@@ -11,10 +11,9 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
-
+from cfehome.aws.conf import *
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-"""
 EMAIL_HOST = 'mail.gandi.net'
 EMAIL_HOST_USER = 'web@acrolama.com'
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
@@ -25,7 +24,6 @@ ADMINS = (
     ('adux', 'adrian@acrolama'),
 )
 MANAGERS = ADMINS
-"""
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -38,7 +36,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['acrolama.herokuapp.com', '.acrolama.com']
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -49,7 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'clases',
-    'schedule',
+    'djangobower',
+    'storages',
     'formulario',
 ]
 
