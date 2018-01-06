@@ -14,8 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url
-from django.contrib import admin
 from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib import admin
 from django.views.generic import TemplateView
 from clases.views import HomeView
 from formulario.views import (
@@ -33,7 +34,12 @@ urlpatterns = [
     url(r'^festprueba/$', festprueba_createview),
 ]
 
-if not settings.DEBUG:
-    urlpatterns += patterns('',
-        (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
-    )
+#if not settings.DEBUG:
+#    urlpatterns += patterns('',
+#        (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
+#    )
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+
