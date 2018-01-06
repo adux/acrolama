@@ -8,8 +8,10 @@ from formulario.models import Fest
 
 # Create your views here.
 
-#class FormularioView(TemplateView):
-#    template_name='homeform.html'
+def cert(request):
+    template_name='-mLNDDNBylEMdONs3dwqhpw8u86osBoJ4vlL7zOt254'
+    context = {}
+    return render (request, template_name, context)
 
 def festprueba_createview(request):
     #if request.method == "get":

@@ -21,7 +21,8 @@ from django.views.generic import TemplateView
 from clases.views import HomeView
 from formulario.views import (
         fest_createview,
-        festprueba_createview
+        festprueba_createview,
+        cert
 )
 
 
@@ -32,6 +33,7 @@ urlpatterns = [
 #    url(r'^contact/$', TemplateView.as_view(template_name='contact.html')),
     url(r'^fest/$', fest_createview),
 #    url(r'^festprueba/$', festprueba_createview),
+    url(r'^.well-known/acme-challenge/$', cert),
 ]
 
 #if not settings.DEBUG:
