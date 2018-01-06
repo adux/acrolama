@@ -33,7 +33,8 @@ urlpatterns = [
 #    url(r'^contact/$', TemplateView.as_view(template_name='contact.html')),
     url(r'^fest/$', fest_createview),
 #    url(r'^festprueba/$', festprueba_createview),
-    url(r'^.well-known/acme-challenge/$', cert),
+#    url(r'^.well-known/acme-challenge/$', cert),
+    url(r'^.well-known/acme-challenge/', include('acme_challenge.urls')),
 ]
 
 #if not settings.DEBUG:
