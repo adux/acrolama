@@ -25,15 +25,6 @@ ADMINS = (
 )
 MANAGERS = ADMINS
 
-###########CERT
-
-
-ACME_CHALLENGE_URL_SLUGi = 'lFZVQvOOaiY0fgC20peKrlAF6W7-RUaNpYeeVD0dYWo'
-ACME_CHALLENGE_TEMPLATE_CONTENT = 'lFZVQvOOaiY0fgC20peKrlAF6W7-RUaNpYeeVD0dYWo.UI7pPXYEiisO2TGfKUXNih98H_wNzeT6BUyEoy2_8mY'
-
-
-
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -58,6 +49,7 @@ INSTALLED_APPS = [
     'djangobower',
     'storages',
     'formulario',
+    'letsencrypt',
 ]
 
 MIDDLEWARE = [

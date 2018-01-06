@@ -13,7 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -33,8 +33,7 @@ urlpatterns = [
 #    url(r'^contact/$', TemplateView.as_view(template_name='contact.html')),
     url(r'^fest/$', fest_createview),
 #    url(r'^festprueba/$', festprueba_createview),
-#    url(r'^.well-known/acme-challenge/$', cert),
-    url(r'^.well-known/acme-challenge/', include('acme_challenge.urls')),
+    url(r'^\.well-known/', include('letsencrypt.urls'))
 ]
 
 #if not settings.DEBUG:

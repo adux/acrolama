@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'clases',
     'schedule',
-    'formulario'
+    'formulario',
+    'letsencrypt',
 ]
 
 MIDDLEWARE = [
