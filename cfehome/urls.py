@@ -23,7 +23,10 @@ from formulario.views import (
         fest_createview,
         festprueba_createview,
         cert
-)
+    )
+from fest.views import (
+        fest_homeview,
+    )
 
 
 urlpatterns = [
@@ -32,7 +35,7 @@ urlpatterns = [
 #    url(r'^about/$', TemplateView.as_view(template_name='about.html')),
 #    url(r'^contact/$', TemplateView.as_view(template_name='contact.html')),
     url(r'^fest/$', fest_createview),
-#    url(r'^festprueba/$', festprueba_createview),
+    url(r'^festprueba/$', fest_homeview),
     url(r'^\.well-known/', include('letsencrypt.urls'))
 ]
 
