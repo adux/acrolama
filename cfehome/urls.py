@@ -33,11 +33,11 @@ from fest.views import (
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', fest_createview),
+    url(r'^$', fest_homeview),
 #    url(r'^about/$', TemplateView.as_view(template_name='about.html')),
 #    url(r'^contact/$', TemplateView.as_view(template_name='contact.html')),
-    url(r'^fest/$', fest_createview),
-    url(r'^festprueba/$', fest_homeview),
+    url(r'^fest/form/$', fest_createview),
+#    url(r'^festprueba/$', fest_homeview),
     url(r'^fest/location/$', fest_locationview),
     url(r'^fest/prices/$', fest_pricesview),
     url(r'^\.well-known/', include('letsencrypt.urls'))
