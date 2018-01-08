@@ -27,6 +27,7 @@ from formulario.views import (
 from fest.views import (
         fest_homeview,
         fest_locationview,
+        fest_pricesview,
     )
 
 
@@ -38,6 +39,7 @@ urlpatterns = [
     url(r'^fest/$', fest_createview),
     url(r'^festprueba/$', fest_homeview),
     url(r'^fest/location/$', fest_locationview),
+    url(r'^fest/prices/$', fest_pricesview),
     url(r'^\.well-known/', include('letsencrypt.urls'))
 ]
 
