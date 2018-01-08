@@ -1,5 +1,4 @@
-{% load static %}
-@import url({% static "font-awesome.min.css"%});
+@import url(fest/css/font-awesome.min.css);
 @import "https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400";
 
 /*
