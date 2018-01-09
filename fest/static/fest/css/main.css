@@ -1,6 +1,6 @@
 @import "https://use.fontawesome.com/1391c0be18.css";
 @import "https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400";
-
+@import "https://fonts.googleapis.com/css?family=Amatic+SC:400,700";
 /*
 	Stellar by HTML5 UP
 	html5up.net | @ajlkn
@@ -3238,19 +3238,18 @@
 		-webkit-transition: background-color 0.2s ease, border-top-left-radius 0.2s ease, border-top-right-radius 0.2s ease, padding 0.2s ease;
 		-ms-transition: background-color 0.2s ease, border-top-left-radius 0.2s ease, border-top-right-radius 0.2s ease, padding 0.2s ease;
 		transition: background-color 0.2s ease, border-top-left-radius 0.2s ease, border-top-right-radius 0.2s ease, padding 0.2s ease;
-		background-color: #ffffff;
+		background-color: #afdece;
 		color: #636363;
 		position: absolute;
 		width: 64em;
 		max-width: calc(100% - 4em);
 		padding: 1em;
-		background-color: #f7f7f7;
+		background-color: #f46a8b;
 		border-top-left-radius: 0.25em;
 		border-top-right-radius: 0.25em;
 		cursor: default;
 		text-align: center;
 	}
-
 		#nav input, #nav select, #nav textarea {
 			color: #636363;
 		}
@@ -3258,15 +3257,12 @@
 		#nav a:hover {
 			color: #636363;
 		}
-
 		#nav strong, #nav b {
 			color: #636363;
 		}
-
 		#nav h1, #nav h2, #nav h3, #nav h4, #nav h5, #nav h6 {
 			color: #636363;
 		}
-
 		#nav blockquote {
 			border-left-color: #dddddd;
 		}
@@ -3320,7 +3316,7 @@
 					}
 
 					#nav ul li a.active {
-						background-color: #ffffff;
+						background-color: #afdece;
 						box-shadow: none;
 					}
 
