@@ -1,17 +1,21 @@
-cfehome/settings/local.py
 db.sqlite3
 .py[cod]
 .DS_STORE
 tags
+
 # Virtualenv related
 bin/
 include/
 pip-selfcheck.json
 
-# Django related 
+# Django related
 # src/<yourproject>/settings/local.py
-# static-cdn/  # any collected static files 
+static/  # any collected static files
+cfehome/settings/local.py
 
+#Sass Ignore
+.sass-cache/
+*.css.map
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
