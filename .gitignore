@@ -10,7 +10,7 @@ pip-selfcheck.json
 
 # Django related
 # src/<yourproject>/settings/local.py
-static/  # any collected static files
+/static  # any collected static files
 cfehome/settings/local.py
 
 #Sass Ignore
