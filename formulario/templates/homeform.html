@@ -1,0 +1,52 @@
+{% extends "baseform.html" %}
+{% block content %}
+    <div class="container">
+			<div class="fs-form-wrap" id="fs-form-wrap">
+				<div class="fs-title">
+					<h1>Winter Acro Festival</h1>
+					<div class="codrops-top">
+						<a class="codrops-icon fa-facebook-square" href="https://www.facebook.com/events/323469541473677/"><span>Facebook Event</span></a>
+                        <a class="codrops-icon fa-envelope" href="mailto:acrolama@acrolama.com"><span>Send us an Email</span></a>
+                        <a class="codrops-icon fa-question-circle-o" href="/#first"><span>Frequently Asked Questions</span></a>
+					</div>
+				</div>
+                <form id="myform" class="fs-form fs-form-full" autocomplete="off" method="POST">{% csrf_token %}
+					<ol class="fs-fields">
+						<li>
+							<label class="fs-field-label fs-anim-upper" for="name">What's your Name?</label>
+							<input class="fs-anim-lower" id="name" name="name" type="text" placeholder="Dean Moriarty" required/>
+						</li>
+                       <li>
+							<label class="fs-field-label fs-anim-upper" for="address">What's your Address?</label>
+							<input class="fs-anim-lower" id="address" name="address" type="text" placeholder="221B Baker Street England" required/>
+						</li>
+                       <li>
+							<label class="fs-field-label fs-anim-upper" for="numero" data-info="For Emergencys only">What's your Phone Number?</label>
+							<input class="fs-anim-lower" id="numero" name="numero" type="text" placeholder="+4112345678" required/>
+						</li>
+						<li>
+							<label class="fs-field-label fs-anim-upper" for="email" data-info="We won't send you spam, we promise...">What's your Email?</label>
+							<input class="fs-anim-lower" id="email" name="email" type="email" placeholder="acrolama@acrolama.com" required/>
+						</li>
+						<li data-input-trigger>
+							<label class="fs-field-label fs-anim-upper" for="option" data-info="All the Scheduele is in the Event">How many days will you stay? <i class="fa fa-heart" aria-hidden="true"></i></label>
+							<div class="fs-radio-group fs-radio-custom clearfix fs-anim-lower">
+								<span><input id="q54" name="option" type="radio" value="4Days"/><label for="q54" class="radio-4day">4 Days 8-11.03 CHF 240.-</label></span>
+								<span><input id="q53" name="option" type="radio" value="3Days"/><label for="q53" class="radio-3day">3 Days 9-11.03 CHF 220.-</label></span>
+								<span><input id="q52" name="option" type="radio" value="2Days"/><label for="q52" class="radio-2day">2 Days (Fr-Sa or Sa-Su) CHF 190.-</label></span>
+                                <span><input id="q51" name="option" type="radio" value="1Day"/><label for="q51" class="radio-1day">Day Pass (Fr, Sa or Su) CHF 85.-</label></span>
+							</div>
+                        </li>
+						<li>
+							<label class="fs-field-label fs-anim-upper" for="allergies" data-info="All food is Bio & Vegan">Any food allergies or something to add?</label>
+							<textarea class="fs-anim-lower" id="allergies" name="allergies" placeholder="Describe here"></textarea>
+						</li>
+					</ol><!-- /fs-fields -->
+					<button class="fs-submit" type="submit">Send answers</button>
+				</form><!-- /fs-form -->
+			</div><!-- /fs-form-wrap -->
+			<div class="related">
+				<p>Designed by Adrian Garate and Giulia Martinelli - Icons Created by Javier Ñuño from the Noun Project</p>
+            </div>
+		</div><!-- /container -->
+{% endblock content%}

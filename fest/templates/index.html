@@ -1,0 +1,220 @@
+{% extends "basefest.html" %}
+{% block content %}
+{% load static %}
+        <!-- Wrapper -->
+            <div id="wrapper">
+                <!-- Header -->
+                    <header id="header" class="alt">
+                            <span class="logo"><img src="{% static "fest/images/logo_vek.svg"%}" alt="" /></span>
+                        <h1>Winter Acro Festival</h1>
+                        <p>A New Acro Gathering in the Swiss Mountains</br>
+                        8 - 11 of March 2018</br>
+                        Register <a href="fest/form/">HERE</a></p>
+                    </header>
+                    {% include 'snippets/navhome.html' %}
+                <!-- Main -->
+                    <div id="main">
+                        <!-- Introduction -->
+                            <section id="intro" class="main">
+                                <div class="spotlight">
+                                    <div class="content">
+                                        <header class="major">
+                                            <h2>What's it all about</h2>
+                                        </header>
+                                            <p>
+                                                A New Acro Festival has born in the Swiss Mountains!</br> From <u>8 till 11 of March</u> we'd like to train, play and have fun with all acrobats, therapists, athletes and teachers in this four days. Since we're in the Mountais we'll add some Snow related activities. And to relax, after hard training days, there will be a evening to enjoy some Warm out-door Whirlpool.
+                                            </p>
+                                        <ul class="actions">
+                                                <li><a href="fest/form/" class="button">Register</a></li>
+                                        </ul>
+                                    </div>
+                                    <span class="image"><img src="{% static "fest/images/pic01.jpg"%}" alt="" /></span>
+                                </div>
+                            </section>
+                        <!-- First Section -->
+                            <section id="first" class="main special">
+                                <header class="major">
+                                    <h2>General Information</h2>
+                                </header>
+                                <ul class="features">
+                                    <li>
+                                        <span class="icon major style1 fa-bed"></span>
+                                        <h3>Accommodation</h3>
+                                        <p>We have a cosy holiday house with dormitories for 50 People. *Not included in daily tickets. More <u>important details</u> <a href="fest/location/#accommodation">HERE</a></p>
+                                    </li>
+                                    <li>
+                                        <span class="icon major style3 fa-cutlery"></span>
+                                        <h3>Food</h3>
+                                        <p>Main dishes, healthy snacks and fruits are all Vegan and included. We have a main Cook but <u>there will be some help asked of everyone.</u></p>
+                                        </li>
+                                    <li>
+                                        <span class="icon major style5 fa-cog"></span>
+                                        <h3>Workshops</h3>
+                                        <p> There will be several rounds of Workshops and a constant Jam. Experience in Acro is necessary, there will be no begginer Workshops but alot of friendly people. <a href="#second">Schedule</a></p>
+                                    </li>
+                                    <li>
+                                        <span class="icon major style6 fa-snowflake-o"></span>
+                                        <h3>Special Events</h3>
+                                        <p>On friday noon ther's a out-door training up on the mountain in the ski resort. (If the weather is good <i class="fa fa-hand-o-left" aria-hidden="true"></i>). There will be a Warm out-door Pool to relax to choose between Thursday, Friday or Saturday evening.</p>
+                                    </li>
+                                    <li>
+                                        <span class="icon major style4 fa-map-marker"></span>
+                                        <h3>Location</h3>
+                                        <p>The hole event takes place in Lenk im Simmental Switzerland. A complete description on how to get there can be found <a href="fest/location/#location">HERE</a></p>
+                                        </li>
+                                    <li>
+                                        <span class="icon major style2 fa-money"></span>
+                                        <h3>Prices</h3>
+                                        <p> We have Passes based on the amout of days you stay at the festival. All of them include: Accomodation, Food, Workshops, Special Events, etc...</br>
+                                        <u>1 Day Tickets don't include Breakfast</u>. More information, like list of prices and conditions go <a href="fest/prices/">HERE</a></p>
+                                </ul>
+                                <footer class="major">
+                                    <ul class="actions">
+                                        <li><a href="fest/form" class="button">Read Enough? Register HERE</a></li>
+                                    </ul>
+                                </footer>
+                            </section>
+                            <section id="second" class="main special">
+                                <header class="major">
+                                    <h2>Schedule</h2>
+                                    <p> A general time plan for the Event</p>
+                                </header>
+                                <h2> Thursday </h2>
+                                <ul class="statistics">
+                                     <li class="style1">
+                                        <span class="icon fa-home"></span>
+                                        <strong>14:00</strong> House Opening
+                                    </li>
+                                    <li class="style1">
+                                        <span class="icon fa-flag-checkered"></span>
+                                        <strong>16:00</strong> Hall Opening
+                                    </li>
+                                    <li class="style1">
+                                        <span class="icon fa-fire"></span>
+                                        <strong>17:00</strong> Warm Up
+                                    </li>
+
+                                    <li class="style1">
+                                        <span class="icon fa-cogs"></span>
+                                        <strong>17:30</strong> Round 1 Workshops
+                                    </li>
+                                    <li class="style1">
+                                        <span class="icon fa-cutlery"></span>
+                                        <strong>19:00</strong> Dinner
+                                    </li>
+                                </ul>
+                                <h2> Friday </h2>
+                                <ul class="statistics">
+                                    <li class="style2">
+                                        <span class="icon fa-cutlery"></span>
+                                        <strong>8:00</strong> Breakfast
+                                    </li>
+                                    <li class="style2">
+                                        <span class="icon fa-snowflake-o"></span>
+                                        <strong>10:00</strong> Snow Event
+                                    </li>
+                                    <li class="style2">
+                                        <span class="icon fa-fire"></span>
+                                        <strong>10:30</strong> Warm Up
+                                    </li>
+                                    <li class="style2">
+                                        <span class="icon"><i class="fa fa-cutlery" aria-hidden="true"></i> <i class="fa fa-plus" aria-hidden="true"></i> <i class="fa fa-magic" aria-hidden="true"></i></span>
+                                        <strong>13:00</strong> Lunch + Show
+                                    </li>
+                                    <li class="style2">
+                                        <span class="icon fa-cogs"></span>
+                                        <strong>15:00</strong> Round 2 Workshops
+                                    </li>
+                                    <li class="style2">
+                                        <span class="icon fa-cogs"></span>
+                                        <strong>17:00</strong> Round 3 Workshops
+                                    </li>
+                                    <li class="style2">
+                                        <span class="icon fa-cutlery"></span>
+                                        <strong>19:00</strong> Dinner
+                                    </li>
+                                </ul>
+                                <h2> Saturday </h2>
+                                <ul class="statistics">
+                                    <li class="style3">
+                                        <span class="icon fa-cutlery"></span>
+                                        <strong>8:00</strong> Breakfast
+                                    </li>
+                                    <li class="style3">
+                                        <span class="icon fa-fire"></span>
+                                        <strong>10:00</strong> Warm Up
+                                    </li>
+                                    <li class="style3">
+                                        <span class="icon fa-cogs"></span>
+                                        <strong>10:30</strong> Round 4 Workshops
+                                    </li>
+                                    <li class="style3">
+                                        <span class="icon fa-cutlery"></span>
+                                        <strong>13:00</strong> Lunch
+                                    </li>
+                                    <li class="style3">
+                                        <span class="icon fa-cogs"></span>
+                                        <strong>15:00</strong> Round 5 Workshops
+                                    </li>
+                                    <li class="style3">
+                                        <span class="icon fa-cogs"></span>
+                                        <strong>17:00</strong> Round 6 Workshops
+                                    </li>
+                                    <li class="style3">
+                                        <span class="icon fa-cutlery"></span>
+                                        <strong>19:00</strong> Dinner
+                                    </li>
+                                </ul>
+                                <h2> Sunday </h2>
+                                <ul class="statistics">
+                                    <li class="style4">
+                                        <span class="icon fa-cutlery"></span>
+                                        <strong>8:00</strong> Breakfast
+                                    </li>
+                                    <li class="style4">
+                                        <span class="icon fa-fire"></span>
+                                        <strong>10:00</strong> Warm Up
+                                    </li>
+                                    <li class="style4">
+                                        <span class="icon fa-cogs"></span>
+                                        <strong>10:30</strong> Round 7 Workshops
+                                    </li>
+                                    <li class="style4">
+                                        <span class="icon fa-cutlery"></span>
+                                        <strong>13:00</strong> Lunch
+                                    </li>
+                                    <li class="style4">
+                                        <span class="icon fa-cogs"></span>
+                                        <strong>15:00</strong> Round 8 Workshops
+                                    </li>
+                                    <li class="style4">
+                                        <span class="icon fa-hourglass-end"></span>
+                                        <strong>17:00</strong> The End.
+                                    </li>
+                                </ul>
+                                <!--<p class="content">Nam elementum nisl et mi a commodo porttitor. Morbi sit amet nisl eu arcu faucibus hendrerit vel a risus. Nam a orci mi, elementum ac arcu sit amet, fermentum pellentesque et purus. Integer maximus varius lorem, sed convallis diam accumsan sed. Etiam porttitor placerat sapien, sed eleifend a enim pulvinar faucibus semper quis ut arcu. Ut non nisl a mollis est efficitur vestibulum. Integer eget purus nec nulla mattis et accumsan ut magna libero. Morbi auctor iaculis porttitor. Sed ut magna ac risus et hendrerit scelerisque. Praesent eleifend lacus in lectus aliquam porta. Cras eu ornare dui curabitur lacinia.</p>
+                                <footer class="major">
+                                    <ul class="actions">
+                                        <li><a href="generic.html" class="button">Learn More</a></li>
+                                    </ul>
+                                </footer>-->
+                            </section>
+                            <!--
+                            <section id="cta" class="main special">
+                                <header class="major">
+                                    <h2>Congue imperdiet</h2>
+                                    <p>Donec imperdiet consequat consequat. Suspendisse feugiat congue<br />
+                                    posuere. Nulla massa urna, fermentum eget quam aliquet.</p>
+                                </header>
+                                <footer class="major">
+                                    <ul class="actions">
+                                        <li><a href="generic.html" class="button special">Get Started</a></li>
+                                        <li><a href="generic.html" class="button">Learn More</a></li>
+                                    </ul>
+                                </footer>
+                            </section>
+                            -->
+                    </div>
+                    {% include 'snippets/footer.html' %}
+            </div>
+{% endblock %}

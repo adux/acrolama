@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% load static %}
+		<title>Winter Acro Fest</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta property="og:url" content="https://acrolama.com/" />
+        <meta property="og:title" content="Winter Acro Festival" />
+        <meta property="og:image" content="{% static "fest/images/banner.jpg"%}"/>
+		{% include 'snippets/cssfest.html' %}
+	</head>
+    <body>
+            {% block content %}{% endblock content %}
+            {% include 'snippets/jsfest.html' %}
+    </body>
+</html>
