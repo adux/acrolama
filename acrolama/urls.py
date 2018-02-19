@@ -20,27 +20,27 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 from clases.views import HomeView
 from formulario.views import (
-        fest_createview,
-        festprueba_createview,
-        cert
+    fest_createview,
+    festprueba_createview,
+    cert
     )
 from fest.views import (
-        fest_homeview,
-        fest_locationview,
-        fest_pricesview,
+    fest_homeview,
+    fest_locationview,
+    fest_pricesview,
     )
+from home.views import (
+    homeview,
+)
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^home/', homeview),
     url(r'^$', fest_homeview),
-#    url(r'^about/$', TemplateView.as_view(template_name='about.html')),
-#    url(r'^contact/$', TemplateView.as_view(template_name='contact.html')),
     url(r'^fest/form/$', fest_createview),
-#    url(r'^festprueba/$', fest_homeview),
     url(r'^fest/location/$', fest_locationview),
     url(r'^fest/prices/$', fest_pricesview),
-    url(r'^\.well-known/', include('letsencrypt.urls'))
 ]
 
 #if not settings.DEBUG:
@@ -50,5 +50,3 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-
-

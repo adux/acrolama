@@ -45,11 +45,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'clases',
     'fest',
-    'storages',
     'formulario',
-    'letsencrypt',
+    'home'
 ]
 
 MIDDLEWARE = [
