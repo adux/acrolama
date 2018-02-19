@@ -6,8 +6,8 @@ AWS_FILE_EXPIRE = 200
 AWS_PRELOAD_METADATA = True
 AWS_QUERYSTRING_AUTH = False
 
-DEFAULT_FILE_STORAGE = 'cfehome.aws.utils.MediaRootS3BotoStorage'
-STATICFILES_STORAGE = 'cfehome.aws.utils.StaticRootS3BotoStorage'
+DEFAULT_FILE_STORAGE = 'acrolama.aws.utils.MediaRootS3BotoStorage'
+STATICFILES_STORAGE = 'acrolama.aws.utils.StaticRootS3BotoStorage'
 AWS_STORAGE_BUCKET_NAME = 'acrolama'
 S3DIRECT_REGION = 'us-west-2'
 S3_URL = '//%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME

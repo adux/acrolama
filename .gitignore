@@ -12,7 +12,7 @@ pip-selfcheck.json
 # src/<yourproject>/settings/local.py
 /static  # any collected static files
 static/
-cfehome/settings/local.py
+acrolama/settings/local.py
 
 #Sass Ignore
 .sass-cache/
