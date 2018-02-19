@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'fest',
     'clases',
-    'schedule',
     'formulario',
     'letsencrypt',
 ]
