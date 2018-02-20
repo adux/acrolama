@@ -31,12 +31,14 @@ from fest.views import (
     )
 from home.views import (
     homeview,
+    portview,
 )
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^home/', homeview),
+    url(r'^home/portafolio', portview),
     url(r'^$', fest_homeview),
     url(r'^fest/form/$', fest_createview),
     url(r'^fest/location/$', fest_locationview),
