@@ -2,18 +2,15 @@
 {% load static %}
 <html lang="en-US">
     <head>
-        <title>AcroLama home</title>
+        <title>Acrolama|Home</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta name="description" content="Template by Colorlib" />
-        <meta name="keywords" content="HTML, CSS, JavaScript, PHP" />
-        <meta name="author" content="Colorlib" />
+        <meta name="description" content="Template by Adux" />
+        <meta name="keywords" content="HTML, CSS, JavaScript" />
+        <meta name="author" content="Adux" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <link rel="shortcut icon" href="images/favicon.png" />
+        <link rel="shortcut icon" href="{% static 'favicon.ico' %}" />
         <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,400i,700,700i,900|Montserrat:400,700|PT+Serif' rel='stylesheet' type='text/css'>
         {% include 'snippets/css.html' %}
-        <!--[if lt IE 9]>
-                <script src="js/html5.js"></script>
-        <![endif]-->
     </head>
     <body>
             {% block content %}{% endblock content %}
