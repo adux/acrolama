@@ -1,23 +1,15 @@
 {% extends 'base.html' %}
-{% load static %}
+{% block head_title %}Home || {{block.super}}{% endblock%}
 {% block content %}
-        {% include 'snippets/nav.html' %}
-        {% include 'preload.html' %}
-
-        <!-- Home -->
-        <div id="home" class="section intro-page">
-            <div class="block content-1170 center-relative center-text">
-                    <img class="top-logo" src="{% static 'home/demo-images/logo.png' %}" alt="Boxus" />
-                <h1 class="big-title">Be the monkey you want to be...<span> but we are lamas.</span></h1>
-                <p class="title-desc">Flying lamas.</p>
-            </div>
-        </div>
-        {% include 'next.html' %}
-        {#{% include 'video.html' %}#}
-        {#{% include 'services.html' %}#}
-        {% include 'portfolio.html' %}
-        {% include 'about.html' %}
-        {# {% include 'skills.html' %}#}
-        {% include 'contact.html' %}
-        {% include 'footer.html' %}
-{% endblock %}
+    {% include 'snippets/nav.html' %}
+    {% include 'preload.html' %}
+    {% include 'start.html' %}
+    {% include 'next.html' %}
+    {#{% include 'video.html' %}#}
+    {#{% include 'services.html' %}#}
+    {% include 'portfolio.html' %}
+    {% include 'about.html' %}
+    {# {% include 'skills.html' %}#}
+    {% include 'contact.html' %}
+    {% include 'footer.html' %}
+{% endblock%}

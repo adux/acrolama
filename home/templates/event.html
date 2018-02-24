@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
+{% block contentevent %}
 {% load static %}
-{% block content %}
+    <div class="single-portfolio">
         {% include 'snippets/nav.html' %}
-        {% include 'preload.html' %}
-        <article id="portfolio-2" class="section portfolio">
+        <article id="portfolio-2" class=" section portfolio">
             <div class="center-relative content-1170">
                 <div class="entry-content">
                     <div class="content-wrap relative">
-                        <a class="absolute x-close" href="index.html#portfolio">
-                            <img src="images/icon_x.svg" alt="Close">
+                        <a class="absolute x-close" href="/">
+                                <img src="{% static 'home/images/icon_x.svg' %}" alt="Close">
                         </a>
                         <script>
                             var aboutImage_speed = "500";
@@ -19,28 +19,27 @@
                             <a id="aboutImage_next" class="image_slider_next" href="#"></a>
                             <div class="caroufredsel_wrapper">
                                 <ul id="aboutImage" class="image-slider slides">
-                                    <li><img src="demo-images/about_img_04.jpg" alt=""></li>
-                                    <li><img src="demo-images/about_img_05.jpg" alt=""></li>
-                                    <li><img src="demo-images/about_img_06.jpg" alt=""></li>
+                                    <li><img src="{% static 'home/demo-images/about_img_04.jpg' %}" alt=""></li>
+                                    <li><img src="{% static 'home/demo-images/about_img_05.jpg' %}" alt=""></li>
+                                    <li><img src="{% static 'home/demo-images/about_img_06.jpg' %}" alt=""></li>
                                 </ul>
                             </div>
                             <div class="clear"></div>
                         </div>
-
                         <div class="clear"></div>
                         <br>
                         <br>
                         <br>
                         <div class="one_half text-right">
                             <p>
-                                <span style="color: #adadad;">Project Name:</span> Handmade<br>
-                                <span style="color: #adadad;">Client:</span> Est Lorem<br>
-                                <span style="color: #adadad;">Year:</span> 2017
+                                <span style="color: #adadad;">Cycle:</span> 6 - Pops and Bla<br>
+                                <span style="color: #adadad;">Start:</span> 18 of March<br>
+                                <span style="color: #adadad;">Duration:</span> 4 Classes
                             </p>
                             <br>
                             <br>
                             <div class="text-right">
-                                <a href="#" target="_self" class="button ">Download</a>
+                                <a href="#" target="_self" class="button ">Register</a>
                             </div>
                         </div>
                         <div class="one_half last ">
@@ -58,4 +57,5 @@
             </div>
             {% include 'footer.html' %}
         </article>
+    </div>
         {% endblock %}

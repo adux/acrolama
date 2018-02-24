@@ -2,7 +2,7 @@
 {% load static %}
 <html lang="en-US">
     <head>
-        <title>Acrolama|Home</title>
+        <title>{% block head_title %}Acrolama{% endblock%}</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="description" content="Template by Adux" />
         <meta name="keywords" content="HTML, CSS, JavaScript" />
@@ -13,7 +13,8 @@
         {% include 'snippets/css.html' %}
     </head>
     <body>
-            {% block content %}{% endblock content %}
+            {% block content %}{% endblock %}
+            {% block contentevent %}{% endblock %}
             {% include 'snippets/js.html' %}
     </body>
 </html>

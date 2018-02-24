@@ -1,12 +1,11 @@
 from django.shortcuts import render
-
+from django.http import HttpResponse
+from django.views import View
+from django.views.generic import TemplateView
 # Create your views here.i
 
-def homeview(request):
+class HomeView(TemplateView):
     template_name='home.html'
-    context={}
-    return render(request, template_name, context)
-def portview(request):
-    tempate_name='single-portfolio2.html'
-    context={}
-    return render(request,template_name,context)
+
+class EventView(TemplateView):
+    template_name='event.html'
