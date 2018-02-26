@@ -1,3 +1,13 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import (
+    AboutMember,
+    AboutGeneral,
+    AboutDate,
+    Event,
+)
+
+admin.site.register(AboutMember)
+admin.site.register(AboutGeneral)
+admin.site.register(AboutDate)
+admin.site.register(Event)

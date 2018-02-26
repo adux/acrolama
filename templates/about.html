@@ -1,0 +1,78 @@
+{% load static %}
+<!-- About -->
+        <div id="about" class="section">
+            <div class="block content-1170 center-relative">
+                <div class="section-title-holder left green">
+                    <div class="section-num">
+                        <span>
+                                &nbsp;<i class="fas fa-male"></i><i class="fas fa-female"></i>
+                        </span>
+                    </div>
+                    <h2 class="entry-title">ABOUT</h2>
+                </div>
+                <div class="section-content-holder right">
+                    <div class="content-wrapper">
+                        <div class="content-title-holder">
+                            <p class="content-title">TEAM</p>
+                        </div>
+                        <div class="one_half ">
+                                {% for obj in about_general %}
+                                {{ obj.general_description }}
+                                {%endfor%}
+                        </div>
+                        <div class="one_half last ">
+                            {% for obj in about_date %}
+                            <span style="color: #e54b76;"><strong>{{obj.yearstart}}-{{obj.yearend}}·</strong></span> <span style="color:#727190;i"><em> {{obj.date_description}}</em></span><br>
+                            {% endfor %}
+                        </div><div class="clear"></div>
+                        <br>
+                        <br>
+                    </div>
+                    <div class="full-width ">
+                        <script>
+                            var aboutImage_speed = "500";
+                            var aboutImage_auto = "false";
+                            var aboutImage_hover = "true";
+                        </script>
+                        <div class="image-slider-wrapper relative img aboutImage">
+                            <a id="aboutImage_next" class="image_slider_next" href="#"></a>
+                            <div class="caroufredsel_wrapper">
+                                <ul id="aboutImage" class="image-slider slides">
+                                    <li><img src="{% static "home/demo-images/about_img_04.jpg" %}" alt=""></li>
+                                    <li><img src="{% static "home/demo-images/about_img_05.jpg" %}" alt=""></li>
+                                    <li><img src="{% static "home/demo-images/about_img_06.jpg" %}" alt=""></li>
+                                </ul>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        <script>
+                            var team1_speed = "500";
+                            var team1_auto = "true";
+                            var team1_hover = "true";
+                        </script>
+                        <div class="image-slider-wrapper relative team team1">
+                            <a id="team1_next" class="image_slider_next" href="#"></a>
+                            <div class="caroufredsel_wrapper">
+                                <ul id="team1" class="image-slider slides">
+                                    {% for obj in about_content %}
+                                    <li>
+                                        <div class="member-content-holder">
+                                                <h4 class="member-name">{{ obj.member_name }}</h4>
+                                                <p class="member-position">{{ obj.member_position}}</p>
+                                                <div class="member-content">{{obj.member_content}}<br></div>
+                                        </div>
+                                        <div class="member-image-holder">
+                                            <img src="{% static "home/demo-images/about_img_01.jpg" %}" alt="">
+                                        </div>
+                                        <div class="clear"></div>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>   <!-- end full-width div -->
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>

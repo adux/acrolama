@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'home'
     'fest',
-    'clases',
     'formulario',
 ]
 

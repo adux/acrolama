@@ -17,7 +17,6 @@ from django.conf.urls import url, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from clases.views import HomeView
 from formulario.views import (
     fest_createview,
     festprueba_createview,
@@ -29,24 +28,19 @@ from fest.views import (
     fest_pricesview,
     )
 from home.views import (
-    HomeView,
+    homeview,
     EventView,
 )
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', HomeView.as_view()),
+    url(r'^$', homeview),
     url(r'^event/$', EventView.as_view()),
     url(r'^fest/$', fest_homeview),
     url(r'^fest/form/$', fest_createview),
     url(r'^fest/location/$', fest_locationview),
     url(r'^fest/prices/$', fest_pricesview),
 ]
-
-#if not settings.DEBUG:
-#    urlpatterns += patterns('',
-#        (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
-#    )
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

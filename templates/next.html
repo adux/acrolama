@@ -13,91 +13,25 @@
                 <div class="section-content-holder left green">
                     <div class="content-wrapper">
                         <div class="blog-holder block center-relative">
+                            {% for obj in event %}
                             <article class="relative blog-item-holder center-relative">
                                 <div class="num">
-                                    <i class="fas fa-redo"></i>
+                                        <i class="{{obj.type_event}}"></i>
                                 </div>
                                 <div class="info">
-                                    <div class="author vcard "><a href="#">MasterClass - Zürich</a></div>
+                                        <div class="author vcard "><a href="#">{{obj.get_type_event_display}} - {{obj.city_event}}</a></div>
                                     <div class="cat-links">
                                         <ul>
-                                            <li><a href="#">28 February</a></li>
+                                                <li><a href="#">{{obj.get_datestart}}{{obj.get_dateend}}</a></li>
                                         </ul>
                                     </div>
                                 </div>
                                 <h3 class="entry-title">
-                                    <a href="#">Intermediate Pops</a>
+                                        <a href="#">{{obj.title_event}}</a>
                                 </h3>
                                 <div class="clear"></div>
                             </article>
-                            <article class="relative blog-item-holder center-relative">
-                                <div class="num">
-                                    <i class="fas fa-star"></i>
-                                </div>
-                                <div class="info">
-                                        <div class="author vcard "><a href="#">Winter Acro Fest - Lenk</a></div>
-                                    <div class="cat-links">
-                                        <ul>
-                                            <li><a href="#">8 - 11 March</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <h3 class="entry-title">
-                                    <a href="#">Acro Festi in der Lenk!</a>
-                                </h3>
-                                <div class="clear"></div>
-                            </article>
-                            <article class="relative blog-item-holder center-relative">
-                                <div class="num">
-                                    <i class="fas fa-cogs"></i>
-                                </div>
-                                <div class="info">
-                                        <div class="author vcard "><a href="#">Cycle 4 - Bern</a></div>
-                                    <div class="cat-links">
-                                        <ul>
-                                            <li><a href="#">Tue (1 - 22 March)</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <h3 class="entry-title">
-                                    <a href="#">Washing Machines with uncommon positions</a>
-                                </h3>
-                                <div class="clear"></div>
-                            </article>
-                            <article class="relative blog-item-holder center-relative">
-                                <div class="num">
-                                    <i class="fas fa-cogs"></i>
-                                </div>
-                                <div class="info">
-                                        <div class="author vcard "><a href="#">Cycle 6 - Zürich</a></div>
-                                    <div class="cat-links">
-                                        <ul>
-                                            <li><a href="#"> Wed (14 March - 4 April) </a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <h3 class="entry-title">
-                                    <a href="#">Whips and Drills</a>
-                                </h3>
-                                <div class="clear"></div>
-                            </article>
-                            <article class="relative blog-item-holder center-relative">
-                                <div class="num">
-                                    <i class="fas fa-cogs"></i>
-                                </div>
-                                <div class="info">
-                                        <div class="author vcard "><a href="#">Cycle 6 - Zürich</a></div>
-                                    <div class="cat-links">
-                                        <ul>
-                                            <li><a href="#">Wed (14 March - 4 April)</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <h3 class="entry-title">
-                                    <a href="#">Whips and Drills</a>
-                                </h3>
-                                <div class="clear"></div>
-                            </article>
+                            {% endfor %}
                             <div class="latest-post-bottom-text">
                                 <a href="#">CALENDAR</a>
                             </div>
