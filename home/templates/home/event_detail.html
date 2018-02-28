@@ -2,17 +2,16 @@
 {% block contentevent %}
 {% load static %}
     <div class="single-portfolio">
-        {% include 'snippets/nav.html' %}
         <article id="portfolio-2" class=" section portfolio">
             <div class="center-relative content-1170">
                 <div class="entry-content">
                     <div class="content-wrap relative">
-                        <a class="absolute x-close" href="/">
+                        <a class="absolute x-close" href="/#next">
                                 <img src="{% static 'home/images/icon_x.svg' %}" alt="Close">
                         </a>
                         <script>
-                            var aboutImage_speed = "500";
-                            var aboutImage_auto = "false";
+                            var aboutImage_speed = "1000";
+                            var aboutImage_auto = "true";
                             var aboutImage_hover = "true";
                         </script>
                         <div class="image-slider-wrapper relative img aboutImage">
@@ -32,9 +31,9 @@
                         <br>
                         <div class="one_half text-right">
                             <p>
-                                <span style="color: #adadad;">Cycle:</span> 6 - Pops and Bla<br>
-                                <span style="color: #adadad;">Start:</span> 18 of March<br>
-                                <span style="color: #adadad;">Duration:</span> 4 Classes
+                            <span style="color: #adadad;">Date(s):</span> {{object.get_datestart}}{{object.get_dateend}}<br>
+                            <span style="color: #adadad;">Time:</span> from {{object.get_timestart}} till {{object.get_timeend}}<br>
+                            <span style="color: #adadad;">Location:</span> {{object.location}}
                             </p>
                             <br>
                             <br>
@@ -43,15 +42,16 @@
                             </div>
                         </div>
                         <div class="one_half last ">
-                            <h1>Handmade for Everyone</h1>
-                            <p>We choose to go to the moon in this decade and do the other things, not because they are easy.</p>
-                            <br>
-                            <p>
-                                Because they are hard, because that goal will serve to organize and measure the best of our energies and skills, because that challenge is one that we are willing to accept, one we are unwilling to postpone and one.<br>
-                            </p>
+                                <h1>{{object.title}}</h1>
+                                <p>{{object.description}}</p><br>
+                                <h1>Prerequisites</h1>
+                                <p>{{object.prerequisites}}</p>
                         </div>
                         <div class="clear"></div>
                     </div>
+                </div>
+                <div class="full-width">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d4274.290564544589!2d-75.2952832049782!3d40.753669641460846!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2srs!4v1444506658649" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
                 </div>
                 <div class="clear"></div>
             </div>

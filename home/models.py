@@ -1,5 +1,8 @@
 from django.db import models
-# Create your models here.
+from django.db.models.signals import pre_save
+from .utils import unique_slug_generator
+
+
 
 class AboutMember(models.Model):
         member_name     = models.CharField(max_length=30)
@@ -29,28 +32,50 @@ class Event(models.Model):
         ('fas fa-star','Camp'),
     )
     Ocurrance_Event = (
-        ('Wed','Weekly Wednesday'),
-        ('Tue','Weekly Thursday'),
-        ('Sun','Weekly Sunday'),
-        ('Once','One Time Event'),
-        ('Year','Yearly Event'),
+        ('Wed','Wednesday\'s'),
+        ('Tue','Tuersday\'s'),
+        ('Sun','Sunday\'s'),
+        ('WedSun.','Wed. & Sunday\'s'),
+        ('Yearly','Yearly'),
+        ('One Time','One Time'),
     )
-    type_event          = models.CharField(max_length=13, choices=Event_Icon)
-    title_event         = models.CharField(max_length=60)
-    description_event   = models.CharField(max_length=300)
-    prerequisites_event = models.CharField(max_length=300, null=True, blank=True)
-    location_event      = models.CharField(max_length=60)
-    city_event          = models.CharField(max_length=20)
-    datestart_event     = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
-    dateend_event       = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
-    ocurrance_event     = models.CharField(max_length=7, choices=Ocurrance_Event)
-    duration_event      = models.CharField(max_length=5, null=True,blank=True)
+    cat           = models.CharField(max_length=13, choices=Event_Icon)
+    title         = models.CharField(max_length=60)
+    slug          = models.SlugField(unique=True, null=True,blank=True)
+    description   = models.CharField(max_length=300)
+    prerequisites = models.CharField(max_length=300, null=True, blank=True)
+    location      = models.CharField(max_length=60)
+    city          = models.CharField(max_length=20)
+    datestart     = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
+    dateend       = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
+    ocurrance     = models.CharField(max_length=8, choices=Ocurrance_Event, null=True,blank=True)
+
     def get_datestart(self):
-        return self.datestart_event.strftime('%d %b')
-    def get_dateend(self):
-        if self.dateend_event.strftime('%d %b') == self.datestart_event.strftime('%d %b'):
-            return self.dateend_event.strftime('')
+        if self.datestart.strftime('%b') == self.dateend.strftime('%b') and self.dateend.strftime('%d %b') != self.datestart.strftime('%d %b'):
+            return self.datestart.strftime('%d')
         else:
-            return self.dateend_event.strftime(' - %d %b')
+            return self.datestart.strftime('%d %b')
+    def get_timestart(self):
+        return self.datestart.strftime('%H:%M')
+    def get_dateend(self):
+        if self.dateend.strftime('%d %b') == self.datestart.strftime('%d %b'):
+            return self.dateend.strftime('')
+        else:
+            return self.dateend.strftime(' - %d %b')
+    def get_timeend(self):
+        return self.dateend.strftime('%H:%M')
     def __str__(self):
-        return self.title_event
+        return self.title
+
+''' Signal of Django to generate slug if not created  '''
+def event_pre_save_receiver(sender, instance, *args, **kwargs):
+    if not instance.slug:
+        instance.slug = unique_slug_generator(instance)
+pre_save.connect(event_pre_save_receiver,sender=Event)
+
+
+class Testimonial (models.Model):
+    text = models.CharField(max_length=350)
+    author = models.CharField(max_length=30)
+    def __str__(self):
+        return self.author

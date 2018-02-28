@@ -5,9 +5,11 @@ from .models import (
     AboutGeneral,
     AboutDate,
     Event,
+    Testimonial,
 )
 
+admin.site.register(Event)
 admin.site.register(AboutMember)
 admin.site.register(AboutGeneral)
 admin.site.register(AboutDate)
-admin.site.register(Event)
+admin.site.register(Testimonial)

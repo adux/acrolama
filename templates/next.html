@@ -5,7 +5,7 @@
                 <div class="section-title-holder right">
                     <div class="section-num">
                         <span>
-                                <i class="fas fa-stopwatch"></i>
+                                <i class="fas fa-hourglass-half"></i>
                         </span>
                     </div>
                     <h2 class="entry-title">NEXT</h2>
@@ -14,20 +14,20 @@
                     <div class="content-wrapper">
                         <div class="blog-holder block center-relative">
                             {% for obj in event %}
-                            <article class="relative blog-item-holder center-relative">
+                            <article class="blog-item-holder relative">
                                 <div class="num">
-                                        <i class="{{obj.type_event}}"></i>
+                                        <i class="{{obj.cat}}"></i>
                                 </div>
                                 <div class="info">
-                                        <div class="author vcard "><a href="#">{{obj.get_type_event_display}} - {{obj.city_event}}</a></div>
+                                        <div class="author vcard "><a href="e/{{obj.slug}}">{{obj.get_cat_display}} - {{obj.city}}</a></div>
                                     <div class="cat-links">
                                         <ul>
-                                                <li><a href="#">{{obj.get_datestart}}{{obj.get_dateend}}</a></li>
+                                                <li><a href="e/{{obj.slug}}">{{obj.get_datestart}}{{obj.get_dateend}} | {{obj.get_ocurrance_display|default_if_none:""}}</a></li>
                                         </ul>
                                     </div>
                                 </div>
                                 <h3 class="entry-title">
-                                        <a href="#">{{obj.title_event}}</a>
+                                        <a href="e/{{obj.slug}}">{{obj.title}}</a>
                                 </h3>
                                 <div class="clear"></div>
                             </article>
@@ -51,34 +51,15 @@
                     <div class="text1 testimonial-slider-holder slider-holder">
                         <div class="caroufredsel_wrapper">
                             <ul id="text1" class="slides testimonial">
+                                {% for obj in testimonial %}
                                 <li style='height: 200px;'>
                                     <div class="testimonial-content">
-                                        <p class="testimonial-text">The goal is not to be better than the other man, but your previous self.</p>
-                                        <p class="testimonial-author">DALAI LAMA</p>
-                                    </div>
-                                    <!--<div class="clear"></div>-->
-                                </li>
-                                <li style='height: 200px;'>
-                                    <div class="testimonial-content">
-                                        <p class="testimonial-text">Apropos 'Not my Circus, not my Monkey', we don't want Monkeys in the Circus.</p>
-                                        <p class="testimonial-author">SOME OTHER LAMA</p>
-                                    </div>
-                                    <!--<div class="clear"></div>-->
-                                </li>
-                                <li style='height: 200px;'>
-                                    <div class="testimonial-content">
-                                        <p class="testimonial-text"> The more you practise, the luckier you get.</p>
-                                        <p class="testimonial-author">SOMEONE TRYING TO BE FUNNY</p>
+                                            <p class="testimonial-text">{{obj.text}}</p>
+                                            <p class="testimonial-author">{{obj.author}}</p>
                                     </div>
                                     <div class="clear"></div>
                                 </li>
-                                <li style='height: 200px;'>
-                                    <div class="testimonial-content">
-                                        <p class="testimonial-text">Damn everything but the circus.</p>
-                                        <p class="testimonial-author">CORITA KENT</p>
-                                    </div>
-                                    <div class="clear"></div>
-                                </li>
+                                {% endfor %}
                             </ul>
                         </div>
                         <a id="text1_next" class="carousel_text_next right" style="" href="#"></a>

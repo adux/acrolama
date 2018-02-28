@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.views import View
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, DetailView
 from django.utils import timezone
 from datetime import datetime
 
@@ -10,6 +10,7 @@ from .models import(
     AboutGeneral,
     AboutDate,
     Event,
+    Testimonial,
 
 )
 
@@ -20,15 +21,21 @@ def homeview(request):
     qs_aboutmember  = AboutMember.objects.all()
     qs_aboutgeneral = AboutGeneral.objects.all()
     qs_aboutdate    = AboutDate.objects.all()
-    qs_event        = Event.objects.filter(datestart_event__gte=datetime.now()).order_by('datestart_event')[:5]
+    qs_event        = Event.objects.filter(datestart__gte=datetime.now()).order_by('datestart')[:5]
+    qs_testimonial  = Testimonial.objects.all()
     context= {
         "about_content":qs_aboutmember,
         "about_general":qs_aboutgeneral,
         "about_date":qs_aboutdate,
         "event":qs_event,
+        "testimonial":qs_testimonial,
     }
     return render(request, template_name, context)
 
-class EventView(TemplateView):
-    template_name='event.html'
+class EventDetailView(DetailView):
+    queryset = Event.objects.all()
 
+    #def get_object(self,*args, **kwargs):
+    #    event_id = self.kwargs.get('event_id')
+    #    obj = get_object_or_404(Event, id=event_id)
+    #    return obj

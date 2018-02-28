@@ -29,13 +29,13 @@ from fest.views import (
     )
 from home.views import (
     homeview,
-    EventView,
+    EventDetailView,
 )
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', homeview),
-    url(r'^event/$', EventView.as_view()),
+    url(r'^e/(?P<slug>[\w-]+)/$', EventDetailView.as_view()),
     url(r'^fest/$', fest_homeview),
     url(r'^fest/form/$', fest_createview),
     url(r'^fest/location/$', fest_locationview),
