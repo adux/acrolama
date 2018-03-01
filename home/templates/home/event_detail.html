@@ -33,19 +33,28 @@
                             <p>
                             <span style="color: #adadad;">Date(s):</span> {{object.get_datestart}}{{object.get_dateend}}<br>
                             <span style="color: #adadad;">Time:</span> from {{object.get_timestart}} till {{object.get_timeend}}<br>
-                            <span style="color: #adadad;">Location:</span> {{object.location}}
-                            </p>
+                            <span style="color: #adadad;">Location:</span> {{object.location}}<br>
+                            {% if object.price %}
+                            <span style="color: #adadad;">Price:</span> {{object.price}}<br>
+                            {% else %}
                             <br>
                             <br>
                             <div class="text-right">
-                                <a href="#" target="_self" class="button ">Register</a>
+                                <a href="#" target="_self" class="button ">Pricing</a>
                             </div>
-                        </div>
+                            {% endif%}
+                            </p>
+                                                    </div>
                         <div class="one_half last ">
                                 <h1>{{object.title}}</h1>
                                 <p>{{object.description}}</p><br>
                                 <h1>Prerequisites</h1>
                                 <p>{{object.prerequisites}}</p>
+                                <br>
+                                <br>
+                            <div class="text-left">
+                                <a href="#" target="_self" class="button ">Register</a>
+                            </div>
                         </div>
                         <div class="clear"></div>
                     </div>

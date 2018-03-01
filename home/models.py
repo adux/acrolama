@@ -3,7 +3,6 @@ from django.db.models.signals import pre_save
 from .utils import unique_slug_generator
 
 
-
 class AboutMember(models.Model):
         member_name     = models.CharField(max_length=30)
         member_position = models.CharField(max_length=30)
@@ -24,31 +23,41 @@ class AboutDate(models.Model):
             return self.date_end.strftime('%Y')
 
 class Event(models.Model):
-    Event_Icon = (
+    Icon = (
         ('fas fa-redo','Masterclass'),
         ('fas fa-rocket','Festival'),
         ('fas fa-cogs','Cycle'),
         ('fas fa-cog','Workshop'),
         ('fas fa-star','Camp'),
+        ('fas fa-star','Retreat'),
     )
-    Ocurrance_Event = (
+    Ocurrance = (
         ('Wed','Wednesday\'s'),
-        ('Tue','Tuersday\'s'),
+        ('Thu','Thursday\'s'),
         ('Sun','Sunday\'s'),
         ('WedSun.','Wed. & Sunday\'s'),
-        ('Yearly','Yearly'),
-        ('One Time','One Time'),
+        ('Year','Yearly'),
+        ('One','One Time'),
     )
-    cat           = models.CharField(max_length=13, choices=Event_Icon)
-    title         = models.CharField(max_length=60)
-    slug          = models.SlugField(unique=True, null=True,blank=True)
-    description   = models.CharField(max_length=300)
-    prerequisites = models.CharField(max_length=300, null=True, blank=True)
-    location      = models.CharField(max_length=60)
-    city          = models.CharField(max_length=20)
-    datestart     = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
-    dateend       = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
-    ocurrance     = models.CharField(max_length=8, choices=Ocurrance_Event, null=True,blank=True)
+    Level = (
+        ('A', 'Advanced'),
+        ('B', 'Intermediate'),
+        ('C', 'Introdution'),
+        ('Z', 'Multilevel'),
+    )
+    cat             = models.CharField(max_length=13, choices=Icon, default=1)
+    level           = models.CharField(max_length=1, choices=Level, default=1)
+    title           = models.CharField(max_length=60)
+    description     = models.TextField(max_length=300)
+    prerequisites   = models.TextField(max_length=300, null=True, blank=True)
+    location        = models.CharField(max_length=60)
+    city            = models.CharField(max_length=20)
+    ocurrance       = models.CharField(max_length=8, choices=Ocurrance, null=True,blank=True)
+    datestart       = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
+    dateend         = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
+    price           = models.CharField(max_length=20, null=True, blank=True)
+    publication     = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
+    slug            = models.SlugField(unique=True, null=True,blank=True)
 
     def get_datestart(self):
         if self.datestart.strftime('%b') == self.dateend.strftime('%b') and self.dateend.strftime('%d %b') != self.datestart.strftime('%d %b'):
@@ -73,9 +82,8 @@ def event_pre_save_receiver(sender, instance, *args, **kwargs):
         instance.slug = unique_slug_generator(instance)
 pre_save.connect(event_pre_save_receiver,sender=Event)
 
-
 class Testimonial (models.Model):
-    text = models.CharField(max_length=350)
+    text = models.TextField(max_length=350)
     author = models.CharField(max_length=30)
     def __str__(self):
         return self.author

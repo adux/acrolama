@@ -4,14 +4,12 @@ from django.views import View
 from django.views.generic import TemplateView, DetailView
 from django.utils import timezone
 from datetime import datetime
-
 from .models import(
     AboutMember,
     AboutGeneral,
     AboutDate,
     Event,
     Testimonial,
-
 )
 
 # Create your views here.i
@@ -34,8 +32,3 @@ def homeview(request):
 
 class EventDetailView(DetailView):
     queryset = Event.objects.all()
-
-    #def get_object(self,*args, **kwargs):
-    #    event_id = self.kwargs.get('event_id')
-    #    obj = get_object_or_404(Event, id=event_id)
-    #    return obj

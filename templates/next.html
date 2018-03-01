@@ -19,7 +19,7 @@
                                         <i class="{{obj.cat}}"></i>
                                 </div>
                                 <div class="info">
-                                        <div class="author vcard "><a href="e/{{obj.slug}}">{{obj.get_cat_display}} - {{obj.city}}</a></div>
+										<div class="author vcard "><a href="e/{{obj.slug}}">{{obj.get_level_display}} {{obj.get_cat_display}} - {{obj.city}}</a></div>
                                     <div class="cat-links">
                                         <ul>
                                                 <li><a href="e/{{obj.slug}}">{{obj.get_datestart}}{{obj.get_dateend}} | {{obj.get_ocurrance_display|default_if_none:""}}</a></li>
@@ -35,6 +35,7 @@
                             <div class="latest-post-bottom-text">
                                 <a href="#">CALENDAR</a>
                             </div>
+                            <div class="clear"></div>
                         </div>
                     </div>
                 </div>
