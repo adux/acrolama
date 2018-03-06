@@ -1,26 +1,41 @@
 from django.db import models
 from django.db.models.signals import pre_save
+from django.conf import settings
 from .utils import unique_slug_generator
 
+class FileItem(models.Model):
+    user            = models.ForeignKey(settings.AUTH_USER_MODEL, default=1)
+    name            = models.CharField(max_length=120, null=True, blank=True)
+    path            = models.TextField(blank=True, null=True)
+    size            = models.BigIntegerField(default=0)
+    file_type       = models.CharField(max_length=120, null=True, blank=True)
+    timestamp       = models.DateTimeField(auto_now_add=True)
+    updated         = models.DateTimeField(auto_now=True)
+    uploaded        = models.BooleanField(default=False)
+    active          = models.BooleanField(default=True)
+    def title(self):
+        return str(self.name)
 
 class AboutMember(models.Model):
-        member_name     = models.CharField(max_length=30)
-        member_position = models.CharField(max_length=30)
-        member_content  = models.CharField(max_length=300)
-        def __str__(self):
-            return self.member_name
+    name        = models.CharField(max_length=30)
+    position    = models.CharField(max_length=30)
+    content     = models.CharField(max_length=300)
+    image       = models.ForeignKey(FileItem)
+    def __str__(self):
+        return self.member_name
 
 class AboutGeneral(models.Model):
-        general_description = models.CharField(max_length=300)
+    description = models.TextField(max_length=300)
+    image       = models.ForeignKey(FileItem)
 
 class AboutDate(models.Model):
-    date_start          = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
-    date_end            = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
-    date_description    = models.CharField(max_length=50)
+    start       = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
+    end         = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
+    description = models.CharField(max_length=50)
     def yearstart(self):
-        return self.date_start.strftime('%b %Y')
+        return self.start.strftime('%b %Y')
     def yearend(self):
-            return self.date_end.strftime('%Y')
+            return self.end.strftime('%Y')
 
 class Event(models.Model):
     Icon = (
@@ -45,6 +60,7 @@ class Event(models.Model):
         ('C', 'Introdution'),
         ('Z', 'Multilevel'),
     )
+
     cat             = models.CharField(max_length=13, choices=Icon, default=1)
     level           = models.CharField(max_length=1, choices=Level, default=1)
     title           = models.CharField(max_length=60)
@@ -87,3 +103,8 @@ class Testimonial (models.Model):
     author = models.CharField(max_length=30)
     def __str__(self):
         return self.author
+
+class Media (models.Model):
+    text            = models.TextField(max_length=30,blank=True,null=True)
+    sec_text        = models.TextField(max_length=30,blank=True,null=True)
+    image           = models.ForeignKey(FileItem)

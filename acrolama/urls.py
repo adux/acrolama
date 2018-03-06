@@ -17,10 +17,12 @@ from django.conf.urls import url, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.views.generic.base import TemplateView
+
+
 from formulario.views import (
     fest_createview,
     festprueba_createview,
-    cert
     )
 from fest.views import (
     fest_homeview,
@@ -30,6 +32,7 @@ from fest.views import (
 from home.views import (
     homeview,
     EventDetailView,
+    FilePolicyAPI,
 )
 
 urlpatterns = [
@@ -40,7 +43,12 @@ urlpatterns = [
     url(r'^fest/form/$', fest_createview),
     url(r'^fest/location/$', fest_locationview),
     url(r'^fest/prices/$', fest_pricesview),
+    url(r'^api/files/policy/$', FilePolicyAPI.as_view()),
+    url(r'^upload/$', TemplateView.as_view(template_name='upload.html'), name='upload-home'),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+''' 
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+'''

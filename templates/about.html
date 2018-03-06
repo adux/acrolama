@@ -16,13 +16,13 @@
                             <p class="content-title">LAMAS</p>
                         </div>
                         <div class="one_half ">
-                                {% for obj in about_general %}
-                                {{ obj.general_description }}
+                                {% for obj in general %}
+                                {{ obj.description }}
                                 {%endfor%}
                         </div>
                         <div class="one_half last ">
                             {% for obj in about_date %}
-                            <span style="color: #e54b76;"><strong>{{obj.yearstart}}-{{obj.yearend}}·</strong></span> <span style="color:#727190;i"><em> {{obj.date_description}}</em></span><br>
+                            <span style="color: #e54b76;"><strong>{{obj.yearstart}}-{{obj.yearend}}·</strong></span> <span style="color:#727190;i"><em> {{obj.description}}</em></span><br>
                             {% endfor %}
                         </div><div class="clear"></div>
                         <br>
@@ -57,9 +57,9 @@
                                     {% for obj in about_content %}
                                     <li>
                                         <div class="member-content-holder">
-                                                <h4 class="member-name">{{ obj.member_name }}</h4>
-                                                <p class="member-position">{{ obj.member_position}}</p>
-                                                <div class="member-content">{{obj.member_content}}<br></div>
+                                                <h4 class="member-name">{{ obj.name }}</h4>
+                                                <p class="member-position">{{ obj.position}}</p>
+                                                <div class="member-content">{{obj.content}}<br></div>
                                         </div>
                                         <div class="member-image-holder">
                                             <img src="{% static "home/demo-images/about_img_01.jpg" %}" alt="">
