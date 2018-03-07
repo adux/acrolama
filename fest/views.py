@@ -6,7 +6,6 @@ from .models import (
 
 def fest_homeview(request):
     template_name='index.html'
-    qs  = Workshop.objects.all()
     context={
         }
     return render(request, template_name,context)
@@ -20,5 +19,8 @@ def fest_pricesview(request):
     return render(request, template_name, context)
 def fest_workshopsview(request):
     template_name='workshops.html'
-    context={}
+    qs_workshop = Workshop.objects.all()
+    context={
+        "workshop" : qs_workshop,
+    }
     return render(request, template_name, context)

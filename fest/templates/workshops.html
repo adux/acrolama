@@ -16,7 +16,9 @@
                                     <span class="image main"><img src="{% static "fest/images/pic04.jpg"%}" alt="" /></span>
                                     <!-- Table -->
 									<section>
-										<h2>Thursday</h2>
+                                      {% for obj in workshop%}
+                                      <h2>{obj.day}</h2>
+                                      {% endfor%}
 										<h3>Workshops</h3>
 										<div class="table-wrapper">
 											<table>
@@ -28,33 +30,15 @@
                                                         <th>Prerequisites</th>
 													</tr>
 												</thead>
+                                                {% for obj in workshop%}
 												<tbody>
 													<tr>
-														<td>Item One</td>
-														<td>Ante turpis integer aliquet porttitor.</td>
-														<td>29.99</td>
-													</tr>
-													<tr>
-														<td>Item Two</td>
-														<td>Vis ac commodo adipiscing arcu aliquet.</td>
-														<td>19.99</td>
-													</tr>
-													<tr>
-														<td>Item Three</td>
-														<td> Morbi faucibus arcu accumsan lorem.</td>
-														<td>29.99</td>
-													</tr>
-													<tr>
-														<td>Item Four</td>
-														<td>Vitae integer tempus condimentum.</td>
-														<td>19.99</td>
-													</tr>
-													<tr>
-														<td>Item Five</td>
-														<td>Ante turpis integer aliquet porttitor.</td>
-														<td>29.99</td>
+                                                            <td>{obj.time}</td>
+                                                            <td>{obj.teachers}</td>
+                                                            <td>{obj.topica}</td>
 													</tr>
 												</tbody>
+                                                {% endfor  %}
 												<tfoot>
 													<tr>
 														<td colspan="2"></td>
