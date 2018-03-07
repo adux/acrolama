@@ -10,5 +10,5 @@ class Workshop(models.Model):
     workshop        = models.TextField(max_length=300, blank=True, null=True)
     prerequisites   = models.TextField(max_length=300, blank=True, null=True)
     def day(self):
-        return self.date.strft('%A')
+        return self.date.strftime('%A')
 
