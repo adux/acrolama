@@ -1,0 +1,75 @@
+{% extends "basefest.html" %}
+{% block content %}
+{% load static %}
+<!-- Wrapper -->
+            <div id="wrapper">
+                <!-- Header -->
+                    <header id="header">
+                        <h1>Lenk im Simmental</h1>
+                        <p>How to get there and where will we sleep</p>
+                    </header>
+                    {% include 'snippets/navnothome.html' %}
+                <!-- Main -->
+                    <div id="main">
+                        <!-- Content -->
+                            <section id="accommodation" class="main">
+                                    <span class="image main"><img src="{% static "fest/images/pic04.jpg"%}" alt="" /></span>
+                                    <!-- Table -->
+									<section>
+										<h2>Thursday</h2>
+										<h3>Workshops</h3>
+										<div class="table-wrapper">
+											<table>
+												<thead>
+													<tr>
+														<th>Time</th>
+														<th>Teachers</th>
+														<th>Topic</th>
+                                                        <th>Prerequisites</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>Item One</td>
+														<td>Ante turpis integer aliquet porttitor.</td>
+														<td>29.99</td>
+													</tr>
+													<tr>
+														<td>Item Two</td>
+														<td>Vis ac commodo adipiscing arcu aliquet.</td>
+														<td>19.99</td>
+													</tr>
+													<tr>
+														<td>Item Three</td>
+														<td> Morbi faucibus arcu accumsan lorem.</td>
+														<td>29.99</td>
+													</tr>
+													<tr>
+														<td>Item Four</td>
+														<td>Vitae integer tempus condimentum.</td>
+														<td>19.99</td>
+													</tr>
+													<tr>
+														<td>Item Five</td>
+														<td>Ante turpis integer aliquet porttitor.</td>
+														<td>29.99</td>
+													</tr>
+												</tbody>
+												<tfoot>
+													<tr>
+														<td colspan="2"></td>
+														<td>100.00</td>
+													</tr>
+												</tfoot>
+											</table>
+										</div>
+                                <footer class="major">
+                                    <ul class="actions">
+                                        <li><a href="/" class="button">Back</a></li>
+                                    </ul>
+                                </footer>
+                            </section>
+                    </div>
+                    {% include 'snippets/footer.html' %}
+            </div>
+{% endblock %}

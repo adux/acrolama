@@ -14,4 +14,7 @@ def fest_pricesview(request):
     template_name='prices.html'
     context={}
     return render(request, template_name, context)
-
+def fest_workshopsview(request):
+    template_name='workshops.html'
+    context={}
+    return render(request, template_name, context)
