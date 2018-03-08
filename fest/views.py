@@ -19,10 +19,10 @@ def fest_pricesview(request):
     return render(request, template_name, context)
 def fest_workshopsview(request):
     template_name='workshops.html'
-    qs_jueves       = Workshop.objects.filter(date='2018-03-08')
-    qs_viernes      = Workshop.objects.filter(date='2018-03-09')
-    qs_sabado       = Workshop.objects.filter(date='2018-03-10')
-    qs_domingo      = Workshop.objects.filter(date='2018-03-11')
+    qs_jueves       = Workshop.objects.filter(date='2018-03-08').order_by('time')
+    qs_viernes      = Workshop.objects.filter(date='2018-03-09').order_by('time')
+    qs_sabado       = Workshop.objects.filter(date='2018-03-10').order_by('time')
+    qs_domingo      = Workshop.objects.filter(date='2018-03-11').order_by('time')
     context={
         "jueves": qs_jueves,
         "viernes": qs_viernes,
