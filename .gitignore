@@ -13,6 +13,7 @@ pip-selfcheck.json
 /static  # any collected static files
 static/
 acrolama/settings/local.py
+home/migrations/
 
 #Sass Ignore
 .sass-cache/
