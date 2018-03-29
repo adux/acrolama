@@ -8,4 +8,3 @@ class FestForm(forms.Form):
     option      = forms.CharField(required=False)
     allergies   = forms.CharField(required=False)
     date        = forms.DateField(required=False)
-

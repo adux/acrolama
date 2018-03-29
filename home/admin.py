@@ -6,7 +6,7 @@ from .models import (
     AboutDate,
     Event,
     Testimonial,
-    FileItem,
+    Portfolio,
 
 )
 
@@ -15,4 +15,4 @@ admin.site.register(AboutMember)
 admin.site.register(AboutGeneral)
 admin.site.register(AboutDate)
 admin.site.register(Testimonial)
-admin.site.register(FileItem)
+admin.site.register(Portfolio)

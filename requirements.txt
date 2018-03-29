@@ -14,7 +14,6 @@ django-crispy-forms==1.7.0
 django-letsencrypt==3.0.0
 django-scheduler==0.8.6.1
 django-storages==1.6.5
-djangorestframework==3.7.7
 docutils==0.14
 gunicorn==19.7.1
 icalendar==4.0.0
