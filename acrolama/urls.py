@@ -12,12 +12,13 @@ from fest.views import (
     fest_locationview,
     fest_pricesview,
     )
+
 from home.views import (
     homeview,
     EventDetailView,
     PortfolioCreateView,
+    )
 
-)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),

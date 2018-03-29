@@ -9,6 +9,7 @@ from django.views.generic import (
     DetailView,
     CreateView,
 )
+
 from home.models import (
     AboutMember,
     AboutGeneral,
@@ -63,3 +64,4 @@ class PortfolioCreateView(LoginRequiredMixin, CreateView):
         instance.owner = self.request.user
         #instance.save is done by CreateView
         return super(PortfolioCreateView, self).form_valid(form)
+

@@ -99,3 +99,4 @@ class Portfolio(models.Model):
     upload          = models.ImageField(upload_to='portfolio/')
     def __str__(self):
         return self.text
+
