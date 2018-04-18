@@ -16,8 +16,6 @@ class AboutMember(models.Model):
 
 class AboutGeneral(models.Model):
     description = models.TextField(max_length=1000)
-    uploaded_at = models.DateTimeField(auto_now_add=True)
-    image       = models.ImageField(upload_to='about/general/')
 
 class AboutDate(models.Model):
     start       = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
@@ -26,7 +24,9 @@ class AboutDate(models.Model):
     def yearstart(self):
         return self.start.strftime('%b %Y')
     def yearend(self):
-            return self.end.strftime('%Y')
+        return self.end.strftime('%Y')
+    def __str__(self):
+         return self.description
 
 class Event(models.Model):
     Icon = (
@@ -103,4 +103,3 @@ class Portfolio(models.Model):
     upload          = models.ImageField(upload_to='portfolio/')
     def __str__(self):
         return self.text
-
