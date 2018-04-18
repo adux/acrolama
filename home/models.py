@@ -9,11 +9,15 @@ class AboutMember(models.Model):
     name        = models.CharField(max_length=30)
     position    = models.CharField(max_length=30)
     content     = models.CharField(max_length=300)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    image       = models.ImageField(upload_to='about/member/')
     def __str__(self):
         return self.name
 
 class AboutGeneral(models.Model):
     description = models.TextField(max_length=300)
+    uploaded_at     = models.DateTimeField(auto_now_add=True)
+    image          = models.ImageField(upload_to='about/general/')
 
 class AboutDate(models.Model):
     start       = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
