@@ -12,7 +12,8 @@ from django.views.generic import (
 
 from home.models import (
     AboutMember,
-    AboutGeneral,
+    About,
+    AboutImage,
     AboutDate,
     Event,
     Testimonial,
@@ -25,7 +26,8 @@ from home.forms import (
 def homeview(request):
     template_name='home.html'
     qs_aboutmember  = AboutMember.objects.all()
-    qs_aboutgeneral = AboutGeneral.objects.all()
+    qs_aboutgeneral = About.objects.all()
+    qs_aboutimage   = AboutImage.objects.all()
     qs_aboutdate    = AboutDate.objects.all()
     qs_event        = Event.objects.filter(datestart__gte=datetime.now()).order_by('datestart')[:5]
     qs_testimonial  = Testimonial.objects.all()
@@ -36,12 +38,14 @@ def homeview(request):
     context= {
         "about_content":qs_aboutmember,
         "about_general":qs_aboutgeneral,
+        "about_image":qs_aboutimage,
         "about_date":qs_aboutdate,
         "event":qs_event,
         "testimonial":qs_testimonial,
         "portfolio":qs_portfolio,
         "positions":positions,
         "fportfolio":qs_pfstart,
+        "eportfolio":qs_pfend,
     }
     return render(request, template_name, context)
 

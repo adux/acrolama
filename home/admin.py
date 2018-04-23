@@ -1,13 +1,25 @@
 from django.contrib import admin
 from .models import (
+    About,
+    AboutImage,
     AboutMember,
-    AboutGeneral,
     AboutDate,
     Event,
     EventImage,
     Testimonial,
     Portfolio,
 )
+
+class AboutImageInline(admin.StackedInline):
+    model               = AboutImage
+    extra               = 1
+    can_delete          = True
+    show_change_link    = True
+
+class AboutAdmin(admin.ModelAdmin):
+    inlines             = [
+        AboutImageInline,
+             ]
 
 class PortfolioAdmin(admin.ModelAdmin):
     list_display        = ('order','text','upload')
@@ -27,8 +39,8 @@ class EventAdmin(admin.ModelAdmin):
              ]
 
 admin.site.register(Event, EventAdmin)
-admin.site.register(AboutMember)
-admin.site.register(AboutGeneral)
+admin.site.register(About, AboutAdmin)
 admin.site.register(AboutDate)
+admin.site.register(AboutMember)
 admin.site.register(Testimonial)
 admin.site.register(Portfolio, PortfolioAdmin)
