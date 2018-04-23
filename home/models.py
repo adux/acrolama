@@ -93,7 +93,7 @@ pre_save.connect(event_pre_save_receiver,sender=Event)
 class EventImage(models.Model):
     event       = models.ForeignKey(Event)
     uploaded_at = models.DateTimeField(auto_now_add=True)
-    upload      = models.ImageField(upload_to='event/')
+    image      = models.ImageField(upload_to='event/')
 
 class Testimonial(models.Model):
     text = models.TextField(max_length=350)
