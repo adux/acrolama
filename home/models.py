@@ -18,7 +18,7 @@ class AboutGeneral(models.Model):
     description = models.TextField(max_length=1000)
 
 class AboutGeneralImage(models.Model):
-    algo        =   models.TextField(max_length=300,blank=True,null=True)
+    Image        =   models.TextField(max_length=300,blank=True,null=True)
 
 class AboutDate(models.Model):
     start       = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
