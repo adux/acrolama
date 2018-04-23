@@ -29,8 +29,9 @@ def homeview(request):
     qs_aboutdate    = AboutDate.objects.all()
     qs_event        = Event.objects.filter(datestart__gte=datetime.now()).order_by('datestart')[:5]
     qs_testimonial  = Testimonial.objects.all()
-    qs_portfolio    = Portfolio.objects.order_by('uploaded_at')[1:6]
+    qs_portfolio    = Portfolio.objects.order_by('uploaded_at')[1:5]
     qs_pfstart      = Portfolio.objects.order_by('uploaded_at')[0:1]
+    qs_pfend        = Portfolio.objects.order_by('uploaded_at')[5:6]
     positions       = ['p_one','p_one_half',]
     context= {
         "about_content":qs_aboutmember,

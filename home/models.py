@@ -17,6 +17,9 @@ class AboutMember(models.Model):
 class AboutGeneral(models.Model):
     description = models.TextField(max_length=1000)
 
+class AboutGeneralImage(models.Model):
+    algo        =   models.TextField(max_length=300,blank=True,null=True)
+
 class AboutDate(models.Model):
     start       = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
     end         = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
@@ -80,14 +83,17 @@ class Event(models.Model):
             return self.dateend.strftime(' - %d %b')
     def get_timeend(self):
         return self.dateend.strftime('%H:%M')
-    def __str__(self):
-        return self.title
 
 ''' Signal of Django to generate slug if not created  '''
 def event_pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)
 pre_save.connect(event_pre_save_receiver,sender=Event)
+
+class EventImage(models.Model):
+    event       = models.ForeignKey(Event)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    upload      = models.ImageField(upload_to='event/')
 
 class Testimonial(models.Model):
     text = models.TextField(max_length=350)
@@ -97,9 +103,8 @@ class Testimonial(models.Model):
 
 class Portfolio(models.Model):
     owner           = models.ForeignKey(User)
+    order           = models.CharField(max_length=1,blank=True,null=True)
     text            = models.TextField(max_length=30,blank=True,null=True)
     sec_text        = models.TextField(max_length=30,blank=True,null=True)
     uploaded_at     = models.DateTimeField(auto_now_add=True)
     upload          = models.ImageField(upload_to='portfolio/')
-    def __str__(self):
-        return self.text
