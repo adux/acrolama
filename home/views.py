@@ -16,6 +16,7 @@ from home.models import (
     AboutImage,
     AboutDate,
     Event,
+    EventImage,
     Testimonial,
     Portfolio,
 )
@@ -51,12 +52,15 @@ def homeview(request):
 
 class EventDetailView(DetailView):
     queryset = Event.objects.all()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['image'] = EventImage.objects.all()
+        return context
 
 class PortfolioCreateView(LoginRequiredMixin, CreateView):
     form_class = PortfolioCreateForm
     template_name = 'home/portfolio_form.html'
     success_url = reverse_lazy('home/portfolio_form.html')
-
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
