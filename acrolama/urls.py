@@ -15,6 +15,7 @@ from fest.views import (
 
 from home.views import (
     homeview,
+    InfoDetailView,
     EventDetailView,
     PortfolioCreateView,
     )
@@ -25,11 +26,13 @@ urlpatterns = [
     url(r'^accounts/login/', LoginView.as_view(), name='login'),
     url(r'^$', homeview, name='home'),
     url(r'^portfolioupload/$', PortfolioCreateView.as_view()),
-    url(r'^e/(?P<slug>[\w-]+)/$', EventDetailView.as_view()),
+    url(r'^event/(?P<slug>[\w-]+)/$', EventDetailView.as_view()),
+    url(r'^info/(?P<slug>[\w-]+)/$', InfoDetailView.as_view()),
     url(r'^fest/$', fest_homeview),
     url(r'^fest/form/$', fest_createview),
     url(r'^fest/location/$', fest_locationview),
     url(r'^fest/prices/$', fest_pricesview),
+
 ]
 
 if settings.DEBUG:

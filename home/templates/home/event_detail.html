@@ -1,19 +1,24 @@
 {% extends 'base.html' %}
 {% block contentevent %}
 {% load static %}
-    <div class="single-portfolio">
+<div class="single-portfolio">
         <article id="portfolio-2" class=" section portfolio">
             <div class="center-relative content-1170">
                 <div class="entry-content">
                     <div class="content-wrap relative">
-                        <a class="absolute x-close" href="/#next">
+                        <a class="absolute x-close" onclick="goBack()">
                                 <img src="{% static 'home/images/icon_x.svg' %}" alt="Close">
                         </a>
-                        <script>
-                            var aboutImage_speed = "1000";
-                            var aboutImage_auto = "true";
-                            var aboutImage_hover = "true";
-                        </script>
+        <script>
+                function goBack(){
+                        window.history.back();
+                }
+        </script>
+        <script>
+                var aboutImage_speed = "1000";
+                var aboutImage_auto = "true";
+                 var aboutImage_hover = "true";
+        </script>
                         <div class="image-slider-wrapper relative img aboutImage">
                             <a id="aboutImage_next" class="image_slider_next" href="#"></a>
                             <div class="caroufredsel_wrapper">
@@ -26,43 +31,43 @@
                         <div class="clear"></div>
                         <br>
                         <br>
-                        <br>
-                        <div class="one_half text-right">
+                        <div class="one_half text-left">
                             <p>
-                            <span style="color: #adadad;">Date(s):</span> {{object.get_datestart}}{{object.get_dateend}}<br>
-                            <span style="color: #adadad;">Time:</span> from {{object.get_timestart}} till {{object.get_timeend}}<br>
-                            <span style="color: #adadad;">Location:</span> {{object.location}}<br>
+                            <strong>Date(s):</strong> {{object.get_datestart}}{{object.get_dateend}}<br>
+                            <strong>Time:</strong> {{object.get_timestart}} - {{object.get_timeend}}<br>
+                            <strong>Location:</strong> {{object.location}}<br>
                             {% if object.price %}
-                            <span style="color: #adadad;">Price:</span> {{object.price}}<br>
+                            <strong>Price:</strong> {{object.price}}<br>
+                            <div class="text-left">
+                                <a href="#" target="_self" class="button ">Register</a>
+                            </div>
                             {% else %}
-                            <br>
-                            <br>
-                            <div class="text-right">
-                                <a href="#" target="_self" class="button ">Pricing</a>
+                            <div class="text-left">
+                                <a href="/info/prices/" target="_self" class="button ">Pricing</a>
+                                <br>
+                                <a href="#" target="_self" class="button ">Register</a>
                             </div>
                             {% endif%}
                             </p>
-                                                    </div>
-                        <div class="one_half last ">
+                        </div>
+                        <div class="one_half last">
                                 <h1>{{object.title}}</h1>
                                 <p>{{object.description}}</p><br>
                                 <h1>Prerequisites</h1>
                                 <p>{{object.prerequisites}}</p>
                                 <br>
                                 <br>
-                            <div class="text-left">
-                                <a href="#" target="_self" class="button ">Register</a>
-                            </div>
                         </div>
                         <div class="clear"></div>
                     </div>
                 </div>
+                <!--
                 <div class="full-width">
                         <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d4274.290564544589!2d-75.2952832049782!3d40.753669641460846!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2srs!4v1444506658649" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
                 </div>
-                <div class="clear"></div>
+                <div class="clear"></div>-->
             </div>
-            {% include 'footer.html' %}
         </article>
-    </div>
-        {% endblock %}
+</div>
+{% include 'footer.html' %}
+{% endblock %}

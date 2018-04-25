@@ -6,6 +6,8 @@ from .models import (
     AboutDate,
     Event,
     EventImage,
+    Info,
+    InfoImage,
     Testimonial,
     Portfolio,
 )
@@ -37,7 +39,18 @@ class EventAdmin(admin.ModelAdmin):
     inlines             = [
         EventImageInline,
              ]
+class InfoImageInline(admin.StackedInline):
+    model               = InfoImage
+    extra               = 1
+    can_delete          = True
+    show_change_link    = True
 
+class InfoAdmin(admin.ModelAdmin):
+    list_display        = ('title','slug')
+    inlines             = [
+        InfoImageInline,
+    ]
+admin.site.register(Info, InfoAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(About, AboutAdmin)
 admin.site.register(AboutDate)

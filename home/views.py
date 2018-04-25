@@ -17,6 +17,8 @@ from home.models import (
     AboutDate,
     Event,
     EventImage,
+    Info,
+    InfoImage,
     Testimonial,
     Portfolio,
 )
@@ -49,6 +51,13 @@ def homeview(request):
         "eportfolio":qs_pfend,
     }
     return render(request, template_name, context)
+
+class InfoDetailView(DetailView):
+    queryset = Info.objects.all()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['image'] = InfoImage.objects.all()
+        return context
 
 class EventDetailView(DetailView):
     queryset = Event.objects.all()
