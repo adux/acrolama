@@ -7,7 +7,7 @@
                 <div class="entry-content">
                     <div class="content-wrap relative">
                         <a class="absolute x-close" onclick="goBack()">
-                                <img src="{% static 'home/images/icon_x.svg' %}" alt="Close">
+                                <img src="{% static 'home/images/icon_x.svg' %}" alt="Close"> BACK 
                         </a>
         <script>
                 function goBack(){
@@ -32,29 +32,72 @@
                         <br>
                         <br>
                         <div class="one_half text-left">
-                            <p>
-                            <strong>Date(s):</strong> {{object.get_datestart}}{{object.get_dateend}}<br>
-                            <strong>Time:</strong> {{object.get_timestart}} - {{object.get_timeend}}<br>
-                            <strong>Location:</strong> {{object.location}}<br>
+                            <strong>Date(s):</strong> {{object.get_datestart}}{{object.get_dateend}}
+                            <br>
+                            <strong>Time:</strong> {{object.get_timestart}} - {{object.get_timeend}}
+                            <br>
+                            <strong>Location:</strong> {{object.location}}
+                            <br>
                             {% if object.price %}
-                            <strong>Price:</strong> {{object.price}}<br>
+                            <strong>Price:</strong> {{object.price}}
+                            <br>
                             <div class="text-left">
                                 <a href="#" target="_self" class="button ">Register</a>
                             </div>
                             {% else %}
-                            <div class="text-left">
-                                <a href="/info/prices/" target="_self" class="button ">Pricing</a>
-                                <br>
-                                <a href="#" target="_self" class="button ">Register</a>
+                            <div class="tab">
+                                <input id="tab-one" type="checkbox" name="tabs">
+                                <label for="tab-one">Pricing</label>
+                                <div class="tab-content">
+                                    <p>
+                                        <div class="table-wrapper text-left">
+                                            <table class="alt">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Name</th>
+                                                        <th scope="col">Price</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td scope="row" data-label="Name">Single Season Abo</td>
+                                                        <td data-label="Price (Normal / Student)">CHF 340/270</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td scope="row" data-label="Name">Double Season Abo</td>
+                                                        <td data-label="Price (Normal / Student)">CHF 580/485</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td scope="row" data-label="Name">Cycle</td>
+                                                        <td data-label="Price (Normal / Student)">CHF 80/60</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td scope="row" data-label="Name">Single Class</td>
+                                                        <td data-label="Price (Normal / Student)">CHF 24</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <a href="/info/prices/" target="_self" class="button ">Details</a>
+                                    </p>
+                                </div>
                             </div>
-                            {% endif%}
-                            </p>
+                            <div class="tab">
+                                <input id="tab-two" type="checkbox" name="tabs">
+                                <label for="tab-two">Register</label>
+                                <div class="tab-content">
+                                        <p><a href="#" target="_self" class="button ">Register</a>Li soluta molestias iure facere dolorum adipisci eum? Saepe, itaque.</p>
+                                </div>
+                            </div>
+                            {% endif %}
                         </div>
                         <div class="one_half last">
                                 <h1>{{object.title}}</h1>
                                 <p>{{object.description}}</p><br>
+                                {% if object.prerequisites%}
                                 <h1>Prerequisites</h1>
                                 <p>{{object.prerequisites}}</p>
+                                {% endif%}
                                 <br>
                                 <br>
                         </div>
