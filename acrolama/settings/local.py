@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'home',
     'fest',
     'formulario',
-    'rest_framework',
     'storages',
 ]
 
