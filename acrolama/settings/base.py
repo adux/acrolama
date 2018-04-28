@@ -10,9 +10,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 SECRET_KEY = 's9+nemt@ka=)v2dsy92u7%&cu^w2#abu)v85)zh#ej2f2@zxht'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-ALLOWED_HOSTS = []
-
 
 # Application definition
 INSTALLED_APPS = [
