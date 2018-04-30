@@ -14,7 +14,7 @@
                         <div class="image-slider-wrapper relative img aboutImage">
                             <a id="aboutImage_next" class="image_slider_next" href="#"></a>
                             <div class="caroufredsel_wrapper">
-                                    <ul id="aboutImage" class="image-slider slides">{% for obj in image %}
+                                    <ul id="aboutImage" class="image-slider slides">{% for obj in info.infoimage_set.all %}
                                         <li><img src="{{obj.image.url}}" alt=""></li>{%endfor%}
                                 </ul>
                             </div>
