@@ -70,7 +70,7 @@ class Event(models.Model):
         ('Z', 'Multilevel'),
     )
 
-    cat              = models.CharField(max_length=13, choices=Icon, default=1)
+    cat              = models.CharField(max_length=15, choices=Icon, default=1)
     level            = models.CharField(max_length=1, choices=Level, default=1)
     title            = models.CharField(max_length=60)
     description      = models.TextField(max_length=1000)
