@@ -66,15 +66,15 @@ class Event(models.Model):
     Level            = (
         ('A', 'Advanced'),
         ('B', 'Intermediate'),
-        ('C', 'Introdution'),
+        ('C', 'Introduction'),
         ('Z', 'Multilevel'),
     )
 
     cat              = models.CharField(max_length=13, choices=Icon, default=1)
     level            = models.CharField(max_length=1, choices=Level, default=1)
     title            = models.CharField(max_length=60)
-    description      = models.TextField(max_length=300)
-    prerequisites    = models.TextField(max_length=300, null=True, blank=True)
+    description      = models.TextField(max_length=1000)
+    prerequisites    = models.TextField(max_length=1000, null=True, blank=True)
     location         = models.CharField(max_length=60)
     city             = models.CharField(max_length=20)
     ocurrance        = models.CharField(max_length=8, choices=Ocurrance, null=True,blank=True)
@@ -88,13 +88,13 @@ class Event(models.Model):
             return self.datestart.strftime('%d')
         else:
             return self.datestart.strftime('%d %b')
-    def get_timestart(self):
-        return self.datestart.strftime('%H:%M')
     def get_dateend(self):
         if self.dateend.strftime('%d %b') == self.datestart.strftime('%d %b'):
             return self.dateend.strftime('')
         else:
-            return self.dateend.strftime(' - %d %b')
+            return self.dateend.strftime(' - %d. %b %Y')
+    def get_timestart(self):
+        return self.datestart.strftime('%H:%M')
     def get_timeend(self):
         return self.dateend.strftime('%H:%M')
 
