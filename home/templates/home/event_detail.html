@@ -38,24 +38,25 @@
                             <br>
                             <strong>Location:</strong> {{object.location}}
                             <br>
-                            <strong>Event Type:</strong> {{object.cat}} - {{object.level}}
+                            <strong>Event Type:</strong> {{object.get_cat_display}} - {{object.get_level_display}}
                             <br>
                             {% if object.price %}
                             <strong>Price:</strong> {{object.price}}
                             <br>
                             <div class="tab">
-                                <input id="tab-one" type="checkbox" name="tabs">
+                                <input id="tab-one" type="checkbox" name="tabs" />
                                 <label for="tab-one">Register</label>
                                 <div class="tab-content">
-                                        <p><a href="#" target="_self" class="button ">Register</a>Li soluta molestias iure facere dolorum adipisci eum? Saepe, itaque.</p>
+                                        <form action="/your-name/" method="post">
+                                            <a action="" target="_self" class="button ">Submit</a>
+                                        </form>
                                 </div>
                             </div>
                             {% else %}
                             <div class="tab">
-                                <input id="tab-one" type="checkbox" name="tabs">
+                                <input id="tab-one" type="checkbox" name="tabs"/>
                                 <label for="tab-one">Pricing</label>
                                 <div class="tab-content">
-                                    <p>
                                         <div class="table-wrapper text-left">
                                             <table class="alt">
                                                 <thead>
@@ -85,24 +86,25 @@
                                             </table>
                                         </div>
                                         <a href="/info/prices/" target="_self" class="button ">Details</a>
-                                    </p>
                                 </div>
                             </div>
                             <div class="tab">
-                                <input id="tab-two" type="checkbox" name="tabs">
+                                <input id="tab-two" type="checkbox" name="tabs"/>
                                 <label for="tab-two">Register</label>
                                 <div class="tab-content">
-                                        <p><a href="#" target="_self" class="button ">Register</a>Li soluta molestias iure facere dolorum adipisci eum? Saepe, itaque.</p>
+                                    <form action="/your-name/" method="post">
+                                        <a action="" target="_self" class="button ">Submit</a>
+                                    </form>
                                 </div>
                             </div>
                             {% endif %}
                         </div>
                         <div class="one_half last">
                                 <h1>{{object.title}}</h1>
-                                <p>{{object.description}}</p><br>
+                                <p>{{object.description|safe}}</p><br>
                                 {% if object.prerequisites%}
                                 <h1>Prerequisites</h1>
-                                <p>{{object.prerequisites}}</p>
+                                <p>{{object.prerequisites|safe}}</p>
                                 {% endif%}
                                 <br>
                                 <br>
