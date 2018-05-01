@@ -53,7 +53,7 @@ class Event(models.Model):
         ('fas fa-cogs','Cycle'),
         ('fas fa-cog','Workshop'),
         ('fas fa-star','Camp'),
-        ('fas fa-star','Retreat'),
+        ('fas fa-seedling','Retreat'),
     )
     Ocurrance        = (
         ('Wed','Wednesday\'s'),
@@ -105,9 +105,27 @@ def event_pre_save_receiver(sender, instance, *args, **kwargs):
 pre_save.connect(event_pre_save_receiver,sender=Event)
 
 class EventImage(models.Model):
-    event       = models.ForeignKey(Event)
-    uploaded_at = models.DateTimeField(auto_now_add=True)
-    image      = models.ImageField(upload_to='event/')
+    event           = models.ForeignKey(Event)
+    uploaded_at     = models.DateTimeField(auto_now_add=True)
+    image           = models.ImageField(upload_to='event/')
+
+class Booking(models.Model):
+    Abo             = (
+        ('SA','Season Abo'),
+        ('CY','Cycle Abo'),
+        ('SI','Single Ticket'),
+    )
+    event           = models.ForeignKey(Event)
+    name            = models.CharField(max_length=40)
+    email           = models.CharField(max_length=50)
+    phone           = models.CharField(max_length=30)
+    abo             = models.CharField(max_length=8, choices=Abo, null=True,blank=True)
+    option          = models.CharField(max_length=5, null=True, blank=True)
+    comment         = models.TextField(max_length=350, null=True, blank=True)
+    payment         = models.CharField(max_length=30, null=True, blank=True)
+    status          = models.CharField(max_length=30, null=True, blank=True)
+    note            = models.TextField(max_length=1000, null=True, blank=True)
+    booked_at       = models.DateTimeField(auto_now_add=True)
 
 class Testimonial(models.Model):
     text = models.TextField(max_length=350)
