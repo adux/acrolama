@@ -1,20 +1,23 @@
 from datetime import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse
-from django.urls import reverse_lazy
+from django.http import HttpResponse, HttpResponseForbidden
+from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404
 from django.views import View
 from django.views.generic import (
     DetailView,
     CreateView,
+    FormView,
 )
+from django.views.generic.detail import SingleObjectMixin
 
 from home.models import (
     AboutMember,
     About,
     AboutImage,
     AboutDate,
+    Booking,
     Event,
     Info,
     InfoImage,
@@ -23,6 +26,7 @@ from home.models import (
 )
 from home.forms import (
     PortfolioCreateForm,
+    BookingCreateForm,
 )
 
 def homeview(request):
@@ -55,9 +59,34 @@ class InfoDetailView(DetailView):
     model = Info
     context_object_name = 'info'
 
+class Booking(SingleObjectMixin, FormView):
+    template_name = 'home/event_detail.html'
+    form_class = BookingCreateForm
+    model = Booking
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseForbidden()
+        self.object = self.get_object()
+        return super(Booking, self).post(request, *args, **kwargs)
+    def get_success_url(self):
+        return reverse('home')
+
 class EventDetailView(DetailView):
     model = Event
     context_object_name = 'event'
+    def get_context_data(self,**kwargs):
+        context = super(EventDetailView, self).get_context_data(**kwargs)
+        context['form'] = BookingCreateForm(auto_id=False)
+        return context
+
+class EventView(View):
+    def get(self,request,*args,**kwargs):
+        view = EventDetailView.as_view()
+        return view(request,*args,**kwargs)
+    def post(self,request,*args,**kwargs):
+        view = Booking.as_view()
+        return view(request,*args,**kwargs)
+
 
 class PortfolioCreateView(LoginRequiredMixin, CreateView):
     form_class = PortfolioCreateForm

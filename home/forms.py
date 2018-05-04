@@ -1,5 +1,5 @@
 from django import forms
-from .models import Portfolio
+from .models import Portfolio, Booking
 
 
 
@@ -18,10 +18,9 @@ class BookingCreateForm(forms.Form):
         ('CY','Cycle Abo'),
         ('SI','Single Ticket'),
     )
-    name            = forms.CharField()
-    email           = forms.CharField()
-    phone           = forms.CharField()
-    abo             = forms.CharField(required=False)
-    option          = forms.CharField(required=False)
-    comment         = forms.CharField(required=False)
-
+    name            = forms.CharField(label='',widget=forms.TextInput(attrs={'placeholder': 'Name'}))
+    email           = forms.CharField(label='',widget=forms.TextInput(attrs={'placeholder': 'Email'}))
+    phone           = forms.CharField(label='',widget=forms.TextInput(attrs={'placeholder': 'Phone'}))
+    abo             = forms.CharField(label='',required=False,widget=forms.TextInput(attrs={'placeholder': 'Abo'}))
+    option          = forms.CharField(label='',required=False,widget=forms.TextInput(attrs={'placeholder': 'Option'}))
+    comment         = forms.CharField(label='',required=False,widget=forms.TextInput(attrs={'placeholder': 'Comment'}))
