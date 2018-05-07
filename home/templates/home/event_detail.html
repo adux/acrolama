@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 {% block contentevent %}
 {% load static %}
+{% include 'snippets/nav.html'%}
 <div class="single-portfolio">
         <article id="portfolio-2" class=" section portfolio">
             <div class="center-relative content-1170">
                 <div class="entry-content">
                     <div class="content-wrap relative">
-                        <a class="absolute x-close" onclick="goBack()">
+                            <!--<a class="absolute x-close" onclick="goBack()">
                                 <img src="{% static 'home/images/icon_x.svg' %}" alt="Close">
                         </a>
         <script>
@@ -18,7 +19,7 @@
                 var aboutImage_speed = "1000";
                 var aboutImage_auto = "true";
                  var aboutImage_hover = "true";
-        </script>
+        </script>-->
                         <div class="image-slider-wrapper relative img aboutImage">
                             <a id="aboutImage_next" class="image_slider_next" href="#"></a>
                             <div class="caroufredsel_wrapper">
