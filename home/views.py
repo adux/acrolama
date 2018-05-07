@@ -40,6 +40,8 @@ def homeview(request):
     qs_portfolio    = Portfolio.objects.order_by('order')[1:5]
     qs_pfstart      = Portfolio.objects.order_by('order')[0:1]
     qs_pfend        = Portfolio.objects.order_by('order')[5:6]
+    qs_prices       = Info.objects.filter(slug = 'prices')
+    qs_faq       = Info.objects.filter(slug = 'faq')
     positions       = ['p_one','p_one_half',]
     if form.is_valid():
         form.save()
@@ -58,6 +60,8 @@ def homeview(request):
         "eportfolio":qs_pfend,
         "form":form,
         "errors":errors,
+        "price":qs_prices,
+        "faq":qs_faq,
     }
     return render(request, template_name, context)
 
