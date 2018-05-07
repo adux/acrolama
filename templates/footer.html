@@ -5,12 +5,8 @@
             <p>Why lama? Cause like, who doesn't like lamas!?.<br><br>
             </p>
             <ul class="actions">
-              {% for obj in price %}
-              <li><a href="{% url 'info' obj.slug %}" class="button">Policys</a></li>
-              {% endfor %}
-              {% for obj in faq %}
-              <li><a href="{% url 'info' obj.slug %}" class="button">FAQ</a></li>
-              {% endfor %}
+              <li><a href="/info/prices/" class="button">Policys</a></li>
+              <li><a href="/info/faq/" class="button">FAQ</a></li>
             </ul>
           </section>
           <section>
@@ -28,5 +24,5 @@
               <li><a href="https://www.youtube.com/channel/UC9_46R-RgJlkN4DghDug3Kw/"><span class="icon fab fa-youtube label alt"></span></a></li>
             </ul>
           </section>
-          <p class="copyright">© 2018 All rights reserved. | Template by <a href="https://colorlib.com" target="_blank">Colorlib</a> | Pictures by <a href="http://mad-motions.tumblr.com/" target="_blank">Matthias Bleich</a></p>
+          <p class="copyright">© 2018 All rights reserved.| Created by Adrian Garate | Pictures by <a href="http://mad-motions.tumblr.com/" target="_blank">Matthias Bleich</a> | Template by <a href="https://colorlib.com" target="_blank">Colorlib</a></p>
         </footer>
