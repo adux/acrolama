@@ -17,6 +17,7 @@ from home.views import (
     homeview,
     InfoDetailView,
     EventDetailView,
+    EventListView,
     PortfolioCreateView,
     )
 
@@ -27,6 +28,7 @@ urlpatterns = [
     url(r'^$', homeview, name='home'),
     url(r'^portfolioupload/$', PortfolioCreateView.as_view()),
     url(r'^event/(?P<slug>[\w-]+)/$', EventDetailView.as_view(), name='event'),
+    url(r'^events/$', EventListView.as_view(), name='events'),
     url(r'^info/(?P<slug>[\w-]+)/$', InfoDetailView.as_view(), name='info'),
     url(r'^fest/$', fest_homeview),
     url(r'^fest/form/$', fest_createview),

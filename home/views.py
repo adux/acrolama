@@ -7,6 +7,7 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import (
     DetailView,
     CreateView,
+    ListView,
 )
 from django.views.generic.edit import FormMixin
 from home.models import (
@@ -63,6 +64,12 @@ class InfoDetailView(DetailView):
     model = Info
     context_object_name = 'info'
 
+class EventListView(ListView):
+    model = Event
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['list'] = Event.objects.order_by('datestart')
+        return context
 class EventDetailView(FormMixin, DetailView):
     model = Event
     form_class = BookingCreateForm
