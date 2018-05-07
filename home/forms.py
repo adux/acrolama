@@ -1,6 +1,6 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-from .models import Portfolio, Booking
+from .models import Portfolio, Booking, NewsList
 
 
 
@@ -35,3 +35,15 @@ class BookingCreateForm(forms.ModelForm):
             'comment': forms.Textarea(attrs={'placeholder': 'Comment'}),
         }
 
+class NewsForm(forms.ModelForm):
+    class Meta:
+        model = NewsList
+        fields = (
+            'email',
+        )
+        labels = {
+            'email': _(''),
+        }
+        widgets = {
+            'email': forms.EmailInput(attrs={'placeholder': 'Your Email'}),
+        }

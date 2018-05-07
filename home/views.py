@@ -1,6 +1,6 @@
 from datetime import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseForbidden, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404
@@ -24,10 +24,13 @@ from home.models import (
 from home.forms import (
     PortfolioCreateForm,
     BookingCreateForm,
+    NewsForm,
 )
 
 def homeview(request):
     template_name='home.html'
+    form = NewsForm( request.POST or None)
+    errors = None
     qs_aboutmember  = AboutMember.objects.all()
     qs_aboutgeneral = About.objects.all()
     qs_aboutimage   = AboutImage.objects.all()
@@ -38,6 +41,10 @@ def homeview(request):
     qs_pfstart      = Portfolio.objects.order_by('order')[0:1]
     qs_pfend        = Portfolio.objects.order_by('order')[5:6]
     positions       = ['p_one','p_one_half',]
+    if form.is_valid():
+        form.save()
+    if form.errors:
+        errors = form.errors
     context= {
         "about_content":qs_aboutmember,
         "about_general":qs_aboutgeneral,
@@ -49,6 +56,8 @@ def homeview(request):
         "positions":positions,
         "fportfolio":qs_pfstart,
         "eportfolio":qs_pfend,
+        "form":form,
+        "errors":errors,
     }
     return render(request, template_name, context)
 

@@ -16,8 +16,14 @@
                         </div>
                         <div class="one_half last">
                             <div class="contact-form">
-                                <p><input id="contact-email" type="email" name="your-email" placeholder="Email"></p>
-                                <p><input type="submit" onClick="SendMail()" value="SEND"></p>
+                              {% if form.errors.non_field_errors %}
+                                        {{ form.errors.non_field_errors }}
+                                        {% endif %}
+                                        <form method="post">
+                                                {%csrf_token%}
+                                                {{form.as_p}}
+                                                <p><input value="Submit" type="submit"></input></p>
+                                        </form>
                             </div>
                         </div>
                         <div class="clear"></div>

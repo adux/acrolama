@@ -11,6 +11,7 @@ from .models import (
     InfoImage,
     Testimonial,
     Portfolio,
+    NewsList
 )
 
 class AboutImageInline(admin.StackedInline):
@@ -55,10 +56,17 @@ class InfoAdmin(admin.ModelAdmin):
     inlines             = [
         InfoImageInline,
     ]
+
+class NewsAdmin(admin.ModelAdmin):
+    list_display        = ('email','active','inscribed_at')
+    list_filter         = ('active',)
+
+
 admin.site.register(Info, InfoAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(About, AboutAdmin)
 admin.site.register(Booking, BookingAdmin)
+admin.site.register(NewsList,NewsAdmin)
 admin.site.register(AboutDate)
 admin.site.register(AboutMember)
 admin.site.register(Testimonial)

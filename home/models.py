@@ -110,6 +110,11 @@ class EventImage(models.Model):
     uploaded_at     = models.DateTimeField(auto_now_add=True)
     image           = models.ImageField(upload_to='event/')
 
+class NewsList(models.Model):
+    email           = models.CharField(max_length=100,blank=True,null=True)
+    active          = models.BooleanField(default=True)
+    inscribed_at    = models.DateField(auto_now_add=True)
+
 class Booking(models.Model):
     Abo             = [
         ('SA','Season Abo'),
@@ -138,6 +143,7 @@ class Booking(models.Model):
     booked_at       = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return '%s - %s' % (self.event, self.name)
+
 class Testimonial(models.Model):
     text = models.TextField(max_length=350)
     author = models.CharField(max_length=30)
