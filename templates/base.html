@@ -1,19 +1,22 @@
 <!DOCTYPE HTML>
 {% load static %}
+{% load analytical %}
 <html lang="en-US">
-    <head>
-        <title>{% block head_title %}Acrolama{% endblock%}</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta name="description" content="Template by Adux" />
-        <meta name="keywords" content="HTML, CSS, JavaScript" />
-        <meta name="author" content="Adux" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <link rel="shortcut icon" href="{% static 'favicon.ico' %}" />
-                {% include 'snippets/css.html' %}
-    </head>
-    <body>
+        <head>
+            {% analytical_head_top %}
+            <title>{% block head_title %}Acrolama{% endblock%}</title>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+            <meta name="description" content="Acrolama is a Acrobatic and Acroyoga Duo based in Zürich Switzerland that teach and organize several Weekly Classes, Trainings Camps, Retreats and Workshops. They host the Winter Acro Festival in Lenk and are part of the Urban Acro Fesitval Züri Team."/>
+            <meta name="keywords" content="Acroyoga Zurich, Acroyoga Switzerland, Acro Schweiz, Swiss Acro" />
+            <meta name="author" content="Adrian Garate" />
+            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+            <link rel="shortcut icon" href="{% static 'favicon.ico' %}" /> {% include 'snippets/css.html' %}{% analytical_head_bottom %}
+        </head>
+        <body>
+            {% analytical_body_top %}
             {% block content %}{% endblock %}
             {% block contentevent %}{% endblock %}
             {% include 'snippets/js.html' %}
-    </body>
+            {% analytical_body_bottom %}
+        </body>
 </html>

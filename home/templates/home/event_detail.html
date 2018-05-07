@@ -7,7 +7,7 @@
                 <div class="entry-content">
                     <div class="content-wrap relative">
                         <a class="absolute x-close" onclick="goBack()">
-                                <img src="{% static 'home/images/icon_x.svg' %}" alt="Close"> BACK 
+                                <img src="{% static 'home/images/icon_x.svg' %}" alt="Close">
                         </a>
         <script>
                 function goBack(){
@@ -40,6 +40,7 @@
                             <br>
                             <strong>Event Type:</strong> {{object.get_cat_display}} - {{object.get_level_display}}
                             <br>
+                            <br>
                             {% if object.price %}
                             <strong>Price:</strong> {{object.price}}
                             <br>
@@ -53,7 +54,7 @@
                                         <form method="post">
                                                 {%csrf_token%}
                                                 {{form.as_p}}
-                                                <p><input value="Submit" type="submit"></input></p>
+                                                <p><input value="Submit" type="submit"></p>
                                         </form>
                                 </div>
                             </div>
@@ -103,7 +104,7 @@
                                         <form method="post">
                                             {% csrf_token %}
                                             {{form.as_p}}
-                                            <p><input value="Submit" type="submit" "></input>
+                                            <p><input value="Submit" type="submit"></p>
                                     </form>
                                 </div>
                             </div>

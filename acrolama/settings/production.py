@@ -33,10 +33,11 @@ INSTALLED_APPS = [
     'fest',
     'formulario',
     'storages',
+    'analytical',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
-
+GOOGLE_ANALYTICS_PROPERTY_ID = 'UA-118797477-1'
 # Database for heroku
 import dj_database_url
 db_from_env = dj_database_url.config()
