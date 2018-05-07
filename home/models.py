@@ -97,7 +97,8 @@ class Event(models.Model):
         return self.datestart.strftime('%H:%M')
     def get_timeend(self):
         return self.dateend.strftime('%H:%M')
-
+    def __str__(self):
+        return self.title
 ''' Signal of Django to generate slug if not created  '''
 def event_pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
@@ -110,12 +111,20 @@ class EventImage(models.Model):
     image           = models.ImageField(upload_to='event/')
 
 class Booking(models.Model):
-    Abo             = (
+    Abo             = [
         ('SA','Season Abo'),
         ('CY','Cycle Abo'),
         ('SI','Single Ticket'),
-    )
-    event           = models.ForeignKey(Event)
+    ]
+    Status          = [
+        ('IN','Informed'),
+        ('CA','Canceled'),
+        ('PA','Payed'),
+        ('PE','Pending'),
+        ('SW','Switched')
+    ]
+
+    event           = models.ForeignKey(Event, on_delete=models.CASCADE)
     name            = models.CharField(max_length=40)
     email           = models.CharField(max_length=50)
     phone           = models.CharField(max_length=30)
@@ -123,10 +132,12 @@ class Booking(models.Model):
     option          = models.CharField(max_length=5, null=True, blank=True)
     comment         = models.TextField(max_length=350, null=True, blank=True)
     payment         = models.CharField(max_length=30, null=True, blank=True)
-    status          = models.CharField(max_length=30, null=True, blank=True)
+    pay_till        = models.DateField(auto_now_add=False,auto_now=False, null=True,blank=True)
+    status          = models.CharField(max_length=15, choices=Status,null=True,blank=True)
     note            = models.TextField(max_length=1000, null=True, blank=True)
     booked_at       = models.DateTimeField(auto_now_add=True)
-
+    def __str__(self):
+        return '%s - %s' % (self.event, self.name)
 class Testimonial(models.Model):
     text = models.TextField(max_length=350)
     author = models.CharField(max_length=30)

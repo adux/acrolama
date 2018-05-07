@@ -28,11 +28,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms',
     'home',
     'fest',
     'formulario',
     'storages',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 # Database for heroku
 import dj_database_url

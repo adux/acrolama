@@ -4,6 +4,7 @@ from .models import (
     AboutImage,
     AboutMember,
     AboutDate,
+    Booking,
     Event,
     EventImage,
     Info,
@@ -22,6 +23,10 @@ class AboutAdmin(admin.ModelAdmin):
     inlines             = [
         AboutImageInline,
              ]
+class BookingAdmin(admin.ModelAdmin):
+    list_display        = ('event','booked_at','name','phone','email','abo','status','pay_till')
+    list_filter         = ('event','status','abo')
+    search_fields       = ('name','email','event')
 
 class PortfolioAdmin(admin.ModelAdmin):
     list_display        = ('order','text','upload')
@@ -53,6 +58,7 @@ class InfoAdmin(admin.ModelAdmin):
 admin.site.register(Info, InfoAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(About, AboutAdmin)
+admin.site.register(Booking, BookingAdmin)
 admin.site.register(AboutDate)
 admin.site.register(AboutMember)
 admin.site.register(Testimonial)

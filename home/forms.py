@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.translation import ugettext_lazy as _
 from .models import Portfolio, Booking
 
 
@@ -12,15 +13,25 @@ class PortfolioCreateForm(forms.ModelForm):
             'upload',
         ]
 
-class BookingCreateForm(forms.Form):
-    Abo             = (
-        ('SA','Season Abo'),
-        ('CY','Cycle Abo'),
-        ('SI','Single Ticket'),
-    )
-    name            = forms.CharField(label='',widget=forms.TextInput(attrs={'placeholder': 'Name'}))
-    email           = forms.CharField(label='',widget=forms.TextInput(attrs={'placeholder': 'Email'}))
-    phone           = forms.CharField(label='',widget=forms.TextInput(attrs={'placeholder': 'Phone'}))
-    abo             = forms.CharField(label='',required=False,widget=forms.TextInput(attrs={'placeholder': 'Abo'}))
-    option          = forms.CharField(label='',required=False,widget=forms.TextInput(attrs={'placeholder': 'Option'}))
-    comment         = forms.CharField(label='',required=False,widget=forms.TextInput(attrs={'placeholder': 'Comment'}))
+class BookingCreateForm(forms.ModelForm):
+    class Meta:
+        model = Booking
+        fields = (
+            'name',
+            'email',
+            'phone',
+            'comment',
+        )
+        labels = {
+            'name': _(''),
+            'email': _(''),
+            'phone': _(''),
+            'comment': _(''),
+        }
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Name'}),
+            'email': forms.EmailInput(attrs={'placeholder': 'Email'}),
+            'phone': forms.TextInput(attrs={'placeholder': 'Phone (+41076...)'}),
+            'comment': forms.Textarea(attrs={'placeholder': 'Comment'}),
+        }
+

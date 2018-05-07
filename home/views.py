@@ -4,14 +4,11 @@ from django.http import HttpResponse, HttpResponseForbidden
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404
-from django.views import View
 from django.views.generic import (
     DetailView,
     CreateView,
-    FormView,
 )
-from django.views.generic.detail import SingleObjectMixin
-
+from django.views.generic.edit import FormMixin
 from home.models import (
     AboutMember,
     About,
@@ -35,7 +32,7 @@ def homeview(request):
     qs_aboutgeneral = About.objects.all()
     qs_aboutimage   = AboutImage.objects.all()
     qs_aboutdate    = AboutDate.objects.all()
-    qs_event        = Event.objects.filter(datestart__gte=datetime.now()).order_by('datestart')[:5]
+    qs_event        = Event.objects.filter(datestart__gte=timezone.now()).order_by('datestart')[:5]
     qs_testimonial  = Testimonial.objects.all()
     qs_portfolio    = Portfolio.objects.order_by('order')[1:5]
     qs_pfstart      = Portfolio.objects.order_by('order')[0:1]
@@ -59,34 +56,30 @@ class InfoDetailView(DetailView):
     model = Info
     context_object_name = 'info'
 
-class Booking(SingleObjectMixin, FormView):
-    template_name = 'home/event_detail.html'
-    form_class = BookingCreateForm
-    model = Booking
-    def post(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return HttpResponseForbidden()
-        self.object = self.get_object()
-        return super(Booking, self).post(request, *args, **kwargs)
-    def get_success_url(self):
-        return reverse('home')
-
-class EventDetailView(DetailView):
+class EventDetailView(FormMixin, DetailView):
     model = Event
-    context_object_name = 'event'
+    form_class = BookingCreateForm
+    def get_success_url(self):
+        return reverse('event',kwargs={'slug':self.object.slug})
+
     def get_context_data(self,**kwargs):
-        context = super(EventDetailView, self).get_context_data(**kwargs)
-        context['form'] = BookingCreateForm(auto_id=False)
+        context = super(EventDetailView,self).get_context_data(**kwargs)
+        context['form'] = self.get_form()
         return context
 
-class EventView(View):
-    def get(self,request,*args,**kwargs):
-        view = EventDetailView.as_view()
-        return view(request,*args,**kwargs)
-    def post(self,request,*args,**kwargs):
-        view = Booking.as_view()
-        return view(request,*args,**kwargs)
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        instance.event = Event.objects.get(slug = self.object.slug)
+        instance.save()
+        return super(EventDetailView, self).form_valid(form)
 
 class PortfolioCreateView(LoginRequiredMixin, CreateView):
     form_class = PortfolioCreateForm
