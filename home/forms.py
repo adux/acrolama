@@ -14,24 +14,34 @@ class PortfolioCreateForm(forms.ModelForm):
         ]
 
 class BookingCreateForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['abo'].initial ='CY'
+        self.fields['reduction'].initial='NM'
     class Meta:
         model = Booking
         fields = (
             'name',
             'email',
             'phone',
+            'abo',
+            'reduction',
             'comment',
         )
         labels = {
             'name': _(''),
             'email': _(''),
             'phone': _(''),
+            'abo': _(''),
+            'reduction': _(''),
             'comment': _(''),
         }
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'Name'}),
             'email': forms.EmailInput(attrs={'placeholder': 'Email'}),
             'phone': forms.TextInput(attrs={'placeholder': 'Phone (+41076...)'}),
+            'abo': forms.Select(attrs={'checked': 'checked'}),
+            'reduction': forms.Select(attrs={'checked': 'checked'}),
             'comment': forms.Textarea(attrs={'placeholder': 'Comment'}),
         }
 

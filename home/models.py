@@ -121,6 +121,10 @@ class Booking(models.Model):
         ('CY','Cycle Abo'),
         ('SI','Single Ticket'),
     ]
+    Reduction       =[
+        ('ST','Student'),
+        ('NM','Normal'),
+    ]
     Status          = [
         ('IN','Informed'),
         ('CA','Canceled'),
@@ -133,7 +137,8 @@ class Booking(models.Model):
     name            = models.CharField(max_length=40)
     email           = models.CharField(max_length=50)
     phone           = models.CharField(max_length=30)
-    abo             = models.CharField(max_length=8, choices=Abo, null=True,blank=True)
+    abo             = models.CharField(max_length=8, choices=Abo, null=True, blank=True)
+    reduction       = models.CharField(max_length=12, choices=Reduction, null=True, blank=True)
     option          = models.CharField(max_length=5, null=True, blank=True)
     comment         = models.TextField(max_length=350, null=True, blank=True)
     payment         = models.CharField(max_length=30, null=True, blank=True)
