@@ -73,7 +73,7 @@ class Event(models.Model):
     cat              = models.CharField(max_length=15, choices=Icon, default=1)
     level            = models.CharField(max_length=1, choices=Level, default=1)
     title            = models.CharField(max_length=60)
-    description      = models.TextField(max_length=1000)
+    description      = models.TextField(max_length=3000)
     prerequisites    = models.TextField(max_length=1000, null=True, blank=True)
     location         = models.CharField(max_length=60)
     city             = models.CharField(max_length=20)
