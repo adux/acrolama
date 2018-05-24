@@ -13,7 +13,7 @@ class PortfolioCreateForm(forms.ModelForm):
             'upload',
         ]
 
-class BookingCreateForm(forms.ModelForm):
+class BookClassCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['abo'].initial ='CY'
@@ -43,6 +43,28 @@ class BookingCreateForm(forms.ModelForm):
             'abo': forms.Select(attrs={'checked': 'checked'}),
             'reduction': forms.Select(attrs={'checked': 'checked'}),
             'comment': forms.Textarea(attrs={'placeholder': 'Comment'}),
+        }
+
+class BookEventCreateForm(forms.ModelForm):
+    class Meta:
+        model = Booking
+        fields = (
+            'name',
+            'email',
+            'phone',
+            'comment',
+        )
+        labels = {
+            'name': _(''),
+            'email': _(''),
+            'phone': _(''),
+            'comment': _(''),
+        }
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Name'}),
+            'email': forms.EmailInput(attrs={'placeholder': 'Email'}),
+            'phone': forms.TextInput(attrs={'placeholder': 'Phone (+417600000000)'}),
+            'comment': forms.Textarea(attrs={'placeholder': 'Comments, Questions, Allergies, Injuries'}),
         }
 
 class NewsForm(forms.ModelForm):

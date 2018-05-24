@@ -24,7 +24,8 @@ from home.models import (
 )
 from home.forms import (
     PortfolioCreateForm,
-    BookingCreateForm,
+    BookClassCreateForm,
+    BookEventCreateForm,
     NewsForm,
 )
 
@@ -36,8 +37,8 @@ def homeview(request):
     qs_aboutgeneral = About.objects.all()
     qs_aboutimage   = AboutImage.objects.all()
     qs_aboutdate    = AboutDate.objects.all()
-    qs_event        = Event.objects.filter(dateend__gte=timezone.now()).order_by('datestart').exclude(cat='fas fa-cogs')[:5]
-    qs_class        = Event.objects.filter(dateend__gte=timezone.now()).order_by('datestart').filter(cat='fas fa-cogs')[:5]
+    qs_event        = Event.objects.filter(dateend__gte=timezone.now()).order_by('datestart').exclude(cat='fas fa-cogs').exclude(published=False)[:5]
+    qs_class        = Event.objects.filter(dateend__gte=timezone.now()).order_by('datestart').filter(cat='fas fa-cogs').exclude(published=False)[:5]
     qs_testimonial  = Testimonial.objects.all()
     qs_portfolio    = Portfolio.objects.order_by('order')[1:5]
     qs_pfstart      = Portfolio.objects.order_by('order')[0:1]
@@ -70,19 +71,20 @@ class EventListView(ListView):
     model = Event
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['list'] = Event.objects.order_by('datestart').exclude(cat='fas fa-cogs')
+        context['list'] = Event.objects.order_by('datestart').exclude(cat='fas fa-cogs').exclude(published=False)
         return context
 
 class ClassListView(ListView):
     model = Event
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['list'] = Event.objects.order_by('datestart').filter(cat='fas fa-cogs')
+        context['list'] = Event.objects.order_by('datestart').filter(cat='fas fa-cogs').exclude(published=False)
+
         return context
 
 class ClassDetailView(FormMixin, DetailView):
     model = Event
-    form_class = BookingCreateForm
+    form_class = BookClassCreateForm
     def get_success_url(self):
         return reverse('classes',kwargs={'slug':self.object.slug})
     def get_context_data(self,**kwargs):
@@ -104,7 +106,7 @@ class ClassDetailView(FormMixin, DetailView):
 
 class EventDetailView(FormMixin, DetailView):
     model = Event
-    form_class = BookingCreateForm
+    form_class = BookEventCreateForm
     def get_success_url(self):
         return reverse('events',kwargs={'slug':self.object.slug})
     def get_context_data(self,**kwargs):

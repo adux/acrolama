@@ -82,6 +82,7 @@ class Event(models.Model):
     dateend          = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
     price            = models.CharField(max_length=20, null=True, blank=True)
     publication      = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
+    published        = models.BooleanField()
     slug             = models.SlugField(unique=True, null=True,blank=True)
     def get_datestart(self):
         if self.datestart.strftime('%b') == self.dateend.strftime('%b') and self.dateend.strftime('%d %b') != self.datestart.strftime('%d %b'):
