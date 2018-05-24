@@ -39,7 +39,7 @@ class EventImageInline(admin.StackedInline):
     show_change_link    = True
 
 class EventAdmin(admin.ModelAdmin):
-    list_display        = ('title','city','datestart','dateend','slug','published')
+    list_display        = ('title','city','datestart','dateend','slug','published','registration')
     list_filter         = ('cat','level','city')
     search_fields       = ('title','datestart','dateend')
     inlines             = [

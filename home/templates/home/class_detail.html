@@ -37,20 +37,6 @@
                             {% if object.price %}
                             <strong>Price:</strong> {{object.price}}
                             <br>
-                            <div class="tab">
-                                <input id="tab-one" type="checkbox" name="tabs" />
-                                <label for="tab-one">Register</label>
-                                <div class="tab-content tab-form">
-                                        {% if form.errors.non_field_errors %}
-                                        {{ form.errors.non_field_errors }}
-                                        {% endif %}
-                                        <form method="post">
-                                                {%csrf_token%}
-                                                {{form.as_p}}
-                                                <p><input value="Submit" type="submit"></p>
-                                        </form>
-                                </div>
-                            </div>
                             {% else %}
                             <div class="tab">
                                 <input id="tab-one" type="checkbox" name="tabs"/>
@@ -87,8 +73,9 @@
                                         <a href="/info/prices/" target="_self" class="button" type="submit">Details</a>
                                 </div>
                             </div>
+                            {% endif %}
                             <div class="tab">
-                                <input id="tab-two" type="checkbox" name="tabs"/>
+                                <input id="tab-two" type="checkbox" name="tabs" checked/>
                                 <label for="tab-two">Register</label>
                                 <div class="tab-content tab-form">
                                         {% if form.errors.non_field_errors %}
@@ -101,7 +88,6 @@
                                     </form>
                                 </div>
                             </div>
-                            {% endif %}
                         </div>
                         <div class="one_half last">
                                 <h1>{{object.title}}</h1>
