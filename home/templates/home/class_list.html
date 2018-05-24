@@ -1,40 +1,40 @@
+{% extends 'base.html' %}
+{% block contentevents %}
 {% load static %}
-<!-- News -->
-        <div id="events" class="section">
+{% include 'snippets/nav.html' %}
+<!-- Events -->
+        <div id="next" class="section">
             <div class="block content-1170 center-relative">
-                <div class="section-title-holder left">
+                <div class="section-title-holder right">
                     <div class="section-num">
                         <span>
                                 <i class="fas fa-hourglass-half"></i>
                         </span>
                     </div>
-                    <h2 class="entry-title">EVENTS</h2>
+                    <h2 class="entry-title">CLASSES</h2>
                 </div>
-                <div class="section-content-holder right green">
+                <div class="section-content-holder left green">
                     <div class="content-wrapper">
                         <div class="blog-holder block center-relative">
-                            {% for obj in event %}
+                            {% for object in list %}
                             <article class="blog-item-holder relative">
                                 <div class="num">
-                                        <i class="{{obj.cat}}"></i>
+                                        <i class="{{object.cat}}"></i>
                                 </div>
                                 <div class="info">
-										<div class="author vcard "><a href="events/{{obj.slug}}">{{obj.get_level_display}} {{obj.get_cat_display}} - {{obj.city}}</a></div>
+										<div class="author vcard "><a href="/classes/{{object.slug}}">{{object.get_level_display}} {{object.get_cat_display}} - {{object.city}}</a></div>
                                     <div class="cat-links">
                                         <ul>
-                                                <li><a href="events/{{obj.slug}}">{{obj.get_datestart}}{{obj.get_dateend}} | {{obj.get_ocurrance_display|default_if_none:""}}</a></li>
+                                                <li><a href="/classes/{{object.slug}}">{{object.get_datestart}}{{object.get_dateend}} | {{object.get_ocurrance_display|default_if_none:""}}</a></li>
                                         </ul>
                                     </div>
                                 </div>
                                 <h3 class="entry-title">
-                                        <a href="events/{{obj.slug}}">{{obj.title}}</a>
+                                        <a href="/classes/{{object.slug}}">{{object.title}}</a>
                                 </h3>
                                 <div class="clear"></div>
                             </article>
                             {% endfor %}
-                            <div class="latest-post-bottom-text">
-                                    <a href="{% url 'events'%}">EVENTS CALENDAR</a>
-                            </div>
                             <div class="clear"></div>
                         </div>
                     </div>
@@ -42,3 +42,5 @@
                 <div class="clear"></div>
             </div>
         </div>
+{% include 'footer.html' %}
+{% endblock %}
