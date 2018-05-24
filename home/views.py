@@ -36,8 +36,8 @@ def homeview(request):
     qs_aboutgeneral = About.objects.all()
     qs_aboutimage   = AboutImage.objects.all()
     qs_aboutdate    = AboutDate.objects.all()
-    qs_event        = Event.objects.filter(datestart__gte=timezone.now()).order_by('datestart').exclude(cat='fas fa-cogs')[:5]
-    qs_class        = Event.objects.filter(datestart__gte=timezone.now()).order_by('datestart').filter(cat='fas fa-cogs')[:5]
+    qs_event        = Event.objects.filter(dateend__gte=timezone.now()).order_by('datestart').exclude(cat='fas fa-cogs')[:5]
+    qs_class        = Event.objects.filter(dateend__gte=timezone.now()).order_by('datestart').filter(cat='fas fa-cogs')[:5]
     qs_testimonial  = Testimonial.objects.all()
     qs_portfolio    = Portfolio.objects.order_by('order')[1:5]
     qs_pfstart      = Portfolio.objects.order_by('order')[0:1]
