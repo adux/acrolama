@@ -1,5 +1,6 @@
 from datetime import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
@@ -86,6 +87,7 @@ class ClassDetailView(FormMixin, DetailView):
     model = Event
     form_class = BookClassCreateForm
     def get_success_url(self):
+        messages.add_message(self.request, messages.SUCCESS, 'SUCCESS! See you soon!')
         return reverse('classes',kwargs={'slug':self.object.slug})
     def get_context_data(self,**kwargs):
         context = super(ClassDetailView,self).get_context_data(**kwargs)
@@ -102,7 +104,8 @@ class ClassDetailView(FormMixin, DetailView):
         instance = form.save(commit=False)
         instance.event = Event.objects.get(slug = self.object.slug)
         instance.save()
-        return super(EventDetailView, self).form_valid(form)
+        messages.add_message(self.request, messages.SUCCESS, 'SUCCESS! See you soon!')
+        return super(ClassDetailView, self).form_valid(form)
 
 class EventDetailView(FormMixin, DetailView):
     model = Event
