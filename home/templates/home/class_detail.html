@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block contentevent %}
+{% block contentclass %}
 {% load static %}
 {% include 'snippets/nav.html'%}
 <div class="single-portfolio">
@@ -75,7 +75,7 @@
                             </div>
                             {% endif %}
                             <div class="tab">
-                                <input id="tab-two" type="checkbox" name="tabs" checked/>
+                                <input id="tab-two" type="checkbox" name="tabs" checked="checked"/>
                                 <label for="tab-two">Register</label>
                                 <div class="tab-content tab-form">
                                         {% if form.errors.non_field_errors %}
@@ -84,18 +84,11 @@
                                         {% if messages %}
                                         <ul class="messages">
                                             {% for message in messages %}
-                                            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                            <li{% if message.tags %} style="color: #f3d216; text-align:center;" class="{{ message.tags }}"{% endif %}>{{ message }}</li>
                                             {% endfor %}
                                         </ul>
                                         {% endif %}
                                         <form method="post"> {% csrf_token %}
-                                                {% if messages %}
-                                                <ul class="messages">
-                                                    {% for message in messages %}
-                                                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                                                    {% endfor %}
-                                                </ul>
-                                                {% endif %}
                                             {{form.as_p}}
                                             <p><input value="Submit" type="submit"></p>
                                         </form>

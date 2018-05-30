@@ -87,7 +87,7 @@ class ClassDetailView(FormMixin, DetailView):
     model = Event
     form_class = BookClassCreateForm
     def get_success_url(self):
-        messages.add_message(self.request, messages.SUCCESS, 'SUCCESS! See you soon!')
+        messages.add_message(self.request, messages.SUCCESS, 'Thanks for Registering! See you soon!')
         return reverse('classes',kwargs={'slug':self.object.slug})
     def get_context_data(self,**kwargs):
         context = super(ClassDetailView,self).get_context_data(**kwargs)
@@ -103,14 +103,15 @@ class ClassDetailView(FormMixin, DetailView):
     def form_valid(self, form):
         instance = form.save(commit=False)
         instance.event = Event.objects.get(slug = self.object.slug)
+        instance.option = instance.event.get_ocurrance_display()
         instance.save()
-        messages.add_message(self.request, messages.SUCCESS, 'SUCCESS! See you soon!')
         return super(ClassDetailView, self).form_valid(form)
 
 class EventDetailView(FormMixin, DetailView):
     model = Event
     form_class = BookEventCreateForm
     def get_success_url(self):
+        messages.add_message(self.request, messages.SUCCESS, 'SUCCESS! See you soon!')
         return reverse('events',kwargs={'slug':self.object.slug})
     def get_context_data(self,**kwargs):
         context = super(EventDetailView,self).get_context_data(**kwargs)
