@@ -27,7 +27,7 @@ class AboutAdmin(admin.ModelAdmin):
 class BookingAdmin(admin.ModelAdmin):
     list_display        = ('event','booked_at','name','phone','email','abo','status','pay_till')
     list_filter         = ('event','status','abo')
-    search_fields       = ('name','email','event')
+    search_fields       = ('name','email','event__title')
 
 class PortfolioAdmin(admin.ModelAdmin):
     list_display        = ('order','text','upload')
@@ -60,7 +60,6 @@ class InfoAdmin(admin.ModelAdmin):
 class NewsAdmin(admin.ModelAdmin):
     list_display        = ('email','active','inscribed_at')
     list_filter         = ('active',)
-
 
 admin.site.register(Info, InfoAdmin)
 admin.site.register(Event, EventAdmin)
