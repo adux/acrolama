@@ -23,6 +23,7 @@ class BookClassCreateForm(forms.ModelForm):
             'email',
             'phone',
             'abo',
+            'day',
             'reduction',
             'comment',
         )
@@ -31,6 +32,7 @@ class BookClassCreateForm(forms.ModelForm):
             'email': _(''),
             'phone': _(''),
             'abo': _(''),
+            'day': _(''),
             'reduction': _(''),
             'comment': _(''),
         }
@@ -39,6 +41,7 @@ class BookClassCreateForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'placeholder': 'Email'}),
             'phone': forms.TextInput(attrs={'placeholder': 'Phone (+41076...)'}),
             'abo': forms.Select(attrs={'checked': 'checked'}),
+            'day': forms.Select(attrs={'checked': 'checked'}),
             'reduction': forms.Select(attrs={'checked': 'checked'}),
             'comment': forms.Textarea(attrs={'placeholder': 'Comment'}),
         }

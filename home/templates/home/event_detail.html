@@ -29,9 +29,17 @@
                             <br>
                             <strong>Time:</strong> {{object.get_timestart}} - {{object.get_timeend}}
                             <br>
-                            <strong>Location:</strong> {{object.location}}
+                            {% if object.loc_extra %}
+                            <strong>Location Wed.:</strong> {{object.loc}}
                             <br>
+                            <strong>Location Sun.:</strong> {{object.loc_extra}}
+                            <br>
+                            {% else %}
+                            <strong>Location:</strong> {{object.loc}}
+                            <br>
+                            {% endif%}
                             <strong>Event Type:</strong> {{object.get_cat_display}} - {{object.get_level_display}}
+                            <br>
                             <br>
                             {% if object.price %}
                             <strong>Price:</strong> {{object.price}}
@@ -61,6 +69,10 @@
                                                     <tr>
                                                         <td scope="row" data-label="Name">Cycle</td>
                                                         <td data-label="Price (Normal / Student)">CHF 80/60</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td scope="row" data-label="Name">Double Cycle</td>
+                                                        <td data-label="Price (Normal / Student)">CHF 140/110</td>
                                                     </tr>
                                                     <tr>
                                                         <td scope="row" data-label="Name">Single Class</td>
@@ -116,29 +128,37 @@
                         <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d4274.290564544589!2d-75.2952832049782!3d40.753669641460846!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2srs!4v1444506658649" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
                 </div>
                 <div class="clear"></div>
+                {% if object.get_cat_display != "Cycle"%}
+                <div class="fullwidth">
                 <script>
                     var team1_speed = "2000";
                     var team1_auto = "true";
                     var team1_hover = "true";
                 </script>
-                <div class="image-slider-wrapper relative team team1">
-                    <a id="team1_next" class="image_slider_next" href="#"></a>
-                    <div class="caroufredsel_wrapper">
-                        <ul id="team1" class="image-slider slides">
-                            <li>
-                                <div class="member-content-holder">
-                                        <h4 class="member-name">Pepito</h4>
-                                        <p class="member-position">Correr</p>
-                                        <div class="member-content">Text<br></div>
-                                </div>
-                                <div class="member-image-holder">
-                                        <img src="{{obj.image.url}}" alt="">
-                                </div>
-                                <div class="clear"></div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="clear"></div>
+                        <div class="image-slider-wrapper relative team team1">
+                            <a id="team1_next" class="image_slider_next" href="#"></a>
+                            <div class="caroufredsel_wrapper">
+                                <ul id="team1" class="image-slider slides">
+                                    {% for obj in event.teacher_set.all %}
+                                    <li>
+                                        <div class="member-content-holder">
+                                                <h4 class="member-name"> {{obj.name}}</h4>
+                                                <p class="member-position">{{obj.position}}</p>
+                                                <div class="member-content">{{obj.conten}}<br></div>
+                                        </div>
+                                        {% if obj.image %}
+                                        <div class="member-image-holder">
+                                                <img src="{{obj.image.url}}" alt="">
+                                        </div>
+                                        {% endif %}
+                                        <div class="clear"></div>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                        </div>
+                </div>
+                {% endif %}
+                <div class="clear"></div>
                 </div>
             </div>
         </article>

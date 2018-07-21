@@ -76,7 +76,8 @@ class Event(models.Model):
     title            = models.CharField(max_length=60)
     description      = models.TextField(max_length=3000)
     prerequisites    = models.TextField(max_length=1000, null=True, blank=True)
-    location         = models.CharField(max_length=60)
+    loc              = models.CharField(max_length=60)
+    loc_extra        = models.CharField(max_length=60, null=True, blank=True)
     city             = models.CharField(max_length=20)
     ocurrance        = models.CharField(max_length=8, choices=Ocurrance, null=True,blank=True)
     datestart        = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
@@ -109,8 +110,18 @@ def event_pre_save_receiver(sender, instance, *args, **kwargs):
         instance.slug = unique_slug_generator(instance)
 pre_save.connect(event_pre_save_receiver,sender=Event)
 
+class Teacher(models.Model):
+    name            = models.CharField(max_length=30)
+    event           = models.ForeignKey(Event, on_delete=models.CASCADE)
+    position        = models.CharField(max_length=30, null=True, blank=True)
+    content         = models.TextField(max_length=1000)
+    uploaded_at     = models.DateTimeField(auto_now_add=True)
+    image           = models.ImageField(upload_to='about/teacher/', null=True, blank=True)
+    def __str__(self):
+        return self.name
+
 class EventImage(models.Model):
-    event           = models.ForeignKey(Event)
+    event           = models.ForeignKey(Event, on_delete=models.CASCADE)
     uploaded_at     = models.DateTimeField(auto_now_add=True)
     image           = models.ImageField(upload_to='event/')
 
@@ -129,6 +140,11 @@ class Booking(models.Model):
         ('ST','Student'),
         ('NM','Normal'),
     ]
+    Day             = [
+        ('Wed','Wednesday\'s'),
+        ('Sun','Sunday\'s'),
+        ('WedSun.','Wed. & Sunday\'s'),
+    ]
     Status          = [
         ('IN','Informed'),
         ('CA','Canceled'),
@@ -141,6 +157,7 @@ class Booking(models.Model):
     email           = models.CharField(max_length=50)
     phone           = models.CharField(max_length=30)
     abo             = models.CharField(max_length=8, choices=Abo, null=True, blank=True)
+    day             = models.CharField(max_length=8, choices=Day, null=True, blank=True)
     reduction       = models.CharField(max_length=12, choices=Reduction, null=True, blank=True)
     option          = models.CharField(max_length=50, null=True, blank=True)
     comment         = models.TextField(max_length=350, null=True, blank=True)

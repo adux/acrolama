@@ -7,6 +7,7 @@ from .models import (
     Booking,
     Event,
     EventImage,
+    Teacher,
     Info,
     InfoImage,
     Testimonial,
@@ -38,13 +39,24 @@ class EventImageInline(admin.StackedInline):
     can_delete          = True
     show_change_link    = True
 
+class EventTeacherInline(admin.StackedInline):
+    model               = Teacher
+    extra               = 1
+    can_delete          = True
+    show_change_link    = True
+
 class EventAdmin(admin.ModelAdmin):
     list_display        = ('title','city','datestart','dateend','slug','published','registration')
     list_filter         = ('cat','level','city')
     search_fields       = ('title','datestart','dateend')
     inlines             = [
         EventImageInline,
+        EventTeacherInline,
              ]
+class TeacherAdmin(admin.ModelAdmin):
+    list_display        =('name','content')
+    search_fields       =('name','content')
+
 class InfoImageInline(admin.StackedInline):
     model               = InfoImage
     extra               = 1
@@ -62,6 +74,7 @@ class NewsAdmin(admin.ModelAdmin):
     list_filter         = ('active',)
 
 admin.site.register(Info, InfoAdmin)
+admin.site.register(Teacher, TeacherAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(About, AboutAdmin)
 admin.site.register(Booking, BookingAdmin)
