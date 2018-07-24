@@ -25,7 +25,7 @@ from home.views import (
 
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    url(settings.ADMIN_URL, admin.site.urls),
     url(r'^accounts/login/', LoginView.as_view(), name='login'),
     url(r'^$', homeview, name='home'),
     url(r'^portfolioupload/$', PortfolioCreateView.as_view()),

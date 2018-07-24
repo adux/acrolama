@@ -52,6 +52,9 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
 
+#Admin URL
+ADMIN_URL = os.environ.get('DJANGO_ADMIN_URL')
+
 #### Secure
 CORS_REPLACE_HTTPS_REFERER      = True
 HOST_SCHEME                     = "https://"
