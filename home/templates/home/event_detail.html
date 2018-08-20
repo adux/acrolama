@@ -35,17 +35,17 @@
                             &nbsp;&nbsp;<strong>Time:</strong> {{object.get_timeextra}}<br>
                             &nbsp;&nbsp;<strong>Location:</strong> {{object.loc_extra}}
                             {% else %}
-                            <strong>Time:</strong> {{object.get_timestart}} - {{object.get_timeend}}
+                            <strong>Time:</strong> {{object.get_timestart}} - {{object.get_timeend}}<br>
                             <strong>Location:</strong> {{object.loc}}
                             <br>
                             {% endif %}
                             <strong>Event Type:</strong> {{object.get_cat_display}} - {{object.get_level_display}}
                             <br>
-                            <br>
                             {% if object.price %}
                             <strong>Price:</strong> {{object.price}}
                             <br>
                             {% else %}
+                            <br>
                             <div class="tab">
                                 <input id="tab-one" type="checkbox" name="tabs"/>
                                 <label for="tab-one">Pricing</label>
