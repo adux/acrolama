@@ -81,6 +81,7 @@ class Event(models.Model):
     city             = models.CharField(max_length=20)
     ocurrance        = models.CharField(max_length=8, choices=Ocurrance, null=True,blank=True)
     datestart        = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
+    dateextra        = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
     dateend          = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
     price            = models.CharField(max_length=20, null=True, blank=True)
     publication      = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
@@ -97,11 +98,12 @@ class Event(models.Model):
             return self.dateend.strftime('')
         else:
             return self.dateend.strftime(' - %d. %b %Y')
-
     def get_timestart(self):
         return self.datestart.strftime('%H:%M')
     def get_timeend(self):
         return self.dateend.strftime('%H:%M')
+    def get_timeextra(self):
+        return self.dateextra.strftime('%H:%M')
     def __str__(self):
         return self.title
 ''' Signal of Django to generate slug if not created  '''

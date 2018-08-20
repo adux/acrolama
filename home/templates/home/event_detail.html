@@ -10,7 +10,7 @@
         <script>
                 var aboutImage_speed = "1000";
                 var aboutImage_auto = "true";
-                 var aboutImage_hover = "true";
+                var aboutImage_hover = "true";
         </script>
                         <div class="image-slider-wrapper relative img aboutImage">
                             <a id="aboutImage_next" class="image_slider_next" href="#"></a>
@@ -27,17 +27,18 @@
                         <div class="one_half text-left">
                             <strong>Date(s):</strong> {{object.get_datestart}}{{object.get_dateend}}
                             <br>
-                            <strong>Time:</strong> {{object.get_timestart}} - {{object.get_timeend}}
-                            <br>
                             {% if object.loc_extra %}
-                            <strong>Location Wed.:</strong> {{object.loc}}
-                            <br>
-                            <strong>Location Sun.:</strong> {{object.loc_extra}}
-                            <br>
+                            <strong>Wednesday</strong><br>
+                            &nbsp;&nbsp;<strong>Time:</strong> {{object.get_timestart}}<br>
+                            &nbsp;&nbsp;<strong>Location:</strong> {{object.loc}}<br>
+                            <strong>Sunday</strong><br>
+                            &nbsp;&nbsp;<strong>Time:</strong> {{object.get_timeextra}}<br>
+                            &nbsp;&nbsp;<strong>Location:</strong> {{object.loc_extra}}
                             {% else %}
+                            <strong>Time:</strong> {{object.get_timestart}} - {{object.get_timeend}}
                             <strong>Location:</strong> {{object.loc}}
                             <br>
-                            {% endif%}
+                            {% endif %}
                             <strong>Event Type:</strong> {{object.get_cat_display}} - {{object.get_level_display}}
                             <br>
                             <br>
@@ -144,7 +145,7 @@
                                         <div class="member-content-holder">
                                                 <h4 class="member-name"> {{obj.name}}</h4>
                                                 <p class="member-position">{{obj.position}}</p>
-                                                <div class="member-content">{{obj.conten}}<br></div>
+                                                <div class="member-content">{{obj.content}}<br></div>
                                         </div>
                                         {% if obj.image %}
                                         <div class="member-image-holder">

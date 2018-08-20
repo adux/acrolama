@@ -3,16 +3,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth.views import LoginView
-from formulario.views import (
-    fest_createview,
-    festprueba_createview,
-    )
-from fest.views import (
-    fest_homeview,
-    fest_locationview,
-    fest_pricesview,
-    )
-
 from home.views import (
     homeview,
     ClassListView,
@@ -22,7 +12,6 @@ from home.views import (
     EventListView,
     PortfolioCreateView,
     )
-
 
 urlpatterns = [
     url(settings.ADMIN_URL, admin.site.urls),
@@ -34,10 +23,6 @@ urlpatterns = [
     url(r'^classes/(?P<slug>[\w-]+)$', ClassDetailView.as_view(), name='classes'),
     url(r'^classes', ClassListView.as_view(), name='class'),
     url(r'^info/(?P<slug>[\w-]+)/$', InfoDetailView.as_view(), name='info'),
-    url(r'^fest/$', fest_homeview),
-    url(r'^fest/form/$', fest_createview),
-    url(r'^fest/location/$', fest_locationview),
-    url(r'^fest/prices/$', fest_pricesview),
 ]
 
 if settings.DEBUG:
