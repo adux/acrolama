@@ -29,16 +29,16 @@
                             <br>
                             {% if object.loc_extra %}
                             <strong>Wednesday</strong><br>
-                            &nbsp;&nbsp;<strong>Time:</strong> {{object.get_timestart}}<br>
-                            &nbsp;&nbsp;<strong>Location:</strong> {{object.loc}}<br>
+                            <strong>Time:</strong> {{object.get_timestart}}<br>
+                            <strong>Location:</strong> {{object.loc}}<br>
                             <strong>Sunday</strong><br>
-                            &nbsp;&nbsp;<strong>Time:</strong> {{object.get_timeextra}}<br>
-                            &nbsp;&nbsp;<strong>Location:</strong> {{object.loc_extra}}
+                            <strong>Time:</strong> {{object.get_timeextra}}<br>
+                            <strong>Location:</strong> {{object.loc_extra}}
                             {% else %}
                             <strong>Time:</strong> {{object.get_timestart}} - {{object.get_timeend}}<br>
                             <strong>Location:</strong> {{object.loc}}
-                            <br>
                             {% endif %}
+                            <br>
                             <strong>Event Type:</strong> {{object.get_cat_display}} - {{object.get_level_display}}
                             <br>
                             {% if object.price %}
@@ -142,13 +142,13 @@
                                 <ul id="team1" class="image-slider slides">
                                     {% for obj in event.teacher_set.all %}
                                     <li>
-                                        <div class="member-content-holder">
+                                        <div class="member-content-holder-event">
                                                 <h4 class="member-name"> {{obj.name}}</h4>
                                                 <p class="member-position">{{obj.position}}</p>
                                                 <div class="member-content">{{obj.content}}<br></div>
                                         </div>
                                         {% if obj.image %}
-                                        <div class="member-image-holder">
+                                        <div class="member-image-holder-event">
                                                 <img src="{{obj.image.url}}" alt="">
                                         </div>
                                         {% endif %}
