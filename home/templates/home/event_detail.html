@@ -145,7 +145,7 @@
                                         <div class="member-content-holder-event">
                                                 <h4 class="member-name"> {{obj.name}}</h4>
                                                 <p class="member-position">{{obj.position}}</p>
-                                                <div class="member-content">{{obj.content}}<br></div>
+                                                <div class="member-content">{{obj.content|safe}}<br></div>
                                         </div>
                                         {% if obj.image %}
                                         <div class="member-image-holder-event">
