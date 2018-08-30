@@ -5,13 +5,17 @@ from django.conf import settings
 from home.utils import unique_slug_generator
 User = settings.AUTH_USER_MODEL
 
+
+# Static About and Content of Webpage
 class About(models.Model):
     description     = models.TextField(max_length=1000)
+
 
 class AboutImage(models.Model):
     general         = models.ForeignKey(About)
     uploaded_at     = models.DateTimeField(auto_now_add=True)
     image           = models.ImageField(upload_to='about/general/')
+
 
 class AboutMember(models.Model):
     name            = models.CharField(max_length=30)
@@ -22,9 +26,10 @@ class AboutMember(models.Model):
     def __str__(self):
         return self.name
 
+
 class AboutDate(models.Model):
-    start           = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
-    end             = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
+    start           = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
+    end             = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
     description     = models.CharField(max_length=50)
     def yearstart(self):
         return self.start.strftime('%b %Y')
@@ -33,20 +38,24 @@ class AboutDate(models.Model):
     def __str__(self):
          return self.description
 
-class Info(models.Model):
-    title            = models.CharField(max_length=50)
-    content          = models.TextField(max_length=3000,null=True,blank=True)
-    slug             = models.SlugField(unique=True, null=True,blank=True)
-def info_pre_save_receiver(sender, instance, *args, **kwargs):
-    if not instance.slug:
-        instance.slug = unique_slug_generator(instance)
-pre_save.connect(info_pre_save_receiver,sender=Info)
 
-class InfoImage(models.Model):
-    general          = models.ForeignKey(Info)
-    uploaded_at      = models.DateTimeField(auto_now_add=True)
-    image            = models.ImageField(upload_to='info/')
+class Testimonial(models.Model):
+    text = models.TextField(max_length=350)
+    author = models.CharField(max_length=30)
+    def __str__(self):
+        return self.text
 
+
+class Portfolio(models.Model):
+    owner           = models.ForeignKey(User)
+    order           = models.CharField(max_length=1, blank=True, null=True)
+    text            = models.TextField(max_length=30, blank=True, null=True)
+    sec_text        = models.TextField(max_length=30, blank=True, null=True)
+    uploaded_at     = models.DateTimeField(auto_now_add=True)
+    upload          = models.ImageField(upload_to='portfolio/')
+
+
+#Proyectos
 class Event(models.Model):
     Icon             = (
         ('fas fa-redo','Masterclass'),
@@ -57,10 +66,14 @@ class Event(models.Model):
         ('fas fa-seedling','Retreat'),
     )
     Ocurrance        = (
+        ('Mon','Monday\'s'),
+        ('Tue','Tuesday\'s'),
         ('Wed','Wednesday\'s'),
         ('Thu','Thursday\'s'),
+        ('Fri','Friday\'s'),
         ('Sun','Sunday\'s'),
         ('WedSun.','Wed. & Sunday\'s'),
+        ('TueSun.','Tue. & Sunday\'s'),
         ('Year','Yearly'),
         ('One','One Time'),
     )
@@ -70,7 +83,6 @@ class Event(models.Model):
         ('C', 'Introduction'),
         ('Z', 'Multilevel'),
     )
-
     cat              = models.CharField(max_length=15, choices=Icon, default=1)
     level            = models.CharField(max_length=1, choices=Level, default=1)
     title            = models.CharField(max_length=60)
@@ -80,14 +92,14 @@ class Event(models.Model):
     loc_extra        = models.CharField(max_length=60, null=True, blank=True)
     city             = models.CharField(max_length=20)
     ocurrance        = models.CharField(max_length=8, choices=Ocurrance, null=True,blank=True)
-    datestart        = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
-    dateextra        = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
-    dateend          = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
+    datestart        = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
+    dateextra        = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
+    dateend          = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
     price            = models.CharField(max_length=20, null=True, blank=True)
-    publication      = models.DateTimeField(auto_now=False,auto_now_add=False,null=True,blank=True)
+    publication      = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
     published        = models.BooleanField()
     registration     = models.BooleanField(default=True)
-    slug             = models.SlugField(unique=True, null=True,blank=True)
+    slug             = models.SlugField(unique=True, null=True, blank=True)
     def get_datestart(self):
         if self.datestart.strftime('%b') == self.dateend.strftime('%b') and self.dateend.strftime('%d %b') != self.datestart.strftime('%d %b'):
             return self.datestart.strftime('%d')
@@ -110,7 +122,14 @@ class Event(models.Model):
 def event_pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)
-pre_save.connect(event_pre_save_receiver,sender=Event)
+pre_save.connect(event_pre_save_receiver, sender=Event)
+
+
+class EventImage(models.Model):
+    event           = models.ForeignKey(Event, on_delete=models.CASCADE)
+    uploaded_at     = models.DateTimeField(auto_now_add=True)
+    image           = models.ImageField(upload_to='event/')
+
 
 class Teacher(models.Model):
     name            = models.CharField(max_length=30)
@@ -122,21 +141,15 @@ class Teacher(models.Model):
     def __str__(self):
         return self.name
 
-class EventImage(models.Model):
-    event           = models.ForeignKey(Event, on_delete=models.CASCADE)
-    uploaded_at     = models.DateTimeField(auto_now_add=True)
-    image           = models.ImageField(upload_to='event/')
-
-class NewsList(models.Model):
-    email           = models.CharField(max_length=100,blank=True,null=True)
-    active          = models.BooleanField(default=True)
-    inscribed_at    = models.DateField(auto_now_add=True)
 
 class Booking(models.Model):
     Abo             = [
         ('SA','Season Abo'),
         ('CY','Cycle Abo'),
         ('SI','Single Ticket'),
+    ]
+    Category           = [
+        ('EI','Einkommen'),
     ]
     Reduction       =[
         ('ST','Student'),
@@ -154,6 +167,15 @@ class Booking(models.Model):
         ('PE','Pending'),
         ('SW','Switched')
     ]
+    Method          = [
+        ('BT','Bank'),
+        ('TW','Twint'),
+        ('PP','PayPal'),
+        ('CS','Cash'),
+        ('CR','Credit Card'),
+        ('UN','Unclasified'),
+    ]
+    category        = models.CharField(max_length=10, choices=Category, default='EI')
     event           = models.ForeignKey(Event, on_delete=models.CASCADE)
     name            = models.CharField(max_length=40)
     email           = models.CharField(max_length=50)
@@ -163,24 +185,75 @@ class Booking(models.Model):
     reduction       = models.CharField(max_length=12, choices=Reduction, null=True, blank=True)
     option          = models.CharField(max_length=50, null=True, blank=True)
     comment         = models.TextField(max_length=350, null=True, blank=True)
-    payment         = models.CharField(max_length=30, null=True, blank=True)
-    pay_till        = models.DateField(auto_now_add=False,auto_now=False, null=True,blank=True)
-    status          = models.CharField(max_length=15, choices=Status,null=True,blank=True)
+    amount          = models.CharField(max_length=30, null=True, blank=True)
+    pay_till        = models.DateField(auto_now_add=False,auto_now=False, null=True, blank=True)
+    pay_date        = models.DateField(auto_now_add=False,auto_now=False, null=True, blank=True)
+    methode         = models.CharField(max_length=15, choices=Method, default='UN', null=True, blank=True)
+    status          = models.CharField(max_length=15, choices=Status, null=True, blank=True)
     note            = models.TextField(max_length=1000, null=True, blank=True)
     booked_at       = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return '%s - %s' % (self.event, self.name)
 
-class Testimonial(models.Model):
-    text = models.TextField(max_length=350)
-    author = models.CharField(max_length=30)
-    def __str__(self):
-        return self.text
 
-class Portfolio(models.Model):
-    owner           = models.ForeignKey(User)
-    order           = models.CharField(max_length=1,blank=True,null=True)
-    text            = models.TextField(max_length=30,blank=True,null=True)
-    sec_text        = models.TextField(max_length=30,blank=True,null=True)
-    uploaded_at     = models.DateTimeField(auto_now_add=True)
-    upload          = models.ImageField(upload_to='portfolio/')
+#Contabilidad
+class Accounting(models.Model):
+    Category           = [
+        ('EI','Einkommen'),
+        ('KO','Kosten'),
+        ('AU','Ausgaben'),
+        ('IN','Inversion'),
+        ('LO','Lohn'),
+        ('SP','Spargeld'),
+    ]
+    Status          = [
+        ('IN','Informed'),
+        ('CA','Canceled'),
+        ('PA','Payed'),
+        ('PE','Pending'),
+        ('SW','Switched')
+    ]
+    Method          = [
+        ('BT','Bank'),
+        ('TW','Twint'),
+        ('PP','PayPal'),
+        ('CS','Cash'),
+        ('CR','Credit Card'),
+        ('UN','Unclasified'),
+    ]
+    category        = models.CharField(max_length=10, choices=Category)
+    event           = models.ForeignKey(Event, on_delete=models.CASCADE, null=True,blank=True)
+    amount          = models.CharField(max_length=9)
+    pay_till        = models.DateField(auto_now_add=False,auto_now=False, null=True, blank=True)
+    pay_date        = models.DateField(auto_now_add=False,auto_now=False, null=True, blank=True)
+    methode         = models.CharField(max_length=15, choices=Method, default='UN', null=True, blank=True)
+    status          = models.CharField(max_length=15, choices=Status, null=True, blank=True)
+    description     = models.CharField(max_length=300, null=True, blank=True)
+    degistered_at   = models.DateTimeField(auto_now_add=True)
+
+# Extra Information and FAQ
+class Info(models.Model):
+    title            = models.CharField(max_length=50)
+    content          = models.TextField(max_length=3000, null=True, blank=True)
+    slug             = models.SlugField(unique=True, null=True, blank=True)
+def info_pre_save_receiver(sender, instance, *args, **kwargs):
+    if not instance.slug:
+        instance.slug = unique_slug_generator(instance)
+pre_save.connect(info_pre_save_receiver,sender=Info)
+
+
+class InfoImage(models.Model):
+    general          = models.ForeignKey(Info)
+    uploaded_at      = models.DateTimeField(auto_now_add=True)
+    image            = models.ImageField(upload_to='info/')
+
+
+class Faq(models.Model):
+    question         = models.CharField(max_length=300, null=True, blank=True)
+    answer           = models.CharField(max_length=600, null=True, blank=True)
+
+
+class NewsList(models.Model):
+    email           = models.CharField(max_length=100, blank=True, null=True)
+    active          = models.BooleanField(default=True)
+    inscribed_at    = models.DateField(auto_now_add=True)

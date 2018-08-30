@@ -20,23 +20,6 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 's9+nemt@ka=)v2dsqwdQWDQWDQEQWRGQERVQW
 DEBUG = False
 ALLOWED_HOSTS = ['stageacrolama.herokuapp.com', 'acrolama.herokuapp.com', 'www.acrolama.com', 'acrolama.com', '.acrolama.com']
 
-# Application definition
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'crispy_forms',
-    'home',
-    'storages',
-    'analytical',
-]
-
-CRISPY_TEMPLATE_PACK = 'bootstrap3'
-GOOGLE_ANALYTICS_PROPERTY_ID = 'UA-118797477-1'
-
 # Database for heroku
 import dj_database_url
 db_from_env = dj_database_url.config()

@@ -31,6 +31,25 @@ TEMPLATES = [
     },
 ]
 
+# Application definition
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'crispy_forms',
+    'home',
+    'storages',
+    'analytical',
+    'widget_tweaks',
+    'django_filters',
+]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+GOOGLE_ANALYTICS_PROPERTY_ID = 'UA-118797477-1'
+
 WSGI_APPLICATION = 'acrolama.wsgi.application'
 
 AUTH_PASSWORD_VALIDATORS = [

@@ -1,0 +1,15 @@
+{% block content %}
+  <form method="get">
+    {{ filter.form.as_p }}
+    {{ filter_bk.form.as_p }}
+    <button type="submit">Search</button>
+  </form>
+  <ul>
+  {% for acc in filter.qs %}
+  <li>{{acc.get_category_display}} - {{acc.event}} - {{acc.date}} - {{acc.amount}} - {{acc.get_status_display}}</li>
+  {% endfor %}
+  {% for bk in filter_bk.qs %}
+  <li>Einkommen - {{bk.event}} - {{bk.event.datestart}}</li>
+  {% endfor %}
+  </ul>
+{% endblock %}

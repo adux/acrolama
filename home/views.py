@@ -16,6 +16,7 @@ from home.models import (
     About,
     AboutImage,
     AboutDate,
+    Accounting,
     Booking,
     Event,
     Info,
@@ -29,6 +30,18 @@ from home.forms import (
     BookEventCreateForm,
     NewsForm,
 )
+from home.filters import AccountingFilter, BookingFilter
+
+def accountingview(request):
+    acc_list = Accounting.objects.all()
+    bk_list = Booking.objects.all()
+    acc_filter = AccountingFilter(request.GET, queryset=acc_list)
+    bk_filter = BookingFilter(request.GET, queryset=bk_list)
+    context = {
+        "filter":acc_filter,
+        "filter_bk":bk_filter,
+    }
+    return render(request, 'accounting.html', context)
 
 def homeview(request):
     template_name='home.html'
@@ -64,24 +77,29 @@ def homeview(request):
     }
     return render(request, template_name, context)
 
+
 class InfoDetailView(DetailView):
     model = Info
     context_object_name = 'info'
 
+
 class EventListView(ListView):
     model = Event
+    template_name = 'home/event_list.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['list'] = Event.objects.order_by('datestart').exclude(cat='fas fa-cogs').exclude(published=False)
         return context
 
+
 class ClassListView(ListView):
     model = Event
+    template_name = 'home/class_list.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['list'] = Event.objects.order_by('datestart').filter(cat='fas fa-cogs').exclude(published=False)
-
         return context
+
 
 class ClassDetailView(FormMixin, DetailView):
     model = Event
@@ -107,6 +125,7 @@ class ClassDetailView(FormMixin, DetailView):
         instance.save()
         return super(ClassDetailView, self).form_valid(form)
 
+
 class EventDetailView(FormMixin, DetailView):
     model = Event
     form_class = BookEventCreateForm
@@ -129,6 +148,7 @@ class EventDetailView(FormMixin, DetailView):
         instance.event = Event.objects.get(slug = self.object.slug)
         instance.save()
         return super(EventDetailView, self).form_valid(form)
+
 
 class PortfolioCreateView(LoginRequiredMixin, CreateView):
     form_class = PortfolioCreateForm
