@@ -150,6 +150,11 @@ class Booking(models.Model):
     ]
     Category           = [
         ('EI','Einkommen'),
+        ('KO','Kosten'),
+        ('AU','Ausgaben'),
+        ('IN','Inversion'),
+        ('LO','Lohn'),
+        ('SP','Spargeld'),
     ]
     Reduction       =[
         ('ST','Student'),

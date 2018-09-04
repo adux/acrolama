@@ -1,15 +1,95 @@
+{% extends "intrabase.html" %}
+{% load widget_tweaks %}
 {% block content %}
-  <form method="get">
-    {{ filter.form.as_p }}
-    {{ filter_bk.form.as_p }}
-    <button type="submit">Search</button>
-  </form>
-  <ul>
-  {% for acc in filter.qs %}
-  <li>{{acc.get_category_display}} - {{acc.event}} - {{acc.date}} - {{acc.amount}} - {{acc.get_status_display}}</li>
-  {% endfor %}
-  {% for bk in filter_bk.qs %}
-  <li>Einkommen - {{bk.event}} - {{bk.event.datestart}}</li>
-  {% endfor %}
-  </ul>
+        <script>
+                var total = {A:{row:1,t:0},B:{row:2,t:0}};
+                $('#theTable tr').each(function() {
+                    $row = $(this);
+                    $.each(total, function(key, col) {
+                        rowFil = $row.filter(':contains("' + key + '")');
+                        col.t += (rowFil) ? +rowFil.find('td:eq(' + col.row + ')').text() : 0;
+                    });
+                });
+                $("#theTable tfoot tr:last td:eq(1)").text(total.A.t);
+                $("#theTable tfoot tr:last td:eq(2)").text(total.B.t);
+        </script>
+<form method="get">
+        <div class="well">
+                <h4>Filter</h4>
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        {{ filter_bk.form.category.label_tag }}
+                        {% render_field filter_bk.form.category class="form-control" %}
+                    </div>
+                    <div class="form-group col-md-3">
+                        {{ filter_bk.form.event.label_tag }}
+                        {% render_field filter_bk.form.event class="form-control" %}
+                    </div>
+                    <div class="form-group col-md-3">
+                        {{ filter_bk.form.methode.label_tag }}
+                        {% render_field filter_bk.form.methode class="form-control" %}
+                    </div>
+                    <div class="form-group col-sm-3">
+                        {{ filter_bk.form.status.label_tag }}
+                        {% render_field filter_bk.form.status class="form-control" %}
+                    </div>
+                    <div class="form-group col-sm-3">
+                        {{ filter_bk.form.abo.label_tag }}
+                        {% render_field filter_bk.form.abo class="form-control" %}
+                    </div>
+                    <div class="form-group col-sm-3">
+                        {{ filter_bk.form.reduction.label_tag }}
+                        {% render_field filter_bk.form.reduction class="form-control" %}
+                    </div>
+                    <div class="form-group col-3">
+                        {{ filter_bk.form.pay_date.label_tag }}
+                        {% render_field filter_bk.form.pay_date class="form-control" %}
+                    </div>
+                    <div class="form-group col-3">
+                        {{ filter_bk.form.pay_till.label_tag }}
+                        {% render_field filter_bk.form.pay_till class="form-control" %}
+                    </div>
+                </div>
+        </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+<h4> Einkommen</h4>
+<table class="table table-bordered" id="theTable">
+        <thead>
+                <tr>
+                        <th>Category</th>
+                        <th>Event</th>
+                        <th>Pay Date</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                </tr>
+        </thead>
+        <tbody>
+            {% for acc in filter.qs %}
+            <tr>
+                    <td>{{acc.get_category_display}} </td>
+                    <td>{{acc.event}}</td>
+                    <td>{{acc.pay_date}}</td>
+                    <td>{{acc.amount}}</td>
+                    <td>{{acc.get_status_display}}</td>
+            </tr>
+            {% endfor%}
+            {% for bk in filter_bk.qs %}
+            <tr>
+                    <td>{{bk.get_category_display}}</td>
+                    <td>{{bk.event}}</td>
+                    <td>{{bk.pay_date}}</td>
+                    <td>{{bk.amount}}</td>
+                    <td>{{bk.get_status_display}}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                    <td><strong>Total</strong></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+            </tr>
+        </tbody>
+</table>
 {% endblock %}

@@ -1,5 +1,6 @@
 from datetime import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
@@ -30,8 +31,11 @@ from home.forms import (
     BookEventCreateForm,
     NewsForm,
 )
-from home.filters import AccountingFilter, BookingFilter
-
+from home.filters import (
+    AccountingFilter,
+    BookingFilter,
+)
+@login_required(login_url='/error404/')
 def accountingview(request):
     acc_list = Accounting.objects.all()
     bk_list = Booking.objects.all()
