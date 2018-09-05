@@ -1,18 +1,7 @@
 {% extends "intrabase.html" %}
 {% load widget_tweaks %}
 {% block content %}
-        <script>
-                var total = {A:{row:1,t:0},B:{row:2,t:0}};
-                $('#theTable tr').each(function() {
-                    $row = $(this);
-                    $.each(total, function(key, col) {
-                        rowFil = $row.filter(':contains("' + key + '")');
-                        col.t += (rowFil) ? +rowFil.find('td:eq(' + col.row + ')').text() : 0;
-                    });
-                });
-                $("#theTable tfoot tr:last td:eq(1)").text(total.A.t);
-                $("#theTable tfoot tr:last td:eq(2)").text(total.B.t);
-        </script>
+<div class="jumbotron">
 <form method="get">
         <div class="well">
                 <h4>Filter</h4>
@@ -53,7 +42,8 @@
         </div>
     <button type="submit" class="btn btn-primary">Search</button>
 </form>
-<h4> Einkommen</h4>
+</div>
+<h4>Einkommen</h4>
 <table class="table table-bordered" id="theTable">
         <thead>
                 <tr>
@@ -64,10 +54,19 @@
                         <th>Status</th>
                 </tr>
         </thead>
+        <tfoot>
+            <tr>
+              <th></th>
+              <th align="center">Count</th>
+              <th align="left"></th>
+              <th align="left"></th>
+              <th align="left"></th>
+            </tr>
+        </tfoot>
         <tbody>
             {% for acc in filter.qs %}
             <tr>
-                    <td>{{acc.get_category_display}} </td>
+                    <td>{{acc.get_category_display}}</td>
                     <td>{{acc.event}}</td>
                     <td>{{acc.pay_date}}</td>
                     <td>{{acc.amount}}</td>
@@ -83,13 +82,6 @@
                     <td>{{bk.get_status_display}}</td>
             </tr>
             {% endfor %}
-            <tr>
-                    <td><strong>Total</strong></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-            </tr>
         </tbody>
 </table>
 {% endblock %}
