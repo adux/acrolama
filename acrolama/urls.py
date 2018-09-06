@@ -19,11 +19,10 @@ urlpatterns = [
     url(r'^accounts/login/', LoginView.as_view(), name='login'),
     url(r'^accounting/$', accountingview , name='accounting'),
     url(r'^$', homeview, name='home'),
-    url(r'^portfolioupload/$', PortfolioCreateView.as_view()),
     url(r'^events/$', EventListView.as_view(), name='event'),
     url(r'^classes/$', ClassListView.as_view(), name='class'),
-    url(r'^events/(?P<slug>[\w-]+)$', EventDetailView.as_view(), name='events'),
-    url(r'^classes/(?P<slug>[\w-]+)$', ClassDetailView.as_view(), name='classes'),
+    url(r'^events/(?P<slug>[\w-]+)/$', EventDetailView.as_view(), name='events'),
+    url(r'^classes/(?P<slug>[\w-]+)/$', ClassDetailView.as_view(), name='classes'),
     url(r'^info/(?P<slug>[\w-]+)/$', InfoDetailView.as_view(), name='info'),
 ]
 

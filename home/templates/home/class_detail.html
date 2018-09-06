@@ -27,17 +27,25 @@
                         <div class="one_half text-left">
                             <strong>Date(s):</strong> {{object.get_datestart}}{{object.get_dateend}}
                             <br>
-                            <strong>Time:</strong> {{object.get_timestart}} - {{object.get_timeend}}
-                            <br>
+                            {% if object.loc_extra %}
+                            <strong>Wednesday</strong><br>
+                            <strong>Time:</strong> {{object.get_timestart}}<br>
+                            <strong>Location:</strong> {{object.loc}}<br>
+                            <strong>Sunday</strong><br>
+                            <strong>Time:</strong> {{object.get_timeextra}}<br>
+                            <strong>Location:</strong> {{object.loc_extra}}
+                            {% else %}
+                            <strong>Time:</strong> {{object.get_timestart}} - {{object.get_timeend}}<br>
                             <strong>Location:</strong> {{object.loc}}
+                            {% endif %}
                             <br>
                             <strong>Event Type:</strong> {{object.get_cat_display}} - {{object.get_level_display}}
-                            <br>
                             <br>
                             {% if object.price %}
                             <strong>Price:</strong> {{object.price}}
                             <br>
                             {% else %}
+                            <br>
                             <div class="tab">
                                 <input id="tab-one" type="checkbox" name="tabs"/>
                                 <label for="tab-one">Pricing</label>
@@ -52,12 +60,8 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <td scope="row" data-label="Name">Single Season Abo</td>
-                                                        <td data-label="Price (Normal / Student)">CHF 340/270</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td scope="row" data-label="Name">Double Season Abo</td>
-                                                        <td data-label="Price (Normal / Student)">CHF 580/485</td>
+                                                        <td scope="row" data-label="Name">Double Double Cycle</td>
+                                                        <td data-label="Price (Normal / Student)">CHF 140/110</td>
                                                     </tr>
                                                     <tr>
                                                         <td scope="row" data-label="Name">Cycle</td>

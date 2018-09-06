@@ -108,6 +108,7 @@ class ClassListView(ListView):
 class ClassDetailView(FormMixin, DetailView):
     model = Event
     form_class = BookClassCreateForm
+    template_name = 'home/class_detail.html'
     def get_success_url(self):
         messages.add_message(self.request, messages.SUCCESS, 'Thanks for Registering! See you soon!')
         return reverse('classes',kwargs={'slug':self.object.slug})
@@ -133,8 +134,9 @@ class ClassDetailView(FormMixin, DetailView):
 class EventDetailView(FormMixin, DetailView):
     model = Event
     form_class = BookEventCreateForm
+    template_name = 'home/event_detail.html'
     def get_success_url(self):
-        messages.add_message(self.request, messages.SUCCESS, 'SUCCESS! See you soon!')
+        messages.add_message(self.request, messages.SUCCESS, 'Thanks for Registering! See you soon!')
         return reverse('events',kwargs={'slug':self.object.slug})
     def get_context_data(self,**kwargs):
         context = super(EventDetailView,self).get_context_data(**kwargs)

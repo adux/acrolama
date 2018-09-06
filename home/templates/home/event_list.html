@@ -16,21 +16,21 @@
                 <div class="section-content-holder left green">
                     <div class="content-wrapper">
                         <div class="blog-holder block center-relative">
-                            {% for object in list %}
+                            {% for obj in list %}
                             <article class="blog-item-holder relative">
                                 <div class="num">
-                                        <i class="{{object.cat}}"></i>
+                                        <i class="{{obj.cat}}"></i>
                                 </div>
                                 <div class="info">
-										<div class="author vcard "><a href="/events/{{object.slug}}">{{object.get_level_display}} {{object.get_cat_display}} - {{object.city}}</a></div>
+										<div class="author vcard "><a href="/events/{{obj.slug}}">{{obj.get_level_display}} {{obj.get_cat_display}} - {{obj.city}}</a></div>
                                     <div class="cat-links">
                                         <ul>
-                                                <li><a href="/events/{{object.slug}}">{{object.get_datestart}}{{object.get_dateend}} | {{object.get_ocurrance_display|default_if_none:""}}</a></li>
+                                                <li><a href="/events/{{obj.slug}}">{{obj.get_datestart}}{{obj.get_dateend}} | {{obj.get_ocurrance_display|default_if_none:""}}</a></li>
                                         </ul>
                                     </div>
                                 </div>
                                 <h3 class="entry-title">
-                                        <a href="/events/{{object.slug}}">{{object.title}}</a>
+                                        <a href="/events/{{obj.slug}}">{{obj.title}}</a>
                                 </h3>
                                 <div class="clear"></div>
                             </article>
