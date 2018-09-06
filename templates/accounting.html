@@ -49,18 +49,21 @@
                 <tr>
                         <th>Category</th>
                         <th>Event</th>
+                        <th>Name</th>
                         <th>Pay Date</th>
-                        <th>Amount</th>
+                        <th>Pay Till</th>
                         <th>Status</th>
-                </tr>
+                        <th>Amount</th>
         </thead>
         <tfoot>
             <tr>
-              <th></th>
-              <th align="center">Count</th>
-              <th align="left"></th>
-              <th align="left"></th>
-              <th align="left"></th>
+                <th align="center">Total</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th align="left"></th>
             </tr>
         </tfoot>
         <tbody>
@@ -68,18 +71,22 @@
             <tr>
                     <td>{{acc.get_category_display}}</td>
                     <td>{{acc.event}}</td>
+                    <td></td>
                     <td>{{acc.pay_date}}</td>
-                    <td>{{acc.amount}}</td>
+                    <td>{{acc.pay_till}}</td>
                     <td>{{acc.get_status_display}}</td>
+                    <td>{{acc.amount}}</td>
             </tr>
             {% endfor%}
             {% for bk in filter_bk.qs %}
             <tr>
                     <td>{{bk.get_category_display}}</td>
                     <td>{{bk.event}}</td>
+                    <td>{{bk.name}}</td>
                     <td>{{bk.pay_date}}</td>
-                    <td>{{bk.amount}}</td>
+                    <td>{{bk.pay_till}}</td>
                     <td>{{bk.get_status_display}}</td>
+                    <td>{{bk.amount}}</td>
             </tr>
             {% endfor %}
         </tbody>
