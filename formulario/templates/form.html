@@ -1,0 +1,15 @@
+{% extends "baseform.html" %}
+{% block content %}
+
+<h1> Winter Acro Fest </h1>
+
+<form method='POST'> {% csrf_token %}
+        <input type='text' name='name' placeholder='Name'></br>
+        <input type='text' name='address' placeholder='Address'></br>
+        <input type='text' name='email' placeholder='Email'></br>
+        <button type='submit'>Submit</button>
+</form>
+
+
+{% endblock %}
+
