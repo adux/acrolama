@@ -1,0 +1,37 @@
+{% extends "basefest.html" %}
+{% block content %}
+{% load static %}
+<!-- Wrapper -->
+            <div id="wrapper">
+
+                <!-- Header -->
+                    <header id="header">
+                        <h1>Prices & Conditions</h1>
+                        <p></p>
+                    </header>
+                    {% include 'snippets/navnothome.html' %}
+                <!-- Main -->
+                    <div id="main">
+                        <!-- Content -->
+                            <section id="content" class="main">
+                                    <span class="image main"><img src="{% static "fest/images/pic07.jpg"%}" alt="" /></span>
+                                <h2>Passes list</h2>
+                                <p> We have Passes based on the amout of days you stay at the festival. All of them include: Accommodation, Food, Workshops, Special Events, etc...</br>
+                                    1 Day Tickets on the other hand <u>don't include breakfast or Accommodations</u>.
+                                <h3>List Price</h3>
+                                <ul>
+                                    <li>4 Days Pass: CHF 240.-</li>
+                                    <li>3 Days Pass: CHF 220.-</li>
+                                    <li>2 Days Pass: CHF 190.-</li>
+                                    <li>1 Day Ticket CHF 85.-</li>
+                                </ul>
+                                <h3>Payment Methods</h3>
+                                <p> We will send you the Bank Details after you Register in the <a href='/fest/form/'>FORM</a></br>
+                                If some other payment method is needed for special reasons you can allways ask, there might be a fee included</p>
+                                <h2>Refund Conditions</h2>
+                                <p>Before 15. of February: 50% refund. After: no refund, but you can happily sell or give your ticket to someone else. Let us know about the name change per email!</p>
+                            </section>
+                    </div>
+                    {% include 'snippets/footer.html' %}
+            </div>
+{% endblock %}

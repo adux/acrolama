@@ -1,0 +1,76 @@
+{% extends "basefest.html" %}
+{% block content %}
+{% load static %}
+<!-- Wrapper -->
+            <div id="wrapper">
+                <!-- Header -->
+                    <header id="header">
+                        <h1>Workshop List</h1>
+                        <p>This list can and will be Updated/Changed.</p>
+                    </header>
+                    {% include 'snippets/navnothome.html' %}
+                <!-- Main -->
+                    <div id="main">
+                        <!-- Content -->
+                            <section id="accommodation" class="main">
+                                    <span class="image main"><img src="{% static "fest/images/pic08.jpg"%}" alt="" /></span>
+                                    <!-- Table -->
+                                    <section>
+                                      <h2>Worshops!</h2>
+                                      <p></p>
+                                        <div class="table-wrapper">
+                                            <h3>Saturday</h3>
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Time</th>
+                                                        <th>Teachers</th>
+                                                        <th>Topic</th>
+                                                        <th>Prerequisites</th>
+                                                    </tr>
+                                                </thead>
+                                                {% for obj in sabado %}
+                                                <tbody>
+                                                    <tr>
+                                                            <td>{{obj.time}}</td>
+                                                            <td>{{obj.teachers}}</td>
+                                                            <td>{{obj.workshop}}</td>
+                                                            <td>{{obj.prerequisites}}</td>
+
+                                                    </tr>
+                                                </tbody>
+                                                {% endfor %}
+                                            </table>
+                                            <h3>Sunday</h3>
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Time</th>
+                                                        <th>Teachers</th>
+                                                        <th>Topic</th>
+                                                        <th>Prerequisites</th>
+                                                    </tr>
+                                                </thead>
+                                                {% for obj in domingo %}
+                                                <tbody>
+                                                    <tr>
+                                                            <td>{{obj.time}}</td>
+                                                            <td>{{obj.teachers}}</td>
+                                                            <td>{{obj.workshop}}</td>
+                                                            <td>{{obj.prerequisites}}</td>
+
+                                                    </tr>
+                                                </tbody>
+                                                {% endfor %}
+                                            </table>
+                                        </div>
+                                <footer class="major">
+                                    <ul class="actions">
+                                        <li><a href="/" class="button">Back</a></li>
+                                    </ul>
+                                </footer>
+                            </section>
+                    </div>
+                    {% include 'snippets/footer.html' %}
+            </div>
+{% endblock %}

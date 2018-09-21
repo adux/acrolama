@@ -1,0 +1,61 @@
+{% extends "basefest.html" %}
+{% block content %}
+{% load static %}
+<!-- Wrapper -->
+            <div id="wrapper">
+                <!-- Header -->
+                    <header id="header">
+                        <h1>Lenk im Simmental</h1>
+                        <p>How to get there and where will we sleep</p>
+                    </header>
+                    {% include 'snippets/navnothome.html' %}
+                <!-- Main -->
+                    <div id="main">
+                        <!-- Content -->
+                            <section id="accommodation" class="main">
+                                    <span class="image main"><img src="{% static "fest/images/pic04.jpg"%}" alt="" /></span>
+                                    <h2>Alpina holiday house</h2>
+                                    <p><span class="image left"><img src="{% static "fest/images/pic05.jpg" %}" alt="" /></span>The cosy rustically holiday house is located in Matten. It's a small village right before Lenk. The hause is central and close by the train station Matten.</br></br>From the accommodation to the sport hall:</br>no walking distance. 6 minutes car ride or by train. (train ticket is included in the Pass)</br></br>
+                                    Direction</br>
+                                    Alpina Ferienhaus, Dorfstrasse </br>
+                                    3772 St. Stephan</br>
+                                    <a href='https://goo.gl/maps/zhmCXJhWEws'>Google Maps Location CLICK HERE</a></br></br>
+                                    </p>
+                                    <h3>Accommodation</h3>
+                                    <p>3 dormitories (10 - 12 - 16 sleeping spots)</br>There are mattress and pillows but please <strong><u>bring your own sleeping bag.</strong></u></br></p>
+                            </section>
+                            <section id="location" class="main">
+                                    <h2>By Train:</h2>
+                                <p>The wonderful destination of Lenk lays at the end of a beautiful and varied train ride from either Bern or Montreux.</br>
+                                Only one train change from Bern to Lenk.</br>
+                                The Lötschberger train takes you hourly from Bern directly to Zweisimmen, where you’ll change trains to catch the 20 minute regional train to Lenk.</p>
+                                    <h3>Approximate Travel Times by train</h3>
+                                    <ul>
+                                        <li>Zurich – Berne – Lenk: 2h 30 min</li>
+                                        <li>Basel – Berne – Lenk: 2h 15 min</li>
+                                        <li>Geneva – Lausanne – Montreux – Lenk: 3h 30 min</li>
+                                        <li>Berne/Belp – Lenk: 1h 45 min</li>
+                                    </ul>
+                                    <h3>Tickets</h3>
+                                    <p> Tickets can be bought in the Swiss Main Trains system <a href="https://www.sbb.ch/">SBB</a></br>
+                                Prices are very relative to How Soon, Time of Train. As a general recommendation <u>book with time!</u></p>
+                                    <h2>By Car:</h2>
+                                    <p> Traveling on the A6 motorway Bern-Thun, take the Wimmis/Zweisimmen exit through the Simmenfluh Tunnel, on the other side of which begins your journey up the Simme River Valley. The main road in the valley, the Simmentalstrasse.</br>
+                                Coming from Bulle and the Canton of Freiburg, one can reach Lenk via Charmey by traveling over the Jaunpass into the Simmental (Boltigen) or by traveling via Château d’Oex-Saanen-Zweisimmen.</p>
+                                    <h3>Approximate Travel Times by car</h3>
+                                    <ul>
+                                        <li>Berne – Lenk: 1h 15min</li>
+                                        <li>Basel – Lenk: 2h</li>
+                                        <li>Geneva – Lenk: 2h 15min</li>
+                                        <li>Zurich – Lenk: 2h 30min</li>
+                                    </ul>
+                                <footer class="major">
+                                    <ul class="actions">
+                                        <li><a href="/" class="button">Back</a></li>
+                                    </ul>
+                                </footer>
+                            </section>
+                    </div>
+                    {% include 'snippets/footer.html' %}
+            </div>
+{% endblock %}
