@@ -242,7 +242,7 @@ class Accounting(models.Model):
 # Extra Information and FAQ
 class Info(models.Model):
     title            = models.CharField(max_length=50)
-    content          = models.TextField(max_length=3000, null=True, blank=True)
+    content          = models.TextField(max_length=5000, null=True, blank=True)
     slug             = models.SlugField(unique=True, null=True, blank=True)
 def info_pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
