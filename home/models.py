@@ -162,8 +162,11 @@ class Booking(models.Model):
     ]
     Day             = [
         ('Wed','Wednesday\'s'),
+        ('Tue','Tuesday\'s'),
         ('Sun','Sunday\'s'),
         ('WedSun.','Wed. & Sunday\'s'),
+        ('TueWed.','Tue. & Wednesday\'s'),
+        ('TueSun.','Tue. & Sunday\'s'),
     ]
     Status          = [
         ('IN','Informed'),

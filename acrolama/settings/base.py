@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crispy_forms',
     'home',
-    'formulario',
     'storages',
     'analytical',
     'widget_tweaks',
