@@ -144,9 +144,11 @@ class Teacher(models.Model):
 
 class Booking(models.Model):
     Abo             = [
-        ('SA','Season Abo'),
-        ('CY','Cycle Abo'),
-        ('SI','Single Ticket'),
+        ('SA','Single Season Abo'),
+        ('SD','Double Season Abo'),
+        ('CY','Single Cycle Abo'),
+        ('CD','Double Cycle Abo'),
+        ('SI','Single Day Ticket'),
     ]
     Category           = [
         ('EI','Einkommen'),

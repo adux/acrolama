@@ -14,8 +14,9 @@ class PortfolioCreateForm(forms.ModelForm):
 class BookClassCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['abo'].initial ='CY'
+        self.fields['abo'].initial ='CY'.required
         self.fields['reduction'].initial='NM'
+        self.fields['day'].required=True
     class Meta:
         model = Booking
         fields = (
@@ -39,7 +40,7 @@ class BookClassCreateForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'Name'}),
             'email': forms.EmailInput(attrs={'placeholder': 'Email'}),
-            'phone': forms.TextInput(attrs={'placeholder': 'Phone (+41076...)'}),
+            'phone': forms.TextInput(attrs={'placeholder': 'Phone (+4107611111111)'}),
             'abo': forms.Select(attrs={'checked': 'checked'}),
             'day': forms.Select(attrs={'checked': 'checked'}),
             'reduction': forms.Select(attrs={'checked': 'checked'}),
