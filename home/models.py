@@ -159,8 +159,8 @@ class Booking(models.Model):
         ('SP','Spargeld'),
     ]
     Reduction       =[
-        ('ST','Student'),
-        ('NM','Normal'),
+        ('ST','Student Price'),
+        ('NM','Normal Price'),
     ]
     Day             = [
         ('Wed','Wednesday\'s'),
