@@ -42,7 +42,7 @@ def accountingview(request):
     acc_filter = AccountingFilter(request.GET, queryset=acc_list)
     bk_filter = BookingFilter(request.GET, queryset=bk_list)
     context = {
-        "filter":acc_filter,
+        "filter_acc":acc_filter,
         "filter_bk":bk_filter,
     }
     return render(request, 'accounting.html', context)

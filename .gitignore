@@ -12,6 +12,8 @@ pip-selfcheck.json
 # src/<yourproject>/settings/local.py
 /static  # any collected static files
 static/
+media/
+/media
 acrolama/settings/local.py
 
 #Sass Ignore

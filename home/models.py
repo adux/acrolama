@@ -232,7 +232,7 @@ class Accounting(models.Model):
         ('UN','Unclasified'),
     ]
     category        = models.CharField(max_length=10, choices=Category)
-    event           = models.ForeignKey(Event, on_delete=models.CASCADE, null=True,blank=True)
+    event           = models.ForeignKey(Event, on_delete=models.CASCADE, null=True, blank=True)
     amount          = models.CharField(max_length=9)
     pay_till        = models.DateField(auto_now_add=False,auto_now=False, null=True, blank=True)
     pay_date        = models.DateField(auto_now_add=False,auto_now=False, null=True, blank=True)

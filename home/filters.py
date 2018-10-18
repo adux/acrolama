@@ -19,7 +19,7 @@ class AccountingFilter(django_filters.FilterSet):
     pay_till = django_filters.DateFromToRangeFilter(widget=SplitDateTimeWidget(attrs={'placeholder': 'YYYY-MM-DD'}))
     event__datestart = django_filters.DateFromToRangeFilter(widget=SplitDateTimeWidget(attrs={'placeholder': 'YYYY-MM-DD'}))
     event__cat = django_filters.ChoiceFilter(choices = Icon)
-class Meta:
+    class Meta:
         model = Accounting
         fields = ['category','event','methode','status']
 
