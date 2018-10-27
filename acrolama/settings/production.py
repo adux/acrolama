@@ -1,6 +1,15 @@
 from .base import *
 from acrolama.aws.conf import *
 
+#Sentry SDK
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+sentry_sdk.init(
+    dsn="https://449183d07de2455ba0ecf384ca29a77f@sentry.io/1310482",
+    integrations=[DjangoIntegration()]
+)
+
 #Email
 EMAIL_HOST = 'mail.gandi.net'
 EMAIL_HOST_USER = 'web@acrolama.com'

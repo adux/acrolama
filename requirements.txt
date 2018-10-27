@@ -39,3 +39,4 @@ simplejson==3.13.2
 six==1.11.0
 sorl-thumbnail==12.4.1
 urllib3==1.22
+sentry-sdk==0.5.1
