@@ -12,7 +12,7 @@ class About(models.Model):
 
 
 class AboutImage(models.Model):
-    general         = models.ForeignKey(About)
+    general         = models.ForeignKey(About, on_delete=models.CASCADE)
     uploaded_at     = models.DateTimeField(auto_now_add=True)
     image           = models.ImageField(upload_to='about/general/')
 
@@ -47,7 +47,7 @@ class Testimonial(models.Model):
 
 
 class Portfolio(models.Model):
-    owner           = models.ForeignKey(User)
+    owner           = models.ForeignKey(User, on_delete=models.CASCADE)
     order           = models.CharField(max_length=1, blank=True, null=True)
     text            = models.TextField(max_length=30, blank=True, null=True)
     sec_text        = models.TextField(max_length=30, blank=True, null=True)
@@ -253,7 +253,7 @@ pre_save.connect(info_pre_save_receiver,sender=Info)
 
 
 class InfoImage(models.Model):
-    general          = models.ForeignKey(Info)
+    general          = models.ForeignKey(Info, on_delete=models.CASCADE)
     uploaded_at      = models.DateTimeField(auto_now_add=True)
     image            = models.ImageField(upload_to='info/')
 

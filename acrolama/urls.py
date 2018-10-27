@@ -13,7 +13,7 @@ from home.views import (
     EventListView,
     PortfolioCreateView,
     )
-
+app_name='home'
 urlpatterns = [
     url(settings.ADMIN_URL, admin.site.urls),
     url(r'^accounts/login/', LoginView.as_view(), name='login'),
