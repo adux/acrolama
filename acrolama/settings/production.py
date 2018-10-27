@@ -11,12 +11,10 @@ sentry_sdk.init(
 )
 
 #Email
-EMAIL_HOST = 'mail.gandi.net'
-EMAIL_HOST_USER = 'web@acrolama.com'
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'web@acrolama.com'
+EMAIL_HOST = os.environ.get('MAILGUN_SMTP_SERVER')
+EMAIL_HOST_USER = os.environ.get('MAILGUN_SMTP_LOGIN')
+EMAIL_HOST_PASSWORD = os.environ.get('MAILGUN_SMTP_PASSWORD')
+EMAIL_PORT = os.environ.get('MAILGUN_SMTP_PORT')
 ADMINS = (
     ('Adrian Garate', 'adrian@acrolama.com'),
 )
