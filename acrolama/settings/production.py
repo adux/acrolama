@@ -5,7 +5,7 @@ from acrolama.aws.conf import *
 EMAIL_HOST = 'mail.gandi.net'
 EMAIL_HOST_USER = 'web@acrolama.com'
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
-EMAIL_PORT = 465
+EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'Acrolama <web@acrolama.com>'
 ADMINS = (
