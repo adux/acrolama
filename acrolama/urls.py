@@ -1,4 +1,5 @@
-from django.conf.urls import url, include
+from django.urls import path, include
+from django.conf.urls import url
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -13,7 +14,7 @@ from home.views import (
     EventListView,
     PortfolioCreateView,
     )
-app_name='home'
+
 urlpatterns = [
     url(settings.ADMIN_URL, admin.site.urls),
     url(r'^accounts/login/', LoginView.as_view(), name='login'),
@@ -24,6 +25,7 @@ urlpatterns = [
     url(r'^events/(?P<slug>[\w-]+)/$', EventDetailView.as_view(), name='events'),
     url(r'^classes/(?P<slug>[\w-]+)/$', ClassDetailView.as_view(), name='classes'),
     url(r'^info/(?P<slug>[\w-]+)/$', InfoDetailView.as_view(), name='info'),
+    path('todo/', include('todo.urls', namespace="todo")),
 ]
 
 if settings.DEBUG:

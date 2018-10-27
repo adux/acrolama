@@ -36,17 +36,20 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    'django.contrib.flatpages',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'crispy_forms',
     'home',
     'storages',
     'analytical',
     'widget_tweaks',
     'django_filters',
+    'todo',
 ]
-
+SITE_ID = 1
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 GOOGLE_ANALYTICS_PROPERTY_ID = 'UA-118797477-1'
 
@@ -81,3 +84,25 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+
+#Auth
+LOGIN_REDIRECT_URL = 'home'
+
+# Todo-specific settings
+TODO_DEFAULT_LIST_ID = None
+# Restrict access to todo lists/views to `is_staff()` users.
+# False here falls back to `is_authenticated()` users.
+TODO_STAFF_ONLY = True
+
+# If you use the "public" ticket filing option, to whom should these tickets be assigned?
+# Must be a valid username in your system. If unset, unassigned tickets go to "Anyone."
+TODO_DEFAULT_ASSIGNEE = None
+
+# If you use the "public" ticket filing option, to which list should these tickets be saved?
+# Defaults to first list found, which is probably not what you want!
+TODO_DEFAULT_LIST_SLUG = 'tickets'
+
+# If you use the "public" ticket filing option, to which *named URL* should the user be
+# redirected after submitting? (since they can't see the rest of the ticket system).
+# Defaults to "/"
+TODO_PUBLIC_SUBMIT_REDIRECT = '/'

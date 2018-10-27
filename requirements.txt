@@ -17,6 +17,7 @@ django-instagram==0.1.1
 django-letsencrypt==3.0.0
 django-scheduler==0.8.6.1
 django-storages==1.6.5
+django-todo==2.0.3
 django-widget-tweaks==1.4.2
 docutils==0.14
 gunicorn==19.7.1
