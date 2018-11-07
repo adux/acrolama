@@ -14,7 +14,7 @@ class PortfolioCreateForm(forms.ModelForm):
 class BookClassCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['abo'].initial='CY'
+        self.fields['abo'].initial='SC'
         self.fields['abo'].required=True
         self.fields['reduction'].initial='NM'
         self.fields['day'].required=True

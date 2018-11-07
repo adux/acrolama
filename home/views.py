@@ -126,7 +126,27 @@ class ClassDetailView(FormMixin, DetailView):
     def form_valid(self, form):
         instance = form.save(commit=False)
         instance.event = Event.objects.get(slug = self.object.slug)
-        instance.option = instance.event.get_ocurrance_display()
+        #instance.option = instance.event.get_ocurrance_display()
+        if instance.abo == 'SA' and instance.reduction=='NM' :
+            instance.amount = '380'
+        elif instance.abo == 'SA':
+            instance.amount = '300'
+        elif instance.abo == 'DS' and instance.reduction == 'NM':
+            instance.amount = '750'
+        elif instance.abo == 'DS':
+            instance.amount = '590'
+        elif instance.abo == 'SC' and instance.reduction == 'NM':
+            instance.amount = '90'
+        elif instance.abo == 'SC':
+            instance.amount = '70'
+        elif instance.abo == 'DC' and instance.reduction == 'NM':
+            instance.amount = '150'
+        elif instance.abo == 'DC':
+            instance.amount = '120'
+        elif instance.abo == 'ST':
+            instance.amount = '25'
+        else:
+            instance.amount = 'other'
         instance.save()
         return super(ClassDetailView, self).form_valid(form)
 

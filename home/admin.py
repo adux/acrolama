@@ -27,7 +27,7 @@ class AboutAdmin(admin.ModelAdmin):
         AboutImageInline,
              ]
 class BookingAdmin(admin.ModelAdmin):
-    list_display        = ('event','booked_at','name','phone','email','abo','status','pay_till')
+    list_display        = ('event','booked_at','name','phone','email','abo','day','status')
     list_filter         = ('event','status','abo')
     search_fields       = ('name','email','event__title')
 
