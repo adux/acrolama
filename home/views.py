@@ -2,6 +2,7 @@ from datetime import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.mail import send_mail
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
@@ -172,6 +173,15 @@ class EventDetailView(FormMixin, DetailView):
     def form_valid(self, form):
         instance = form.save(commit=False)
         instance.event = Event.objects.get(slug = self.object.slug)
+        subject = 'Acrolama - Confirmation'
+        message = 'Hi ' + instance.name + '\b Thanks for registering! You must know lamas are\
+        little rebels their not just waiting for your email. And we don\'t like monkeys doing our atomatic emailing job.\
+        \b But their reliable. In 72 hours (tops) you\'ll recive an email concerning your registration status!\b\b\
+        Hugs\b\
+        The Lamas'
+        sender = 'info@acrolama.com'
+        to = [instance.email]
+        send_mail(subject,message,sender,to)
         instance.save()
         return super(EventDetailView, self).form_valid(form)
 
