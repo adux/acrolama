@@ -174,12 +174,8 @@ class EventDetailView(FormMixin, DetailView):
         instance = form.save(commit=False)
         instance.event = Event.objects.get(slug = self.object.slug)
         subject = 'Acrolama - Confirmation'
-        message = "Hi " + instance.name + "\r\n\r\n Thanks for registering!\r\n Lamas are little rebels, they are not as\
-good at doing automatic jobs as monkeys. But their reliable!. In 72 hours (tops) you will recive an email concerning\
-your registration status.\r\n\r\n\r\n\
-        Big hubsHugs\r\n\
-        The Lamas"
-        sender = 'info@acrolama.com'
+        message = "Hello " + instance.name + "\r\n\r\nThanks for registering!\r\n\r\nLamas are little rebels, they are not good at doing automatic jobs. Definitly not as good as monkeys. Fly better though...\r\n\r\nAnyway in the next 72 hours you will receive an email concerning your registration status! Thanks for your patience.\r\n\r\n\r\n\Big Hug\r\n\The Lamas"
+        sender = 'notmonkeys@acrolama.com'
         to = [instance.email]
         send_mail(subject,message,sender,to)
         instance.save()
