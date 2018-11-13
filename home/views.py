@@ -148,6 +148,12 @@ class ClassDetailView(FormMixin, DetailView):
             instance.amount = '25'
         else:
             instance.amount = 'other'
+        instance.event = Event.objects.get(slug = self.object.slug)
+        subject = 'Acrolama - Confirmation - ' + instance.event_name
+        message = "Hello " + instance.name + "\r\n\r\nThanks for registering!\r\n\r\nLamas are little rebels, they are not good at doing automatic jobs. Definitly not as good as monkeys. Fly better though...\r\n\r\nAnyway, in the next 72 hours you will receive an email concerning your registration status! Thanks for your patience.\r\n\r\n\r\nBig Hug\r\nThe Lamas"
+        sender = 'notmonkeys@acrolama.com'
+        to = [instance.email]
+        send_mail(subject,message,sender,to)
         instance.save()
         return super(ClassDetailView, self).form_valid(form)
 
@@ -173,8 +179,8 @@ class EventDetailView(FormMixin, DetailView):
     def form_valid(self, form):
         instance = form.save(commit=False)
         instance.event = Event.objects.get(slug = self.object.slug)
-        subject = 'Acrolama - Confirmation'
-        message = "Hello " + instance.name + "\r\n\r\nThanks for registering!\r\n\r\nLamas are little rebels, they are not good at doing automatic jobs. Definitly not as good as monkeys. Fly better though...\r\n\r\nAnyway in the next 72 hours you will receive an email concerning your registration status! Thanks for your patience.\r\n\r\n\r\n\Big Hug\r\n\The Lamas"
+        subject = 'Acrolama - Confirmation - ' + instance.event_name
+        message = "Hello " + instance.name + "\r\n\r\nThanks for registering!\r\n\r\nLamas are little rebels, they are not good at doing automatic jobs. Definitly not as good as monkeys. Fly better though...\r\n\r\nAnyway, in the next 72 hours you will receive an email concerning your registration status! Thanks for your patience.\r\n\r\n\r\nBig Hug\r\nThe Lamas"
         sender = 'notmonkeys@acrolama.com'
         to = [instance.email]
         send_mail(subject,message,sender,to)
