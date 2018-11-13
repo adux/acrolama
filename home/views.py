@@ -149,8 +149,8 @@ class ClassDetailView(FormMixin, DetailView):
         else:
             instance.amount = 'other'
         instance.event = Event.objects.get(slug = self.object.slug)
-        subject = 'Acrolama - Confirmation - ' + instance.event_name
-        message = "Hello " + instance.name + "\r\n\r\nThanks for registering!\r\n\r\nLamas are little rebels, they are not good at doing automatic jobs. Definitly not as good as monkeys. Fly better though...\r\n\r\nAnyway, in the next 72 hours you will receive an email concerning your registration status! Thanks for your patience.\r\n\r\n\r\nBig Hug\r\nThe Lamas"
+        subject = 'Acrolama - Confirmation - ' + str(instance.event)
+        message = "Hoi " + instance.name + "\r\n\r\nThanks for registering for our Class!\r\n\r\nLamas are little rebels, they are not good at doing automatic jobs. Definitly not as good as monkeys. Fly better though...\r\n\r\nAnyway, in the next 72 hours you will receive an email concerning your registration status! Thanks for your patience.\r\n\r\n\r\nBig Hug\r\nThe Lamas"
         sender = 'notmonkeys@acrolama.com'
         to = [instance.email]
         send_mail(subject,message,sender,to)
@@ -179,7 +179,7 @@ class EventDetailView(FormMixin, DetailView):
     def form_valid(self, form):
         instance = form.save(commit=False)
         instance.event = Event.objects.get(slug = self.object.slug)
-        subject = 'Acrolama - Confirmation - ' + instance.event_name
+        subject = 'Acrolama - Confirmation - ' + str(instance.event)
         message = "Hello " + instance.name + "\r\n\r\nThanks for registering!\r\n\r\nLamas are little rebels, they are not good at doing automatic jobs. Definitly not as good as monkeys. Fly better though...\r\n\r\nAnyway, in the next 72 hours you will receive an email concerning your registration status! Thanks for your patience.\r\n\r\n\r\nBig Hug\r\nThe Lamas"
         sender = 'notmonkeys@acrolama.com'
         to = [instance.email]
