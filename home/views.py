@@ -48,6 +48,10 @@ def accountingview(request):
     }
     return render(request, 'accounting.html', context)
 
+def carouview(request):
+    template_name='carou.html'
+    return render(request, template_name)
+
 def homeview(request):
     template_name='home.html'
     form = NewsForm( request.POST or None)

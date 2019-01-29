@@ -38,7 +38,7 @@
                             {% if object.registration %}
                             <div class="tab">
                                 <input id="tab-one" type="checkbox" name="tabs" checked="checked"/>
-                                <label for="tab-one">Register</label>
+                                <label for="tab-one">REGISTER</label>
                                 <div class="tab-content tab-form">
                                         {% if form.errors.non_field_errors %}
                                         {{ form.errors.non_field_errors }}
@@ -46,7 +46,7 @@
                                         {% if messages %}
                                         <ul class="messages">
                                             {% for message in messages %}
-                                            <li{% if message.tags %} style="color: #f3d216; text-align: center;" class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                            <li{% if message.tags %} style="text-align: center;" class="{{ message.tags }}"{% endif %}>{{ message }}</li>
                                             {% endfor %}
                                         </ul>
                                         {% endif %}

@@ -3,44 +3,44 @@
 {% load static %}
 {% include 'snippets/nav.html' %}
 <!-- Events -->
-        <div id="next" class="section">
-            <div class="block content-1170 center-relative">
-                <div class="section-title-holder right">
-                    <div class="section-num">
-                        <span>
-                                <i class="fas fa-hourglass-half"></i>
-                        </span>
-                    </div>
-                    <h2 class="entry-title">EVENTS</h2>
-                </div>
-                <div class="section-content-holder left green">
-                    <div class="content-wrapper">
-                        <div class="blog-holder block center-relative">
-                            {% for obj in list %}
-                            <article class="blog-item-holder relative">
-                                <div class="num">
-                                        <i class="{{obj.cat}}"></i>
-                                </div>
-                                <div class="info">
-										<div class="author vcard "><a href="/events/{{obj.slug}}">{{obj.get_level_display}} {{obj.get_cat_display}} - {{obj.city}}</a></div>
-                                    <div class="cat-links">
-                                        <ul>
-                                                <li><a href="/events/{{obj.slug}}">{{obj.get_datestart}}{{obj.get_dateend}} | {{obj.get_ocurrance_display|default_if_none:""}}</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <h3 class="entry-title">
-                                        <a href="/events/{{obj.slug}}">{{obj.title}}</a>
-                                </h3>
-                                <div class="clear"></div>
-                            </article>
-                            {% endfor %}
-                            <div class="clear"></div>
+<div id="events" class="section">
+    <div class="block content-1170 center-relative">
+        <div class="section-title-holder left green">
+            <div class="section-num green">
+                <span>
+                        <i class="fas fa-hourglass-half"></i>
+                </span>
+            </div>
+            <h2 class="entry-title">EVENTS</h2>
+        </div>
+        <div class="section-content-holder left green">
+            <div class="content-wrapper">
+                <div class="blog-holder block center-relative">
+                    {% for obj in list %}
+                    <article class="blog-item-holder relative">
+                        <div class="num">
+                                <i class="{{obj.cat}}"></i>
                         </div>
-                    </div>
+                        <div class="info">
+                                <div class="author vcard "><a href="/events/{{obj.slug}}">{{obj.get_level_display}} {{obj.get_cat_display}} - {{obj.city}}</a></div>
+                            <div class="cat-links">
+                                <ul>
+                                        <li><a href="/events/{{obj.slug}}">{{obj.get_datestart}}{{obj.get_dateend}} | {{obj.get_ocurrance_display|default_if_none:""}}</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <h3 class="entry-title">
+                                <a href="/events/{{obj.slug}}">{{obj.title}}</a>
+                        </h3>
+                        <div class="clear"></div>
+                    </article>
+                    {% endfor %}
+                    <div class="clear"></div>
                 </div>
-                <div class="clear"></div>
             </div>
         </div>
+        <div class="clear"></div>
+    </div>
+</div>
 {% include 'footer.html' %}
 {% endblock %}

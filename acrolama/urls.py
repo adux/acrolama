@@ -6,6 +6,7 @@ from django.contrib import admin
 from django.contrib.auth.views import LoginView
 from home.views import (
     homeview,
+    carouview,
     accountingview,
     ClassListView,
     ClassDetailView,
@@ -26,6 +27,7 @@ urlpatterns = [
     url(r'^classes/(?P<slug>[\w-]+)/$', ClassDetailView.as_view(), name='classes'),
     url(r'^info/(?P<slug>[\w-]+)/$', InfoDetailView.as_view(), name='info'),
     path('todo/', include('todo.urls', namespace="todo")),
+    url(r'^test/$', carouview)
 ]
 
 if settings.DEBUG:
