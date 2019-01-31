@@ -43,17 +43,21 @@ class AboutDate(models.Model):
     def __str__(self):
          return self.description
 #End About Section
+
+
 #Start FAQ Section
 class Faq(models.Model):
     question         = models.CharField(max_length=300, null=True, blank=True)
-    answer           = models.CharField(max_length=1200, null=True, blank=True)
+    answer           = models.TextField(max_length=2000, null=True, blank=True)
 
 class FaqValues(models.Model):
     image            = models.CharField(max_length=15, null= True, blank=True)
     title            = models.CharField(max_length=100, null=True, blank=True)
     content          = models.CharField(max_length=120, null=True, blank=True)
 #End FAQ Section
-# Start Variable Info Pages
+
+
+#Start Variable Info Pages
 class Info(models.Model):
     title            = models.CharField(max_length=50)
     content          = models.TextField(max_length=5000, null=True, blank=True)
