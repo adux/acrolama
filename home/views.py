@@ -21,6 +21,8 @@ from home.models import (
     Accounting,
     Booking,
     Event,
+    Faq,
+    FaqValues,
     Info,
     InfoImage,
     Testimonial,
@@ -36,8 +38,11 @@ from home.filters import (
     AccountingFilter,
     BookingFilter,
 )
+
+# Accounting con login requerido TODO: mejorar sistema de login a algo mas secreto ...
 @login_required(login_url='/error404/')
 def accountingview(request):
+    template_name = 'accounting/accounting.html'
     acc_list = Accounting.objects.all()
     bk_list = Booking.objects.all()
     acc_filter = AccountingFilter(request.GET, queryset=acc_list)
@@ -46,12 +51,14 @@ def accountingview(request):
         "filter_acc":acc_filter,
         "filter_bk":bk_filter,
     }
-    return render(request, 'accounting.html', context)
+    return render(request, template_name, context)
 
-def carouview(request):
-    template_name='carou.html'
+# Generar algunos tests.
+def testview(request):
+    template_name='test.html'
     return render(request, template_name)
 
+# home de home.html
 def homeview(request):
     template_name='home.html'
     form = NewsForm( request.POST or None)
@@ -86,11 +93,20 @@ def homeview(request):
     }
     return render(request, template_name, context)
 
+# faq.html
+def faqview(request):
+    qs_faq = Faq.objects.all()
+    template_name= 'faq.html'
+    context = {
+        "faq" : qs_faq
+    }
+    return render(request, template_name, context)
 
+
+# For the info pages
 class InfoDetailView(DetailView):
     model = Info
     context_object_name = 'info'
-
 
 class EventListView(ListView):
     model = Event
@@ -191,18 +207,3 @@ class EventDetailView(FormMixin, DetailView):
         instance.save()
         return super(EventDetailView, self).form_valid(form)
 
-
-class PortfolioCreateView(LoginRequiredMixin, CreateView):
-    form_class = PortfolioCreateForm
-    template_name = 'home/portfolio_form.html'
-    success_url = reverse_lazy('home/portfolio_form.html')
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        portfolios  = Portfolio.objects.all()
-        context['portfolios'] = portfolios
-        return context
-    def form_valid(self, form):
-        instance = form.save(commit=False)
-        instance.owner = self.request.user
-        #instance.save is done by CreateView
-        return super(PortfolioCreateView, self).form_valid(form)

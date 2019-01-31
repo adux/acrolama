@@ -6,10 +6,15 @@ from home.utils import unique_slug_generator
 User = settings.AUTH_USER_MODEL
 
 
-# Static About and Content of Webpage
+#abcdefghijklmnpqrstuvwxyz
+#Static and Content
+#Projects
+#Accounting
+
+# Static Content of Webpage
+#Start About Section
 class About(models.Model):
     description     = models.TextField(max_length=1000)
-
 
 class AboutImage(models.Model):
     general         = models.ForeignKey(About, on_delete=models.CASCADE)
@@ -37,14 +42,37 @@ class AboutDate(models.Model):
         return self.end.strftime('%Y')
     def __str__(self):
          return self.description
+#End About Section
+#Start FAQ Section
+class Faq(models.Model):
+    question         = models.CharField(max_length=300, null=True, blank=True)
+    answer           = models.CharField(max_length=1200, null=True, blank=True)
 
+class FaqValues(models.Model):
+    image            = models.CharField(max_length=15, null= True, blank=True)
+    title            = models.CharField(max_length=100, null=True, blank=True)
+    content          = models.CharField(max_length=120, null=True, blank=True)
+#End FAQ Section
+# Start Variable Info Pages
+class Info(models.Model):
+    title            = models.CharField(max_length=50)
+    content          = models.TextField(max_length=5000, null=True, blank=True)
+    slug             = models.SlugField(unique=True, null=True, blank=True)
+def info_pre_save_receiver(sender, instance, *args, **kwargs):
+    if not instance.slug:
+        instance.slug = unique_slug_generator(instance)
+pre_save.connect(info_pre_save_receiver,sender=Info)
 
-class Testimonial(models.Model):
-    text = models.TextField(max_length=350)
-    author = models.CharField(max_length=30)
-    def __str__(self):
-        return self.text
+class InfoImage(models.Model):
+    general          = models.ForeignKey(Info, on_delete=models.CASCADE)
+    uploaded_at      = models.DateTimeField(auto_now_add=True)
+    image            = models.ImageField(upload_to='info/')
+#End Info Pages
 
+class NewsList(models.Model):
+    email           = models.CharField(max_length=100, blank=True, null=True)
+    active          = models.BooleanField(default=True)
+    inscribed_at    = models.DateField(auto_now_add=True)
 
 class Portfolio(models.Model):
     owner           = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -54,8 +82,14 @@ class Portfolio(models.Model):
     uploaded_at     = models.DateTimeField(auto_now_add=True)
     upload          = models.ImageField(upload_to='portfolio/')
 
+class Testimonial(models.Model):
+    text = models.TextField(max_length=350)
+    author = models.CharField(max_length=30)
+    def __str__(self):
+        return self.text
 
 #Proyectos
+#Events
 class Event(models.Model):
     Icon             = (
         ('fas fa-redo','Masterclass'),
@@ -93,6 +127,7 @@ class Event(models.Model):
     city             = models.CharField(max_length=20)
     ocurrance        = models.CharField(max_length=8, choices=Ocurrance, null=True,blank=True)
     datestart        = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
+    #Why did i need this ? 
     dateextra        = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
     dateend          = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
     price            = models.CharField(max_length=20, null=True, blank=True)
@@ -240,30 +275,3 @@ class Accounting(models.Model):
     status          = models.CharField(max_length=15, choices=Status, null=True, blank=True)
     description     = models.CharField(max_length=300, null=True, blank=True)
     degistered_at   = models.DateTimeField(auto_now_add=True)
-
-# Extra Information and FAQ
-class Info(models.Model):
-    title            = models.CharField(max_length=50)
-    content          = models.TextField(max_length=5000, null=True, blank=True)
-    slug             = models.SlugField(unique=True, null=True, blank=True)
-def info_pre_save_receiver(sender, instance, *args, **kwargs):
-    if not instance.slug:
-        instance.slug = unique_slug_generator(instance)
-pre_save.connect(info_pre_save_receiver,sender=Info)
-
-
-class InfoImage(models.Model):
-    general          = models.ForeignKey(Info, on_delete=models.CASCADE)
-    uploaded_at      = models.DateTimeField(auto_now_add=True)
-    image            = models.ImageField(upload_to='info/')
-
-
-class Faq(models.Model):
-    question         = models.CharField(max_length=300, null=True, blank=True)
-    answer           = models.CharField(max_length=600, null=True, blank=True)
-
-
-class NewsList(models.Model):
-    email           = models.CharField(max_length=100, blank=True, null=True)
-    active          = models.BooleanField(default=True)
-    inscribed_at    = models.DateField(auto_now_add=True)

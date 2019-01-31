@@ -4,17 +4,19 @@ from .models import (
     AboutImage,
     AboutMember,
     AboutDate,
+    Accounting,
     Booking,
     Event,
     EventImage,
-    Teacher,
+    Faq,
+    FaqValues,
     Info,
     InfoImage,
-    Testimonial,
-    Portfolio,
     NewsList,
-    Accounting
-)
+    Portfolio,
+    Teacher,
+    Testimonial
+    )
 
 class AboutImageInline(admin.StackedInline):
     model               = AboutImage
@@ -45,6 +47,10 @@ class EventTeacherInline(admin.StackedInline):
     extra               = 1
     can_delete          = True
     show_change_link    = True
+
+class FaqAdmin(admin.ModelAdmin):
+    list_display        = 'question', 'answer'
+
 
 class AccountingInline(admin.StackedInline):
     model               = Accounting
@@ -95,6 +101,7 @@ admin.site.register(AboutDate)
 admin.site.register(AboutMember)
 admin.site.register(Accounting,AccountingAdmin)
 admin.site.register(Booking, BookingAdmin)
+admin.site.register(Faq, FaqAdmin)
 admin.site.register(Info, InfoAdmin)
 admin.site.register(Teacher, TeacherAdmin)
 admin.site.register(Event, EventAdmin)
