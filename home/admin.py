@@ -5,6 +5,7 @@ from .models import (
     AboutMember,
     AboutDate,
     Accounting,
+    Address,
     Booking,
     Event,
     EventImage,
@@ -99,6 +100,7 @@ class NewsAdmin(admin.ModelAdmin):
 admin.site.register(About, AboutAdmin)
 admin.site.register(AboutDate)
 admin.site.register(AboutMember)
+admin.site.register(Address)
 admin.site.register(Accounting,AccountingAdmin)
 admin.site.register(Booking, BookingAdmin)
 admin.site.register(Faq, FaqAdmin)

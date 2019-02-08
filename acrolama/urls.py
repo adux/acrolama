@@ -26,7 +26,7 @@ urlpatterns = [
     url(r'^events/(?P<slug>[\w-]+)/$', EventDetailView.as_view(), name='events'),
     url(r'^classes/(?P<slug>[\w-]+)/$', ClassDetailView.as_view(), name='classes'),
     url(r'^info/(?P<slug>[\w-]+)/$', InfoDetailView.as_view(), name='info'),
-    path('faq/',faqview),  
+    path('faq/',faqview),
     path('todo/', include('todo.urls', namespace="todo")),
     url(r'^test/$', testview)
 ]

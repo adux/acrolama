@@ -1,7 +1,9 @@
 import os
-
+import sys
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -14,6 +16,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'acrolama.urls'
+WSGI_APPLICATION = 'acrolama.wsgi.application'
 
 TEMPLATES = [
     {
@@ -31,29 +34,33 @@ TEMPLATES = [
     },
 ]
 
-# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.flatpages',
+#    'django.contrib.flatpages',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'crispy_forms',
-    'home',
+    #Added
     'storages',
     'analytical',
     'widget_tweaks',
     'django_filters',
     'todo',
+    'crispy_forms',
+    #Own
+    'home',
+    'project',
+    'media',
+    'accounting',
+    'booking'
 ]
+
 SITE_ID = 1
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 GOOGLE_ANALYTICS_PROPERTY_ID = 'UA-118797477-1'
-
-WSGI_APPLICATION = 'acrolama.wsgi.application'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -72,10 +79,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'acrolama'
     }
 }
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
