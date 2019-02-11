@@ -83,7 +83,7 @@ class Level (models.Model):
 class Location(models.Model):
     name = models.CharField(max_length=120)
     address = models.ForeignKey('home.Address', on_delete=models.CASCADE)
-    image = models.ForeignKey('media.Image', on_delete=models.CASCADE)
+    image = models.ForeignKey('audiovisual.Image', on_delete=models.CASCADE)
     max_participants = models.CharField(max_length=5,null=True, blank=True)
     description = models.TextField(max_length=2000, null=True, blank=True)
     indication = models.TextField(max_length=2000, null=True, blank=True)
@@ -152,8 +152,8 @@ class Event(models.Model):
     max_participants = models.CharField(max_length=5, null=True, blank=True)
     #timeoptions = models.ManyToManyField(TimeOption)
     #Media
-    images = models.ManyToManyField('media.Image')
-    videos = models.ManyToManyField('media.Video', blank=True)
+    images = models.ManyToManyField('audiovisual.Image')
+    videos = models.ManyToManyField('audiovisual.Video', blank=True)
     #Optional
     prerequisites = models.TextField(max_length=2000, null=True, blank=True)
     highlights = models.TextField(max_length=2000, null=True, blank=True)

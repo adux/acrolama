@@ -1,8 +1,10 @@
 from django.db import models
 
+
 BOOKINGSTATUS = [
     ('PE','Pending'),
     ('WL','Waiting List'),
+    ('IN','Informed'),
     ('PA','Participant'),
     ('CA','Canceled'),
     ('SW','Switched')
