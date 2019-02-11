@@ -1,6 +1,7 @@
 from django.forms import ModelForm
 from django import forms
-from project.models import TimeOption 
+#from .models import TimeOption
+
 class ArrayFieldSelectMultiple(forms.SelectMultiple):
 
     def __init__(self, *args, **kwargs):
@@ -22,10 +23,10 @@ class ArrayFieldSelectMultiple(forms.SelectMultiple):
             return self.delimiter.join(data.getlist(name))
         return data.get(name, None)
 
-class ArrayAdminForm(ModelForm):
-    class Meta:
-        model = TimeOption
-        widgets = {
-            'start_interval' : ArrayFieldSelectMultiple
-        }
+#class ArrayAdminForm(ModelForm):
+#    class Meta:
+#        model = TimeOption
+#        widgets = {
+#            'start_interval' : ArrayFieldSelectMultiple
+#        }
 

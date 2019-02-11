@@ -3,7 +3,7 @@ from django.contrib.postgres.fields import ArrayField
 from django.utils.translation import ugettext as _
 from django.db.models.signals import pre_save
 from home.utils import unique_slug_generator
-from .forms import ArrayAdminForm
+#from .forms import ArrayAdminForm
 ###Reference Data
 
 EVENTCATEGORY = [
@@ -46,7 +46,7 @@ class Day(models.Model):
 
 
 class TimeOption(models.Model):
-    form = ArrayAdminForm
+    #form = ArrayAdminForm
     name = models.CharField(max_length=20)
     description = models.TextField(max_length=1000)
     days = models.ForeignKey(Day, null=True, blank=True, on_delete=models.CASCADE)
