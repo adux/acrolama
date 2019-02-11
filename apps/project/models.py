@@ -3,7 +3,7 @@ from django.contrib.postgres.fields import ArrayField
 from django.utils.translation import ugettext as _
 from django.db.models.signals import pre_save
 from home.utils import unique_slug_generator
-
+from .forms import ArrayAdminForm
 ###Reference Data
 
 EVENTCATEGORY = [
@@ -46,6 +46,7 @@ class Day(models.Model):
 
 
 class TimeOption(models.Model):
+    form = ArrayAdminForm
     name = models.CharField(max_length=20)
     description = models.TextField(max_length=1000)
     days = models.ForeignKey(Day, null=True, blank=True, on_delete=models.CASCADE)
@@ -58,7 +59,7 @@ class TimeOption(models.Model):
     start_date = models.DateField(auto_now_add=False, auto_now=False, blank=True,null=True)
     end_date = models.DateField(auto_now_add=False, auto_now=False, blank=True,null=True)
     def __str__(self):
-        return '%s - %s' % (self.name, self.start_time)
+        return '%s - %s' % (self.name, self.start_interval)
 
 
 class PriceOption(models.Model):

@@ -12,9 +12,12 @@ from .models import (
     Project,
     Team,
 )
+
+
 admin.site.register(Project)
 admin.site.register(Team)
 admin.site.register(Event)
+admin.site.register(Exception)
 admin.site.register(TimeOption)
 admin.site.register(PriceOption)
 admin.site.register(TimeLocation)
