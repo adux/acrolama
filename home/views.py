@@ -172,7 +172,7 @@ class ClassDetailView(FormMixin, DetailView):
         subject = 'Acrolama - Confirmation - ' + str(instance.event)
         message = "Hoi " + instance.name + "\r\n\r\nThanks for registering for our Class!\r\n\r\nLamas are little rebels, they are not good at doing automatic jobs. Definitly not as good as monkeys. Fly better though...\r\n\r\nAnyway, in the next 72 hours you will receive an email concerning your registration status! Thanks for your patience.\r\n\r\n\r\nBig Hug\r\nThe Lamas"
         sender = 'notmonkeys@acrolama.com'
-        to = [instance.email]
+        to = [instance.email, 'acrolama@acrolama.com']
         send_mail(subject,message,sender,to)
         instance.save()
         return super(ClassDetailView, self).form_valid(form)
