@@ -148,6 +148,7 @@ class ClassDetailView(FormMixin, DetailView):
         instance = form.save(commit=False)
         instance.event = Event.objects.get(slug = self.object.slug)
         #instance.option = instance.event.get_ocurrance_display()
+        #TODO: get a way to do the list without this ...
         if instance.abo == 'SA' and instance.reduction=='NM' :
             instance.amount = '380'
         elif instance.abo == 'SA':
@@ -167,10 +168,12 @@ class ClassDetailView(FormMixin, DetailView):
         elif instance.abo == 'ST':
             instance.amount = '25'
         else:
+            #EMAIL
+            #TODO: MUST have a better solution to controll it from admin
             instance.amount = 'other'
         instance.event = Event.objects.get(slug = self.object.slug)
         subject = 'Acrolama - Confirmation - ' + str(instance.event)
-        message = "Hoi " + instance.name + "\r\n\r\nThanks for registering for our Class!\r\n\r\nLamas are little rebels, they are not good at doing automatic jobs. Definitly not as good as monkeys. Fly better though...\r\n\r\nAnyway, in the next 72 hours you will receive an email concerning your registration status! Thanks for your patience.\r\n\r\n\r\nBig Hug\r\nThe Lamas"
+        message = "Hoi " + instance.name + "\r\n\r\nThanks for registering for our Class: " + str(instance.event) +"!\r\n\r\nLamas are little rebels, unlike monkeys, we're bad at routine jobs. Fly dope tho...\r\n\r\nAnyway, in the next 72 hours you will receive an email concerning your registration status. In the meantime maybe take a look at our Instagram: https://instagram.com/acrolama or visit the FAQ if you have questions: https://acrolama.com/faq .\r\n\r\n\r\nHope to see you soon!\r\n\r\nBig Hug\r\nThe Lamas"
         sender = 'notmonkeys@acrolama.com'
         to = [instance.email, 'acrolama@acrolama.com']
         send_mail(subject,message,sender,to)
@@ -200,7 +203,7 @@ class EventDetailView(FormMixin, DetailView):
         instance = form.save(commit=False)
         instance.event = Event.objects.get(slug = self.object.slug)
         subject = 'Acrolama - Confirmation - ' + str(instance.event)
-        message = "Hello " + instance.name + "\r\n\r\nThanks for registering!\r\n\r\nLamas are little rebels, they are not good at doing automatic jobs. Definitly not as good as monkeys. Fly better though...\r\n\r\nAnyway, in the next 72 hours you will receive an email concerning your registration status! Thanks for your patience.\r\n\r\n\r\nBig Hug\r\nThe Lamas"
+        message = "Hello " + instance.name + "\r\n\r\nThanks for registering for:" + str(instance.event) + "!\r\n\r\nLamas are little rebels, dislike routine jobs. Fly dope tho...\r\n\r\nAnyway, in the next 72 hours you will receive an email concerning your registration status!\r\nIn the meantime maybe take a look at our Instagram: https://instagram.com/acrolama or visit the FAQ if you have questions: https://acrolama.com/faq .\r\n\r\n\r\nBig Hug\r\nThe Lamas"
         sender = 'notmonkeys@acrolama.com'
         to = [instance.email]
         send_mail(subject,message,sender,to)
