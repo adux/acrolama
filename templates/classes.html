@@ -1,0 +1,71 @@
+{% load static %}
+<!-- News -->
+        <div id="classes" class="section">
+            <div class="block content-1170 center-relative">
+                <div class="section-title-holder left green">
+                    <div class="section-num green">
+                        <span>
+                                <i class="fas fa-sync"></i>
+                        </span>
+                    </div>
+                    <h2 class="entry-title">CLASSES</h2>
+                </div>
+                <div class="section-content-holder right green">
+                    <div class="content-wrapper">
+                        <div class="blog-holder block center-relative">
+                            {% for obj in class %}
+                            <article class="blog-item-holder relative">
+                                <div class="num">
+                                        <i class="{{obj.cat}}"></i>
+                                </div>
+                                <div class="info">
+										<div class="author vcard "><a href="classes/{{obj.slug}}">{{obj.get_level_display}} {{obj.get_cat_display}} - {{obj.city}}</a></div>
+                                    <div class="cat-links">
+                                        <ul>
+                                                <li><a href="classes/{{obj.slug}}">{{obj.get_datestart}}{{obj.get_dateend}} | {{obj.get_ocurrance_display|default_if_none:""}}</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <h3 class="entry-title">
+                                        <a href="classes/{{obj.slug}}">{{obj.title}}</a>
+                                </h3>
+                                <div class="clear"></div>
+                            </article>
+                            {% endfor %}
+                            <div class="latest-post-bottom-text">
+                                    <a href="{% url 'class'  %}">CLASSES CALENDAR</a>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <!-- CAROUSEL -->
+            <div class="block content-1170 center-relative">
+                <div class="extra-content-left">
+                    <script>
+                        var text1_speed = "1000";
+                        var text1_auto = "true";
+                        var text1_hover = "true";
+                    </script>
+                    <div class="text1 testimonial-slider-holder slider-holder">
+                        <div class="caroufredsel_wrapper">
+                            <ul id="text1" class="slides testimonial">
+                                {% for obj in testimonial %}
+                                <li style='height: 200px;'>
+                                    <div class="testimonial-content">
+                                            <p class="testimonial-text"><span>{{obj.text}}</span></p>
+                                            <p class="testimonial-author"><span>{{obj.author}}</span></p>
+                                    </div>
+                                    <div class="clear"></div>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <a id="text1_next" class="carousel_text_next right" style="" href="#"></a>
+                        <!--<div class="clear"></div>-->
+                    </div>
+                </div>
+            </div>
+        </div>

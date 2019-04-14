@@ -1,0 +1,76 @@
+{% extends 'base.html' %}{% load static %}{% block content %}{% include 'snippets/nav.html' %}
+<!-- Service -->
+<div id="faq" class="section faq">
+    <div class="block content-1170 center-relative">
+        <div class="section-title-holder left pink">
+            <div class="section-num pink">
+                <span>&nbsp;?!</span>
+            </div>
+            <h2 class="entry-title">FAQ</h2>
+        </div>
+        <div class="section-content-holder right pink">
+            <div class="content-wrapper">
+                <script>
+                    var slider1_speed = "2000";
+                    var slider1_auto = "true";
+                    var slider1_hover = "true";
+                </script>
+                <div class="image-slider-wrapper relative faq slider1">
+                    <a id="slider1_next" class="image_slider_next" href ="#"></a>
+                    <ul id="slider1" class="image-slider slides">
+                        <li>
+                            <div class="faq-holder ">
+                                <img src="{% static "home/demo-images/icon_01.png" %}" alt="">
+                                <div class="faq-content-holder">
+                                    <div class="faq-title">NO BULLSHIT</div>
+                                    <div class="faq-content">We will listen to you, and be honest in our replies, even if it means you won’t always like what we say.<br /></div>
+                                </div>
+                            </div>
+                            <div class="faq-holder ">
+                                <img src="{% static "home/demo-images/icon_02.png" %}" alt="">
+                                <div class="faq-content-holder">
+                                    <div class="faq-title">FUN</div>
+                                    <div class="faq-content">We like organize events that we would love to go too. And we like fun events, in the wide sense of it.<br /></div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="faq-holder ">
+                                <img src="{% static "home/demo-images/icon_03.png" %}" alt="">
+                                <div class="faq-content-holder">
+                                    <div class="faq-title">HONEST</div>
+                                    <div class="faq-content">We will give you what we promise to give you. If we make mistakes, we will apologize and make good.<br /><br /></div>
+                                </div>
+                            </div>
+                            <div class="faq-holder ">
+                                <img src="{% static "home/demo-images/icon_03.png" %}" alt="">
+                                <div class="faq-content-holder">
+                                    <div class="faq-title">QUALITY</div>
+                                    <div class="faq-content">We do this cause we love it. No carring about the details would be cheating ourselfs. We want to share the best of ourselfs with you.<br /></div>
+                                </div>
+                            </div>
+
+                        </li>
+                    </ul>
+                    <div class = "clear"></div>
+                </div>
+            </div>
+        </div>
+        <div class="section-content-holder right pink">
+            <div class="content-wrapper">
+                <div class="faq-header">Frequently Asked Questions</div>
+                <div class="faq-content">{% for obj in faq %}
+                    <div class="faq-question">
+                        <input id="{{ obj.pk }}" type="checkbox" class="panel">
+                        <div class="plus">+</div>
+                        <label for="{{ obj.pk }}" class="panel-title">{{ obj.question }} </label>
+                        <div class="panel-content">{{ obj.answer }} </div>
+                    </div>{% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class='clear'></div>
+    </div>
+{% include 'footer.html' %}
+{% endblock %}</div>

@@ -1,38 +1,34 @@
-from django.conf.urls import url, include
+from django.urls import path, include
+from django.conf.urls import url
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth.views import LoginView
-from formulario.views import (
-    fest_createview,
-    festprueba_createview,
-    )
-from fest.views import (
-    fest_homeview,
-    fest_locationview,
-    fest_pricesview,
-    )
-
 from home.views import (
     homeview,
+    testview,
+    faqview,
+    accountingview,
+    ClassListView,
+    ClassDetailView,
     InfoDetailView,
     EventDetailView,
-    PortfolioCreateView,
+    EventListView,
     )
 
-
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    url(settings.ADMIN_URL, admin.site.urls),
     url(r'^accounts/login/', LoginView.as_view(), name='login'),
+    url(r'^accounting/$', accountingview , name='accounting'),
     url(r'^$', homeview, name='home'),
-    url(r'^portfolioupload/$', PortfolioCreateView.as_view()),
-    url(r'^event/(?P<slug>[\w-]+)/$', EventDetailView.as_view()),
-    url(r'^info/(?P<slug>[\w-]+)/$', InfoDetailView.as_view()),
-    url(r'^fest/$', fest_homeview),
-    url(r'^fest/form/$', fest_createview),
-    url(r'^fest/location/$', fest_locationview),
-    url(r'^fest/prices/$', fest_pricesview),
-
+    url(r'^events/$', EventListView.as_view(), name='event'),
+    url(r'^classes/$', ClassListView.as_view(), name='class'),
+    url(r'^events/(?P<slug>[\w-]+)/$', EventDetailView.as_view(), name='events'),
+    url(r'^classes/(?P<slug>[\w-]+)/$', ClassDetailView.as_view(), name='classes'),
+    url(r'^info/(?P<slug>[\w-]+)/$', InfoDetailView.as_view(), name='info'),
+    path('faq/',faqview),
+    path('todo/', include('todo.urls', namespace="todo")),
+    url(r'^test/$', testview)
 ]
 
 if settings.DEBUG:
