@@ -104,6 +104,7 @@ class InfoDetailView(DetailView):
     model = Info
     context_object_name = 'info'
 
+
 class EventListView(ListView):
     model = Event
     template_name = 'home/event_list.html'

@@ -28,7 +28,7 @@
                         <ul>
                             <li><strong>Event</strong>: {{ object.title }}</li>
                             <li><strong>Categorie</strong>: {{ object.get_category_display }}</li>
-                            <li><strong>Date</strong>: {{ object.event_startdate }} {% if object.evnet_startdate != object.event_enddate %} - {{ object.event_enddate }} {% endif %} {% for to in timeoption %}
+                            <li><strong>Date</strong>: {{ object.event_startdate }} {% if object.event_startdate != object.event_enddate %} - {{ object.event_enddate }} {% endif %} {% for to in timeoption %}
                             <li><h3>{{ to.regular_days }}</h3></li>
                             {% for tl in to.timelocation_set.all %}
                             <li><strong>Address</strong> : {{ tl.location.address }}
@@ -51,18 +51,12 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                {% for po in priceoption %}
                                                 <tr>
-                                                    <td scope="row" data-label="Name">Double Class Cycle</td>
-                                                    <td data-label="Price (Normal / Student)">CHF 150/120</td>
+                                                    <td scope="row" data-label="Name">{{ po.name }}</td>
+                                                    <td data-label="Price">{% if po.price_chf %}CHF {{po.price_chf}}{% endif %}</td>
                                                 </tr>
-                                                <tr>
-                                                    <td scope="row" data-label="Name">Single Class Cycle</td>
-                                                    <td data-label="Price (Normal / Student)">CHF 90/70</td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row" data-label="Name">Single Class</td>
-                                                    <td data-label="Price (Normal / Student)">CHF 25</td>
-                                                </tr>
+                                                {% endfor %}
                                             </tbody>
                                         </table>
                                     </div>
@@ -70,8 +64,8 @@
                             </div>
                         </div>
                         <div class="tab">
-                            <input id="tab-two" type="checkbox" name="tabs"/>
-                            <label for="tab-two">REGISTER</label>
+                            <input id="tab-two" type="checkbox" name="tabs" checked/>
+                            <label for="tab-two">BOOKING</label>
                             <div class="tab-content tab-form">
                                     {% if form.errors.non_field_errors %}
                                     {{ form.errors.non_field_errors }}

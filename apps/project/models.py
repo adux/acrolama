@@ -149,11 +149,11 @@ class Event(models.Model):
     published = models.BooleanField()
     registration = models.BooleanField(default=True)
     slug = models.SlugField(unique=True, null=True, blank=True)
+
     def __str__(self):
         return self.title
-
 
 def event_pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)
-    pre_save.connect(event_pre_save_receiver, sender=Event)
+pre_save.connect(event_pre_save_receiver, sender=Event)

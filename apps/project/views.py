@@ -9,7 +9,7 @@ from django.views.generic.detail import SingleObjectMixin
 
 from django.db import connection
 
-from project.models import Event, PriceOption
+from project.models import Event, TimeOption, PriceOption
 from booking.forms import BookForm
 
 class EventDisplay(DetailView):
@@ -19,6 +19,8 @@ class EventDisplay(DetailView):
         context = super().get_context_data(**kwargs)
         slug = self.kwargs
         context['form'] = BookForm(slug)
+        context['timeoption'] = TimeOption.objects.filter(timelocation__event__slug=self.object.slug)
+        context['priceoption'] = PriceOption.objects.filter(event__slug=self.object.slug)
         return context
 
 
@@ -44,7 +46,6 @@ class EventInterest(SingleObjectMixin, FormView):
         to = [instance.email, 'acrolama@acrolama.com']
         send_mail(subject,message,sender,to)
         instance.save()
-
         return super().form_valid(form)
 
     def get_success_url(self):
