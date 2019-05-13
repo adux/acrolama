@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django import forms
 from .models import (
     Day,
     Event,
@@ -13,7 +14,7 @@ from .models import (
     Team,
 )
 
-
+admin.site.register(Day)
 admin.site.register(Project)
 admin.site.register(Team)
 admin.site.register(Event)
@@ -22,6 +23,7 @@ admin.site.register(TimeOption)
 admin.site.register(PriceOption)
 admin.site.register(TimeLocation)
 admin.site.register(Location)
+admin.site.register(Level)
 admin.site.register(Policy)
 
 

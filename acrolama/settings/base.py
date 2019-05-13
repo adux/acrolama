@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-#    'django.contrib.flatpages',
+#   'django.contrib.flatpages',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
@@ -56,7 +56,8 @@ INSTALLED_APPS = [
     'project',
     'audiovisual',
     'accounting',
-    'booking'
+    'booking',
+    'users'
 ]
 
 SITE_ID = 1

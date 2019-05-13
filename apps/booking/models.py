@@ -11,7 +11,7 @@ BOOKINGSTATUS = [
 ]
 
 
-class Booking(models.Model):
+class Book(models.Model):
     event = models.ForeignKey('project.Event', on_delete=models.CASCADE)
     #USER
     name = models.CharField(max_length=40)

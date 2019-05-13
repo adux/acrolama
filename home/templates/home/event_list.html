@@ -16,25 +16,40 @@
         <div class="section-content-holder left green">
             <div class="content-wrapper">
                 <div class="blog-holder block center-relative">
-                    {% for obj in list %}
-                    <article class="blog-item-holder relative">
-                        <div class="num">
-                                <i class="{{obj.cat}}"></i>
-                        </div>
-                        <div class="info">
-                                <div class="author vcard "><a href="/events/{{obj.slug}}">{{obj.get_level_display}} {{obj.get_cat_display}} - {{obj.city}}</a></div>
-                            <div class="cat-links">
-                                <ul>
-                                        <li><a href="/events/{{obj.slug}}">{{obj.get_datestart}}{{obj.get_dateend}} | {{obj.get_ocurrance_display|default_if_none:""}}</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <h3 class="entry-title">
-                                <a href="/events/{{obj.slug}}">{{obj.title}}</a>
-                        </h3>
-                        <div class="clear"></div>
-                    </article>
-                    {% endfor %}
+                            {% for object in list %}
+                            <article class="blog-item-holder relative">
+                                <div class="num">
+                                        <i class="{{ object.category }}"></i>
+                                </div>
+                                <div class="info">
+                                    <div class="author vcard ">
+                                        <a href="/classes/{{object.slug}}/">
+                                            {{ object.level.get_name_display }} {{ object.get_category_display }} -
+                                            {% for ad in object.time_locations.all %}
+                                                {% ifchanged %} {{ad.location }} {% endifchanged %}
+                                            {% endfor %}
+                                        </a>
+                                    </div>
+                                    <div class="cat-links">
+                                        <ul>
+                                                <li><a href="/classes/{{object.slug}}/">
+                                                        {{ object.event_startdate }} {% if object.event_enddate != object.event_startdate %}- {{ object.event_enddate }} {% endif %}
+                                                        {% for obj in object.time_locations.all %}
+                                                        {% for rd in obj.time_options.all %}
+                                                        {% ifchanged %} | {{ rd.regular_days|default_if_none:"" }}{% endifchanged%}
+                                                        {% endfor %}
+                                                        {% endfor %}
+                                                    </a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <h3 class="entry-title">
+                                        <a href="/classes/{{object.slug}}/">{{object.title}}</a>
+                                </h3>
+                                <div class="clear"></div>
+                            </article>
+                            {% endfor %}
+
                     <div class="clear"></div>
                 </div>
             </div>
