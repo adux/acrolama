@@ -539,6 +539,6 @@ class Address(models.Model):
     street = models.CharField(max_length=50)# Street address
     premise = models.CharField(max_length=10, null=True, blank=True)# Apartment, Suite, Box number, etc.
     def __str__(self):
-        return '%s, %s' % (self.street, self.city)
+        return '%s, %s %s' % (self.street, self.postalcode, self.city)
 
 

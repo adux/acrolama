@@ -26,21 +26,45 @@
                     <br>
                     <div class="one_half text-left">
                         <ul>
-                            <li><strong>Event</strong>: {{ object.title }}</li>
-                            <li><strong>Categorie</strong>: {{ object.get_category_display }}</li>
-                            <li><strong>Date</strong>: {{ object.event_startdate }} {% if object.event_startdate != object.event_enddate %} - {{ object.event_enddate }} {% endif %} {% for to in timeoption %}
-                            <li><h3>{{ to.regular_days }}</h3></li>
-                            {% for tl in to.timelocation_set.all %}
-                            <li><strong>Address</strong> : {{ tl.location.address }}
-                            {% endfor %}
-                            <li><strong>Door Open</strong>: {{ to.open_starttime }}  - {{ to.open_endtime }}</li>
-                            {% if to.class_starttime %}<li><strong>Class</strong>: {{ to.class_starttime }} - {{ to.class_endtime }}</li>{% endif %}
+                            <li>
+                                <strong>Event</strong>: {{ object.title }}
+                            </li>
+                            <li>
+                            <strong>Category{% if object.level %}/Level{% endif %}</strong>: 
+                            {{ object.get_category_display }}
+                            {% if object.level %}
+                            - {{ object.level }}
+                            {% endif %}
+                            </li>
+                            <li>
+                                <strong>Date</strong>: {{ object.event_startdate }}
+                                {% if object.event_startdate != object.event_enddate %}
+                                - {{ object.event_enddate }}
+                                {% endif %}
+                            </li>
+                                {% for to in timeoption %}
+                            <li>
+                                <h3>{{ to.regular_days }}</h3>
+                            </li>
+                                    {% for tl in to.timelocation_set.all %}
+                            <li>
+                                <strong>Address</strong> : {{ tl.location.address }}
+                            </li>
+                                    {% endfor %}
+                            <li>
+                                <strong>Door Open</strong>: {{ to.open_starttime }}  - {{ to.open_endtime }}
+                            </li>
+                                {% if to.class_starttime %}
+                            <li>
+                                <strong>Class</strong>: {{ to.class_starttime }} - {{ to.class_endtime }}
+                            </li>
+                                {% endif %}
                             {% endfor %}
                         </ul>
                     <br>
                         <div class="tab">
                             <input id="tab-one" type="checkbox" name="tabs"/>
-                            <label for="tab-one">PRICING</label>
+                            <label for="tab-one">PRICING OPTIONS</label>
                             <div class="tab-content">
                                     <div class="table-wrapper text-left">
                                         <table class="alt">
@@ -54,13 +78,20 @@
                                                 {% for po in priceoption %}
                                                 <tr>
                                                     <td scope="row" data-label="Name">{{ po.name }}</td>
-                                                    <td data-label="Price">{% if po.price_chf %}CHF {{po.price_chf}}{% endif %}</td>
+                                                    <td data-label="Price">
+                                                        {% if po.price_chf %}
+                                                        CHF {{po.price_chf}}
+                                                        {% elif por.price_euro %}
+                                                        EURO {{po.price.euro}}
+                                                        {% endif %}</td>
                                                 </tr>
                                                 {% endfor %}
                                             </tbody>
                                         </table>
                                     </div>
-                                    <a href="/info/prices/" target="_self" class="button" type="submit">Details</a>
+                                    <a href="/info/prices/" target="_self" class="button" type="submit">
+                                        Details
+                                    </a>
                             </div>
                         </div>
                         <div class="tab">
@@ -73,7 +104,12 @@
                                     {% if messages %}
                                     <ul class="messages">
                                         {% for message in messages %}
-                                        <li{% if message.tags %} style="color: #f3d216; text-align:center;" class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                        <li {% if message.tags %}
+                                            style="color: #f3d216; text-align:center;"
+                                            class="{{ message.tags }}"
+                                            {% endif %}>
+                                            {{ message }}
+                                        </li>
                                         {% endfor %}
                                     </ul>
                                     {% endif %}
@@ -84,7 +120,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="one_half last">
                             <h1>{{object.title}}</h1>
                             <p>{{object.description|safe}}</p><br>
