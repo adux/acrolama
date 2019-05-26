@@ -8,10 +8,16 @@
         <meta name="keywords" content="Acroyoga Zurich, Acroyoga Switzerland, Acro Schweiz, Swiss Acro" />
         <meta name="author" content="Adrian Garate" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <link rel="shortcut icon" href="{% static 'favicon.ico' %}" /> {% include 'snippets/css.html' %}
+        <link rel="shortcut icon" href="{% static 'favicon.ico' %}" />
+        {% include 'snippets/css.html' %}
         {% analytical_head_bottom %}
     </head>
     <body>
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert-box {{ message.tags }}"><span>{{ message.tags }}: </span>{{ message }}</div>
+            {% endfor %}
+        {% endif %}
         {% analytical_body_top %}
         {% block content %}{% endblock %}
         {% block contentevent %}{% endblock %}

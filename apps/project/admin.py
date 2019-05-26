@@ -11,12 +11,10 @@ from .models import (
     Policy,
     PriceOption,
     Project,
-    Team,
 )
 
 admin.site.register(Day)
 admin.site.register(Project)
-admin.site.register(Team)
 admin.site.register(Event)
 admin.site.register(Exception)
 admin.site.register(TimeOption)

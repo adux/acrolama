@@ -54,6 +54,10 @@ def accountingview(request):
     }
     return render(request, template_name, context)
 
+def successview(request):
+    template_name='success.html'
+    return render(request, template_name)
+
 # home de home.html
 def homeview(request):
     template_name='home.html'

@@ -55,6 +55,7 @@ class TimeOption(models.Model):
     def __str__(self):
         return '%s: %s - %s' % (self.name, self.open_starttime, self.open_endtime)
 
+
 class PriceOption(models.Model):
     abonament = models.BooleanField(default=False)
     name = models.CharField(max_length=30)
@@ -75,12 +76,11 @@ class Level(models.Model):
 
 class Location(models.Model):
     name = models.CharField(max_length=120)
-    address = models.ForeignKey('home.Address', on_delete=models.CASCADE)
+    address = models.ForeignKey('address.Address', on_delete=models.CASCADE)
     image = models.ForeignKey('audiovisual.Image', on_delete=models.CASCADE)
     max_capacity = models.CharField(max_length=5,null=True, blank=True)
     description = models.TextField(max_length=2000, null=True, blank=True)
     indication = models.TextField(max_length=2000, null=True, blank=True)
-
     def __str__(self):
         return '%s' % (self.address)
 
@@ -91,22 +91,11 @@ class TimeLocation(models.Model):
     def __str__(self):
         return " vs ".join(p.name for p in self.time_options.all()) 
 
-class Team(models.Model):
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    title = models.CharField(max_length=20)
-    email = models.CharField(max_length=50)
-    phone = models.CharField(max_length=50)
-    picture = models.ImageField(upload_to='team/', null=True, blank=True)
-    description = models.TextField(max_length=1000, blank=True,null=True)
-    def __str__(self):
-        return '%s %s' % (self.first_name, self.last_name)
-
 
 class Project(models.Model):
     name = models.CharField(max_length=120)
     description = models.TextField(max_length=2000)
-    manager = models.ManyToManyField(Team)
+    manager = models.ManyToManyField('users.Staff')
     todo = models.CharField(max_length=120, null=True, blank=True)
     creationdate = models.DateTimeField(auto_now_add=True)
     def __str__(self):
@@ -145,7 +134,8 @@ class Event(models.Model):
     highlights = models.TextField(max_length=2000, null=True, blank=True)
     included = models.TextField(max_length=2000, null=True, blank=True)
     food = models.TextField(max_length=2000, null=True, blank=True)
-    team = models.ManyToManyField(Team)
+    staff = models.ManyToManyField('users.Staff')
+    teacher = models.ManyToManyField('users.Teacher')
     published = models.BooleanField()
     registration = models.BooleanField(default=True)
     slug = models.SlugField(unique=True, null=True, blank=True)

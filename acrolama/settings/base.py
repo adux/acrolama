@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     #Own
     'home',
     'project',
+    'address',
     'audiovisual',
     'accounting',
     'booking',
