@@ -29,11 +29,13 @@ from project.models import (
     Location,
 )
 from home.forms import (
-    PortfolioCreateForm,
     NewsForm,
 )
 from booking.forms import (
     BookForm
+)
+from users.forms import (
+    UserRegisterForm
 )
 from home.filters import (
     AccountingFilter,
@@ -61,7 +63,7 @@ def successview(request):
 # home de home.html
 def homeview(request):
     template_name='home.html'
-    form = NewsForm( request.POST or None)
+    form = UserRegisterForm( request.POST or None)
     errors = None
     qs_aboutmember  = AboutMember.objects.all()
     qs_aboutgeneral = About.objects.all()
@@ -75,6 +77,8 @@ def homeview(request):
     qs_pfend        = Portfolio.objects.order_by('order')[5:6]
     if form.is_valid():
         form.save()
+        username = form.cleaned_data.get('username')
+        messages.success(request, f'Thanks {username}. Please confirm your email.')
     if form.errors:
         errors = form.errors
     context= {

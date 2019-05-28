@@ -9,17 +9,14 @@ PRONOUN = [
 
 #class Profil(models.Model):
 class Profile(models.Model):
-    email = models.CharField(max_length=50)
     phone = models.CharField(max_length=50)
     address = models.ForeignKey('address.Address', on_delete=models.CASCADE)
     pronoun = models.CharField(max_length=10)
     uploaded_at = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(upload_to='user/profile/', null=True, blank=True)
     def __str__(self):
         return self.name
 
 class Teacher(models.Model):
-    email = models.CharField(max_length=50)
     phone = models.CharField(max_length=50)
     address = models.ForeignKey('address.Address', on_delete=models.CASCADE)
     pronoun = models.CharField(max_length=10)
@@ -31,7 +28,6 @@ class Teacher(models.Model):
         return self.name
 
 class Staff(models.Model):
-    email = models.CharField(max_length=50)
     phone = models.CharField(max_length=50)
     address = models.ForeignKey('address.Address', on_delete=models.CASCADE)
     pronoun = models.CharField(max_length=10)
