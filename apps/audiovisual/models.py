@@ -14,7 +14,7 @@ class Video(models.Model):
     title = models.CharField(max_length=50)
     description = models.TextField(max_length=230, null=True, blank=True)
     link = models.CharField(max_length=300)
-    image = models.ImageField(upload_to='video/')
+    image = models.ImageField(upload_to='videos/')
     def __str__(self):
         return self.title
 

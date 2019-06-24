@@ -14,9 +14,11 @@ pip-selfcheck.json
 static/
 media/
 /media
+images/
+videos/
 acrolama/settings/local.py
 
-#Sass Ignore
+# Sass Ignore
 .sass-cache/
 *.css.map
 
@@ -119,3 +121,6 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+#Vim
+Session.vim

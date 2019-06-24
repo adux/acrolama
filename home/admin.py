@@ -5,7 +5,6 @@ from .models import (
     AboutMember,
     AboutDate,
     Accounting,
-    Address,
     Booking,
     Event,
     EventImage,
@@ -15,7 +14,6 @@ from .models import (
     InfoImage,
     NewsList,
     Portfolio,
-    Teacher,
     Testimonial
     )
 
@@ -43,12 +41,6 @@ class EventImageInline(admin.StackedInline):
     can_delete          = True
     show_change_link    = True
 
-class EventTeacherInline(admin.StackedInline):
-    model               = Teacher
-    extra               = 1
-    can_delete          = True
-    show_change_link    = True
-
 class FaqAdmin(admin.ModelAdmin):
     list_display        = 'question', 'answer'
 
@@ -64,18 +56,12 @@ class EventAdmin(admin.ModelAdmin):
     search_fields       = ('title','datestart','dateend')
     inlines             = [
         EventImageInline,
-        EventTeacherInline,
         AccountingInline,
              ]
 
 class AccountingAdmin(admin.ModelAdmin):
     list_display        =('category','event','status','amount')
     search_fields       =('event','category','status')
-
-
-class TeacherAdmin(admin.ModelAdmin):
-    list_display        =('name','content')
-    search_fields       =('name','content')
 
 
 class InfoImageInline(admin.StackedInline):
@@ -100,12 +86,10 @@ class NewsAdmin(admin.ModelAdmin):
 admin.site.register(About, AboutAdmin)
 admin.site.register(AboutDate)
 admin.site.register(AboutMember)
-admin.site.register(Address)
 admin.site.register(Accounting,AccountingAdmin)
 admin.site.register(Booking, BookingAdmin)
 admin.site.register(Faq, FaqAdmin)
 admin.site.register(Info, InfoAdmin)
-admin.site.register(Teacher, TeacherAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(NewsList,NewsAdmin)
 admin.site.register(Testimonial)

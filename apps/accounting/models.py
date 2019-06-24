@@ -41,7 +41,7 @@ class Partner(models.Model):
 
 
 class Invoice(models.Model):
-    booking = models.ForeignKey('booking.Booking', null=True, blank=True, on_delete=models.CASCADE)
+    booking = models.ForeignKey('booking.Book', null=True, blank=True, on_delete=models.CASCADE)
     partner = models.ForeignKey(Partner, on_delete=models.CASCADE, null=True, blank=True)
     status = models.CharField(max_length=10, choices=INVOICESTATUS, default='PE')
     amount = models.CharField(max_length=10)

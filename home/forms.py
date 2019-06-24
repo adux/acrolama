@@ -1,15 +1,11 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-from .models import Portfolio, Booking, NewsList
+from home.models import(
+    Portfolio,
+    Booking,
+    NewsList,
+)
 
-class PortfolioCreateForm(forms.ModelForm):
-    class Meta:
-        model = Portfolio
-        fields = [
-            'text',
-            'sec_text',
-            'upload',
-        ]
 
 class BookClassCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -70,7 +66,14 @@ class BookEventCreateForm(forms.ModelForm):
             'comment': forms.Textarea(attrs={'placeholder': 'Comments, Questions, Allergies, Injuries'}),
         }
 
+
+# Multiple Forms Seccion
+
+class MultipleForms(forms.ModelForm):
+    action = forms.CharField(max_length=60, widget=forms.HiddenInput())
+
 class NewsForm(forms.ModelForm):
+    action = forms.CharField(max_length=60, widget=forms.HiddenInput())
     class Meta:
         model = NewsList
         fields = (
