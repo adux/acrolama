@@ -12,10 +12,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='invoice',
-            name='booking',
-        ),
+        # migrations.RemoveField(
+        #     model_name='invoice',
+        #     name='booking',
+        # ),
         migrations.AddField(
             model_name='invoice',
             name='book',
