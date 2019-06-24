@@ -19,14 +19,14 @@ class Migration(migrations.Migration):
         #     name='event',
         #     field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='project.Event'),
         # ),
-        migrations.AddField(
-            model_name='booking',
-            name='price',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='project.PriceOption'),
-        ),
-        migrations.AddField(
-            model_name='booking',
-            name='time',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='project.TimeOption'),
-        ),
+        # migrations.AddField(
+        #     model_name='booking',
+        #     name='price',
+        #     field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='project.PriceOption'),
+        # ),
+        # migrations.AddField(
+        #     model_name='booking',
+        #     name='time',
+        #     field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='project.TimeOption'),
+        # ),
     ]
