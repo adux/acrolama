@@ -1,4 +1,5 @@
 from .base import *
+#Media and Static Files for production
 from acrolama.aws.conf import *
 
 #Sentry SDK
@@ -20,6 +21,7 @@ ANYMAIL = {
     "MAILGUN_SENDER_DOMAIN": env("MAILGUN_DOMAIN"),
     "MAILGUN_API_URL": env("MAILGUN_API_URL", default="https://api.mailgun.net/v3"),
 }
+
 ADMINS = (
     ('Adrian Garate', 'adrian@acrolama.com'),
 )

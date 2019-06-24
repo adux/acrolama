@@ -14,6 +14,8 @@ pip-selfcheck.json
 static/
 media/
 /media
+images/
+videos/
 acrolama/settings/local.py
 
 # Sass Ignore

@@ -6,6 +6,7 @@ from home.models import(
     NewsList,
 )
 
+
 class BookClassCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

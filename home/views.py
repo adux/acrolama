@@ -54,7 +54,6 @@ from home.filters import (
     BookingFilter,
 )
 
-# Accounting con login requerido TODO: mejorar sistema de login a algo mas secreto ...
 @login_required(login_url='/error404/')
 def accountingview(request):
     template_name = 'accounting/accounting.html'
@@ -67,6 +66,7 @@ def accountingview(request):
         "filter_bk":bk_filter,
     }
     return render(request, template_name, context)
+
 
 class HomeFormView(MultiFormsView):
     template_name = "home.html"
