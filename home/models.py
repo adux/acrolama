@@ -28,8 +28,8 @@ class AboutMember(models.Model):
 
 
 class AboutDate(models.Model):
-    start           = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
-    end             = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
+    start           = models.DateField(auto_now=False, auto_now_add=False, null=True, blank=True)
+    end             = models.DateField(auto_now=False, auto_now_add=False, null=True, blank=True)
     description     = models.CharField(max_length=50)
     def yearstart(self):
         return self.start.strftime('%b %Y')
