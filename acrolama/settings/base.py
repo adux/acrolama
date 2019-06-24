@@ -1,9 +1,10 @@
 import os
 import sys
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-#change of root of apps
+
+#Change of root of apps
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 
 MIDDLEWARE = [
@@ -27,7 +28,7 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-                'django.template.context_processors.request',
+                'django.template.context_processors.request', #allauth needs this
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
@@ -37,30 +38,35 @@ TEMPLATES = [
 
 INSTALLED_APPS = [
     'django.contrib.admin',
-    'django.contrib.auth',
+    'django.contrib.auth', #allauth
     'django.contrib.contenttypes',
-#    'django.contrib.flatpages',
+#   'django.contrib.flatpages',
     'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'django.contrib.sites',
+    'django.contrib.messages', #allauth
+    'django.contrib.staticfiles', # django debuger uses this
+    'django.contrib.sites', #allauth
     #Added
     'storages',
-    'analytical',
     'widget_tweaks',
     'django_filters',
-    'todo',
-    'crispy_forms',
     #Own
     'home',
     'project',
+    'address',
     'audiovisual',
     'accounting',
-    'booking'
+    'booking',
+    'users'
 ]
 
-SITE_ID = 1
+SITE_ID = 1 #required by allauth
+
+#Crispy Forms for todo
+INSTALLED_APPS += ["crispy_forms"]
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+#Analytica
+INSTALLED_APPS += ["analytical"]
 GOOGLE_ANALYTICS_PROPERTY_ID = 'UA-118797477-1'
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -85,19 +91,27 @@ DATABASES = {
     }
 }
 
-# Internationalization
-# https://docs.djangoproject.com/en/1.11/topics/i18n/
+# Authentication allauth
+INSTALLED_APPS += ["allauth", "allauth.account", "allauth.socialaccount"]
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
 
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
+
+# Internationalization
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Zurich'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-#Auth
-LOGIN_REDIRECT_URL = 'home'
-
 # Todo-specific settings
+INSTALLED_APPS += ["todo"]
 TODO_DEFAULT_LIST_ID = None
 # Restrict access to todo lists/views to `is_staff()` users.
 # False here falls back to `is_authenticated()` users.

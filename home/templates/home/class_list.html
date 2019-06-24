@@ -19,13 +19,24 @@
                             {% for object in list %}
                             <article class="blog-item-holder relative">
                                 <div class="num">
-                                        <i class="{{object.cat}}"></i>
+                                        <i class="{{ object.category }}"></i>
                                 </div>
                                 <div class="info">
-										<div class="author vcard "><a href="/classes/{{object.slug}}/">{{object.get_level_display}} {{object.get_cat_display}} - {{object.city}}</a></div>
+										<div class="author vcard "><a href="/classes/{{object.slug}}/">
+                                                {{ object.level.get_name_display }} {{ object.get_category_display }} - 
+                                                {% for ad in object.time_locations.all %}
+                                                {% ifchanged %} {{ad.location }} {% endifchanged %}
+                                            {% endfor %}</a></div>
                                     <div class="cat-links">
                                         <ul>
-                                                <li><a href="/classes/{{object.slug}}/">{{object.get_datestart}}{{object.get_dateend}} | {{object.get_ocurrance_display|default_if_none:""}}</a></li>
+                                                <li><a href="/classes/{{object.slug}}/">
+                                                        {{ object.event_startdate }} {% if object.event_enddate != object.event_startdate %}- {{ object.event_enddate }} {% endif %}
+                                                        {% for obj in object.time_locations.all %}
+                                                        {% for rd in obj.time_options.all %}
+                                                        {% ifchanged %} | {{ rd.regular_days|default_if_none:"" }}{% endifchanged%}
+                                                        {% endfor %}
+                                                        {% endfor %}
+                                                    </a></li>
                                         </ul>
                                     </div>
                                 </div>

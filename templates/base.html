@@ -8,16 +8,34 @@
         <meta name="keywords" content="Acroyoga Zurich, Acroyoga Switzerland, Acro Schweiz, Swiss Acro" />
         <meta name="author" content="Adrian Garate" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <link rel="shortcut icon" href="{% static 'favicon.ico' %}" /> {% include 'snippets/css.html' %}
+        <link rel="shortcut icon" href="{% static 'favicon.ico' %}" />
+        {% include 'snippets/css.html' %}
         {% analytical_head_bottom %}
     </head>
     <body>
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert-box {{ message.tags }}"><span>{{ message.tags }}: </span>{{ message }}</div>
+            {% endfor %}
+        {% endif %}
         {% analytical_body_top %}
         {% block content %}{% endblock %}
         {% block contentevent %}{% endblock %}
         {% block contentevents %}{% endblock %}
         {% block contentclass %}{% endblock %}
         {% block contentclasses %}{% endblock %}
+        <!-- Sign in pop up -->
+        <div class="popup" role="alert">
+          <div class="popup-container">
+            <a href="#0" class="popup-close img-replace">Close</a>
+            <h1>Responsive Popup</h1>
+                  <form method="POST">{% csrf_token %}
+                      {{forms.login}}
+                      <input value="Sign Up" type="submit"></input>
+                  </form>
+                      Already have and account? <a class="ml-2" href="#">Sign In</a>
+          </div>
+        </div>
         {% include 'snippets/js.html' %}{% analytical_body_bottom %}
     </body>
 </html>

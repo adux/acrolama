@@ -16,13 +16,9 @@
                         </div>
                         <div class="one_half last">
                             <div class="contact-form">
-                              {% if form.errors.non_field_errors %}
-                                        {{ form.errors.non_field_errors }}
-                                        {% endif %}
-                                        <form method="post">
-                                                {%csrf_token%}
-                                                {{form.as_p}}
-                                                <p><input value="Submit" type="submit"></p>
+                                        <form method="post">{%csrf_token%}
+                                          {{ forms.news }}
+                                          <p><input value="Submit" type="submit"></p>
                                         </form>
                             </div>
                         </div>

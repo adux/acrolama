@@ -3,14 +3,21 @@
     <nav id="header-main-menu">
           <div class="mob-menu">MENU</div>
           <ul class="main-menu sm sm-clean">
-              <li><a href="/#home">Home</a></li>
-               <li><a href="/#events">Events</a></li>
-              <li><a href="/#classes">Classes</a></li>
-              <li><a href="/#about">About</a></li>
-              <li><a target="_blank" href="https://www.acrofestival.ch">Fest</a></li>
-              <li><a href="/#contact">Contact</a></li>
-              <li><a target="_blank" style="font-size: 20px;" href="http://www.facebook.com/acrolama"><i class="fab fa-facebook"></i></a></li>
-              <li><a target="_blank" style="font-size: 20px;" href="http://www.instagram.com/acrolama"><i class="fab fa-instagram"></i></a></li>
+            <li><a href="{% url "home" %}">Home</a></li>
+            {% if event %}
+            <li><a href="{% url "home" %}#events">Events</a></li>
+            {% endif %}
+            <li><a href="{% url "home" %}#classes">Classes</a></li>
+            <li><a href="{% url "home" %}#about">About</a></li>
+            <li><a target="_blank" href="https://www.acrofestival.ch">Fest</a></li>
+            <li><a href="{% url "home" %}#contact">Contact</a></li>
+            {% if user.is_authenticated %}
+            <li><a href="{% url "home" %}#profile">{{request.user}} ▿</a></li>
+            <li><a href="{% url "account_logout" %}">Logout</a></li>{% else %}
+            <li><a href="#" class="popup-trigger">Sign in</a></li>
+            {% endif %}
+            <li><a target="_blank" style="font-size: 20px;" href="http://www.facebook.com/acrolama"><i class="fab fa-facebook"></i></a></li>
+            <li><a target="_blank" style="font-size: 20px;" href="http://www.instagram.com/acrolama"><i class="fab fa-instagram"></i></a></li>
           </ul>
       </nav>
   </div>
