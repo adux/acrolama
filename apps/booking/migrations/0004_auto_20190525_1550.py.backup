@@ -10,8 +10,9 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='book',
-            name='address',
-        ),
+        # migrations.AlterField(
+        #     model_name='book',
+        #     name='address',
+        #     field=models.ManyToManyField(to='address.Address'),
+        # ),
     ]

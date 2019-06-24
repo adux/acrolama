@@ -17,7 +17,7 @@ class Book(models.Model):
     name = models.CharField(max_length=40)
     email = models.CharField(max_length=50)
     phone = models.CharField(max_length=30)
-    address = models.ManyToManyField('address.Address')
+    # address = models.CharField(max_length=120)
     #Options
     price = models.ForeignKey('project.PriceOption', on_delete=models.CASCADE)
     time= models.ForeignKey('project.TimeOption', on_delete=models.CASCADE)
