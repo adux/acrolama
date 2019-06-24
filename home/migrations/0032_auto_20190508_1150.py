@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='booking',
             name='event',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='project.Event'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='Event'),
         ),
     ]

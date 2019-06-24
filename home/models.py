@@ -208,7 +208,7 @@ class Booking(models.Model):
         ('UN','Unclasified'),
     ]
     category        = models.CharField(max_length=10, choices=Category, default='EI')
-    event           = models.ForeignKey('project.Event', on_delete=models.CASCADE)
+    event           = models.ForeignKey('Event', on_delete=models.CASCADE)
     name            = models.CharField(max_length=40)
     email           = models.CharField(max_length=50)
     phone           = models.CharField(max_length=30)
