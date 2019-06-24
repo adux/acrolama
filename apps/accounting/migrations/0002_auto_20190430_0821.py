@@ -14,11 +14,11 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='invoice',
-            name='booking',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='booking.Booking'),
-        ),
+        # migrations.AddField(
+        #     model_name='invoice',
+        #     name='booking',
+        #     field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='booking.Booking'),
+        # ),
         migrations.AddField(
             model_name='invoice',
             name='partner',
