@@ -10,10 +10,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='timeoption',
-            name='doors_interval',
-        ),
         migrations.AddField(
             model_name='timeoption',
             name='class_end',
