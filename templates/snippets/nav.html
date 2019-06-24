@@ -11,13 +11,13 @@
             <li><a href="{% url "home" %}#about">About</a></li>
             <li><a target="_blank" href="https://www.acrofestival.ch">Fest</a></li>
             <li><a href="{% url "home" %}#contact">Contact</a></li>
-            {#
+            {% comment %}
             {% if user.is_authenticated %}
             <li><a href="{% url "home" %}#profile">{{request.user}} ▿</a></li>
             <li><a href="{% url "account_logout" %}">Logout</a></li>{% else %}
             <li><a href="#" class="popup-trigger">Sign in</a></li>
             {% endif %}
-            #}
+            {% endcommment %}
             <li><a target="_blank" style="font-size: 20px;" href="http://www.facebook.com/acrolama"><i class="fab fa-facebook"></i></a></li>
             <li><a target="_blank" style="font-size: 20px;" href="http://www.instagram.com/acrolama"><i class="fab fa-instagram"></i></a></li>
           </ul>
