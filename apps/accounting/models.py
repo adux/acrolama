@@ -41,13 +41,14 @@ class Partner(models.Model):
 
 
 class Invoice(models.Model):
-    booking = models.ForeignKey('booking.Book', null=True, blank=True, on_delete=models.CASCADE)
+    book = models.ForeignKey('booking.Book', null=True, blank=True, on_delete=models.CASCADE)
     partner = models.ForeignKey(Partner, on_delete=models.CASCADE, null=True, blank=True)
     status = models.CharField(max_length=10, choices=INVOICESTATUS, default='PE')
     amount = models.CharField(max_length=10)
     pay_till = models.DateField(auto_now_add=False,auto_now=False, null=True, blank=True)
     def __str__(self):
         return '%s - %s%s' % (self.id, self.booking, self.partner)
+
 
 class Payment(models.Model):
     amount = models.CharField(max_length=9)
