@@ -22,7 +22,7 @@
                     </div>
                     <div class="one_half last ">
                         {% for obj in about_date %}
-                        <span style="color: #e54b76;"><strong>{{obj.yearstart}}-{{obj.yearend}}·</strong></span> <span style="color:#727190;i"><em> {{obj.description}}</em></span><br>
+                        <span style="color: #e54b76;"><strong>{{obj.yearstart}}{% if obj.end %} -{{obj.yearend}}{% endif %}</strong></span> <span style="color:#727190;i"><em> {{obj.description}}</em></span><br>
                         {% endfor %}
                     </div><div class="clear"></div>
                     <br>
