@@ -25,7 +25,7 @@ class Profile(models.Model):
 class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone = models.CharField(max_length=50)
-    address = models.ForeignKey('address.Address', on_delete=models.CASCADE)
+    address = models.ForeignKey('address.Address', on_delete=models.CASCADE, null=True, blank=True)
     pronoun = models.CharField(max_length=10)
     birth_date = models.DateField(null=True, blank=True)
     title = models.CharField(max_length=30, null=True, blank=True)
@@ -38,7 +38,7 @@ class Teacher(models.Model):
 class Staff(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone = models.CharField(max_length=50)
-    address = models.ForeignKey('address.Address', on_delete=models.CASCADE)
+    address = models.ForeignKey('address.Address', on_delete=models.CASCADE, null=True, blank=True)
     pronoun = models.CharField(max_length=10)
     birth_date = models.DateField(null=True, blank=True)
     title = models.CharField(max_length=30, null=True, blank=True)

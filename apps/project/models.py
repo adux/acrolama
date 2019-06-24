@@ -89,7 +89,7 @@ class TimeLocation(models.Model):
     time_options = models.ManyToManyField(TimeOption)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     def __str__(self):
-        return " vs ".join(p.name for p in self.time_options.all()) 
+        return " vs ".join(p.name for p in self.time_options.all())
 
 
 class Project(models.Model):
@@ -134,7 +134,7 @@ class Event(models.Model):
     highlights = models.TextField(max_length=2000, null=True, blank=True)
     included = models.TextField(max_length=2000, null=True, blank=True)
     food = models.TextField(max_length=2000, null=True, blank=True)
-    staff = models.ManyToManyField('users.Staff')
+    staff = models.ManyToManyField('users.Staff', blank=True)
     teacher = models.ManyToManyField('users.Teacher')
     published = models.BooleanField()
     registration = models.BooleanField(default=True)
