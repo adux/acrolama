@@ -12,10 +12,6 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RemoveField(
             model_name='timeoption',
-            name='class_interval',
-        ),
-        migrations.RemoveField(
-            model_name='timeoption',
             name='doors_interval',
         ),
         migrations.AddField(
