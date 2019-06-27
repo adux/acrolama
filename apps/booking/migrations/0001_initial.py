@@ -8,25 +8,63 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-        ('project', '0001_initial'),
-    ]
+    dependencies = [("project", "0001_initial")]
 
     operations = [
         migrations.CreateModel(
-            name='Book',
+            name="Book",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=40)),
-                ('email', models.CharField(max_length=50)),
-                ('phone', models.CharField(max_length=30)),
-                ('comment', models.TextField(blank=True, max_length=350, null=True)),
-                ('status', models.CharField(blank=True, choices=[('PE', 'Pending'), ('WL', 'Waiting List'), ('IN', 'Informed'), ('PA', 'Participant'), ('CA', 'Canceled'), ('SW', 'Switched')], max_length=15, null=True)),
-                ('note', models.TextField(blank=True, max_length=1000, null=True)),
-                ('booked_at', models.DateTimeField(auto_now_add=True)),
-                ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='project.Event')),
-                ('price', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='project.PriceOption')),
-                ('time', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='project.TimeOption')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=40)),
+                ("email", models.CharField(max_length=50)),
+                ("phone", models.CharField(max_length=30)),
+                ("comment", models.TextField(blank=True, max_length=350, null=True)),
+                (
+                    "status",
+                    models.CharField(
+                        blank=True,
+                        choices=[
+                            ("PE", "Pending"),
+                            ("WL", "Waiting List"),
+                            ("IN", "Informed"),
+                            ("PA", "Participant"),
+                            ("CA", "Canceled"),
+                            ("SW", "Switched"),
+                        ],
+                        max_length=15,
+                        null=True,
+                    ),
+                ),
+                ("note", models.TextField(blank=True, max_length=1000, null=True)),
+                ("booked_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "event",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="project.Event"
+                    ),
+                ),
+                (
+                    "price",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="project.PriceOption",
+                    ),
+                ),
+                (
+                    "time",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="project.TimeOption",
+                    ),
+                ),
             ],
-        ),
+        )
     ]

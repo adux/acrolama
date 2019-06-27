@@ -5,19 +5,17 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('home', '0001_initial'),
-    ]
+    dependencies = [("home", "0001_initial")]
 
     operations = [
         migrations.AlterField(
-            model_name='aboutdate',
-            name='end',
+            model_name="aboutdate",
+            name="end",
             field=models.DateField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='aboutdate',
-            name='start',
+            model_name="aboutdate",
+            name="start",
             field=models.DateField(blank=True, null=True),
         ),
     ]

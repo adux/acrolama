@@ -1,6 +1,7 @@
 from django.views.generic.base import ContextMixin, TemplateResponseMixin
 from django.views.generic.edit import ProcessFormView
 
+
 class MultiFormMixin(ContextMixin):
 
     form_classes = {}
@@ -13,13 +14,17 @@ class MultiFormMixin(ContextMixin):
 
     def get_form_classes(self):
         return self.form_classes
-    
+
     def get_forms(self, form_classes):
-        return dict([(key, self._create_form(key, class_name)) \
-            for key, class_name in form_classes.items()])
+        return dict(
+            [
+                (key, self._create_form(key, class_name))
+                for key, class_name in form_classes.items()
+            ]
+        )
 
     def get_instance(self, form_name):
-        instance_method = 'get_%s_instance' % form_name
+        instance_method = "get_%s_instance" % form_name
         if hasattr(self, instance_method):
             return getattr(self, instance_method)()
         else:
@@ -27,18 +32,15 @@ class MultiFormMixin(ContextMixin):
 
     def get_form_kwargs(self, form_name):
         kwargs = {}
-        #kwargs.update({'instance': self.get_instance(form_name)})  # helps when updating records
-        kwargs.update({'initial':self.get_initial(form_name)})
-        kwargs.update({'prefix':self.get_prefix(form_name)})
-        if self.request.method in ('POST', 'PUT'):
-            kwargs.update({
-                'data': self.request.POST,
-                'files': self.request.FILES,
-            })
+        # kwargs.update({'instance': self.get_instance(form_name)})  # helps when updating records
+        kwargs.update({"initial": self.get_initial(form_name)})
+        kwargs.update({"prefix": self.get_prefix(form_name)})
+        if self.request.method in ("POST", "PUT"):
+            kwargs.update({"data": self.request.POST, "files": self.request.FILES})
         return kwargs
 
     def forms_valid(self, forms, form_name):
-        form_valid_method = '%s_form_valid' % form_name
+        form_valid_method = "%s_form_valid" % form_name
         if hasattr(self, form_valid_method):
             return getattr(self, form_valid_method)(forms[form_name])
         else:
@@ -48,13 +50,13 @@ class MultiFormMixin(ContextMixin):
         return self.render_to_response(self.get_context_data(forms=forms))
 
     def get_initial(self, form_name):
-        initial_method = 'get_%s_initial' % form_name
+        initial_method = "get_%s_initial" % form_name
         if hasattr(self, initial_method):
             attrs = getattr(self, initial_method)()
-            attrs['action'] = form_name
+            attrs["action"] = form_name
             return attrs
         else:
-            return {'action': form_name}
+            return {"action": form_name}
 
     def get_prefix(self, form_name):
         return self.prefixes.get(form_name, self.prefix)
@@ -69,7 +71,6 @@ class MultiFormMixin(ContextMixin):
 
 
 class ProcessMultipleFormsView(ProcessFormView):
-
     def get(self, request, *args, **kwargs):
         form_classes = self.get_form_classes()
         forms = self.get_forms(form_classes)
@@ -77,7 +78,7 @@ class ProcessMultipleFormsView(ProcessFormView):
 
     def post(self, request, *args, **kwargs):
         form_classes = self.get_form_classes()
-        form_name = request.POST.get('action')
+        form_name = request.POST.get("action")
         return self._process_individual_form(form_name, form_classes)
 
     def _process_individual_form(self, form_name, form_classes):
@@ -96,8 +97,8 @@ class BaseMultipleFormsView(MultiFormMixin, ProcessMultipleFormsView):
     A base view for displaying several forms.
     """
 
+
 class MultiFormsView(TemplateResponseMixin, BaseMultipleFormsView):
     """
     A view for displaying several forms, and rendering a template response.
     """
-

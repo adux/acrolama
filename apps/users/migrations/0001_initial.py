@@ -10,51 +10,117 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('address', '0001_initial'),
+        ("address", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Teacher',
+            name="Teacher",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('phone', models.CharField(max_length=50)),
-                ('pronoun', models.CharField(max_length=10)),
-                ('birth_date', models.DateField(blank=True, null=True)),
-                ('title', models.CharField(blank=True, max_length=30, null=True)),
-                ('description', models.TextField(max_length=1000)),
-                ('image', models.ImageField(blank=True, null=True, upload_to='user/teacher/')),
-                ('uploaded_at', models.DateTimeField(auto_now_add=True)),
-                ('address', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='address.Address')),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("phone", models.CharField(max_length=50)),
+                ("pronoun", models.CharField(max_length=10)),
+                ("birth_date", models.DateField(blank=True, null=True)),
+                ("title", models.CharField(blank=True, max_length=30, null=True)),
+                ("description", models.TextField(max_length=1000)),
+                (
+                    "image",
+                    models.ImageField(blank=True, null=True, upload_to="user/teacher/"),
+                ),
+                ("uploaded_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "address",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="address.Address",
+                    ),
+                ),
+                (
+                    "user",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Staff',
+            name="Staff",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('phone', models.CharField(max_length=50)),
-                ('pronoun', models.CharField(max_length=10)),
-                ('birth_date', models.DateField(blank=True, null=True)),
-                ('title', models.CharField(blank=True, max_length=30, null=True)),
-                ('description', models.TextField(max_length=1000)),
-                ('image', models.ImageField(blank=True, null=True, upload_to='user/staff/')),
-                ('uploaded_at', models.DateTimeField(auto_now_add=True)),
-                ('address', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='address.Address')),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("phone", models.CharField(max_length=50)),
+                ("pronoun", models.CharField(max_length=10)),
+                ("birth_date", models.DateField(blank=True, null=True)),
+                ("title", models.CharField(blank=True, max_length=30, null=True)),
+                ("description", models.TextField(max_length=1000)),
+                (
+                    "image",
+                    models.ImageField(blank=True, null=True, upload_to="user/staff/"),
+                ),
+                ("uploaded_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "address",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="address.Address",
+                    ),
+                ),
+                (
+                    "user",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Profile',
+            name="Profile",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('phone', models.CharField(max_length=50)),
-                ('pronoun', models.CharField(max_length=10)),
-                ('birth_date', models.DateField(blank=True, null=True)),
-                ('uploaded_at', models.DateTimeField(auto_now_add=True)),
-                ('address', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='address.Address')),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("phone", models.CharField(max_length=50)),
+                ("pronoun", models.CharField(max_length=10)),
+                ("birth_date", models.DateField(blank=True, null=True)),
+                ("uploaded_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "address",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="address.Address",
+                    ),
+                ),
+                (
+                    "user",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]
