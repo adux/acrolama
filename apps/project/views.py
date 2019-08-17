@@ -1,14 +1,14 @@
-#from django.shortcuts import render
-#from django import forms
-#from django.http import HttpResponseForbidden
+from django.shortcuts import render
+from django import forms
+from django.http import HttpResponseForbidden
 from django.urls import reverse
-#from django.utils import timezone
+from django.utils import timezone
 from django.views import View
 from django.views.generic import DetailView, FormView
 from django.views.generic.detail import SingleObjectMixin
 
 from django.core.mail import send_mail
-#from django.db import connection
+from django.db import connection
 
 from project.models import Event, TimeOption, PriceOption
 from booking.forms import BookForm
