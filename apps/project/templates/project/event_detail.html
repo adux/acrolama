@@ -30,7 +30,7 @@
                                 <strong>Event</strong>: {{ object.title }}
                             </li>
                             <li>
-                            <strong>Category{% if object.level %}/Level{% endif %}</strong>: 
+                            <strong>Category{% if object.level %}/Level{% endif %}</strong>:
                             {{ object.get_category_display }}
                             {% if object.level %}
                             - {{ object.level }}

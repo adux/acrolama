@@ -2,13 +2,13 @@ from datetime import datetime
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.core.mail import send_mail
-from django.db.models import F
-from django.http import HttpResponse, HttpResponseForbidden, HttpResponseRedirect
-from django.urls import reverse, reverse_lazy
+#from django.core.mail import send_mail
+#from django.db.models import F
+from django.http import HttpResponseForbidden, HttpResponseRedirect
+#from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import DetailView, CreateView, ListView
+from django.views.generic import DetailView, ListView
 from home.multiforms import MultiFormsView
 from home.models import (
     AboutMember,
