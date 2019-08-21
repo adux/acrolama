@@ -4,7 +4,7 @@ import sys
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-#Change of root of apps
+# Change of root of apps
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 
 MIDDLEWARE = [
@@ -28,7 +28,7 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-                'django.template.context_processors.request', #allauth needs this
+                'django.template.context_processors.request',  # allauth needs this
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
@@ -38,18 +38,18 @@ TEMPLATES = [
 
 INSTALLED_APPS = [
     'django.contrib.admin',
-    'django.contrib.auth', #allauth
+    'django.contrib.auth',  # allauth
     'django.contrib.contenttypes',
 #   'django.contrib.flatpages',
     'django.contrib.sessions',
-    'django.contrib.messages', #allauth
-    'django.contrib.staticfiles', # django debuger uses this
-    'django.contrib.sites', #allauth
-    #Added
+    'django.contrib.messages',  # allauth
+    'django.contrib.staticfiles',  # django debuger uses this
+    'django.contrib.sites',  # allauth
+    # Added
     'storages',
     'widget_tweaks',
     'django_filters',
-    #Own
+    # Own
     'home',
     'project',
     'address',
@@ -59,13 +59,13 @@ INSTALLED_APPS = [
     'users'
 ]
 
-SITE_ID = 1 #required by allauth
+SITE_ID = 1  # required by allauth
 
-#Crispy Forms for todo
+# Crispy Forms for todo
 INSTALLED_APPS += ["crispy_forms"]
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
-#Analytica
+# Analytica
 INSTALLED_APPS += ["analytical"]
 GOOGLE_ANALYTICS_PROPERTY_ID = 'UA-118797477-1'
 

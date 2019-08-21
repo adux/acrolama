@@ -15,8 +15,8 @@ from home.models import (
     About,
     AboutImage,
     AboutDate,
-    Accounting,
-    Booking,
+    # Accounting,
+    # Booking,
     Faq,
     FaqValues,
     Info,
@@ -28,18 +28,18 @@ from project.models import Event, Location
 from home.forms import NewsForm
 from booking.forms import BookForm
 from users.forms import UserRegisterForm, ProfileLoginForm
-from home.filters import AccountingFilter, BookingFilter
+# from home.filters import AccountingFilter, BookingFilter
 
 
-@login_required(login_url="/error404/")
-def accountingview(request):
-    template_name = "accounting/accounting.html"
-    acc_list = Accounting.objects.all()
-    bk_list = Booking.objects.all()
-    acc_filter = AccountingFilter(request.GET, queryset=acc_list)
-    bk_filter = BookingFilter(request.GET, queryset=bk_list)
-    context = {"filter_acc": acc_filter, "filter_bk": bk_filter}
-    return render(request, template_name, context)
+# @login_required(login_url="/error404/")
+# def accountingview(request):
+#     template_name = "accounting/accounting.html"
+#     acc_list = Accounting.objects.all()
+#     bk_list = Booking.objects.all()
+#     acc_filter = AccountingFilter(request.GET, queryset=acc_list)
+#     bk_filter = BookingFilter(request.GET, queryset=bk_list)
+#     context = {"filter_acc": acc_filter, "filter_bk": bk_filter}
+#     return render(request, template_name, context)
 
 
 class HomeFormView(MultiFormsView):

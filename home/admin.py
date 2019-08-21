@@ -4,10 +4,10 @@ from .models import (
     AboutImage,
     AboutMember,
     AboutDate,
-    Accounting,
-    Booking,
-    Event,
-    EventImage,
+#   Accounting,
+#   Booking,
+#   Event,
+#   EventImage,
     Faq,
     FaqValues,
     Info,
@@ -29,60 +29,60 @@ class AboutAdmin(admin.ModelAdmin):
     inlines = [AboutImageInline]
 
 
-class BookingAdmin(admin.ModelAdmin):
-    list_display = (
-        "event",
-        "booked_at",
-        "name",
-        "phone",
-        "email",
-        "abo",
-        "day",
-        "status",
-    )
-    list_filter = ("event", "status", "abo")
-    search_fields = ("name", "email", "event__title")
+# class BookingAdmin(admin.ModelAdmin):
+#     list_display = (
+#         "event",
+#         "booked_at",
+#         "name",
+#         "phone",
+#         "email",
+#         "abo",
+#         "day",
+#         "status",
+#     )
+#     list_filter = ("event", "status", "abo")
+#     search_fields = ("name", "email", "event__title")
 
 
 class PortfolioAdmin(admin.ModelAdmin):
     list_display = ("order", "text", "upload")
 
 
-class EventImageInline(admin.StackedInline):
-    model = EventImage
-    extra = 1
-    can_delete = True
-    show_change_link = True
+# class EventImageInline(admin.StackedInline):
+#     model = EventImage
+#     extra = 1
+#     can_delete = True
+#     show_change_link = True
 
 
 class FaqAdmin(admin.ModelAdmin):
     list_display = "question", "answer"
 
 
-class AccountingInline(admin.StackedInline):
-    model = Accounting
-    extra = 1
-    can_delete = True
+# class AccountingInline(admin.StackedInline):
+#     model = Accounting
+#     extra = 1
+#     can_delete = True
 
 
-class EventAdmin(admin.ModelAdmin):
-    list_display = (
-        "title",
-        "city",
-        "datestart",
-        "dateend",
-        "slug",
-        "published",
-        "registration",
-    )
-    list_filter = ("cat", "level", "city")
-    search_fields = ("title", "datestart", "dateend")
-    inlines = [EventImageInline, AccountingInline]
+# class EventAdmin(admin.ModelAdmin):
+#     list_display = (
+#         "title",
+#         "city",
+#         "datestart",
+#         "dateend",
+#         "slug",
+#         "published",
+#         "registration",
+#     )
+#     list_filter = ("cat", "level", "city")
+#     search_fields = ("title", "datestart", "dateend")
+#     inlines = [EventImageInline, AccountingInline]
 
 
-class AccountingAdmin(admin.ModelAdmin):
-    list_display = ("category", "event", "status", "amount")
-    search_fields = ("event", "category", "status")
+# class AccountingAdmin(admin.ModelAdmin):
+#     list_display = ("category", "event", "status", "amount")
+#     search_fields = ("event", "category", "status")
 
 
 class InfoImageInline(admin.StackedInline):
@@ -105,11 +105,11 @@ class NewsAdmin(admin.ModelAdmin):
 admin.site.register(About, AboutAdmin)
 admin.site.register(AboutDate)
 admin.site.register(AboutMember)
-admin.site.register(Accounting, AccountingAdmin)
-admin.site.register(Booking, BookingAdmin)
+# admin.site.register(Accounting, AccountingAdmin)
+# admin.site.register(Booking, BookingAdmin)
 admin.site.register(Faq, FaqAdmin)
 admin.site.register(Info, InfoAdmin)
-admin.site.register(Event, EventAdmin)
+# admin.site.register(Event, EventAdmin)
 admin.site.register(NewsList, NewsAdmin)
 admin.site.register(Testimonial)
 admin.site.register(Portfolio, PortfolioAdmin)
