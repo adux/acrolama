@@ -22,6 +22,8 @@ ANYMAIL = {
     "MAILGUN_API_URL": os.environ.get('MAILGUN_API_URL', default='https://api.mailgun.net/v3'),
 }
 
+DEFAULT_FROM_EMAIL = 'noreply@acrolama.com'
+
 ADMINS = (
     ('Adrian Garate', 'adrian@acrolama.com'),
 )
