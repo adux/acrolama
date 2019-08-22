@@ -35,6 +35,8 @@ ACCOUNT_EMAIL_REQUIRED = os.environ.get(
     'ACCOUNT_EMAIL_REQUIRED', default='True')
 ACCOUNT_EMAIL_VERIFICATION = os.environ.get(
     'ACCOUNT_EMAIL_VERIFICATION', default='True')
+ACCOUNT_UNIQUE_EMAIL = os.environ.get(
+    'ACCOUNT_UNIQUE_EMAIL', default='True')
 ACCOUNT_LOGIN_ATTEMPTS_LIMIT = os.environ.get(
     'ACCOUNT_LOGIN_ATTEMPTS_LIMIT')
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = os.environ.get(
