@@ -49,6 +49,8 @@ ACCOUNT_SIGNUP_FORM_CLASS = os.environ.get(
     'ACCOUNT_SIGNUP_FORM_CLASS')
 ACCOUNT_USERNAME_REQUIRED = os.environ.get(
     'ACCOUNT_USERNAME_REQUIRED', default='True')
+ACCOUNT_USER_MODEL_USERNAME_FIELD = os.environ.get(
+    'ACCOUNT_USER_MODEL_USERNAME_FIELD', default='None')
 
 ADMINS = (
     ('Adrian Garate', 'adrian@acrolama.com'),
