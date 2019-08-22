@@ -42,7 +42,7 @@ python3-openid==3.1.0
 requests==2.22.0
 requests-oauthlib==1.2.0
 s3transfer==0.1.12
-sentry-sdk==0.8.0
+sentry-sdk==0.11.1
 simplejson==3.13.2
 six==1.11.0
 sorl-thumbnail==12.4.1
