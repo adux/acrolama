@@ -1,5 +1,48 @@
 from django.contrib import admin
-from .models import Teacher, Staff
+from django.contrib.auth import get_user_model
+from django.contrib.auth.admin import UserAdmin
+from django.utils.translation import gettext, gettext_lazy as _
 
-admin.site.register(Teacher)
-admin.site.register(Staff)
+from .forms import UserCreationForm, UserChangeForm
+from .models import User
+
+
+class UserAdmin(UserAdmin):
+    add_form = UserCreationForm
+    form = UserChangeForm
+    model = User
+    list_display = [
+        'email', 'first_name', 'last_name', 'is_staff', 'is_teacher'
+    ]
+    list_filter = [
+        'is_staff', 'is_teacher', 'is_active', 'email'
+    ]
+    ordering = ['email']
+    fieldsets = (
+       (None, {'fields': ('email', 'password')}),
+       (_('Personal info'), {
+           'fields': (
+               'first_name',
+               'last_name',
+               'phone',
+               'address',
+               'birth_date',
+           )
+       }),
+       (_('Permissions'), {
+           'fields': ('is_active', 'is_staff', 'is_teacher',
+                      'is_superuser', 'groups', 'user_permissions'),
+          }),
+       (_('Important dates'), {
+           'fields': ('last_login', 'date_joined')
+       }),
+    )
+    add_fieldsets = (
+        (None, {
+              'classes': ('wide',),
+              'fields': ('email', 'password1', 'password2'),
+           }),
+    )
+
+
+admin.site.register(User, UserAdmin)

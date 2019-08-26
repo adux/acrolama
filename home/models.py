@@ -94,7 +94,7 @@ class NewsList(models.Model):
 
 
 class Portfolio(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey("users.User", on_delete=models.CASCADE)
     order = models.CharField(max_length=1, blank=True, null=True)
     text = models.TextField(max_length=30, blank=True, null=True)
     sec_text = models.TextField(max_length=30, blank=True, null=True)

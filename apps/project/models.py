@@ -3,7 +3,7 @@ from django.utils.translation import ugettext as _
 from django.db.models.signals import pre_save
 from home.utils import unique_slug_generator
 
-###Reference Data
+# Reference Data
 
 EVENTCATEGORY = [
     ("fas fa-redo", "Masterclass"),
@@ -14,7 +14,11 @@ EVENTCATEGORY = [
     ("fas fa-seeding", "Retreat"),
 ]
 
-EXCEPTIONCATEGORY = [("TI", "Time"), ("LO", "Location"), ("TL", "TimeLocation")]
+EXCEPTIONCATEGORY = [
+    ("TI", "Time"),
+    ("LO", "Location"),
+    ("TL", "TimeLocation")
+]
 
 LEVEL = [
     ("0", "Multilevel"),
@@ -58,7 +62,11 @@ class TimeOption(models.Model):
     open_endtime = models.TimeField(auto_now=False, auto_now_add=False)
 
     def __str__(self):
-        return "%s: %s - %s" % (self.name, self.open_starttime, self.open_endtime)
+        return "%s: %s - %s" % (
+            self.name,
+            self.open_starttime,
+            self.open_endtime
+        )
 
 
 class PriceOption(models.Model):
@@ -104,7 +112,7 @@ class TimeLocation(models.Model):
 class Project(models.Model):
     name = models.CharField(max_length=120)
     description = models.TextField(max_length=2000)
-    manager = models.ManyToManyField("users.Staff")
+    manager = models.ManyToManyField("users.User")
     todo = models.CharField(max_length=120, null=True, blank=True)
     creationdate = models.DateTimeField(auto_now_add=True)
 
@@ -131,7 +139,9 @@ class Exception(models.Model):
 
 class Event(models.Model):
     category = models.CharField(max_length=50, choices=EVENTCATEGORY)
-    level = models.ForeignKey(Level, null=True, blank=True, on_delete=models.CASCADE)
+    level = models.ForeignKey(
+        Level, null=True, blank=True, on_delete=models.CASCADE
+    )
     title = models.CharField(max_length=100)
     event_startdate = models.DateField(
         auto_now_add=False, auto_now=False, blank=True, null=True
@@ -150,8 +160,12 @@ class Event(models.Model):
     highlights = models.TextField(max_length=2000, null=True, blank=True)
     included = models.TextField(max_length=2000, null=True, blank=True)
     food = models.TextField(max_length=2000, null=True, blank=True)
-    staff = models.ManyToManyField("users.Staff", blank=True)
-    teacher = models.ManyToManyField("users.Teacher")
+    team = models.ManyToManyField(
+        "users.User", related_name='eventteam', blank=True
+    )
+    teacher = models.ManyToManyField(
+        "users.User", related_name='eventteacher'
+    )
     published = models.BooleanField()
     registration = models.BooleanField(default=True)
     slug = models.SlugField(unique=True, null=True, blank=True)
