@@ -22,11 +22,19 @@ class UserAdmin(UserAdmin):
        (None, {'fields': ('email', 'password')}),
        (_('Personal info'), {
            'fields': (
+               'pronoun',
                'first_name',
                'last_name',
                'phone',
                'address',
                'birth_date',
+           )
+       }),
+       (_('Teacher & Stuff info'), {
+           'fields': (
+               'avatar',
+               'short_description',
+               'long_description',
            )
        }),
        (_('Permissions'), {

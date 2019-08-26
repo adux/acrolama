@@ -11,14 +11,11 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import DetailView, ListView
 from home.multiforms import MultiFormsView
 from home.models import (
-    AboutMember,
+    AboutTeam,
     About,
     AboutImage,
     AboutDate,
-    # Accounting,
-    # Booking,
     Faq,
-    FaqValues,
     Info,
     InfoImage,
     Testimonial,
@@ -28,18 +25,6 @@ from project.models import Event, Location
 from home.forms import NewsForm
 from booking.forms import BookForm
 from users.forms import UserRegisterForm, ProfileLoginForm
-# from home.filters import AccountingFilter, BookingFilter
-
-
-# @login_required(login_url="/error404/")
-# def accountingview(request):
-#     template_name = "accounting/accounting.html"
-#     acc_list = Accounting.objects.all()
-#     bk_list = Booking.objects.all()
-#     acc_filter = AccountingFilter(request.GET, queryset=acc_list)
-#     bk_filter = BookingFilter(request.GET, queryset=bk_list)
-#     context = {"filter_acc": acc_filter, "filter_bk": bk_filter}
-#     return render(request, template_name, context)
 
 
 class HomeFormView(MultiFormsView):
@@ -57,7 +42,7 @@ class HomeFormView(MultiFormsView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["about_content"] = AboutMember.objects.all()
+        context["about_content"] = AboutTeam.objects.all()
         context["about_general"] = About.objects.all()
         context["about_image"] = AboutImage.objects.all()
         context["about_date"] = AboutDate.objects.all()

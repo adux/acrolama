@@ -44,19 +44,30 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    # Important
     email = models.EmailField(_('email address'), unique=True)
+    date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
+    is_active = models.BooleanField(_('active'), default=True)
+    is_staff = models.BooleanField(_('staff status'), default=False)
+    is_teacher = models.BooleanField(_('teacher status'), default=False)
+    # For all
+    pronoun = models.CharField(choices=PRONOUN, max_length=10, blank=True)
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, blank=True)
     phone = models.CharField(max_length=50, blank=True)
     address = models.ForeignKey(
         "address.Address", null=True, blank=True, on_delete=models.CASCADE
     )
-    birth_date = models.DateField(null=True, blank=True)
-    date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
-    is_active = models.BooleanField(_('active'), default=True)
-    is_staff = models.BooleanField(_('staff status'), default=False)
-    is_teacher = models.BooleanField(_('teacher status'), default=False)
+    birth_date = models.DateField(_('Birthday'), null=True, blank=True)
+    # Teachers and Stuff can use this
+    title = models.CharField(_('title'), max_length=45, blank=True)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
+    short_description = models.TextField(
+        _('short description'), max_length=400, blank=True
+    )
+    long_description = models.TextField(
+        _('long description'), max_length=1200, blank=True
+    )
 
     objects = UserManager()
 
@@ -85,52 +96,3 @@ class User(AbstractBaseUser, PermissionsMixin):
         Sends an email to this User.
         '''
         send_mail(subject, message, from_email, [self.email], **kwargs)
-
-
-# class Profile(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-#     phone = models.CharField(max_length=50)
-#     address = models.ForeignKey("address.Address", on_delete=models.CASCADE)
-#     pronoun = models.CharField(max_length=10)
-#     birth_date = models.DateField(null=True, blank=True)
-#     uploaded_at = models.DateTimeField(auto_now_add=True)
-
-#     def __str__(self):
-#         return self.name
-
-
-# class Teacher(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-#     phone = models.CharField(max_length=50)
-#     address = models.ForeignKey(
-#         "address.Address", on_delete=models.CASCADE, null=True, blank=True
-#     )
-#     pronoun = models.CharField(max_length=10)
-#     birth_date = models.DateField(null=True, blank=True)
-#     title = models.CharField(max_length=30, null=True, blank=True)
-#     description = models.TextField(max_length=1000)
-#     image = models.ImageField(
-#           upload_to="user/teacher/",
-#           null=True, blank=True
-#       )
-#     uploaded_at = models.DateTimeField(auto_now_add=True)
-
-#     def __str__(self):
-#         return self.user.last_name
-
-
-# class Staff(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-#     phone = models.CharField(max_length=50)
-#     address = models.ForeignKey(
-#         "address.Address", on_delete=models.CASCADE, null=True, blank=True
-#     )
-#     pronoun = models.CharField(max_length=10)
-#     birth_date = models.DateField(null=True, blank=True)
-#     title = models.CharField(max_length=30, null=True, blank=True)
-#     description = models.TextField(max_length=1000)
-#     image = models.ImageField(upload_to="user/staff/", null=True, blank=True)
-#     uploaded_at = models.DateTimeField(auto_now_add=True)
-
-#     def __str__(self):
-#         return self.user.last_name
