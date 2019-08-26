@@ -17,7 +17,6 @@ from home.models import (
     AboutDate,
     Faq,
     Info,
-    InfoImage,
     Testimonial,
     Portfolio,
 )

@@ -38,7 +38,7 @@
                         <a id="aboutImage_next" class="image_slider_next" href="#"></a>
                         <div class="caroufredsel_wrapper">
                                 <ul id="aboutImage" class="image-slider slides">{% for obj in about_image %}
-                                        <li><img src="{{obj.image.url}}"  alt=""></li> {% endfor%}
+                                    <li><img src="{{obj.image.image.url}}"  alt="{{obj.image.description}}"></li> {% endfor%}
                                 </ul>
                         </div>
                         <div class="clear"></div>
@@ -57,12 +57,12 @@
                                 {% for obj in about_content %}
                                 <li>
                                     <div class="member-content-holder">
-                                            <h4 class="member-name">{{ obj.name }}</h4>
-                                            <p class="member-position">{{ obj.position}}</p>
-                                            <div class="member-content">{{ obj.content|safe }}<br></div>
+                                            <h4 class="member-name">{{ obj.team.first_name }}</h4>
+                                            <p class="member-position">{{ obj.team.title}}</p>
+                                            <div class="member-content">{{ obj.team.long_description|safe }}<br></div>
                                     </div>
                                     <div class="member-image-holder">
-                                            <img src="{{obj.image.url}}" alt="">
+                                            <img src="{{obj.team.avatar.url}}" alt="">
                                     </div>
                                     <div class="clear"></div>
                                 </li>

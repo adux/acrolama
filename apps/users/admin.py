@@ -33,6 +33,7 @@ class UserAdmin(UserAdmin):
        (_('Teacher & Stuff info'), {
            'fields': (
                'avatar',
+               'title',
                'short_description',
                'long_description',
            )
