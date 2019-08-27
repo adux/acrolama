@@ -26,6 +26,7 @@ class EventAdmin(admin.ModelAdmin):
     ]
     list_filter = ["category", "level"]
     search_fields = ["title", "event_startdate", "event_enddate"]
+    save_as = True
 
 
 admin.site.register(Day)
