@@ -1,7 +1,7 @@
 from django.contrib import admin
-from django import forms
 from .models import (
     Day,
+    Discipline,
     Event,
     Exception,
     TimeOption,
@@ -29,6 +29,7 @@ class EventAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Day)
+admin.site.register(Discipline)
 admin.site.register(Project)
 admin.site.register(Event, EventAdmin)
 admin.site.register(Exception)

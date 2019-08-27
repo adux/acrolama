@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils.translation import ugettext as _
 from django.db.models.signals import pre_save
 from home.utils import unique_slug_generator
 
@@ -14,11 +13,7 @@ EVENTCATEGORY = [
     ("fas fa-seeding", "Retreat"),
 ]
 
-EXCEPTIONCATEGORY = [
-    ("TI", "Time"),
-    ("LO", "Location"),
-    ("TL", "TimeLocation")
-]
+EXCEPTIONCATEGORY = [("TI", "Time"), ("LO", "Location"), ("TL", "TimeLocation")]
 
 LEVEL = [
     ("0", "Multilevel"),
@@ -46,6 +41,17 @@ class Day(models.Model):
         return "%s" % (self.get_day_display())
 
 
+class Project(models.Model):
+    name = models.CharField(max_length=120)
+    description = models.TextField(max_length=2000)
+    manager = models.ManyToManyField("users.User")
+    todo = models.CharField(max_length=120, null=True, blank=True)
+    creationdate = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
 class TimeOption(models.Model):
     name = models.CharField(max_length=20)
     description = models.TextField(max_length=1000)
@@ -62,31 +68,7 @@ class TimeOption(models.Model):
     open_endtime = models.TimeField(auto_now=False, auto_now_add=False)
 
     def __str__(self):
-        return "%s: %s - %s" % (
-            self.name,
-            self.open_starttime,
-            self.open_endtime
-        )
-
-
-class PriceOption(models.Model):
-    abonament = models.BooleanField(default=False)
-    name = models.CharField(max_length=30)
-    description = models.TextField(max_length=1000)
-    reduction = models.BooleanField(default=False)
-    price_chf = models.CharField(max_length=5, null=True, blank=True)
-    price_euro = models.CharField(max_length=5, null=True, blank=True)
-
-    def __str__(self):
-        return "%s - %s" % (self.name, self.price_chf)
-
-
-class Level(models.Model):
-    name = models.CharField(max_length=20, choices=LEVEL)
-    description = models.TextField(max_length=1000, null=True, blank=True)
-
-    def __str__(self):
-        return self.get_name_display()
+        return "%s: %s - %s" % (self.name, self.open_starttime, self.open_endtime)
 
 
 class Location(models.Model):
@@ -109,15 +91,42 @@ class TimeLocation(models.Model):
         return " vs ".join(p.name for p in self.time_options.all())
 
 
-class Project(models.Model):
-    name = models.CharField(max_length=120)
+class Exception(models.Model):
+    category = models.CharField(max_length=15, choices=EXCEPTIONCATEGORY)
     description = models.TextField(max_length=2000)
-    manager = models.ManyToManyField("users.User")
-    todo = models.CharField(max_length=120, null=True, blank=True)
-    creationdate = models.DateTimeField(auto_now_add=True)
+    time_location = models.ManyToManyField(TimeLocation)
 
     def __str__(self):
-        return self.name
+        return "%s, %s" % (self.description, self.category)
+
+
+class PriceOption(models.Model):
+    abonament = models.BooleanField(default=False)
+    name = models.CharField(max_length=30)
+    description = models.TextField(max_length=1000)
+    reduction = models.BooleanField(default=False)
+    price_chf = models.CharField(max_length=5, null=True, blank=True)
+    price_euro = models.CharField(max_length=5, null=True, blank=True)
+
+    def __str__(self):
+        return "%s - %s" % (self.name, self.price_chf)
+
+
+# Sport Info
+class Level(models.Model):
+    name = models.CharField(max_length=20, choices=LEVEL)
+    description = models.TextField(max_length=1000, null=True, blank=True)
+
+    def __str__(self):
+        return self.get_name_display()
+
+
+class Discipline(models.Model):
+    name = models.CharField(max_length=20)
+    description = models.TextField(max_length=1000, null=True, blank=True)
+
+    def __str__(self):
+        return self.get_name_display()
 
 
 class Policy(models.Model):
@@ -128,20 +137,10 @@ class Policy(models.Model):
         return self.name
 
 
-class Exception(models.Model):
-    category = models.CharField(max_length=15, choices=EXCEPTIONCATEGORY)
-    description = models.TextField(max_length=2000)
-    time_location = models.ManyToManyField(TimeLocation)
-
-    def __str__(self):
-        return "%s, %s" % (self.description, self.category)
-
-
 class Event(models.Model):
+    # Event Info
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     category = models.CharField(max_length=50, choices=EVENTCATEGORY)
-    level = models.ForeignKey(
-        Level, null=True, blank=True, on_delete=models.CASCADE
-    )
     title = models.CharField(max_length=100)
     event_startdate = models.DateField(
         auto_now_add=False, auto_now=False, blank=True, null=True
@@ -154,18 +153,22 @@ class Event(models.Model):
     price_options = models.ManyToManyField(PriceOption)
     policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
     max_participants = models.CharField(max_length=5, null=True, blank=True)
+    # Audiovisual Info
     images = models.ManyToManyField("audiovisual.Image")
     videos = models.ManyToManyField("audiovisual.Video", blank=True)
+    # Sport Info
+    level = models.ForeignKey(Level, null=True, blank=True, on_delete=models.CASCADE)
+    discipline = models.ForeignKey(
+        Discipline, null=True, blank=True, on_delete=models.CASCADE
+    )
     prerequisites = models.TextField(max_length=2000, null=True, blank=True)
+    teacher = models.ManyToManyField("users.User", related_name="eventteacher")
+    # Additional Info
     highlights = models.TextField(max_length=2000, null=True, blank=True)
     included = models.TextField(max_length=2000, null=True, blank=True)
     food = models.TextField(max_length=2000, null=True, blank=True)
-    team = models.ManyToManyField(
-        "users.User", related_name='eventteam', blank=True
-    )
-    teacher = models.ManyToManyField(
-        "users.User", related_name='eventteacher'
-    )
+    team = models.ManyToManyField("users.User", related_name="eventteam", blank=True)
+    # Admin Info
     published = models.BooleanField()
     registration = models.BooleanField(default=True)
     slug = models.SlugField(unique=True, null=True, blank=True)
