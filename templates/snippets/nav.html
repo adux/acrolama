@@ -12,7 +12,7 @@
             <li><a target="_blank" href="https://www.acrofestival.ch">Fest</a></li>
             <!-- <li><a href="{% url "home" %}#contact">Contact</a></li> -->
             {% if user.is_authenticated %}
-            <li><a href="{% url "home" %}#profile">{{request.user}} ▿</a></li>
+            <li><a href="{% url "home" %}#profile">{{request.user.first_name}} ▿</a></li>
             <li><a href="{% url "account_logout" %}">Logout</a></li>
             {% else %}
             <li><a href="{% url "account_signup" %}"><b>Register</b></a></li>
