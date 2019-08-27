@@ -1,13 +1,8 @@
-from datetime import datetime
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.core.mail import send_mail
-from django.db.models import F
-from django.http import HttpResponseForbidden, HttpResponseRedirect
-from django.urls import reverse, reverse_lazy
+from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
 from django.utils import timezone
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from django.views.generic import DetailView, ListView
 from home.multiforms import MultiFormsView
 from home.models import (
@@ -20,22 +15,17 @@ from home.models import (
     Testimonial,
     Portfolio,
 )
-from project.models import Event, Location
+from project.models import Event
 from home.forms import NewsForm
 from booking.forms import BookForm
-from users.forms import UserRegisterForm, ProfileLoginForm
 
 
 class HomeFormView(MultiFormsView):
     template_name = "home.html"
     form_classes = {
-        "register": UserRegisterForm,
-        "login": ProfileLoginForm,
         "news": NewsForm,
     }
     success_urls = {
-        "register": reverse_lazy("home"),
-        "login": reverse_lazy("home"),
         "news": reverse_lazy("home"),
     }
 
@@ -63,29 +53,8 @@ class HomeFormView(MultiFormsView):
         context["testimonial"] = Testimonial.objects.all()
         context["portfolio"] = Portfolio.objects.order_by("order")[1:5]
         context["fportfolio"] = Portfolio.objects.order_by("order")[0:1]
-        context["eporrfolio"] = Portfolio.objects.order_by("order")[5:6]
+        context["eportfolio"] = Portfolio.objects.order_by("order")[5:6]
         return context
-
-    def login_form_valid(self, form):
-        form_name = form.cleaned_data.get("action")
-        username = form.cleaned_data.get("username")
-        password = form.cleaned_data.get("password")
-        user = authenticate(self, username=username, password=password)
-        if user is not None:
-            login(self, user)
-        return HttpResponseRedirect(self.get_success_url(form_name))
-
-    def register_form_valid(self, form):
-        instance = form.save(commit=False)
-        form_name = form.cleaned_data.get("action")
-        email = form.cleaned_data.get("email")
-        messages.add_message(
-            self.request,
-            messages.SUCCESS,
-            f"Thanks. Please confirm your email: {email}",
-        )
-        instance.save()
-        return HttpResponseRedirect(self.get_success_url(form_name))
 
     def news_form_valid(self, form):
         instance = form.save(commit=False)
