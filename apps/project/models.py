@@ -126,7 +126,7 @@ class Discipline(models.Model):
     description = models.TextField(max_length=1000, null=True, blank=True)
 
     def __str__(self):
-        return self.get_name_display()
+        return self.name
 
 
 class Policy(models.Model):
