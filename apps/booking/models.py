@@ -14,10 +14,7 @@ BOOKINGSTATUS = [
 class Book(models.Model):
     event = models.ForeignKey("project.Event", on_delete=models.CASCADE)
     # USER
-    name = models.CharField(max_length=40)
-    email = models.CharField(max_length=50)
-    phone = models.CharField(max_length=30)
-    # address = models.CharField(max_length=120)
+    user = models.ForeignKey("users.User", on_delete=models.CASCADE)
     # Options
     price = models.ForeignKey("project.PriceOption", on_delete=models.CASCADE)
     time = models.ForeignKey("project.TimeOption", on_delete=models.CASCADE)
@@ -30,4 +27,6 @@ class Book(models.Model):
     booked_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return "%s - %s" % (self.event, self.name)
+        return "%s - %s %s" % (
+            self.event, self.user.first_name, self.user.last_name
+        )
