@@ -109,3 +109,10 @@ class Testimonial(models.Model):
 
     def __str__(self):
         return self.text
+
+
+class Whatsapp(models.Model):
+    link = models.TextField(max_length=350)
+
+    def __str__(self):
+        return self.link
