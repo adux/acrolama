@@ -10,6 +10,9 @@ from django.utils.translation import ugettext as _
 class About(models.Model):
     description = models.TextField(max_length=1000)
 
+    def __str__(self):
+        return self.description
+
 
 class AboutImage(models.Model):
     image = models.ForeignKey("audiovisual.Image", on_delete=models.CASCADE)
@@ -20,6 +23,9 @@ class AboutImage(models.Model):
 class AboutTeam(models.Model):
     team = models.ForeignKey("users.User", on_delete=models.CASCADE)
     uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.team.first_name
 
 
 class AboutDate(models.Model):
@@ -46,12 +52,18 @@ class Faq(models.Model):
     question = models.CharField(max_length=300, null=True, blank=True)
     answer = models.TextField(max_length=2000, null=True, blank=True)
 
+    def __str__(self):
+        return self.question
+
 
 # Start Variable Info Pages
 class Info(models.Model):
     title = models.CharField(max_length=50)
     content = models.TextField(max_length=5000, null=True, blank=True)
     slug = models.SlugField(unique=True, null=True, blank=True)
+
+    def __str__(self):
+        return self.title
 
 
 def info_pre_save_receiver(sender, instance, *args, **kwargs):
@@ -67,11 +79,17 @@ class InfoImage(models.Model):
     general = models.ForeignKey(Info, on_delete=models.CASCADE)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.image.title
+
 
 class NewsList(models.Model):
     email = models.CharField(max_length=100, blank=True, null=True)
     active = models.BooleanField(default=True)
     inscribed_at = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.email
 
 
 class Portfolio(models.Model):
@@ -80,6 +98,9 @@ class Portfolio(models.Model):
     text = models.TextField(max_length=30, blank=True, null=True)
     sec_text = models.TextField(max_length=30, blank=True, null=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.image.title
 
 
 class Testimonial(models.Model):
