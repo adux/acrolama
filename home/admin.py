@@ -10,6 +10,7 @@ from .models import (
     NewsList,
     Portfolio,
     Testimonial,
+    Whatsapp,
 )
 
 
@@ -57,3 +58,4 @@ admin.site.register(Info, InfoAdmin)
 admin.site.register(NewsList, NewsAdmin)
 admin.site.register(Testimonial)
 admin.site.register(Portfolio, PortfolioAdmin)
+admin.site.register(Whatsapp)
