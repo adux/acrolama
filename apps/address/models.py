@@ -258,7 +258,7 @@ class CountryField(models.CharField):
 
 
 class Address(models.Model):
-    country = CountryField()
+    country = CountryField(default="CH")
     city = models.CharField(max_length=50)  # City / Town
     postalcode = models.CharField(
         max_length=10, null=True, blank=True

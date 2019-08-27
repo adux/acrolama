@@ -24,18 +24,6 @@
         {% block contentevents %}{% endblock %}
         {% block contentclass %}{% endblock %}
         {% block contentclasses %}{% endblock %}
-        <!-- Sign in pop up -->
-        <div class="popup" role="alert">
-          <div class="popup-container">
-            <a href="#0" class="popup-close img-replace">Close</a>
-            <h1>Responsive Popup</h1>
-                  <form method="POST">{% csrf_token %}
-                      {{forms.login}}
-                      <input value="Sign Up" type="submit"></input>
-                  </form>
-                      Already have and account? <a class="ml-2" href="#">Sign In</a>
-          </div>
-        </div>
         {% include 'snippets/js.html' %}{% analytical_body_bottom %}
     </body>
 </html>

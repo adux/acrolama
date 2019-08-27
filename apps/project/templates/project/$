@@ -95,58 +95,52 @@
                                     </a>
                             </div>
                         </div>
-                        <ul class="actions">
                         {% if user.is_authenticated %}
-                            <li><a class="button popup-trigger"><b>Book</b></a></li>
+                        <div class="tab">
+                            <input id="tab-two" type="checkbox" name="tabs" checked/>
+                            <label for="tab-two">BOOKING</label>
+                            <div class="tab-content tab-form">
+                                {% if form.errors.non_field_errors %}
+                                {{ form.errors.non_field_errors }}
+                                {% endif %}
+                                {% if messages %}
+                                <ul class="messages">
+                                    {% for message in messages %}
+                                    <li {% if message.tags %}
+                                        style="color: #f3d216; text-align:center;"
+                                        class="{{ message.tags }}"
+                                        {% endif %}>
+                                        {{ message }}
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                                <form method="post"> {% csrf_token %}
+                                    {{form.as_p}}
+                                    <p><input value="Submit" type="submit"></p>
+                                </form>
+                            </div>
+                        </div><!-- end tab -->
                         {% else %}
-                            <li><a class="button" href="{% url "account_signup" %}"><b>Register</b></a></li>
-                            <li>Allready have an account? <a href="{% url "account_login" %}">Sign in</a></li>
-                        </ul>
+                        <button><a href="{% url "account_signup" %}"><b>Register</b></button>
+                        <button><a href="{% url "account_signup" %}"><b>Sign in</button>
                         {% endif %}
                     </div>
                     <div class="one_half last">
-                        <h1>{{object.title}}</h1>
-                        <p>{{object.description|safe}}</p><br>
-                        {% if object.prerequisites%}
-                        <h1>Prerequisites</h1>
-                        <p>{{object.prerequisites|safe}}</p>
-                        {% endif%}
-                        <br>
-                        <br>
+                            <h1>{{object.title}}</h1>
+                            <p>{{object.description|safe}}</p><br>
+                            {% if object.prerequisites%}
+                            <h1>Prerequisites</h1>
+                            <p>{{object.prerequisites|safe}}</p>
+                            {% endif%}
+                            <br>
+                            <br>
                     </div>
                     <div class="clear"></div>
                 </div>
             </div>
         </div>
     </article>
-</div>
-<!-- Sign in pop up -->
-<div class="popup" role="alert">
-  <div class="popup-container">
-    <a href="#0" class="popup-close img-replace">Close</a>
-    <h1>Booking</h1>
-          <form method="POST">{% csrf_token %}
-            {% if form.errors.non_field_errors %}
-            {{ form.errors.non_field_errors }}
-            {% endif %}
-            {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                <li {% if message.tags %}
-                    style="color: #f3d216; text-align:center;"
-                    class="{{ message.tags }}"
-                    {% endif %}>
-                    {{ message }}
-                </li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-            <form method="post"> {% csrf_token %}
-                {{form.as_p}}
-                <p><input value="Submit" type="submit"></p>
-            </form>
-          </form>
-  </div>
 </div>
 {% include 'footer.html' %}
 {% endblock %}
