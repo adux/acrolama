@@ -65,7 +65,7 @@
                     <br>
                         <div class="tab">
                             <input id="tab-one" type="checkbox" name="tabs"/>
-                            <label for="tab-one">Pricing Detail</label>
+                            <label for="tab-one"><b>PRICING</b></label>
                             <div class="tab-content">
                                     <div class="table-wrapper text-left">
                                         <table class="alt">
@@ -97,10 +97,11 @@
                         </div>
                         <ul class="actions">
                         {% if user.is_authenticated %}
-                            <li><a class="button popup-trigger"><b>Book</b></a></li>
+                        <li> Your one of us &#128151;, feel like flying?:</li>
+                        <li><a class="button popup-trigger"><b>Book</b></a></li>
                         {% else %}
-                            <li><a class="button" href="{% url "account_signup" %}"><b>Register</b></a></li>
-                            <li>Allready have an account? <a href="{% url "account_login" %}">Sign in</a></li>
+                        <li><a class="button" href="{% url "account_signup" %}"><b>Register</b></a></li>
+                        <li>Allready have an account? <a href="{% url "account_login" %}">Sign in</a></li>
                         </ul>
                         {% endif %}
                     </div>
