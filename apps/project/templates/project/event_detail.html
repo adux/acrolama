@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% block head_title %}{{block.super}}Event | {{object.title}}{% endblock%}
 {% block contentclass %}
 {% load static %}
 {% include 'snippets/nav.html'%}
