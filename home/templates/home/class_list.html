@@ -1,57 +1,58 @@
 {% extends 'base.html' %}
-{% block contentclasses %}
+{% block head_title %}{{block.super}}Acro, Yoga and Acroyoga Classes{% endblock%}
+{% block content %}
 {% load static %}
 {% include 'snippets/nav.html' %}
 <!-- Classes -->
-        <div id="next" class="section">
-            <div class="block content-1170 center-relative">
-                <div class="section-title-holder right">
-                    <div class="section-num">
-                        <span>
-                                <i class="fas fa-hourglass-half"></i>
-                        </span>
-                    </div>
-                    <h2 class="entry-title">CLASSES</h2>
-                </div>
-                <div class="section-content-holder left green">
-                    <div class="content-wrapper">
-                        <div class="blog-holder block center-relative">
-                            {% for object in list %}
-                            <article class="blog-item-holder relative">
-                                <div class="num">
-                                        <i class="{{ object.category }}"></i>
-                                </div>
-                                <div class="info">
-										<div class="author vcard "><a href="/classes/{{object.slug}}/">
-                                                {{ object.level.get_name_display }} {{ object.get_category_display }} - 
-                                                {% for ad in object.time_locations.all %}
-                                                {% ifchanged %} {{ad.location }} {% endifchanged %}
-                                            {% endfor %}</a></div>
-                                    <div class="cat-links">
-                                        <ul>
-                                                <li><a href="/classes/{{object.slug}}/">
-                                                        {{ object.event_startdate }} {% if object.event_enddate != object.event_startdate %}- {{ object.event_enddate }} {% endif %}
-                                                        {% for obj in object.time_locations.all %}
-                                                        {% for rd in obj.time_options.all %}
-                                                        {% ifchanged %} | {{ rd.regular_days|default_if_none:"" }}{% endifchanged%}
-                                                        {% endfor %}
-                                                        {% endfor %}
-                                                    </a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <h3 class="entry-title">
-                                        <a href="/classes/{{object.slug}}/">{{object.title}}</a>
-                                </h3>
-                                <div class="clear"></div>
-                            </article>
-                            {% endfor %}
-                            <div class="clear"></div>
+<div id="classes" class="section">
+    <div class="block content-1170 center-relative">
+        <div class="section-title-holder right">
+            <div class="section-num">
+                <span>
+                        <i class="fas fa-hourglass-half"></i>
+                </span>
+            </div>
+            <h2 class="entry-title">CLASSES</h2>
+        </div>
+        <div class="section-content-holder left green">
+            <div class="content-wrapper">
+                <div class="blog-holder block center-relative">
+                    {% for object in list %}
+                    <article class="blog-item-holder relative">
+                        <div class="num">
+                                <i class="{{ object.category }}"></i>
                         </div>
-                    </div>
+                        <div class="info">
+                                <div class="author vcard "><a href="/classes/{{object.slug}}/">
+                                        {{ object.level.get_name_display }} {{ object.get_category_display }} - 
+                                        {% for ad in object.time_locations.all %}
+                                        {% ifchanged %} {{ad.location }} {% endifchanged %}
+                                    {% endfor %}</a></div>
+                            <div class="cat-links">
+                                <ul>
+                                        <li><a href="/classes/{{object.slug}}/">
+                                                {{ object.event_startdate }} {% if object.event_enddate != object.event_startdate %}- {{ object.event_enddate }} {% endif %}
+                                                {% for obj in object.time_locations.all %}
+                                                {% for rd in obj.time_options.all %}
+                                                {% ifchanged %} | {{ rd.regular_days|default_if_none:"" }}{% endifchanged%}
+                                                {% endfor %}
+                                                {% endfor %}
+                                            </a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <h3 class="entry-title">
+                                <a href="/classes/{{object.slug}}/">{{object.title}}</a>
+                        </h3>
+                        <div class="clear"></div>
+                    </article>
+                    {% endfor %}
+                    <div class="clear"></div>
                 </div>
-                <div class="clear"></div>
             </div>
         </div>
+        <div class="clear"></div>
+    </div>
+</div>
 {% include 'footer.html' %}
 {% endblock %}

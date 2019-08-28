@@ -18,7 +18,7 @@ media/
 images/
 videos/
 acrolama/settings/local.py
-templates/local
+templates/local/
 
 # Sass Ignore
 .sass-cache/
