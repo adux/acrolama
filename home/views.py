@@ -22,7 +22,7 @@ from booking.forms import BookForm
 
 
 class HomeFormView(MultiFormsView):
-    template_name = "home.html"
+    template_name = "home/home.html"
     form_classes = {
         "news": NewsForm,
     }

@@ -1,5 +1,7 @@
 from django import forms
-from .models import User
+
+from allauth.account.forms import SignupForm
+from .models import User, PRONOUN
 from django.contrib.auth.forms import (
     UserCreationForm,
     UserChangeForm,
@@ -30,9 +32,8 @@ class UserChangeForm(UserChangeForm):
         ]
 
 
-class ProfileLoginForm(AuthenticationForm):
-    action = forms.CharField(max_length=60, widget=forms.HiddenInput())
-
-    class Meta:
-        model = User
-        fields = ["email", "password", "action", "session"]
+class CustomSignupForm(SignupForm):
+    pronoun = models.CharField(choices=PRONOUN, max_length=10, blank=True)
+    first_name = models.CharField(_('first name'), max_length=30, blank=True)
+    last_name = models.CharField(_('last name'), max_length=30, blank=True)
+    phone = models.CharField(max_length=50, blank=True)
