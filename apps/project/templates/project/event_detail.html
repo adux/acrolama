@@ -127,27 +127,27 @@
   <div class="popup-container">
     <a href="#0" class="popup-close img-replace">Close</a>
     <h1>Booking</h1>
-          <form method="POST">{% csrf_token %}
-            {% if form.errors.non_field_errors %}
-            {{ form.errors.non_field_errors }}
-            {% endif %}
-            {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                <li {% if message.tags %}
-                    style="color: #f3d216; text-align:center;"
-                    class="{{ message.tags }}"
-                    {% endif %}>
-                    {{ message }}
-                </li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-            <form method="post"> {% csrf_token %}
-                {{form.as_p}}
-                <p><input value="Submit" type="submit"></p>
-            </form>
-          </form>
+    <form method="POST">{% csrf_token %}
+        {% if form.errors.non_field_errors %}
+        {{ form.errors.non_field_errors }}
+        {% endif %}
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li {% if message.tags %}
+                style="color: #f3d216; text-align:center;"
+                class="{{ message.tags }}"
+                {% endif %}>
+                {{ message }}
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <form method="post"> {% csrf_token %}
+            {{form.as_p}}
+            <p><input value="Submit" type="submit"></p>
+        </form>
+    </form>
   </div>
 </div>
 {% include 'footer.html' %}

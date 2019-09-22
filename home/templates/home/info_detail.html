@@ -2,41 +2,42 @@
 {% block contentevent %}
 {% include 'snippets/nav.html' %}
 <div class="info">
-        <article id="info" class="section info">
-            <div class="center-relative content-1170">
-                <div class="entry-content">
-                    <div class="content-wrap relative">
-                        <script>
-                            var aboutImage_speed = "1000";
-                            var aboutImage_auto = "true";
-                            var aboutImage_hover = "true";
-                        </script>
-                        <div class="image-slider-wrapper relative img aboutImage">
-                            <a id="aboutImage_next" class="image_slider_next" href="#"></a>
-                            <div class="caroufredsel_wrapper">
-                                    <ul id="aboutImage" class="image-slider slides">{% for obj in info.infoimage_set.all %}
-                                        <li><img src="{{obj.image.image.url}}" alt="{{obj.image.description}}"></li>{%endfor%}
-                                </ul>
-                            </div>
+    <article id="info" class="section info">
+        <div class="center-relative content-1170">
+            <div class="entry-content">
+                <div class="content-wrap relative">
+                    <script>
+                        var aboutImage_speed = "1000";
+                        var aboutImage_auto = "true";
+                        var aboutImage_hover = "true";
+                    </script>
+                    <div class="image-slider-wrapper relative img aboutImage">
+                        <a id="aboutImage_next" class="image_slider_next" href="#"></a>
+                        <div class="caroufredsel_wrapper">
+                                <ul id="aboutImage" class="image-slider slides">{% for obj in info.infoimage_set.all %}
+                                    <li><img src="{{obj.image.image.url}}" alt="{{obj.image.description}}"></li>{%endfor%}
+                            </ul>
                         </div>
-                        <div class="clear"></div>
-                        <br>
-                        <br>
-                        <div class="one text-left">
-                                <h3>{{object.title}}</h3>
-                                {{object.content|safe}}
-                                <br>
-                                <br>
-                                <a class="button" onclick="goBack()">Go Back</a>
-                                <script>
-                                function goBack() {
-                                    window.history.back();
-                                }
-                                </script>
-                        </div>
+                    </div>
+                    <div class="clear"></div>
+                    <br>
+                    <br>
+                    <div class="one text-left">
+                            <h3>{{object.title}}</h3>
+                            {{object.content|safe}}
+                            <br>
+                            <br>
+                            <a class="button" onclick="goBack()">Go Back</a>
+                            <script>
+                            function goBack() {
+                                window.history.back();
+                            }
+                            </script>
+                    </div>
                 </div>
             </div>
-        </article>
+        </div>
+    </article>
 </div>
 {% include 'footer.html' %}
 {% endblock %}
