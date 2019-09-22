@@ -125,6 +125,9 @@ ACCOUNT_SIGNUP_FORM_CLASS = os.environ.get(
 ACCOUNT_USERNAME_REQUIRED = os.environ.get(
     'ACCOUNT_USERNAME_REQUIRED', default=False)
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_FORMS = {
+    'signup': 'users.forms.CustomSignupForm',
+}
 
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
