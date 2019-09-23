@@ -17,12 +17,12 @@ urlpatterns = [
     # Users Registration
     path("ap/", include("allauth.urls")),
     # Home
-    url(r"^$", HomeFormView.as_view(), name="home"),
-    url(r"^events/$", EventListView.as_view(), name="events"),
-    url(r"^classes/$", ClassListView.as_view(), name="classes"),
+    path('', HomeFormView.as_view(), name="home"),
+    path("events/", EventListView.as_view(), name="events"),
+    path("classes/", ClassListView.as_view(), name="classes"),
     path("events/<slug:slug>/", EventDetail.as_view(), name="event"),
     path("classes/<slug:slug>/", EventDetail.as_view(), name="class"),
-    url(r"^info/(?P<slug>[\w-]+)/$", InfoDetailView.as_view(), name="info"),
+    path("info/<slug:slug>/)", InfoDetailView.as_view(), name="info"),
     path("faq/", faqview),
     # Admin stuff
     url(settings.ADMIN_URL, admin.site.urls),
@@ -31,10 +31,16 @@ urlpatterns = [
 ]
 
 if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(
+        settings.STATIC_URL, document_root=settings.STATIC_ROOT
+    )
+    urlpatterns += static(
+        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
+    )
 
 if "debug_toolbar" in settings.INSTALLED_APPS:
     import debug_toolbar
 
-    urlpatterns = [path("__debug__/", include(debug_toolbar.urls))] + urlpatterns
+    urlpatterns = [
+        path("__debug__/", include(debug_toolbar.urls))
+    ] + urlpatterns
