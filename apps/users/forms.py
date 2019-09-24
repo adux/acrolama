@@ -37,7 +37,7 @@ class CustomSignupForm(SignupForm):
     pronoun = forms.ChoiceField(
         choices=PRONOUN,
         label='',
-        widget=forms.Select(attrs={'placeholder': '+41761234567'}),
+        widget=forms.Select(attrs={'placeholder': 'Select'}),
 
     )
     first_name = forms.CharField(max_length=30)
