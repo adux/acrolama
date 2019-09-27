@@ -1,0 +1,3 @@
+[submodule "apps/todo"]
+	path = apps/todo
+	url = https://github.com/adux/django-todo
