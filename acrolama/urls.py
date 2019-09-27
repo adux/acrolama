@@ -27,7 +27,7 @@ urlpatterns = [
     # Admin stuff
     url(settings.ADMIN_URL, admin.site.urls),
     # url(r"^accounting/$", accountingview, name="accounting"),
-    path("todo/", include("todo.urls", namespace="todo")),
+#    path("todo/", include("todo.urls", namespace="todo")),
 ]
 
 if settings.DEBUG:
