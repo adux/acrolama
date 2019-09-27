@@ -162,7 +162,7 @@ TODO_PUBLIC_SUBMIT_REDIRECT = 'home'
 
 # Enable or disable file attachments on Tasks
 # Optionally limit list of allowed filetypes
-TODO_ALLOW_FILE_ATTACHMENTS = True
+TODO_ALLOW_FILE_ATTACHMENTS = False
 TODO_ALLOWED_FILE_ATTACHMENTS = [".jpg", ".gif", ".csv", ".pdf", ".zip"]
 TODO_MAXIMUM_ATTACHMENT_SIZE = 5000000  # In bytes
 
