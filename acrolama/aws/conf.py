@@ -11,7 +11,7 @@ DEFAULT_FILE_STORAGE = 'acrolama.aws.utils.MediaRootS3BotoStorage'
 STATICFILES_STORAGE = 'acrolama.aws.utils.StaticRootS3BotoStorage'
 
 AWS_STORAGE_BUCKET_NAME = 'acrolama'
-S3DIRECT_REGION = 'eu-central-1'
+AWS_S3_REGION_NAME = 'eu-central-1'
 S3_URL = '//%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 MEDIA_URL = '//%s.s3.amazonaws.com/media/' % AWS_STORAGE_BUCKET_NAME
 
@@ -25,8 +25,12 @@ two_months = datetime.timedelta(days=61)
 date_two_months_later = datetime.date.today() + two_months
 expires = date_two_months_later.strftime("%A, %d %B %Y 20:00:00 GMT")
 
-AWS_HEADERS = {
+# AWS_HEADERS = {
+#     'Expires': expires,
+#     'Cache-Control': 'max-age=%d' % (int(two_months.total_seconds()), ),
+# }
+
+AWS_S3_OBJECT_PARAMETERS = {
     'Expires': expires,
     'Cache-Control': 'max-age=%d' % (int(two_months.total_seconds()), ),
 }
-
