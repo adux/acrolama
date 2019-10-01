@@ -1,16 +1,15 @@
 <!-- Menu -->
 <div class="menu-wrapper center-relative">
   <nav id="header-main-menu">
-    <div class="mob-menu">MENU</div>
+    <div class="mob-menu">MENU <i style="font-size:27px;" class="fas fa-bars"></i></div>
     <ul class="main-menu sm sm-clean">
       <li><a href="{% url "home" %}">Home</a></li>
       <li><a href="{% url "home" %}#events">Events</a></li>
       <li><a href="{% url "home" %}#classes">Classes</a></li>
       <li><a href="{% url "home" %}#about">About US</a></li>
       <li><a target="_blank" href="https://www.acrofestival.ch">Fest</a></li>
-      <!-- <li><a href="{% url "home" %}#contact">Contact</a></li> -->
       {% if user.is_authenticated %}
-      <li><a href="{% url "home" %}/#profile">{{request.user.first_name}} ▿</a></li>
+      <li><a href="{% url "home" %}"><i class="fas fa-user"></i> Account</a></li>
       <li><a href="{% url "account_logout" %}">Logout</a></li>
       {% else %}
       <li><a href="{% url "account_signup" %}"><b>Register</b></a></li>

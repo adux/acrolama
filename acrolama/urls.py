@@ -15,7 +15,7 @@ from project.views import EventDetail
 
 urlpatterns = [
     # Users Registration
-    path("ap/", include("allauth.urls")),
+    path("accounts/", include("allauth.urls")),
     # Home
     path('', HomeFormView.as_view(), name="home"),
     path("events/", EventListView.as_view(), name="events"),

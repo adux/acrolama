@@ -149,16 +149,16 @@ TODO_STAFF_ONLY = True
 
 # If you use the "public" ticket filing option, to whom should these tickets be assigned?
 # Must be a valid username in your system. If unset, unassigned tickets go to "Anyone."
-TODO_DEFAULT_ASSIGNEE = 'adrian@acrolama.com'
+TODO_DEFAULT_ASSIGNEE = "adrian@acrolama.com"
 
 # If you use the "public" ticket filing option, to which list should these tickets be saved?
 # Defaults to first list found, which is probably not what you want!
-TODO_DEFAULT_LIST_SLUG = 'tickets'
+TODO_DEFAULT_LIST_SLUG = "tickets"
 
 # If you use the "public" ticket filing option, to which *named URL* should the user be
 # redirected after submitting? (since they can't see the rest of the ticket system).
 # Defaults to "/"
-TODO_PUBLIC_SUBMIT_REDIRECT = 'home'
+TODO_PUBLIC_SUBMIT_REDIRECT = "home"
 
 # Enable or disable file attachments on Tasks
 # Optionally limit list of allowed filetypes
