@@ -28,6 +28,9 @@ class EventDisplay(DetailView):
         context["priceoption"] = PriceOption.objects.filter(
             event__slug=self.object.slug
         )
+        context["teacher"] = User.objects.filter(
+            eventteacher__slug=self.object.slug
+        )
         return context
 
 

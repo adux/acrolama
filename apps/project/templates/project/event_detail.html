@@ -28,15 +28,9 @@
                     <div class="one_half text-left">
                         <ul>
                             <li>
-                                <strong>Event</strong>: {{ object.title }}
-                            </li>
-                            <li>
-                                <strong>Discipline,Category{% if object.level %}&Level{% endif %}</strong>:
-                                {{ object.get_discipline_display }}
-                                {{ object.get_category_display }}
-                                {% if object.level %}
-                                - {{ object.level }}
-                                {% endif %}
+                                {{ object.title }} -{% if object.discipline %} <strong>{{ object.discipline.name }}</strong>{% endif %}
+                                {% if object.level %} <strong>{{ object.level }}</strong>{% endif %}
+                                {% if object.category %} <strong>{{ object.get_category_display }}</strong>{% endif %}
                             </li>
                             <li>
                                 <strong>Date</strong>: {{ object.event_startdate }}
@@ -45,9 +39,11 @@
                                 {% endif %}
                             </li>
                                 {% for to in timeoption %}
+                                {% if to.regular_days %}
                             <li>
                                 <h3>{{ to.regular_days }}</h3>
                             </li>
+                                {% endif %}
                                     {% for tl in to.timelocation_set.all %}
                             <li>
                                 <strong>Address</strong> : {{ tl.location.address }}
@@ -68,38 +64,38 @@
                             <input id="tab-one" type="checkbox" name="tabs"/>
                             <label for="tab-one"><b>PRICING</b></label>
                             <div class="tab-content">
-                                    <div class="table-wrapper text-left">
-                                        <table class="alt">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">Name</th>
-                                                    <th scope="col">Price</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {% for po in priceoption %}
-                                                <tr>
-                                                    <td scope="row" data-label="Name">{{ po.name }}</td>
-                                                    <td data-label="Price">
-                                                        {% if po.price_chf %}
-                                                        CHF {{po.price_chf}}
-                                                        {% elif por.price_euro %}
-                                                        EURO {{po.price.euro}}
-                                                        {% endif %}</td>
-                                                </tr>
-                                                {% endfor %}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <a href="/info/prices/" target="_self" class="button" type="submit">
-                                        Details
-                                    </a>
+                                <div class="table-wrapper text-left">
+                                    <table class="alt">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Price</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for po in priceoption %}
+                                            <tr>
+                                                <td scope="row" data-label="Name">{{ po.name }}</td>
+                                                <td data-label="Price">
+                                                    {% if po.price_chf %}
+                                                    CHF {{po.price_chf}}
+                                                    {% elif por.price_euro %}
+                                                    EURO {{po.price.euro}}
+                                                    {% endif %}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <a href="/info/prices/" target="_self" class="button" type="submit">
+                                    Details
+                                </a>
                             </div>
                         </div>
                         <ul class="actions">
                         {% if user.is_authenticated %}
                         <li> Your one of us &#128151;, feel like flying?:</li>
-                        <li><a class="button popup-trigger"><b>Book</b></a></li>
+                        <li><a class="button popup-trigger" style="width=100%;"><b>Book</b></a></li>
                         {% else %}
                         <li><a class="button" href="{% url "account_signup" %}"><b>Register</b></a></li>
                         <li>Allready have an account? <a href="{% url "account_login" %}">Sign in</a></li>
@@ -107,14 +103,58 @@
                         {% endif %}
                     </div>
                     <div class="one_half last">
+                        <!-- Title and Description -->
                         <h1>{{object.title}}</h1>
-                        <p>{{object.description|safe}}</p><br>
-                        {% if object.prerequisites%}
+                            <p>{{object.description|safe}}</p>
+                            {% if object.prerequisites%}
                         <h1>Prerequisites</h1>
                         <p>{{object.prerequisites|safe}}</p>
                         {% endif%}
-                        <br>
-                        <br>
+                    </div>
+                    <!-- TEACHER SECTION -->
+                    <div class="one" style="background: #afdece;">
+                        <script>
+                            var aboutmember_speed = "2000";
+                            var aboutmember_auto = "true";
+                            var aboutmember_hover = "false";
+                        </script>
+                        <div class="image-slider-wrapper relative team team1">
+                            <!-- Next Arrow -->
+                            <a id="aboutmember_next" class="image_slider_next" href="#"></a>
+                            <div class="caroufredsel_wrapper">
+                                <ul id="aboutmember" class="image-slider slides">
+                                    {% for teacher in teacher %}
+                                    <li>
+                                        <div class="member-content-holder">
+                                                <h4 class="member-name">{{ teacher.first_name }}</h4>
+                                                <p class="member-position">{{ teacher.title }}</p>
+                                                <div class="member-content">{{ teacher.long_description|safe }}<br></div>
+                                        </div>
+                                        <div class="member-image-holder">
+                                                <img src="{{ teacher.avatar }}" alt="">
+                                        </div>
+                                        <div class="clear"></div>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                    <!-- END TEACHER -->
+                    <div class="one">
+                        {% if object.highlights %}
+                        <h1 class="right">Highlights</h1>
+                            <p>{{object.highlights|safe}}</p>
+                        {% endif%}
+                        {% if object.included %}
+                        <h1>Included</h1>
+                            <p>{{object.included|safe}}</p>
+                        {% endif %}
+                        {% if object.food %}
+                        <h1>Food</h1>
+                            <p>{{object.food|safe}}</p>
+                        {% endif %}
                     </div>
                     <div class="clear"></div>
                 </div>
