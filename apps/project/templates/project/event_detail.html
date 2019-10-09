@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block head_title %}{{block.super}}{{ object.level }}{{ object.get_discipline_display }}: {{object.title}}{% endblock%}
+{% block head_title %}{{block.super}}{{ object.get_discipline_display }}{{ object.level }}{{ object.get_category_display }}: {{object.title}}{% endblock%}
 {% block content %}
 {% load static %}
 {% include 'snippets/nav.html'%}
@@ -77,11 +77,8 @@
                                             <tr>
                                                 <td scope="row" data-label="Name">{{ po.name }}</td>
                                                 <td data-label="Price">
-                                                    {% if po.price_chf %}
-                                                    CHF {{po.price_chf}}
-                                                    {% elif por.price_euro %}
-                                                    EURO {{po.price.euro}}
-                                                    {% endif %}</td>
+                                                    {% if po.price_chf %}CHF {{po.price_chf}} {% endif %}{% if por.price_euro %}EURO {{po.price.euro}}{% endif %}
+                                                </td>
                                             </tr>
                                             {% endfor %}
                                         </tbody>
@@ -94,19 +91,18 @@
                         </div>
                         <ul class="actions">
                         {% if user.is_authenticated %}
-                        <li> Your one of us &#128151;, feel like flying?:</li>
-                        <li><a class="button popup-trigger" style="width=100%;"><b>Book</b></a></li>
+                        <!-- <li> Your one of us &#128151;, feel like flying?:</li> -->
+                            <li><a class="button popup-trigger" style="width=100%;"><b>Book</b></a></li>
                         {% else %}
-                        <li><a class="button" href="{% url "account_signup" %}"><b>Register</b></a></li>
-                        <li>Allready have an account? <a href="{% url "account_login" %}">Sign in</a></li>
+                            <li><a class="button" href="{% url "account_signup" %}"><b>Register</b></a></li>
+                            <li>Allready have an account? <a href="{% url "account_login" %}">Sign in</a></li>
                         </ul>
                         {% endif %}
                     </div>
                     <div class="one_half last">
-                        <!-- Title and Description -->
                         <h1>{{object.title}}</h1>
-                            <p>{{object.description|safe}}</p>
-                            {% if object.prerequisites%}
+                        <p>{{object.description|safe}}</p>
+                        {% if object.prerequisites %}
                         <h1>Prerequisites</h1>
                         <p>{{object.prerequisites|safe}}</p>
                         {% endif%}
@@ -126,12 +122,12 @@
                                     {% for teacher in teacher %}
                                     <li>
                                         <div class="member-content-holder">
-                                                <h4 class="member-name">{{ teacher.first_name }}</h4>
-                                                <p class="member-position">{{ teacher.title }}</p>
-                                                <div class="member-content">{{ teacher.long_description|safe }}<br></div>
+                                            <h4 class="member-name">{{ teacher.first_name }}</h4>
+                                            <p class="member-position">{{ teacher.title }}</p>
+                                            <div class="member-content">{{ teacher.long_description|safe }}<br></div>
                                         </div>
                                         <div class="member-image-holder">
-                                                <img src="{{ teacher.avatar }}" alt="">
+                                            <img src="{{ teacher.avatar.url }}" alt="{{ teacher.short_description }}">
                                         </div>
                                         <div class="clear"></div>
                                     </li>
