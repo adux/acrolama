@@ -7,18 +7,15 @@ from django.views.generic import DetailView, ListView
 from home.multiforms import MultiFormsView
 from home.models import (
     AboutTeam,
-    About,
     AboutImage,
     AboutDate,
     Faq,
     Info,
     Testimonial,
     Portfolio,
-    Whatsapp,
 )
 from project.models import Event
 from home.forms import NewsForm
-from booking.forms import BookForm
 
 
 class HomeFormView(MultiFormsView):
@@ -33,7 +30,6 @@ class HomeFormView(MultiFormsView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["about_content"] = AboutTeam.objects.all()
-        context["about_general"] = About.objects.all()
         context["about_image"] = AboutImage.objects.all()
         context["about_date"] = AboutDate.objects.all()
         context["event"] = (
@@ -55,7 +51,6 @@ class HomeFormView(MultiFormsView):
         context["portfolio"] = Portfolio.objects.order_by("order")[1:5]
         context["fportfolio"] = Portfolio.objects.order_by("order")[0:1]
         context["eportfolio"] = Portfolio.objects.order_by("order")[5:6]
-        context["whatsapp"] = Whatsapp.objects.all()
         return context
 
     def news_form_valid(self, form):

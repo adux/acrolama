@@ -1,4 +1,3 @@
-from datetime import datetime, timedelta
 from django.db import models
 from django.db.models.signals import pre_save
 from home.utils import unique_slug_generator
@@ -7,16 +6,9 @@ from django.utils.translation import ugettext as _
 
 # Static Content of Webpage
 # Start About Section
-class About(models.Model):
-    description = models.TextField(max_length=1000)
-
-    def __str__(self):
-        return self.description
-
 
 class AboutImage(models.Model):
     image = models.ForeignKey("audiovisual.Image", on_delete=models.CASCADE)
-    general = models.ForeignKey(About, on_delete=models.CASCADE)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
 
@@ -109,10 +101,3 @@ class Testimonial(models.Model):
 
     def __str__(self):
         return self.text
-
-
-class Whatsapp(models.Model):
-    link = models.TextField(max_length=350)
-
-    def __str__(self):
-        return self.link

@@ -1,4 +1,5 @@
 <!-- Footer -->
+{% load tinycontent_tags %}
 <footer id="footer" class="section">
   <section>
     <h2>General Informations</h2>
@@ -12,8 +13,8 @@
   <section>
     <h2>Follow Us:</h2>
     <dl class="alt">
-      <dt>Whatsapp</dt>{% for obj in whatsapp %}
-      <dd><a href="{{obj.link}}">Acrolama Announcements</a></dd>{% endfor %}
+      <dt>Whatsapp</dt>
+      <dd>{% tinycontent_simple 'footer_whatsapp' %}</dd>
       <dt>Email</dt>
       <dd><a href="mailto:acrolama@acrolama.com">acrolama@acrolama.com</a></dd>
     </dl>

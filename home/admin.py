@@ -1,6 +1,5 @@
 from django.contrib import admin
 from .models import (
-    About,
     AboutImage,
     AboutTeam,
     AboutDate,
@@ -10,19 +9,13 @@ from .models import (
     NewsList,
     Portfolio,
     Testimonial,
-    Whatsapp,
 )
 
 
-class AboutImageInline(admin.StackedInline):
+class AboutImageAdmin(admin.ModelAdmin):
     model = AboutImage
-    extra = 1
     can_delete = True
     show_change_link = True
-
-
-class AboutAdmin(admin.ModelAdmin):
-    inlines = [AboutImageInline]
 
 
 class PortfolioAdmin(admin.ModelAdmin):
@@ -50,7 +43,7 @@ class NewsAdmin(admin.ModelAdmin):
     list_filter = ("active",)
 
 
-admin.site.register(About, AboutAdmin)
+admin.site.register(AboutImage, AboutImageAdmin)
 admin.site.register(AboutDate)
 admin.site.register(AboutTeam)
 admin.site.register(Faq, FaqAdmin)
@@ -58,4 +51,3 @@ admin.site.register(Info, InfoAdmin)
 admin.site.register(NewsList, NewsAdmin)
 admin.site.register(Testimonial)
 admin.site.register(Portfolio, PortfolioAdmin)
-admin.site.register(Whatsapp)

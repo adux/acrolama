@@ -1,4 +1,4 @@
-{% load static %}
+{% load static %}{% load tinycontent_tags %}
 <!-- About -->
     <div id="about" class="section">
         <div class="block content-1170 center-relative">
@@ -8,7 +8,7 @@
                             <i class="fas fa-flask"></i>
                     </span>
                 </div>
-                <h2 class="entry-title">ABOUT</h2>
+                <h2 class="entry-title">ABOUT US</h2>
             </div>
             <div class="section-content-holder right">
                 <div class="content-wrapper">
@@ -16,9 +16,7 @@
                         <p class="content-title">LAMAS</p>
                     </div>
                     <div class="one_half ">
-                            {% for obj in about_general %}
-                            {{ obj.description|safe }}
-                            {%endfor%}
+                        {% tinycontent_simple 'about_description' %}
                     </div>
                     <div class="one_half last ">
                         {% for obj in about_date %}
@@ -72,9 +70,9 @@
                                 {% for obj in about_content %}
                                 <li>
                                     <div class="member-content-holder">
-                                            <h4 class="member-name">{{ obj.team.first_name }}</h4>
-                                            <p class="member-position">{{ obj.team.title}}</p>
-                                            <div class="member-content">{{ obj.team.long_description|safe }}<br></div>
+                                        <h4 class="member-name">{{ obj.team.first_name }}</h4>
+                                        <p class="member-position">{{ obj.team.title}}</p>
+                                        <div class="member-content">{{ obj.team.long_description|safe }}<br></div>
                                     </div>
                                     <div class="member-image-holder">
                                         <img src="{{obj.team.avatar.url}}" alt="{{ obj.team.short_description }}">
