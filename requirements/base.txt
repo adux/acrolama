@@ -1,0 +1,38 @@
+-- Base --
+pytz==2019.1
+webencodings==0.5.1
+bleach==3.1.0
+Pillow==6.0.0
+cffi==1.11.5
+pycparser==2.18
+cryptography==2.7
+asn1crypto==0.24.0
+chardet==3.0.4
+Unidecode==1.0.22
+six==1.11.0
+requests==2.22.0
+requests-oauthlib==1.2.0
+idna==2.6
+defusedxml==0.6.0
+python3-openid==3.1.0
+
+-- Django --
+django==2.2.4
+django-crispy-forms==1.7.2
+django-allauth==0.39.1
+oauthlib==3.0.1
+sqlparse==0.3.0
+
+-- Utils --
+django-annoying==0.10.4
+django-widget-tweaks==1.4.2
+
+-- AWZ
+boto==2.48.0
+boto3==1.5.8
+botocore==1.8.22
+python-dateutil==2.6.1
+docutils==0.14
+jmespath==0.9.3
+django-storages==1.6.5
+s3transfer==0.1.12
