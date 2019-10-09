@@ -2,7 +2,6 @@ from django.db import models
 
 from django.utils.translation import ugettext as _
 
-# Create your models here.
 
 COUNTRIES = [
     ("AD", _("Andorra")),
@@ -267,6 +266,10 @@ class Address(models.Model):
     premise = models.CharField(
         max_length=10, null=True, blank=True
     )  # Apartment, Suite, Box number, etc.
+
+    class Meta:
+        verbose_name = _('Adress')
+        verbose_name_plural = _('Adresses')
 
     def __str__(self):
         return "%s, %s %s" % (self.street, self.postalcode, self.city)
