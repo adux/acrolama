@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     # Added
     'storages',
     'widget_tweaks',
-    'django_filters',
+    # 'django_filters',
     # Own
     'home',
     'project',
