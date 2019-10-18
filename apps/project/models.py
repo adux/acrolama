@@ -13,12 +13,17 @@ EVENTCATEGORY = [
     ("fas fa-seeding", "Retreat"),
 ]
 
-EXCEPTIONCATEGORY = [("TI", "Time"), ("LO", "Location"), ("TL", "TimeLocation")]
+EXCEPTIONCATEGORY = [
+    ("TI", "Time"),
+    ("LO", "Location"),
+    ("TL", "TimeLocation")
+]
 
 LEVEL = [
     ("0", "Multilevel"),
     ("1", "Introduction"),
-    ("2", "Intermediate"),
+    ("2", "Intermediate I"),
+    ("5", "Intermediate II"),
     ("3", "Advanced"),
     ("4", "Profesional"),
 ]
@@ -68,7 +73,13 @@ class TimeOption(models.Model):
     open_endtime = models.TimeField(auto_now=False, auto_now_add=False)
 
     def __str__(self):
-        return "%s: %s - %s" % (self.name, self.open_starttime, self.open_endtime)
+        return "%s: %s/%s - %s/%s" % (
+            self.name,
+            self.open_starttime,
+            self.class_starttime,
+            self.open_endtime,
+            self.class_endtime
+        )
 
 
 class Location(models.Model):
