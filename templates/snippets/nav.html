@@ -7,14 +7,13 @@
       <li><a href="{% url "home" %}#events">Events</a></li>
       <li><a href="{% url "home" %}#classes">Classes</a></li>
       <li><a href="{% url "home" %}#about">About US</a></li>
-      <li><a target="_blank" href="https://www.acrofestival.ch">Fest</a></li>
       {% if user.is_authenticated %}
       <li><a href="{% url "home" %}"><i class="fas fa-user"></i> Account</a></li>
       <li><a href="{% url "account_logout" %}">Logout</a></li>
       {% else %}
-      <li><a href="{% url "account_signup" %}"><b>Register</b></a></li>
-      <li><a href="{% url "account_login" %}">Sign in</a></li>
+      <li><a href="{% url "account_login" %}"><b>Sign in</b></a></li>
       {% endif %}
+      <li><a target="_blank" href="https://www.acrofestival.ch">Festivals</a></li>
       <li><a target="_blank" style="font-size: 20px;" href="http://www.facebook.com/acrolama"><i class="fab fa-facebook"></i></a></li>
       <li><a target="_blank" style="font-size: 20px;" href="http://www.instagram.com/acrolama"><i class="fab fa-instagram"></i></a></li>
     </ul>

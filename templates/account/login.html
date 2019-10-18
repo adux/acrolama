@@ -10,15 +10,19 @@
             <div class="entry-content">
                 <div class="content-wrap relative">
                     <div class="one text-left">
+                        <h1>{% trans "Sign In" %}</h1>
                         <form class="login" method="POST" action="{% url 'account_login' %}">
-                          {% csrf_token %}
-                          {{ form.as_p }}
+                            {% csrf_token %}
+                            <label for="id_login">E-mail:</label>
+                            <input type="email" name="login" placeholder="E-mail address" autofocus="autofocus" required id="id_login">
+                            <p>{% blocktrans %}Don't have an account?<a href="{{ signup_url }}"> Sign up</a>.{% endblocktrans %}</p>
+                            <label for="id_password">Password:</label>
+                            <input type="password" name="password" placeholder="Password" required id="id_password">
+                            <p>Forgot your password?<a href="{% url 'account_reset_password' %}"> Recover Password</a>.</p>
                           {% if redirect_field_value %}
                           <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
                           {% endif %}
                           <button class="primaryAction" type="submit">{% trans "Sign In" %}</button>
-                          <br>
-                          <a class="secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
                         </form>
                     </div>
                 </div>
