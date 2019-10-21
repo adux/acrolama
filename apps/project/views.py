@@ -32,7 +32,7 @@ class EventDisplay(DetailView):
             eventteacher__slug=self.object.slug
         )
         context["exception"] = Exception.objects.filter(
-            eventexception__slug=self.object.slug
+            event__slug=self.object.slug
         )
         return context
 
