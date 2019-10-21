@@ -10,7 +10,7 @@ from django.views.generic.detail import SingleObjectMixin
 from django.core.mail import send_mail
 from django.db import connection
 
-from project.models import Event, TimeOption, PriceOption
+from project.models import Event, TimeOption, PriceOption, Exception
 from booking.forms import BookForm
 from users.models import User
 
