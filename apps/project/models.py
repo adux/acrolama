@@ -161,7 +161,7 @@ class Event(models.Model):
     )
     description = models.TextField(max_length=3000)
     time_locations = models.ManyToManyField(TimeLocation)
-    exceptions = models.ManyToManyField(Exception)
+    exceptions = models.ManyToManyField(Exception, blank=True)
     price_options = models.ManyToManyField(PriceOption)
     policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
     max_participants = models.CharField(max_length=5, null=True, blank=True)
