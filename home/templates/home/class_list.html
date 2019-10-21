@@ -26,7 +26,7 @@
                                 <div class="author vcard "><a href="/classes/{{object.slug}}/">
                                         {{ object.level.get_name_display }} {{ object.get_category_display }} - 
                                         {% for ad in object.time_locations.all %}
-                                        {% ifchanged %} {{ad.location }} {% endifchanged %}
+                                        {% ifchanged %} {{ad.location.name }} {% endifchanged %}
                                     {% endfor %}</a></div>
                             <div class="cat-links">
                                 <ul>

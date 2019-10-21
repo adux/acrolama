@@ -27,7 +27,7 @@
                                         <a href="/events/{{object.slug}}/">
                                              {{ object.discipline }} {{ object.level.get_name_display }} {{ object.get_category_display }} -
                                             {% for ad in object.time_locations.all %}
-                                                {% ifchanged %} {{ad.location }} {% endifchanged %}
+                                                {% ifchanged %} {{ad.location.name }} {% endifchanged %}
                                             {% endfor %}
                                         </a>
                                     </div>
