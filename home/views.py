@@ -34,7 +34,7 @@ class HomeFormView(MultiFormsView):
         context["about_date"] = AboutDate.objects.all()
         context["event"] = (
             Event.objects.filter(event_enddate__gte=timezone.now())
-            .order_by("event_startdate", "title")
+            .order_by("event_startdate", "level", "title")
             .exclude(published=False)
             .exclude(category="fas fa-cogs")
             .distinct()[:6]
