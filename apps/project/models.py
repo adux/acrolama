@@ -23,9 +23,9 @@ LEVEL = [
     ("0", "Multilevel"),
     ("1", "Introduction"),
     ("2", "Intermediate I"),
-    ("5", "Intermediate II"),
-    ("3", "Advanced"),
-    ("4", "Profesional"),
+    ("3", "Intermediate II"),
+    ("4", "Advanced"),
+    ("5", "Profesional"),
 ]
 
 DAYS = [
