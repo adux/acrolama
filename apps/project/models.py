@@ -161,6 +161,7 @@ class Event(models.Model):
     )
     description = models.TextField(max_length=3000)
     time_locations = models.ManyToManyField(TimeLocation)
+    exceptions = models.ManyToManyField(Exception)
     price_options = models.ManyToManyField(PriceOption)
     policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
     max_participants = models.CharField(max_length=5, null=True, blank=True)
@@ -168,7 +169,9 @@ class Event(models.Model):
     images = models.ManyToManyField("audiovisual.Image")
     videos = models.ManyToManyField("audiovisual.Video", blank=True)
     # Sport Info
-    level = models.ForeignKey(Level, null=True, blank=True, on_delete=models.CASCADE)
+    level = models.ForeignKey(
+        Level, null=True, blank=True, on_delete=models.CASCADE
+    )
     discipline = models.ForeignKey(
         Discipline, null=True, blank=True, on_delete=models.CASCADE
     )
@@ -178,7 +181,9 @@ class Event(models.Model):
     highlights = models.TextField(max_length=2000, null=True, blank=True)
     included = models.TextField(max_length=2000, null=True, blank=True)
     food = models.TextField(max_length=2000, null=True, blank=True)
-    team = models.ManyToManyField("users.User", related_name="eventteam", blank=True)
+    team = models.ManyToManyField(
+        "users.User", related_name="eventteam", blank=True
+    )
     # Admin Info
     published = models.BooleanField()
     registration = models.BooleanField(default=True)

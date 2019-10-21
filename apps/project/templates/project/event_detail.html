@@ -38,6 +38,13 @@
                                 - {{ object.event_enddate }}
                                 {% endif %}
                             </li>
+                            {% if object.exception %}
+                            {% for ee in exception %}
+                            <li>
+                                <strong>Exception(s)</strong>: {{ ee.description }}
+                            </li>
+                            {% endfor %}
+                            {% endif %}
                                 {% for to in timeoption %}
                                 {% if to.regular_days %}
                             <li>

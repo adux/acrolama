@@ -31,6 +31,9 @@ class EventDisplay(DetailView):
         context["teacher"] = User.objects.filter(
             eventteacher__slug=self.object.slug
         )
+        context["exception"] = Exception.objects.filter(
+            eventexception__slug=self.object.slug
+        )
         return context
 
 

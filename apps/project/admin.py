@@ -16,10 +16,11 @@ from .models import (
 
 class EventAdmin(admin.ModelAdmin):
     list_display = [
+        "title",
         "event_startdate",
         "event_enddate",
         "category",
-        "title",
+        "level",
         "slug",
         "published",
         "registration",
