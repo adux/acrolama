@@ -43,7 +43,7 @@ class HomeFormView(MultiFormsView):
             Event.objects.filter(
                 event_enddate__gte=timezone.now(), category="fas fa-cogs"
             )
-            .order_by("event_startdate", "title")
+            .order_by("event_startdate", "level", "title")
             .exclude(published=False)
             .distinct()[:6]
         )
