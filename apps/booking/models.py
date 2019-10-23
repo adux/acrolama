@@ -15,9 +15,9 @@ class Book(models.Model):
     event = models.ForeignKey("project.Event", on_delete=models.CASCADE)
     # USER
     user = models.ForeignKey("users.User", on_delete=models.CASCADE)
-    # Options
+    # OPTION
     price = models.ForeignKey("project.PriceOption", on_delete=models.CASCADE)
-    time = models.ForeignKey("project.TimeOption", on_delete=models.CASCADE)
+    time = models.ManyToManyField("project.TimeOption")
     # STATUS
     comment = models.TextField(max_length=350, null=True, blank=True)
     status = models.CharField(
@@ -25,6 +25,10 @@ class Book(models.Model):
     )
     note = models.TextField(max_length=1000, null=True, blank=True)
     booked_at = models.DateTimeField(auto_now_add=True)
+
+    # Gets names from TimeOption
+    def get_times(self):
+        return ",\n".join([p.name for p in self.time.all()])
 
     def __str__(self):
         return "%s - %s %s" % (

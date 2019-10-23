@@ -67,6 +67,7 @@ class EventInterest(SingleObjectMixin, FormView):
         to = [instance.user.email, "acrolama@acrolama.com"]
         send_mail(subject, message, sender, to)
         instance.save()
+        form.save_m2m()
         return super().form_valid(form)
 
     def get_success_url(self):

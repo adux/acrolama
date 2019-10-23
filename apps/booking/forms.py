@@ -9,29 +9,41 @@ class BookForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         if args:
             slug = args[0]
-            slug = slug.get("slug", "")
+            slug = slug.get('slug', '')
             if self.instance:
-                self.fields["price"].queryset = PriceOption.objects.filter(
+                self.fields['price'].queryset = PriceOption.objects.filter(
                     event__slug=slug
                 )
-                self.fields["time"].queryset = TimeOption.objects.filter(
+                self.fields['time'].queryset = TimeOption.objects.filter(
                     timelocation__event__slug=slug
                 )
+                self.fields['price'].empty_label = 'Select an option'
+                self.fields['time'].empty_label = None
 
     class Meta:
         model = Book
-        fields = ("price", "time", "comment")
+        fields = ('time', 'price', 'comment')
         labels = {
-            "price": _(""),
-            "time": _(""),
-            "comment": _(""),
+            'price': _(''),
+            'time': _(''),
+            'comment': _(''),
         }
         widgets = {
-            "price": forms.Select(attrs={"checked": "checked"}),
-            "time": forms.Select(attrs={"checked": "checked"}),
-            "comment": forms.Textarea(attrs={"placeholder": "Comment"}),
+            'price': forms.Select(attrs={
+                'checked': 'checked'
+            }
+                                  ),
+            'time': forms.CheckboxSelectMultiple(
+                attrs={
+                },
+            ),
+            'comment': forms.Textarea(attrs={
+                'cols': 35,
+                'rows': 5,
+                'placeholder': 'Comment'
+            }),
         }
         error_messages = {
-            "time": {"required": _("Time preference:")},
-            "price": {"required": _("Pricing preference:")},
+            'time': {'required': _('Time preference:')},
+            'price': {'required': _('Pricing preference:')},
         }

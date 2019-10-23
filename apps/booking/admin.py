@@ -1,6 +1,5 @@
 from django.contrib import admin
 from .models import Book
-from users.models import User
 
 
 class BookAdmin(admin.ModelAdmin):
@@ -8,14 +7,14 @@ class BookAdmin(admin.ModelAdmin):
         "event",
         "user",
         "price",
-        "time",
+        "get_times",
         "status",
         "note",
         "booked_at",
     ]
 
     list_filter = ["event", "user", "status"]
-    seach_fields = ["event", "user", "note"]
+    search_fields = ["event", "user", "note"]
     save_as = True
 
 
