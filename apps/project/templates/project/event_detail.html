@@ -176,7 +176,10 @@
 <div class="popup" role="alert">
   <div class="popup-container">
     <a href="#0" class="popup-close img-replace">Close</a>
+    <div class ="center-text">
     <h1>Booking</h1>
+    </div>
+    <div class="popup-form text-left">
     <form method="POST">{% csrf_token %}
         {% if form.errors.non_field_errors %}
         {{ form.errors.non_field_errors }}
@@ -198,6 +201,7 @@
             <p><input value="Submit" type="submit"></p>
         </form>
     </form>
+    </div>
   </div>
 </div>
 {% include 'footer.html' %}
