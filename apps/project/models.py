@@ -75,10 +75,10 @@ class TimeOption(models.Model):
     def __str__(self):
         return "%s: %s/%s - %s/%s" % (
             self.name,
-            self.open_starttime.strftime("%H:%m"),
-            self.class_starttime.strftime("%H:%m"),
-            self.open_endtime.strftime("%H:%m"),
-            self.class_endtime.strftime("%H:%m")
+            self.open_starttime.strftime("%H:%M"),
+            self.class_starttime.strftime("%H:%M"),
+            self.open_endtime.strftime("%H:%M"),
+            self.class_endtime.strftime("%H:%M")
         )
 
 
