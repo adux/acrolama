@@ -58,7 +58,7 @@ class Project(models.Model):
 
 
 class TimeOption(models.Model):
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=30)
     description = models.TextField(max_length=1000)
     regular_days = models.ForeignKey(
         Day, null=True, blank=True, on_delete=models.CASCADE
@@ -75,10 +75,10 @@ class TimeOption(models.Model):
     def __str__(self):
         return "%s: %s/%s - %s/%s" % (
             self.name,
-            self.open_starttime,
-            self.class_starttime,
-            self.open_endtime,
-            self.class_endtime
+            self.open_starttime.strftime("%H:%m"),
+            self.class_starttime.strftime("%H:%m"),
+            self.open_endtime.strftime("%H:%m"),
+            self.class_endtime.strftime("%H:%m")
         )
 
 
