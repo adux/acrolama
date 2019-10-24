@@ -73,7 +73,7 @@ class TimeOption(models.Model):
     open_endtime = models.TimeField(auto_now=False, auto_now_add=False)
 
     def __str__(self):
-        if self.class_starttime():
+        if self.class_starttime:
             return "%s: %s/%s - %s/%s" % (
                 self.name,
                 self.open_starttime.strftime("%H:%M"),
