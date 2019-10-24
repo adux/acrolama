@@ -84,8 +84,8 @@ class TimeOption(models.Model):
         else:
             return "%s: %s - %s" % (
                  self.name,
-                 self.class_starttime.strftime("%H:%M"),
-                 self.class_endtime.strftime("%H:%M"),
+                 self.open_starttime.strftime("%H:%M"),
+                 self.open_endtime.strftime("%H:%M"),
             )
 
 
