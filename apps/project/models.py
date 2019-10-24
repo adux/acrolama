@@ -73,19 +73,19 @@ class TimeOption(models.Model):
     open_endtime = models.TimeField(auto_now=False, auto_now_add=False)
 
     def __str__(self):
-        if self.class_starttime:
-            return "%s: %s/%s - %s/%s" % (
-                self.name,
-                self.open_starttime.strftime("%H:%M"),
-                self.class_startitme.strftime("%H:%M"),
-                self.open_endtime.strftime("%H:%M"),
+        # Classes will have regular days
+        if self.regular_days:
+            return "%s: %s - %s" % (
+                self.regular_days,
+                self.class_starttime.strftime("%H:%M"),
                 self.class_endtime.strftime("%H:%M")
             )
+        # Events or not regular Events should not have and Name is used
         else:
             return "%s: %s - %s" % (
                  self.name,
-                 self.open_starttime.strftime("%H:%M"),
-                 self.open_endtime.strftime("%H:%M"),
+                 self.class_starttime.strftime("%H:%M"),
+                 self.class_endtime.strftime("%H:%M"),
             )
 
 
