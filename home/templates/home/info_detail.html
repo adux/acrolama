@@ -2,7 +2,7 @@
 {% block content %}
 {% include 'snippets/nav.html' %}
 <div class="info">
-    <article id="info" class="section info">
+    <article>
         <div class="center-relative content-1170">
             <div class="entry-content">
                 <div class="content-wrap relative">
@@ -23,6 +23,7 @@
                     <div class="one text-left">
                             <h2>{{object.title}}</h2>
                             {{object.content|safe}}
+                            </br></br>
                             <a class="button" onclick="goBack()">Go Back</a>
                             <script>
                             function goBack() {
