@@ -13,8 +13,16 @@ class BookAdmin(admin.ModelAdmin):
         "booked_at",
     ]
 
-    list_filter = ["event", "user", "status"]
-    search_fields = ["event", "user", "note"]
+    list_filter = ["event", "event__level", "status"]
+
+    search_fields = [
+        "event__title",
+        "user__email",
+        "user__last_name",
+        "user__first_name",
+        "note",
+        "status"]
+
     save_as = True
 
 
