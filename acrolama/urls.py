@@ -6,12 +6,12 @@ from django.contrib import admin
 from home.views import (
     HomeFormView,
     faqview,
-    # accountingview,
     ClassListView,
     InfoDetailView,
     EventListView,
 )
 from project.views import EventDetail
+from booking.views import ControlListView
 
 urlpatterns = [
     # Users Registration
@@ -26,7 +26,7 @@ urlpatterns = [
     path("faq/", faqview),
     # Admin stuff
     url(settings.ADMIN_URL, admin.site.urls),
-    # url(r"^accounting/$", accountingview, name="accounting"),
+    path("control/", ControlListView.as_view(), name="control"),
     path("todo/", include("todo.urls", namespace="todo")),
 ]
 
