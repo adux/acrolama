@@ -69,7 +69,7 @@ class HomeFormView(MultiFormsView):
 # faq.html
 def faqview(request):
     qs_faq = Faq.objects.all()
-    template_name = "faq.html"
+    template_name = "home/faq.html"
     context = {"faq": qs_faq}
     return render(request, template_name, context)
 

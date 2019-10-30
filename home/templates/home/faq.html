@@ -1,4 +1,6 @@
-{% extends 'base.html' %}{% load static %}{% block content %}{% include 'snippets/nav.html' %}
+{% extends 'base.html' %}i
+{% block head_title %}{{block.super}}FAQ{% endblock%}
+{% load static %}{% block content %}{% include 'snippets/nav.html' %}
 <!-- Service -->
 <div id="faq" class="section faq">
     <div class="block content-1170 center-relative">
@@ -22,15 +24,15 @@
                             <div class="faq-holder ">
                                 <img src="{% static "home/demo-images/icon_01.png" %}" alt="Square Icon from Acrolama FAQ NO BULLSHIT">
                                 <div class="faq-content-holder">
-                                    <div class="faq-title">NO BULLSHIT</div>
-                                    <div class="faq-content">We will listen to you, and be honest in our replies, even if it means you won’t always like what we say.<br /></div>
+                                    <div class="faq-title">ROLLING PROJECT</div>
+                                    <div class="faq-content">We are constantly changing and improving Acrolama. It's our culture and understand that it's not for everyone. But we are here listening.</div>
                                 </div>
                             </div>
                             <div class="faq-holder ">
                                 <img src="{% static "home/demo-images/icon_02.png" %}" alt="Triangle Icon from Acrolama FAQ FUN ">
                                 <div class="faq-content-holder">
                                     <div class="faq-title">FUN</div>
-                                    <div class="faq-content">We like organize events that we would love to go too. And we like fun events, in the wide sense of it.<br /></div>
+                                    <div class="faq-content">We want to organize events that we would love to go too. And we like to have fun. Even when things can get a bit frustrating try to do them with fun.</div>
                                 </div>
                             </div>
                         </li>
@@ -39,7 +41,7 @@
                                 <img src="{% static "home/demo-images/icon_03.png" %}" alt="Circle Icon from Acrolama FAQ Honest">
                                 <div class="faq-content-holder">
                                     <div class="faq-title">HONEST</div>
-                                    <div class="faq-content">We will give you what we promise to give you. If we make mistakes, we will apologize and make good.<br /><br /></div>
+                                    <div class="faq-content">We will give you what we promise to give you. If we make mistakes, we will apologize and make them good.<br /><br /></div>
                                 </div>
                             </div>
                             <div class="faq-holder ">

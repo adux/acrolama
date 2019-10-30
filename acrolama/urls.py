@@ -23,7 +23,7 @@ urlpatterns = [
     path("events/<slug:slug>/", EventDetail.as_view(), name="event"),
     path("classes/<slug:slug>/", EventDetail.as_view(), name="class"),
     path("info/<slug:slug>/", InfoDetailView.as_view(), name="info"),
-    path("faq/", faqview),
+    path("faq/", faqview, name="faq"),
     # Admin stuff
     url(settings.ADMIN_URL, admin.site.urls),
     path("control/", ControlListView.as_view(), name="control"),
