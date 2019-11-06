@@ -14,18 +14,18 @@ class BookForm(forms.ModelForm):
                 self.fields['price'].queryset = PriceOption.objects.filter(
                     event__slug=slug
                 )
-                self.fields['time'].queryset = TimeOption.objects.filter(
+                self.fields['times'].queryset = TimeOption.objects.filter(
                     timelocation__event__slug=slug
                 )
-                self.fields['price'].empty_label = 'Select an option'
-                self.fields['time'].empty_label = None
+                self.fields['price'].empty_label = 'Select a Pricing Option'
+                self.fields['times'].empty_label = None
 
     class Meta:
         model = Book
-        fields = ('time', 'price', 'comment')
+        fields = ('times', 'price', 'comment')
         labels = {
             'price': _(''),
-            'time': _(''),
+            'times': _(''),
             'comment': _(''),
         }
         widgets = {
@@ -33,7 +33,7 @@ class BookForm(forms.ModelForm):
                 'checked': 'checked'
             }
                                   ),
-            'time': forms.CheckboxSelectMultiple(
+            'times': forms.CheckboxSelectMultiple(
                 attrs={
                 },
             ),
@@ -44,6 +44,6 @@ class BookForm(forms.ModelForm):
             }),
         }
         error_messages = {
-            'time': {'required': _('Time preference:')},
+            'times': {'required': _('Time preference:')},
             'price': {'required': _('Pricing preference:')},
         }

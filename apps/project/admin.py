@@ -3,7 +3,7 @@ from .models import (
     Day,
     Discipline,
     Event,
-    Exception,
+    Irregularity,
     TimeOption,
     TimeLocation,
     Level,
@@ -34,7 +34,7 @@ admin.site.register(Day)
 admin.site.register(Discipline)
 admin.site.register(Project)
 admin.site.register(Event, EventAdmin)
-admin.site.register(Exception)
+admin.site.register(Irregularity)
 admin.site.register(TimeOption)
 admin.site.register(PriceOption)
 admin.site.register(TimeLocation)

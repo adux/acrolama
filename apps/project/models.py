@@ -73,6 +73,7 @@ class TimeOption(models.Model):
     open_endtime = models.TimeField(auto_now=False, auto_now_add=False)
 
     def __str__(self):
+        # return "%s" % (self.name)
         # Classes will have regular days
         if self.regular_days:
             return "%s: %s - %s" % (
@@ -83,9 +84,9 @@ class TimeOption(models.Model):
         # Events or not regular Events should not have and Name is used
         else:
             return "%s: %s - %s" % (
-                 self.name,
-                 self.open_starttime.strftime("%H:%M"),
-                 self.open_endtime.strftime("%H:%M"),
+                self.name,
+                self.open_starttime.strftime("%H:%M"),
+                self.open_endtime.strftime("%H:%M"),
             )
 
 
@@ -109,10 +110,13 @@ class TimeLocation(models.Model):
         return " vs ".join(p.name for p in self.time_options.all())
 
 
-class Exception(models.Model):
+class Irregularity(models.Model):
     category = models.CharField(max_length=15, choices=EXCEPTIONCATEGORY)
     description = models.TextField(max_length=2000)
     time_location = models.ManyToManyField(TimeLocation)
+
+    class Meta:
+        verbose_name_plural = "Irregularities"
 
     def __str__(self):
         return "%s, %s" % (self.description, self.category)
@@ -151,6 +155,9 @@ class Policy(models.Model):
     name = models.CharField(max_length=120)
     description = models.TextField(max_length=2000)
 
+    class Meta:
+        verbose_name_plural = "Policies"
+
     def __str__(self):
         return self.name
 
@@ -168,7 +175,7 @@ class Event(models.Model):
     )
     description = models.TextField(max_length=3000)
     time_locations = models.ManyToManyField(TimeLocation)
-    exceptions = models.ManyToManyField(Exception, blank=True)
+    irregularities = models.ManyToManyField(Irregularity, blank=True)
     price_options = models.ManyToManyField(PriceOption)
     policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
     max_participants = models.CharField(max_length=5, null=True, blank=True)

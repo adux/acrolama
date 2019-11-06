@@ -1,16 +1,11 @@
-from django.shortcuts import render
-from django import forms
-from django.http import HttpResponseForbidden
 from django.urls import reverse
-from django.utils import timezone
 from django.views import View
 from django.views.generic import DetailView, FormView
 from django.views.generic.detail import SingleObjectMixin
 
 from django.core.mail import send_mail
-from django.db import connection
 
-from project.models import Event, TimeOption, PriceOption, Exception
+from project.models import Event, TimeOption, PriceOption, Irregularity
 from booking.forms import BookForm
 from users.models import User
 
@@ -31,7 +26,7 @@ class EventDisplay(DetailView):
         context["teacher"] = User.objects.filter(
             eventteacher__slug=self.object.slug
         )
-        context["exception"] = Exception.objects.filter(
+        context["exception"] = Irregularity.objects.filter(
             event__slug=self.object.slug
         )
         return context

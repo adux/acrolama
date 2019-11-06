@@ -1,0 +1,38 @@
+{% extends "booking/base_bs.html" %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="jumbotron">
+  <div class="container">
+    <h1 class="display-3">Herd</h1>
+    <h4 class="display-4">The lamas control center</h4>
+    <p>This should be seen by administrators of Acrolama only</p>
+    <p><a class="btn btn-primary btn-lg" href="{% url 'home' %}" role="button">Back to Acrolama.com &raquo;</a></p>
+  </div>
+</div>
+
+<div class="container">
+<!-- Example row of columns -->
+  <div class="row">
+    <div class="col-md-4">
+      <h2>Booking Control</h2>
+      <p>This is the Control for Booking Based on Flyers/Base and so on.</p>
+      <p>Access only for Admin</p>
+      <p><a class="btn btn-secondary" href="{% url 'control' %}" role="button">View &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+      <h2>Teacher Control</h2>
+      <p>This is the Control for Booking Based on Flyers/Base and so on.</p>
+      <p>Teachers only see their Class</p>
+      <p><a class="btn btn-secondary" href="{% url 'teacher' %}" role="button">View &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+      <h2>Assitence Control</h2>
+      <p>As Teacher Control but as overview of Admin</p>
+      <p>Only Admins</p>
+      <p><a class="btn btn-secondary" href="{% url 'control' %}" role="button">View &raquo;</a></p>
+    </div>
+  </div>
+
+    <hr>
+</div> <!-- /container -->
+{% endblock %}

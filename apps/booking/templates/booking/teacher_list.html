@@ -1,25 +1,23 @@
 {% extends "booking/base_bs.html" %}
 {% load widget_tweaks %}
 {% block content %}
-<h4></h4>
+<h4>Control</h4>
 <table class="table table-bordered" id="theTable">
         <thead>
             <th>Date Booking</th>
             <th>Event</th>
-            <th>Time Option</th>
-            <th>Price Option</th>
-            <th>Status</th>
+            <th>Time</th>
             <th>User</th>
+            <th>Status</th>
         </thead>
         <tbody>
             {% for obj in list %}
             <tr>
                     <td>{{obj.booked_at}}</td>
                     <td>{{obj.event}}</td>
-                    <td>{% for obj in obj.times.all %}{{obj}}, {% endfor %}</td>
-                    <td>{{obj.price}}</td>
-                    <td>{{obj.get_status_display}}</td>
+                    <td>{{obj.time}}</td>
                     <td>{{obj.user}}</td>
+                    <td>{{obj.get_display.status}}</td>
             </tr>
             {% endfor%}
         </tbody>
