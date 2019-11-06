@@ -66,7 +66,6 @@ class HomeFormView(MultiFormsView):
         return HttpResponseRedirect(self.get_success_url(form_name))
 
 
-# faq.html
 def faqview(request):
     qs_faq = Faq.objects.all()
     template_name = "home/faq.html"
@@ -74,7 +73,6 @@ def faqview(request):
     return render(request, template_name, context)
 
 
-# For the info pages
 class InfoDetailView(DetailView):
     model = Info
     context_object_name = "info"

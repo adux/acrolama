@@ -11,7 +11,7 @@ from home.views import (
     EventListView,
 )
 from project.views import EventDetail
-from booking.views import ControlListView
+from booking.views import ControlListView, TeacherListView, herdview
 
 urlpatterns = [
     # Users Registration
@@ -26,7 +26,9 @@ urlpatterns = [
     path("faq/", faqview, name="faq"),
     # Admin stuff
     url(settings.ADMIN_URL, admin.site.urls),
-    path("control/", ControlListView.as_view(), name="control"),
+    path("herd/", herdview, name="herd"),
+    path("herd/control", ControlListView.as_view(), name="control"),
+    path("herd/teacher/", TeacherListView.as_view(), name="teacher"),
     path("todo/", include("todo.urls", namespace="todo")),
 ]
 
