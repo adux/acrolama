@@ -29,6 +29,7 @@ django-annoying==0.10.4
 django-widget-tweaks==1.4.2
 django-tinycontent
 django-autoslug
+django-filter==2.2.0
 
 -- AWZ
 # TODO: Do i need this. boto==2.48.0

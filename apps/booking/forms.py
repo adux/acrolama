@@ -4,6 +4,12 @@ from booking.models import Book
 from project.models import PriceOption, TimeOption
 
 
+class UpdateForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields = ('user', 'event', 'status')
+
+
 class BookForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

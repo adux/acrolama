@@ -1,43 +1,99 @@
-# from django.contrib.auth.decorators import login_required, user_passes_test
-# from django.utils.decorators import method_decorator
-from django.shortcuts import render
-from django.views.generic import ListView
+from django.views.generic import (
+    TemplateView,
+    UpdateView,
+    ListView,
+)
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+    UserPassesTestMixin,
+)
 
 from .models import Book
-
-# TODO: add to utils
+from .filters import BookFilter
+from .forms import UpdateForm
+from .utils import build_url
 
 
 def staff_check(user):
     return user.is_staff
 
 
-# @method_decorator(login_required, name='dispatch')
-# @user_passes_test(staff_check)
-class ControlListView(ListView):
+def teacher_check(user):
+    return user.is_teacher
+
+
+class ControlListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
     model = Book
     template_name = "booking/control_list.html"
+    ordering = ['event']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["list"] = (
-            Book.objects.order_by("event")
+        bookings = Book.objects.all()
+        context["book_list"] = (
+            bookings.order_by("event")
+        )
+        context["book_filter"] = (
+            BookFilter(self.request.GET, queryset=self.get_queryset())
+        )
+        context["filter"] = (
+            self.request.GET
         )
         return context
 
+    def test_func(self):
+        return staff_check(self.request.user)
 
-class TeacherListView(ListView):
+
+class ControlUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
+    model = Book
+    template_name = "booking/control_update.html"
+    form_class = UpdateForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        bookings = Book.objects.all()
+        context["book_list"] = (
+            bookings.order_by("event")
+        )
+        context["book_filter"] = (
+            BookFilter(self.request.GET, queryset=self.get_queryset())
+        )
+        return context
+
+    def get_success_url(self, **kwargs):
+        user = self.request.GET.get('user', '')
+        event = self.request.GET.get('event', '')
+        status = self.request.GET.get('status', '')
+        pk = self.object.id
+        url = build_url(
+            'control_update',
+            get={'user': user, 'event': event, 'status': status},
+            pk={'pk': pk}
+        )
+        return url
+
+    def test_func(self):
+        return staff_check(self.request.user)
+
+
+class TeacherListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
     model = Book
     template_name = "booking/teacher_list.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["list"] = (
+        context["event_list"] = (
             Book.objects.order_by("event")
         )
         return context
 
+    def test_func(self):
+        return teacher_check(self.request.user)
 
-def herdview(request):
+
+class HerdView(UserPassesTestMixin, LoginRequiredMixin, TemplateView):
     template_name = "booking/herd.html"
-    return render(request, template_name)
+
+    def test_func(self):
+        return staff_check(self.request.user)

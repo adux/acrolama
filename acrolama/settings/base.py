@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',  # allauth
     'django.contrib.staticfiles',  # django debuger uses this
     'django.contrib.sites',  # allauth
-    # Added
+    # Utils
+    'django_filters',
     'storages',
     'widget_tweaks',
     'tinycontent',
@@ -143,7 +144,8 @@ USE_TZ = True
 # Todo-specific settings
 INSTALLED_APPS += ["todo"]
 # Restrict access to ALL todo lists/views to `is_staff` users.
-# If False or unset, all users can see all views (but more granular permissions are still enforced
+# If False or unset, all users can see all views 
+# (but more granular permissions are still enforced
 # within views, such as requiring staff for adding and deleting lists).
 TODO_STAFF_ONLY = True
 
