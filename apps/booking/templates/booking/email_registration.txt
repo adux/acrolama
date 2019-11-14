@@ -1,0 +1,30 @@
+Hoi {{user.first_name}}
+{% load tinycontent_tags %}
+Thanks for registering for: {{event}}
+
+An entire operation has begun. A herd of lamas is inspecting carefully your registration.
+No worries, you're in good hands.
+
+We'll get back to you as soon as possible.
+
+Tip: If you are nervous about the results and can't sleep: count lamas, it helps.
+
+Last but not least, get the latest news in our Whatsapp Group:
+{% tinycontent_simple 'email_whatsapp' %}
+Or visit the FAQ if you have questions: https://acrolama.com/faq its working now.
+
+Hope to see you soon!
+Big Hug
+The Lamas
+
+
+---
+Möchtest du fliegen wie ein Lama? Wir haben verschiedene Acroyoga
+Events! Check out: www.acrolama.com
+
+Acrolmaa KLG
+Tramstrasse 65, Oerlikon, ZH 8050
+View Class Policy[1] | Unsubscribe[2]
+
+[1]: https://acrolama.com/info/acrolama-policy/
+[2]: https://acrolama.com/accounts/

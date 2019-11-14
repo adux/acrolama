@@ -1,9 +1,12 @@
+from django.conf import settings
+
 from django.urls import reverse
 from django.views import View
 from django.views.generic import DetailView, FormView
 from django.views.generic.detail import SingleObjectMixin
 
 from django.core.mail import send_mail
+from django.template.loader import render_to_string
 
 from project.models import Event, TimeOption, PriceOption, Irregularity
 from booking.forms import BookForm
@@ -47,20 +50,30 @@ class EventInterest(SingleObjectMixin, FormView):
             return self.form_invalid(form, user)
 
     def form_valid(self, form, user):
+        # TODO: I think there are some optimisations to be done here. Args
+        # don't seem to right.
         instance = form.save(commit=False)
         instance.event = Event.objects.get(slug=self.object.slug)
         instance.user = user
-        subject = "Acrolama - Confirmation - " + str(instance.event)
-        message = (
-            "Hoi "
-            + instance.user.first_name
-            + "\r\n\r\nThanks for registering for our Class: "
-            + str(instance.event)
-            + "!\r\n\r\nLamas are little rebels, unlike monkeys, we're bad at routine jobs. Fly dope tho...\r\n\r\nAnyway, in the next 72 hours you will receive an email concerning your registration status. In the meantime maybe take a look at our Instagram: https://instagram.com/acrolama or visit the FAQ if you have questions: https://acrolama.com/faq .\r\n\r\n\r\nHope to see you soon!\r\n\r\nBig Hug\r\nThe Lamas"
-        )
+        subject = "Acrolama - Registration - " + str(instance.event)
         sender = "notmonkeys@acrolama.com"
         to = [instance.user.email, "acrolama@acrolama.com"]
-        send_mail(subject, message, sender, to)
+        p = {
+            "event": instance.event,
+            "user": instance.user,
+        }
+
+        msg_plain = render_to_string(
+            settings.BASE_DIR
+            + "/apps/booking/templates/booking/email_registration.txt",
+            p,
+        )
+        msg_html = render_to_string(
+            settings.BASE_DIR
+            + "/apps/booking/templates/booking/email_registration.html",
+            p,
+        )
+        send_mail(subject, msg_plain, sender, to, html_message=msg_html)
         instance.save()
         form.save_m2m()
         return super().form_valid(form)
