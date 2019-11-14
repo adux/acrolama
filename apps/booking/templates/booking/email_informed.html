@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Confirmation email</title>
+  </head>
+  <body>
+    <p>Hoi {{user.first_name}}</p>
+    </br></br>
+    <p>The herd of lama informed us your confirmed for the following event:
+    {{event}}  {{event.event_startdate|date:'d M.'}}{% if event.event_startdate != event.event_enddate %}- {{ event.event_enddate|date:'d M. y'}}{% endif %}
+  {% if event.category == 'fas fa-cogs' %}Event details: https://www.acrolama.com/classes/{{event.slug}}/{% else %}Details: https://www.acrolama.com/events/{{event.slug}}/{% endif %}</p>
+    </br></br>
+    <h4>Please let us know if there are any changes regarding your participation.</h4>
+
+    <p>Booking details:
+    {% if event.category == 'fas fa-cogs' %}Regular{% if times %}{% with count=times.count %} day{{ count|pluralize }}:{% endwith %}{% for d in times.all %} ·{{d}}{% endfor %}{% endif %}{% endif %}
+    Preis: {{price}}
+    {% if irregularities %}{% with count=irregularities.count %}Please note the event has the following exception{{ count|pluralize }}:{% endwith %}{% for obj in irregularities %} ·{{obj.description}}{% endfor %}{% endif %}</p>
+
+    <hr>
+    <p>Is there are a day you can't come?
+  Find a answear to this and other questions in our <a href="https://acrolama.com/faq/" target="_blank">FAQ</a>
+
+  Find our payment methods and abos at: <a href="https://acrolama.com/info/prices/" target="_blank">HERE</a>
+    </br></br>
+    Bank Transfer:
+    Acrolama KLG
+    Tramstrasse 65, 8050 Zürich
+    IBAN: CH29 0022 5225 1202 6601 B
+    BIC: UBSWCHZH80A
+
+    Twint: +41764838510
+
+    Thanks a lot!
+    Big hug
+    Adrian & Danica
+    Die Lamas ;-)
+    </p>
+
+  ---
+  Möchtest du fliegen wie ein Lama? Wir haben verschiedene Acroyoga
+  Events! Check out: www.acrolama.com
+
+  Acrolmaa KLG
+  Tramstrasse 65, Oerlikon, ZH 8050
+  View Class Policy[1] | Unsubscribe[2]
+
+  [1]: https://acrolama.com/info/acrolama-policy/
+  [2]: https://acrolama.com
+  </body>
+</html>

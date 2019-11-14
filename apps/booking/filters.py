@@ -1,22 +1,23 @@
+from django import forms
+
 import django_filters
 
 from booking.models import Book
+from project.models import TimeOption
 
 
 class BookFilter(django_filters.FilterSet):
     year_joined = django_filters.NumberFilter(
-        field_name='booked_at',
-        lookup_expr='year'
+        field_name="booked_at", lookup_expr="year"
     )
     month_joined = django_filters.NumberFilter(
-        field_name='booked_at',
-        lookup_expr='month'
+        field_name="booked_at", lookup_expr="month"
+    )
+
+    times = django_filters.ModelMultipleChoiceFilter(
+        queryset=TimeOption.objects.all(), widget=forms.CheckboxSelectMultiple
     )
 
     class Meta:
         model = Book
-        fields = {
-            'user',
-            'event',  # : ['contains'],
-            'status',
-        }
+        fields = {"user", "event", "status", "times"}  # : ['contains'],

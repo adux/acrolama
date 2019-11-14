@@ -9,26 +9,21 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('booking', '0002_auto_20190826_1105'),
+        ("booking", "0002_auto_20190826_1105"),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='book',
-            name='email',
-        ),
-        migrations.RemoveField(
-            model_name='book',
-            name='name',
-        ),
-        migrations.RemoveField(
-            model_name='book',
-            name='phone',
-        ),
+        migrations.RemoveField(model_name="book", name="email"),
+        migrations.RemoveField(model_name="book", name="name"),
+        migrations.RemoveField(model_name="book", name="phone"),
         migrations.AddField(
-            model_name='book',
-            name='user',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="book",
+            name="user",
+            field=models.ForeignKey(
+                default=1,
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+            ),
             preserve_default=False,
         ),
     ]

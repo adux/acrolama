@@ -8,25 +8,30 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-        ('booking', '0001_initial'),
-        ('project', '0001_initial'),
-    ]
+    dependencies = [("booking", "0001_initial"), ("project", "0001_initial")]
 
     operations = [
         migrations.AddField(
-            model_name='book',
-            name='event',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='project.Event'),
+            model_name="book",
+            name="event",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="project.Event"
+            ),
         ),
         migrations.AddField(
-            model_name='book',
-            name='price',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='project.PriceOption'),
+            model_name="book",
+            name="price",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="project.PriceOption",
+            ),
         ),
         migrations.AddField(
-            model_name='book',
-            name='time',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='project.TimeOption'),
+            model_name="book",
+            name="time",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="project.TimeOption",
+            ),
         ),
     ]

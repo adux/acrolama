@@ -21,7 +21,8 @@ class BookAdmin(admin.ModelAdmin):
         "user__last_name",
         "user__first_name",
         "note",
-        "status"]
+        "status",
+    ]
 
     save_as = True
 

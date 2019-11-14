@@ -5,14 +5,25 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('booking', '0004_auto_20191023_1528'),
-    ]
+    dependencies = [("booking", "0004_auto_20191023_1528")]
 
     operations = [
         migrations.AlterField(
-            model_name='book',
-            name='status',
-            field=models.CharField(blank=True, choices=[('PE', 'Pending'), ('WL', 'Waiting List'), ('IN', 'Informed'), ('PA', 'Participant'), ('CA', 'Canceled'), ('SW', 'Switched')], default='PE', max_length=15, null=True),
-        ),
+            model_name="book",
+            name="status",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("PE", "Pending"),
+                    ("WL", "Waiting List"),
+                    ("IN", "Informed"),
+                    ("PA", "Participant"),
+                    ("CA", "Canceled"),
+                    ("SW", "Switched"),
+                ],
+                default="PE",
+                max_length=15,
+                null=True,
+            ),
+        )
     ]

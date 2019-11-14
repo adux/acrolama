@@ -6,18 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('project', '0007_auto_20191021_1709'),
-        ('booking', '0003_auto_20190827_0837'),
+        ("project", "0007_auto_20191021_1709"),
+        ("booking", "0003_auto_20190827_0837"),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='book',
-            name='time',
-        ),
+        migrations.RemoveField(model_name="book", name="time"),
         migrations.AddField(
-            model_name='book',
-            name='time',
-            field=models.ManyToManyField(to='project.TimeOption'),
+            model_name="book",
+            name="time",
+            field=models.ManyToManyField(to="project.TimeOption"),
         ),
     ]
