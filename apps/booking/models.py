@@ -48,40 +48,41 @@ class Book(models.Model):
 
 
 def update_pre(sender, instance, **kwargs):
-    pre_save_object = sender.objects.get(pk=instance.pk)
+    if instance.pk:
+        pre_save_object = sender.objects.get(pk=instance.pk)
 
     # Taken from
     # https://stackoverflow.com/questions/2809547/creating-email-templates-with-django
     # Theres another Method with Multi wich helps for headers if needed
 
-    if (pre_save_object.status == "PE") and (instance.status == "IN"):
-        subject = "Acrolama - Confirmation - " + str(instance.event)
-        sender = "notmonkeys@acrolama.com"
-        to = [instance.user.email, "acrolama@acrolama.com"]
-        irregularities = Irregularity.objects.filter(
-            event__slug=instance.event.slug
-        )
-        print(instance.times)
-        p = {
-            "event": instance.event,
-            "user": instance.user,
-            "price": instance.price,
-            "times": instance.times.all(),
-            "irregularities": irregularities,
-        }
+        if (pre_save_object.status == "PE") and (instance.status == "IN"):
+            subject = "Acrolama - Confirmation - " + str(instance.event)
+            sender = "notmonkeys@acrolama.com"
+            to = [instance.user.email, "acrolama@acrolama.com"]
+            irregularities = Irregularity.objects.filter(
+                event__slug=instance.event.slug
+            )
+            print(instance.times)
+            p = {
+                "event": instance.event,
+                "user": instance.user,
+                "price": instance.price,
+                "times": instance.times.all(),
+                "irregularities": irregularities,
+            }
 
-        msg_plain = render_to_string(
-            settings.BASE_DIR
-            + "/apps/booking/templates/booking/email_informed.txt",
-            p,
-        )
-        msg_html = render_to_string(
-            settings.BASE_DIR
-            + "/apps/booking/templates/booking/email_informed.html",
-            p,
-        )
+            msg_plain = render_to_string(
+                settings.BASE_DIR
+                + "/apps/booking/templates/booking/email_informed.txt",
+                p,
+            )
+            msg_html = render_to_string(
+                settings.BASE_DIR
+                + "/apps/booking/templates/booking/email_informed.html",
+                p,
+            )
 
-        send_mail(subject, msg_plain, sender, to, html_message=msg_html)
+            send_mail(subject, msg_plain, sender, to, html_message=msg_html)
 
 
 pre_save.connect(update_pre, sender=Book)
