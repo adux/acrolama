@@ -1,6 +1,6 @@
 Hoi {{user.first_name}}
-
-The herd of lama informed us your confirmed for the following event:
+{% load tinycontent_tags %}
+The herd of lama informed us you are confirmed for the following event:
 {{event}}  {{event.event_startdate|date:'d M.'}}{% if event.event_startdate != event.event_enddate %}- {{ event.event_enddate|date:'d M. y'}}{% endif %}
 {% if event.category == 'fas fa-cogs' %}Event details: https://www.acrolama.com/classes/{{event.slug}}/{% else %}Details: https://www.acrolama.com/events/{{event.slug}}/{% endif %}
 
@@ -24,7 +24,10 @@ BIC: UBSWCHZH80A
 
 Twint: +41764838510
 
-Thanks a lot!
+Last but not least, get the latest news in our Whatsapp Group:
+{% tinycontent_simple 'footer_whatsapp' %}
+
+See you soon!
 Big hug
 Adrian & Danica
 Die Lamas ;-)
@@ -38,4 +41,4 @@ Tramstrasse 65, Oerlikon, ZH 8050
 View Class Policy[1] | Unsubscribe[2]
 
 [1]: https://acrolama.com/info/acrolama-policy/
-[2]: https://acrolama.com
+[2]: https://acrolama.com/accounts/
