@@ -7,10 +7,9 @@ The herd of lama informed us you are confirmed for the following event:
 Please let us know if there are any changes regarding your participation.
 
 Booking details:
-{% if event.category == 'fas fa-cogs' %}Regular{% if times %}{% with count=times.count %} day{{ count|pluralize }}:{% endwith %}{% for d in times.all %} ·{{d}}{% endfor %}{% endif %}{% endif %}
+{% if event.category == 'fas fa-cogs' %}Regular{% if times %}{% with count=times.count %} day{{ count|pluralize }}:{% endwith %}{% for d in times.all %} · {{d}}{% endfor %}{% endif %}{% endif %}
 Preis: {{price}}
-{% if irregularities %}{% with count=irregularities.count %}Please note the event has the following exception{{ count|pluralize }}:{% endwith %}{% for obj in irregularities %} ·{{obj.description}}{% endfor %}{% endif %}
-
+{% if irregularities %}{% with count=irregularities.count %}Please note the event has the following exception{{ count|pluralize }}:{% endwith %}{% for obj in irregularities %} ·{{obj.description}}{% endfor %}\n\r{% endif %}
 Is there are a day you can't come?
 Find a answear to this and other questions in our FAQ https://acrolama.ch/faq/
 
@@ -25,7 +24,7 @@ BIC: UBSWCHZH80A
 Twint: +41764838510
 
 Last but not least, get the latest news in our Whatsapp Group:
-{% tinycontent_simple 'footer_whatsapp' %}
+{% tinycontent_simple 'email_whatsapp' %}
 
 See you soon!
 Big hug

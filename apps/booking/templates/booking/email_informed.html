@@ -49,8 +49,8 @@
                             <tr>
                               <td style="padding: 25px 0 0 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;">
                                 <h4>Booking details: </h4>
-                                <p>{% if event.category == 'fas fa-cogs' %}Regular{% if times %}{% with count=times.count %} day{{ count|pluralize }}:{% endwith %}{% for d in times.all %} ·{{d}}{% endfor %}{% endif %}{% endif %}</br>
-                                Preis: {{price}}</br>
+                                <p>{% if event.category == 'fas fa-cogs' %}<b>Regular{% if times %}{% with count=times.count %} day{{ count|pluralize }}</b>:{% endwith %}{% for d in times.all %}</br>· {{d}}{% endfor %}{% endif %}{% endif %}</br></br>
+                                <b>Preis</b>: {{price}}</br>
                                 {% if irregularities %}{% with count=irregularities.count %}Please note the event has the following exception{{ count|pluralize }}:{% endwith %}{% for obj in irregularities %} ·{{obj.description}}{% endfor %}{% endif %}</p>
                               </td>
                             </tr>
@@ -69,13 +69,13 @@
                             <tr>
                               <td style="padding: 25px 0 0 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;">
                                 <h4>Payment methods: </h4>
-                                <p>Bank Transfer:</br>
+                                <p><b>Bank Transfer</b>:</br>
                                   Acrolama KLG</br>
                                   Tramstrasse 65, 8050 Zürich</br>
                                   IBAN: CH29 0022 5225 1202 6601 B</br>
                                   BIC: UBSWCHZH80A </br>
                                   </br>
-                                  Twint: +41764838510</p>
+                                  <b>Twint</b>: +41764838510</p>
                                 <p>Find out more about our abos <a href="https://acrolama.com/info/prices/" target="_blank">www.acrolama/info/prices/</a></p>
                               </td>
                             </tr>
@@ -87,6 +87,7 @@
                 </tr>
                 <tr>
                   <td style="padding: 5px 0 5px 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;">
+                    <p>Don't forget to check out our social media links to get latest news. Links below.</p>
                     <p>See you soon!</br>
                     Big hug</br>
                     Adrian + Danica</br>
@@ -122,7 +123,7 @@
                         </td>
                         <td style="font-size: 0; line-height: 0;" width="20">&nbsp;</td>
                         <td style="font-family: Arial, sans-serif; font-size: 12px; font-weight: bold;">
-                          <a href="{% tinycontent_simple 'footer_whatsapp' %}" target="_blank">
+                          <a href="{% tinycontent_simple 'email_whatsapp' %}" target="_blank">
                               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12.036 5.339c-3.635 0-6.591 2.956-6.593 6.589-.001 1.483.434 2.594 1.164 3.756l-.666 2.432 2.494-.654c1.117.663 2.184 1.061 3.595 1.061 3.632 0 6.591-2.956 6.592-6.59.003-3.641-2.942-6.593-6.586-6.594zm3.876 9.423c-.165.463-.957.885-1.337.942-.341.051-.773.072-1.248-.078-.288-.091-.657-.213-1.129-.417-1.987-.858-3.285-2.859-3.384-2.991-.099-.132-.809-1.074-.809-2.049 0-.975.512-1.454.693-1.653.182-.2.396-.25.528-.25l.38.007c.122.006.285-.046.446.34.165.397.561 1.372.611 1.471.049.099.083.215.016.347-.066.132-.099.215-.198.33l-.297.347c-.099.099-.202.206-.087.404.116.198.513.847 1.102 1.372.757.675 1.395.884 1.593.983.198.099.314.083.429-.05.116-.132.495-.578.627-.777s.264-.165.446-.099 1.156.545 1.354.645c.198.099.33.149.38.231.049.085.049.482-.116.945zm3.088-14.762h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-6.967 19.862c-1.327 0-2.634-.333-3.792-.965l-4.203 1.103 1.125-4.108c-.694-1.202-1.059-2.566-1.058-3.964.002-4.372 3.558-7.928 7.928-7.928 2.121.001 4.112.827 5.609 2.325s2.321 3.491 2.32 5.609c-.002 4.372-3.559 7.928-7.929 7.928z"/></svg>
                             </a>
                         </td>
