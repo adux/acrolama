@@ -27,10 +27,9 @@
                 <tr>
                   <td style="padding: 20px 0 30px 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;">
                     <p>Hoi {{user.first_name}}</p>
-                    <p>The herd of lama informed us you are confirmed for the following event:</br>
-                    {{event}}  {{event.event_startdate|date:'d M.'}}{% if event.event_startdate != event.event_enddate %}- {{ event.event_enddate|date:'d M. y'}}{% endif %}</p></br>
-                    {% if event.category == 'fas fa-cogs' %}Event details: https://www.acrolama.com/classes/{{event.slug}}/{% else %}Details: https://www.acrolama.com/events/{{event.slug}}/{% endif %}
-                    </br>
+                    <p>The herd of lama informed us you are confirmed for the following event:<br/>
+                    {{event}}  {{event.event_startdate|date:'d M.'}}{% if event.event_startdate != event.event_enddate %}- {{ event.event_enddate|date:'d M. y'}}{% endif %}</p>
+                    {% if event.category == 'fas fa-cogs' %}<a href="https://www.acrolama.com/classes/{{event.slug}}/" target="_blank">Class details</a>{% else %}<a href="https://www.acrolama.com/events/{{event.slug}}/" target="_blank">Event details</a>{% endif %}<br/>
                     <h4>Please let us know if there are any changes regarding your participation.</h4>
                     <p>Some questions might also be answeared in our <a href="https://acrolama.com/faq/" target="_blank">FAQ</a></p>
                   </td>
@@ -49,9 +48,9 @@
                             <tr>
                               <td style="padding: 25px 0 0 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;">
                                 <h4>Booking details: </h4>
-                                <p>{% if event.category == 'fas fa-cogs' %}<b>Regular{% if times %}{% with count=times.count %} day{{ count|pluralize }}</b>:{% endwith %}{% for d in times.all %}</br>· {{d}}{% endfor %}{% endif %}{% endif %}</br></br>
-                                <b>Preis</b>: {{price}}</br>
-                                {% if irregularities %}{% with count=irregularities.count %}Please note the event has the following exception{{ count|pluralize }}:{% endwith %}{% for obj in irregularities %} ·{{obj.description}}{% endfor %}{% endif %}</p>
+                                <p>{% if event.category == 'fas fa-cogs' %}<b>Regular{% if times %}{% with count=times.count %} day{{ count|pluralize }}</b>:{% endwith %}{% for d in times.all %}<br/>· {{d}}{% endfor %}{% endif %}{% endif %}<br/><br/>
+                                <b>Preis</b>:<br/> {{price}}<br/><br/>
+                                {% if irregularities %}{% with count=irregularities.count %}<b>Please note the event has the following exception{{ count|pluralize }}</b>:{% endwith %}{% for obj in irregularities %}<br/> ·{{obj.description}}{% endfor %}{% endif %}</p>
                               </td>
                             </tr>
                           </table>
@@ -69,12 +68,12 @@
                             <tr>
                               <td style="padding: 25px 0 0 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;">
                                 <h4>Payment methods: </h4>
-                                <p><b>Bank Transfer</b>:</br>
-                                  Acrolama KLG</br>
-                                  Tramstrasse 65, 8050 Zürich</br>
-                                  IBAN: CH29 0022 5225 1202 6601 B</br>
-                                  BIC: UBSWCHZH80A </br>
-                                  </br>
+                                <p><b>Bank Transfer</b>:<br/>
+                                  Acrolama KLG<br/>
+                                  Tramstrasse 65, 8050 Zürich<br/>
+                                  IBAN: CH29 0022 5225 1202 6601 B<br/>
+                                  BIC: UBSWCHZH80A <br/>
+                                  <br/>
                                   <b>Twint</b>: +41764838510</p>
                                 <p>Find out more about our abos <a href="https://acrolama.com/info/prices/" target="_blank">www.acrolama/info/prices/</a></p>
                               </td>
@@ -88,9 +87,9 @@
                 <tr>
                   <td style="padding: 5px 0 5px 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;">
                     <p>Don't forget to check out our social media links to get latest news. Links below.</p>
-                    <p>See you soon!</br>
-                    Big hug</br>
-                    Adrian + Danica</br>
+                    <p>See you soon!<br/>
+                    Big hug<br/>
+                    Adrian + Danica<br/>
                     Die Lamas ;-)</p>
                   </td>
                 </tr>
@@ -103,7 +102,7 @@
                 <tr>
                   <td style="color: #000; font-family: Arial, sans-serif; font-size: 14px;" width="75%">
                     ---
-                    <p>Möchtest du fliegen wie ein Lama? Wir haben verschiedene Acroyoga Events!</br> <a href="https://www.acrolama.com" target="_blank">wwww.acrolama.com</a></p>
+                    <p>Möchtest du fliegen wie ein Lama? Wir haben verschiedene Acroyoga Events!<br/> <a href="https://www.acrolama.com" target="_blank">wwww.acrolama.com</a></p>
                     <p>&reg; Acrolama KLG, Tramstrasse 65, Oerlikon, CH 8050<br/></p>
                     <a href="www.acrolama.com/unsuscribe" style="color: #ffffff;"><font color="#000">Unsubscribe</font></a> to this notifications.
                   </td>
