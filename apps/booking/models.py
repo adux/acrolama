@@ -62,6 +62,7 @@ def update_pre(sender, instance, **kwargs):
             irregularities = Irregularity.objects.filter(
                 event__slug=instance.event.slug
             )
+
             p = {
                 "event": instance.event,
                 "user": instance.user,

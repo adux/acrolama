@@ -1,3 +1,5 @@
+from django.contrib import messages
+
 from django.views.generic import TemplateView, UpdateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
@@ -62,6 +64,7 @@ class ControlUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
             # TODO im not sure this way of passing the pk is ideal :)
             pk={"pk": pk},
         )
+        messages.success(self.request, 'Update successful.')
         return url
 
     def test_func(self):

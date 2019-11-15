@@ -1,12 +1,12 @@
 from django.conf import settings
 
-from django.urls import reverse
 from django.views import View
 from django.views.generic import DetailView, FormView
 from django.views.generic.detail import SingleObjectMixin
 
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
+from django.contrib import messages
 
 from project.models import Event, TimeOption, PriceOption, Irregularity
 from booking.forms import BookForm
@@ -79,7 +79,8 @@ class EventInterest(SingleObjectMixin, FormView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse("home")
+        messages.success(self.request, 'Thank you for registering')
+        return self.request.path
 
 
 class EventDetail(View):
