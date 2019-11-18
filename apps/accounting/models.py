@@ -54,7 +54,7 @@ class Invoice(models.Model):
 
     def __str__(self):
         if self.booking:
-            return "%s - %s" % (self.id, self.booking)
+            return "%s - %s" % (self.id, self.book)
         else:
             return "%s - %s" % (self.id, self.partner)
 
