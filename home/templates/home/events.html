@@ -31,9 +31,9 @@
                                 <ul>
                                     <li>
                                         <a href="events/{{obj.slug}}">
-                                            {{ obj.event_startdate}} 
+                                            {{ obj.event_startdate}}
                                             {% if obj.event_enddate != obj.event_startdate %}
-                                            - {{ obj.event_enddate }} 
+                                            - {{ obj.event_enddate }}
                                             {% endif %}
                                             {% for to in obj.time_locations.all %}
                                             {% for rd in to.time_options.all %}

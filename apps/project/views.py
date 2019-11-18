@@ -54,6 +54,7 @@ class EventInterest(SingleObjectMixin, FormView):
         # don't seem to right.
         instance = form.save(commit=False)
         instance.event = Event.objects.get(slug=self.object.slug)
+        # TODO: can't i just use self.request.user ? TEST
         instance.user = user
         subject = "Acrolama - Registration - " + str(instance.event)
         sender = "notmonkeys@acrolama.com"

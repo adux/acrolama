@@ -28,6 +28,8 @@ LEVEL = [
     ("5", "Profesional"),
 ]
 
+CYCLE = [(i,i) for i in range(13)]
+
 DAYS = [
     ("0", "Monday"),
     ("1", "Tuesday"),
@@ -166,6 +168,8 @@ class Event(models.Model):
     # Event Info
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     category = models.CharField(max_length=50, choices=EVENTCATEGORY)
+    cycle = models.IntegerField(default=0, choices=CYCLE, blank=True, null=True)
+    # TODO: Make that title auto formats if cycle
     title = models.CharField(max_length=100)
     event_startdate = models.DateField(
         auto_now_add=False, auto_now=False, blank=True, null=True
@@ -206,6 +210,16 @@ class Event(models.Model):
     def __str__(self):
         return self.title
 
+
+def event_pre_save_title(sender, instance, *args, **kwargs):
+    if instance.category == "fas fa-cogs" and instance.cycle:
+        if instance.level.name == '2':
+            instance.title = "Cycle 0." + str(instance.cycle) + " - " + instance.title
+        elif instance.level == '3':
+            instance.title = "Cycle " + str(instance.cycle) + " - " + instance.title
+
+
+pre_save.connect(event_pre_save_title, sender=Event)
 
 def event_pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:

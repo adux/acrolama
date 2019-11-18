@@ -54,7 +54,7 @@ def update_pre(sender, instance, **kwargs):
     # Taken from
     # https://stackoverflow.com/questions/2809547/creating-email-templates-with-django
     # Theres another Method with Multi wich helps for headers if needed
-
+    # TODO: take this out of here :)
         if (pre_save_object.status == "PE") and (instance.status == "IN"):
             subject = "Acrolama - Confirmation - " + str(instance.event)
             sender = "notmonkeys@acrolama.com"

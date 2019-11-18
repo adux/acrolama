@@ -11,6 +11,13 @@ class UpdateForm(forms.ModelForm):
         widgets = {"times": forms.CheckboxSelectMultiple}
 
 
+class CreateForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields = ("user", "event", "times", "price")
+        widgets = {"times": forms.CheckboxSelectMultiple}
+
+
 class BookForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

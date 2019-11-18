@@ -33,7 +33,7 @@ class Partner(models.Model):
         max_length=15, choices=METHODE, null=True, blank=True
     )
     description_pay = models.TextField(max_length=15, null=True, blank=True)
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -53,7 +53,10 @@ class Invoice(models.Model):
     )
 
     def __str__(self):
-        return "%s - %s%s" % (self.id, self.booking, self.partner)
+        if self.booking:
+            return "%s - %s" % (self.id, self.booking)
+        else:
+            return "%s - %s" % (self.id, self.partner)
 
 
 class Payment(models.Model):
