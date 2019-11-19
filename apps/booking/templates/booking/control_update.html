@@ -33,13 +33,15 @@
             </div>
         </div>
         <hr>
-        <p> If Update status from Pending to Informed <strong>an automatic email will be sent.</strong></p>
+        <p> If update status from <u>Pending</u> to <u>Informed</u>: <strong>an automatic email will be sent</strong>.</p>
         <button type="submit" name="update" class="btn btn-danger">
-        <i class="fas fa-edit"></i> DANGER - Update </button>
-       <hr>
+            <i class="fas fa-edit"></i> DANGER - Update
+        </button>
+        <hr>
+        <p> If duplicate is a <u>Cycle</u>: the duplicate will get the <b>next cycle</b> with same level.</p>
         <button type="submit" name="create" class="btn btn-warning">
         <i class="fas fa-edit"></i> Duplicate
-       </button>
+        </button>
     </div>
 </form>
 <hr>
@@ -87,15 +89,15 @@
 </form>
 <hr>
 <table class="table table-bordered">
-    <thead>
+    <tr>
         <th>Booking</th>
         <th>Event</th>
         <th>Time Option</th>
         <th>Price Option</th>
         <th>Status</th>
         <th>Edit</th>
-    </thead>
-    <tbody>
+    </tr>
+    <tr>
         {% for obj in book_filter.qs %}
         <tr>
                 <td>n°{{obj.pk}} {{obj.user.first_name}} {{obj.user.last_name}} - {{obj.booked_at|date:'d M.'}}</td>
@@ -106,6 +108,6 @@
                 <td><a href="{% url 'control_update' obj.pk %}?event={{request.GET.event}}&user={{request.GET.user}}&status={{request.GET.status}}&times={{request.GET.times}}"><i class="fas fa-edit"></i></a>
         </tr>
         {% endfor%}
-    </tbody>
+    </tr>
 </table>
 {% endblock %}

@@ -19,6 +19,7 @@ class EventAdmin(admin.ModelAdmin):
         "title",
         "event_startdate",
         "event_enddate",
+        "cycle",
         "category",
         "level",
         "slug",
