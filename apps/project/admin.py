@@ -1,6 +1,5 @@
 from django.contrib import admin
 from .models import (
-    Day,
     Discipline,
     Event,
     Irregularity,
@@ -31,7 +30,6 @@ class EventAdmin(admin.ModelAdmin):
     save_as = True
 
 
-admin.site.register(Day)
 admin.site.register(Discipline)
 admin.site.register(Project)
 admin.site.register(Event, EventAdmin)

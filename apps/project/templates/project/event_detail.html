@@ -38,8 +38,8 @@
                                 - {{ object.event_enddate }}
                                 {% endif %}
                             </li>
-                                {% if object.exceptions %}
-                                {% with count=object.exceptions.count %}
+                                {% if object.irregularities %}
+                                {% with count=object.irregularities.count %}
                             <li>
                                 <strong>Exception{{ count|pluralize }}:</u></strong>
                             </li>
