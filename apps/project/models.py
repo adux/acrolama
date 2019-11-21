@@ -213,7 +213,7 @@ class Event(models.Model):
         if self.category == "fas fa-cogs" and self.cycle:
             if self.level.name == "2":
                 return "Cycle 0." + str(self.cycle) + " - " + self.title
-            elif self.level == "3":
+            elif self.level.name == "3":
                 return "Cycle " + str(self.cycle) + " - " + self.title
             else:
                 return self.title
