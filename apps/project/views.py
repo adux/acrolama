@@ -80,7 +80,7 @@ class EventInterest(SingleObjectMixin, FormView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        messages.success(self.request, 'Thank you for registering')
+        messages.success(self.request, "Thank you for registering")
         return self.request.path
 
 

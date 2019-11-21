@@ -10,71 +10,91 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('project', '0001_initial'),
-        ('address', '0001_initial'),
-        ('audiovisual', '0001_initial'),
+        ("project", "0001_initial"),
+        ("address", "0001_initial"),
+        ("audiovisual", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='project',
-            name='manager',
+            model_name="project",
+            name="manager",
             field=models.ManyToManyField(to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
-            model_name='location',
-            name='address',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='address.Address'),
+            model_name="location",
+            name="address",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="address.Address",
+            ),
         ),
         migrations.AddField(
-            model_name='location',
-            name='image',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='audiovisual.Image'),
+            model_name="location",
+            name="image",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="audiovisual.Image",
+            ),
         ),
         migrations.AddField(
-            model_name='exception',
-            name='time_location',
-            field=models.ManyToManyField(to='project.TimeLocation'),
+            model_name="exception",
+            name="time_location",
+            field=models.ManyToManyField(to="project.TimeLocation"),
         ),
         migrations.AddField(
-            model_name='event',
-            name='images',
-            field=models.ManyToManyField(to='audiovisual.Image'),
+            model_name="event",
+            name="images",
+            field=models.ManyToManyField(to="audiovisual.Image"),
         ),
         migrations.AddField(
-            model_name='event',
-            name='level',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='project.Level'),
+            model_name="event",
+            name="level",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="project.Level",
+            ),
         ),
         migrations.AddField(
-            model_name='event',
-            name='policy',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='project.Policy'),
+            model_name="event",
+            name="policy",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="project.Policy",
+            ),
         ),
         migrations.AddField(
-            model_name='event',
-            name='price_options',
-            field=models.ManyToManyField(to='project.PriceOption'),
+            model_name="event",
+            name="price_options",
+            field=models.ManyToManyField(to="project.PriceOption"),
         ),
         migrations.AddField(
-            model_name='event',
-            name='teacher',
-            field=models.ManyToManyField(related_name='eventteacher', to=settings.AUTH_USER_MODEL),
+            model_name="event",
+            name="teacher",
+            field=models.ManyToManyField(
+                related_name="eventteacher", to=settings.AUTH_USER_MODEL
+            ),
         ),
         migrations.AddField(
-            model_name='event',
-            name='team',
-            field=models.ManyToManyField(blank=True, related_name='eventteam', to=settings.AUTH_USER_MODEL),
+            model_name="event",
+            name="team",
+            field=models.ManyToManyField(
+                blank=True,
+                related_name="eventteam",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddField(
-            model_name='event',
-            name='time_locations',
-            field=models.ManyToManyField(to='project.TimeLocation'),
+            model_name="event",
+            name="time_locations",
+            field=models.ManyToManyField(to="project.TimeLocation"),
         ),
         migrations.AddField(
-            model_name='event',
-            name='videos',
-            field=models.ManyToManyField(blank=True, to='audiovisual.Video'),
+            model_name="event",
+            name="videos",
+            field=models.ManyToManyField(blank=True, to="audiovisual.Video"),
         ),
     ]

@@ -6,13 +6,32 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('project', '0011_auto_20191116_1233'),
+        ("project", "0011_auto_20191116_1233"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='event',
-            name='cycle',
-            field=models.IntegerField(blank=True, choices=[(0, 0), (1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6), (7, 7), (8, 8), (9, 9), (10, 10), (11, 11), (12, 12)], default=0, null=True),
+            model_name="event",
+            name="cycle",
+            field=models.IntegerField(
+                blank=True,
+                choices=[
+                    (0, 0),
+                    (1, 1),
+                    (2, 2),
+                    (3, 3),
+                    (4, 4),
+                    (5, 5),
+                    (6, 6),
+                    (7, 7),
+                    (8, 8),
+                    (9, 9),
+                    (10, 10),
+                    (11, 11),
+                    (12, 12),
+                ],
+                default=0,
+                null=True,
+            ),
         ),
     ]

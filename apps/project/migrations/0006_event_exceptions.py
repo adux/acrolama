@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('project', '0005_auto_20191021_1636'),
+        ("project", "0005_auto_20191021_1636"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='event',
-            name='exceptions',
-            field=models.ManyToManyField(to='project.Exception'),
+            model_name="event",
+            name="exceptions",
+            field=models.ManyToManyField(to="project.Exception"),
         ),
     ]
