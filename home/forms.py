@@ -63,4 +63,6 @@ class NewsForm(forms.ModelForm):
         model = NewsList
         fields = ("email",)
         labels = {"email": _("")}
-        widgets = {"email": forms.EmailInput(attrs={"placeholder": "Your Email"})}
+        widgets = {
+            "email": forms.EmailInput(attrs={"placeholder": "Your Email"})
+        }

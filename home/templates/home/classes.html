@@ -35,11 +35,19 @@
                                             {% if obj.event_enddate != obj.event_startdate %}
                                             - {{ obj.event_enddate }}
                                             {% endif %}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="cat-links">
+                                <ul>
+                                    <li>
+                                        <a href="classes/{{obj.slug}}">
                                             {% for to in obj.time_locations.all %}
                                                 {% for rd in to.time_options.all %}
                                                     {% ifchanged %}
                                                         {% if rd.regular_days != Null %}
-                                                            | {{ rd.regular_days|default_if_none:"" }}
+                                                        {{ rd.regular_days|default_if_none:"" }}'S {%if rd.regular_days.count == 1 %}·{% endif %}
                                                         {% endif %}
                                                     {% endifchanged%}
                                                 {% endfor %}

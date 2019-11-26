@@ -7,6 +7,7 @@ from django.utils.translation import ugettext as _
 # Static Content of Webpage
 # Start About Section
 
+
 class AboutImage(models.Model):
     image = models.ForeignKey("audiovisual.Image", on_delete=models.CASCADE)
     uploaded_at = models.DateTimeField(auto_now_add=True)

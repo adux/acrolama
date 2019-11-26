@@ -11,23 +11,30 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('home', '0001_initial'),
+        ("home", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='portfolio',
-            name='owner',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="portfolio",
+            name="owner",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddField(
-            model_name='infoimage',
-            name='general',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='home.Info'),
+            model_name="infoimage",
+            name="general",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="home.Info"
+            ),
         ),
         migrations.AddField(
-            model_name='aboutimage',
-            name='general',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='home.About'),
+            model_name="aboutimage",
+            name="general",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="home.About"
+            ),
         ),
     ]

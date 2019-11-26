@@ -36,7 +36,9 @@ class MultiFormMixin(ContextMixin):
         kwargs.update({"initial": self.get_initial(form_name)})
         kwargs.update({"prefix": self.get_prefix(form_name)})
         if self.request.method in ("POST", "PUT"):
-            kwargs.update({"data": self.request.POST, "files": self.request.FILES})
+            kwargs.update(
+                {"data": self.request.POST, "files": self.request.FILES}
+            )
         return kwargs
 
     def forms_valid(self, forms, form_name):

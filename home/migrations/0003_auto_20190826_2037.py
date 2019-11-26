@@ -9,48 +9,62 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('audiovisual', '0001_initial'),
+        ("audiovisual", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('home', '0002_auto_20190826_1105'),
+        ("home", "0002_auto_20190826_1105"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='AboutTeam',
+            name="AboutTeam",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('uploaded_at', models.DateTimeField(auto_now_add=True)),
-                ('team', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("uploaded_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "team",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
-        migrations.DeleteModel(
-            name='AboutMember',
-        ),
-        migrations.DeleteModel(
-            name='FaqValues',
-        ),
-        migrations.RemoveField(
-            model_name='portfolio',
-            name='owner',
-        ),
-        migrations.RemoveField(
-            model_name='portfolio',
-            name='upload',
-        ),
+        migrations.DeleteModel(name="AboutMember",),
+        migrations.DeleteModel(name="FaqValues",),
+        migrations.RemoveField(model_name="portfolio", name="owner",),
+        migrations.RemoveField(model_name="portfolio", name="upload",),
         migrations.AddField(
-            model_name='portfolio',
-            name='image',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='audiovisual.Image'),
+            model_name="portfolio",
+            name="image",
+            field=models.ForeignKey(
+                default=1,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="audiovisual.Image",
+            ),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='aboutimage',
-            name='image',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='audiovisual.Image'),
+            model_name="aboutimage",
+            name="image",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="audiovisual.Image",
+            ),
         ),
         migrations.AlterField(
-            model_name='infoimage',
-            name='image',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='audiovisual.Image'),
+            model_name="infoimage",
+            name="image",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="audiovisual.Image",
+            ),
         ),
     ]

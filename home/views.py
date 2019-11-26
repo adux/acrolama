@@ -14,7 +14,7 @@ from home.models import (
     Testimonial,
     Portfolio,
 )
-from project.models import Event
+from project.models import Event, TimeOption
 from home.forms import NewsForm
 
 
@@ -39,7 +39,7 @@ class HomeFormView(MultiFormsView):
             .exclude(category="fas fa-cogs")
             .distinct()[:6]
         )
-        context["class"] = (
+        classes = (
             Event.objects.filter(
                 event_enddate__gte=timezone.now(), category="fas fa-cogs"
             )
@@ -47,6 +47,23 @@ class HomeFormView(MultiFormsView):
             .exclude(published=False)
             .distinct()[:6]
         )
+        # TODO: With time solve this messs :D
+        # timeoption = TimeOption.objects.filter(
+        #     timelocation__event__slug=slug
+        # )
+        context["class"] = classes
+        """
+        to =
+            {% for to in obj.time_locations.all %}
+                {% for rd in to.time_options.all %}
+                    {% ifchanged %}
+                        {% if rd.regular_days != Null %}
+                        {{ rd.regular_days|default_if_none:"" }}'S {%if rd.regular_days.count == 1 %}·{% endif %}
+                        {% endif %}
+                    {% endifchanged%}
+                {% endfor %}
+            {% endfor %}
+        """
         context["testimonial"] = Testimonial.objects.all()
         context["portfolio"] = Portfolio.objects.order_by("order")[1:5]
         context["fportfolio"] = Portfolio.objects.order_by("order")[0:1]
