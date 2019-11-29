@@ -1,9 +1,15 @@
 from django.contrib import messages
+
+from django.db.models.query_utils import Q
+
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.shortcuts import render
+
 from django.views.generic import DetailView, ListView
+
+
 from home.multiforms import MultiFormsView
 from home.models import (
     AboutTeam,
@@ -14,8 +20,9 @@ from home.models import (
     Testimonial,
     Portfolio,
 )
-from project.models import Event, TimeOption
 from home.forms import NewsForm
+
+from project.models import Event, TimeOption
 
 
 class HomeFormView(MultiFormsView):
@@ -53,7 +60,7 @@ class HomeFormView(MultiFormsView):
             .distinct()
         )
         introClasses = classes.filter(level="1")
-        intermediateClasses = classes.filter(level="2" or "3")
+        intermediateClasses = classes.filter(Q(level="2") | Q(level="3"))
         advancedClasses = classes.filter(level="4")
 
         context["intro"] = introClasses
