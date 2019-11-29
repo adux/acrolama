@@ -1,6 +1,14 @@
 from django.contrib import admin
 from .models import Image, Video
 
-admin.site.register(Image)
+class ImageAdmin(admin.ModelAdmin):
+    list_display = [
+        "title",
+        "formImage",
+        "image",
+        "image_height",
+        "image_width",
+    ]
+admin.site.register(Image, ImageAdmin)
 admin.site.register(Video)
 # Register your models here.

@@ -12,9 +12,7 @@ class BookAdmin(admin.ModelAdmin):
         "note",
         "booked_at",
     ]
-
     list_filter = ["event", "event__level", "status"]
-
     search_fields = [
         "event__title",
         "user__email",
@@ -23,7 +21,6 @@ class BookAdmin(admin.ModelAdmin):
         "note",
         "status",
     ]
-
     save_as = True
 
 
