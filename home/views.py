@@ -1,6 +1,6 @@
 from django.contrib import messages
 
-from django.db.models.query_utils import Q
+from django.db.models import Q
 
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
