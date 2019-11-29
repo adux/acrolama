@@ -32,6 +32,8 @@ class HomeFormView(MultiFormsView):
         context["about_content"] = AboutTeam.objects.all()
         context["about_image"] = AboutImage.objects.all()
         context["about_date"] = AboutDate.objects.all()
+        context["testimonial"] = Testimonial.objects.all()
+        context["portfolio"] = Portfolio.objects.all()[0:8]
         context["event"] = (
             Event.objects.filter(event_enddate__gte=timezone.now())
             .order_by("event_startdate", "level", "title")
@@ -39,19 +41,29 @@ class HomeFormView(MultiFormsView):
             .exclude(category="fas fa-cogs")
             .distinct()[:6]
         )
+        # Classes
         classes = (
             Event.objects.filter(
-                event_enddate__gte=timezone.now(), category="fas fa-cogs"
+                event_enddate__gte=timezone.now(),
+                event_startdate__lt=timezone.now() + timezone.timedelta(days=90),
+                category="fas fa-cogs"
             )
-            .order_by("event_startdate", "level", "title")
+            .order_by("event_startdate", "title")
             .exclude(published=False)
-            .distinct()[:6]
+            .distinct()
         )
+        introClasses = classes.filter(level="1")
+        intermediateClasses = classes.filter(level="2" or "3")
+        advancedClasses = classes.filter(level="4")
+
+        context["intro"] = introClasses
+        context["intermediate"] = intermediateClasses
+        context["advanced"] = advancedClasses
+
         # TODO: With time solve this messs :D
         # timeoption = TimeOption.objects.filter(
         #     timelocation__event__slug=slug
         # )
-        context["class"] = classes
         """
         to =
             {% for to in obj.time_locations.all %}
@@ -64,10 +76,6 @@ class HomeFormView(MultiFormsView):
                 {% endfor %}
             {% endfor %}
         """
-        context["testimonial"] = Testimonial.objects.all()
-        context["portfolio"] = Portfolio.objects.order_by("order")[1:5]
-        context["fportfolio"] = Portfolio.objects.order_by("order")[0:1]
-        context["eportfolio"] = Portfolio.objects.order_by("order")[5:6]
         return context
 
     def news_form_valid(self, form):
