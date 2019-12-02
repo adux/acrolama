@@ -34,7 +34,8 @@ class Image(models.Model):
         imageTemproary.save(
             outputIoStream,
             format='JPEG',
-            quality=90,
+            quality=75,
+            subsampling=0,
             optimize=True
         )
         outputIoStream.seek(0)
