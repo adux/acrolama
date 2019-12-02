@@ -14,7 +14,7 @@
             <div class="grid" id="portfolio-grid">
                 <div class="grid-sizer"></div>
                 {% for obj in portfolio %}
-                <div class="grid-item {% if obj.image.formImage == 'landscape' %} grid-item--width2 {% elif obj.image.formImage == 'vertical' %} grid-item--width2 {% endif %}">
+                <div class="grid-item {% if obj.image.formImage == 'landscape' %} grid-item--width2{% endif %}">
                     <a data-lightbox="portfolio" href="{{obj.image.image.url}}">
                         <img src="{{obj.image.image.url}}" alt="{{obj.sec_text}}">
                         <div class="portfolio-text-holder">
