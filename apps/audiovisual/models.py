@@ -16,8 +16,8 @@ class Image(models.Model):
         height_field='image_height',
         width_field='image_width'
     )
-    image_height = models.PositiveIntegerField()
-    image_width = models.PositiveIntegerField()
+    image_height = models.PositiveIntegerField(null=True, blank=True)
+    image_width = models.PositiveIntegerField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.id:
@@ -28,7 +28,7 @@ class Image(models.Model):
         imageTemproary = PIL.Image.open(image)
         outputIoStream = BytesIO()
         imageTemproaryResized = imageTemproary.thumbnail(
-            (1600,1170),
+            (1170,2340),
             PIL.Image.ANTIALIAS
         )
         imageTemproary.save(

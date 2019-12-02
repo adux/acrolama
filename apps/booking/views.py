@@ -46,8 +46,6 @@ class ControlListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        bookings = Book.objects.all()
-        context["book_list"] = bookings.order_by("event")
         context["book_filter"] = BookFilter(
             self.request.GET, queryset=self.get_queryset()
         )
@@ -65,8 +63,6 @@ class ControlUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        bookings = Book.objects.all()
-        context["book_list"] = bookings.order_by("event")
         context["book_filter"] = BookFilter(
             self.request.GET, queryset=self.get_queryset()
         )
@@ -174,8 +170,6 @@ class ControlCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        bookings = Book.objects.all()
-        context["book_list"] = bookings.order_by("event")
         context["book_filter"] = BookFilter(
             self.request.GET, queryset=self.get_queryset()
         )
