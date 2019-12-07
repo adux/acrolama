@@ -165,48 +165,49 @@ class Policy(models.Model):
 
 
 class Event(models.Model):
-    # Event Info
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    # Home
     category = models.CharField(max_length=50, choices=EVENTCATEGORY)
     cycle = models.IntegerField(
         default=0, choices=CYCLE, blank=True, null=True
     )
-    # TODO: Make that title auto formats if cycle
     title = models.CharField(max_length=100)
+    # Home
     event_startdate = models.DateField(
         auto_now_add=False, auto_now=False, blank=True, null=True
     )
+    # Home
     event_enddate = models.DateField(
         auto_now_add=False, auto_now=False, blank=True, null=True
     )
     description = models.TextField(max_length=3000)
+    # Home
     time_locations = models.ManyToManyField(TimeLocation)
     irregularities = models.ManyToManyField(Irregularity, blank=True)
     price_options = models.ManyToManyField(PriceOption)
     policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
     max_participants = models.CharField(max_length=5, null=True, blank=True)
-    # Audiovisual Info
     images = models.ManyToManyField("audiovisual.Image")
     videos = models.ManyToManyField("audiovisual.Video", blank=True)
-    # Sport Info
+    # Home
     level = models.ForeignKey(
         Level, null=True, blank=True, on_delete=models.CASCADE
     )
+    # Home
     discipline = models.ForeignKey(
         Discipline, null=True, blank=True, on_delete=models.CASCADE
     )
     prerequisites = models.TextField(max_length=2000, null=True, blank=True)
     teacher = models.ManyToManyField("users.User", related_name="eventteacher")
-    # Additional Info
     highlights = models.TextField(max_length=2000, null=True, blank=True)
     included = models.TextField(max_length=2000, null=True, blank=True)
     food = models.TextField(max_length=2000, null=True, blank=True)
     team = models.ManyToManyField(
         "users.User", related_name="eventteam", blank=True
     )
-    # Admin Info
     published = models.BooleanField()
     registration = models.BooleanField(default=True)
+    # All
     slug = models.SlugField(unique=True, null=True, blank=True)
 
     def fulltitle(self):

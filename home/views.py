@@ -41,16 +41,25 @@ class HomeFormView(MultiFormsView):
         context["about_date"] = AboutDate.objects.all()
         context["testimonial"] = Testimonial.objects.all()
         context["portfolio"] = Portfolio.objects.all()[0:8]
-        context["event"] = (
-            Event.objects.filter(event_enddate__gte=timezone.now())
+        event_main = (
+            Event.objects.all()
+            .select_related('level')
+            .select_related('discipline')
+            .prefetch_related('time_locations')
+            .prefetch_related('time_locations__time_options')
+            .prefetch_related('time_locations__location')
+        )
+        event = (
+            event_main.filter(event_enddate__gte=timezone.now())
             .order_by("event_startdate", "level", "title")
             .exclude(published=False)
             .exclude(category="fas fa-cogs")
             .distinct()[:6]
         )
+        context["event"] = event
         # Classes
         classes = (
-            Event.objects.filter(
+            event_main.filter(
                 event_enddate__gte=timezone.now(),
                 event_startdate__lt=timezone.now() + timezone.timedelta(days=90),
                 category="fas fa-cogs"
@@ -59,30 +68,11 @@ class HomeFormView(MultiFormsView):
             .exclude(published=False)
             .distinct()
         )
-        introClasses = classes.filter(level="1")
-        intermediateClasses = classes.filter(Q(level="2") | Q(level="3"))
-        advancedClasses = classes.filter(level="4")
 
-        context["intro"] = introClasses
-        context["intermediate"] = intermediateClasses
-        context["advanced"] = advancedClasses
+        context["intro"] = classes.filter(level="1")
+        context["intermediate"] = classes.filter(Q(level="2") | Q(level="3"))
+        context["advanced"] = classes.filter(level="4")
 
-        # TODO: With time solve this messs :D
-        # timeoption = TimeOption.objects.filter(
-        #     timelocation__event__slug=slug
-        # )
-        """
-        to =
-            {% for to in obj.time_locations.all %}
-                {% for rd in to.time_options.all %}
-                    {% ifchanged %}
-                        {% if rd.regular_days != Null %}
-                        {{ rd.regular_days|default_if_none:"" }}'S {%if rd.regular_days.count == 1 %}·{% endif %}
-                        {% endif %}
-                    {% endifchanged%}
-                {% endfor %}
-            {% endfor %}
-        """
         return context
 
     def news_form_valid(self, form):
