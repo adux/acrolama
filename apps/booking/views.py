@@ -47,7 +47,14 @@ class ControlListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["book_filter"] = BookFilter(
-            self.request.GET, queryset=self.get_queryset()
+            self.request.GET,
+            queryset= ( Book.objects.all()
+            .select_related('event')
+            .select_related('user')
+            .select_related('price')
+            .prefetch_related('times')
+            .prefetch_related('times__regular_days')
+                       )
         )
         context["filter"] = self.request.GET
         return context
@@ -64,7 +71,14 @@ class ControlUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["book_filter"] = BookFilter(
-            self.request.GET, queryset=self.get_queryset()
+            self.request.GET,
+            queryset= ( Book.objects.all()
+            .select_related('event')
+            .select_related('user')
+            .select_related('price')
+            .prefetch_related('times')
+            .prefetch_related('times__regular_days')
+                       )
         )
         return context
 
@@ -171,24 +185,16 @@ class ControlCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["book_filter"] = BookFilter(
-            self.request.GET, queryset=self.get_queryset()
+            self.request.GET,
+            queryset= ( Book.objects.all()
+            .select_related('event')
+            .select_related('user')
+            .select_related('price')
+            .prefetch_related('times')
+            .prefetch_related('times__regular_days')
+                       )
         )
         return context
-
-    # # TODO: There is probably a way to get all the GETs and process them?
-    # def get_success_url(self, **kwargs):
-    #     user = self.request.GET.get("user", "")
-    #     event = self.request.GET.get("event", "")
-    #     status = self.request.GET.get("status", "")
-    #     pk = self.object.id
-    #     url = build_url(
-    #         "control_update",
-    #         get={"user": user, "event": event, "status": status},
-    #         # TODO im not sure this way of passing the pk is ideal :)
-    #         pk={"pk": pk},
-    #     )
-    #     messages.success(self.request, 'Update successful.')
-    #     return url
 
     def test_func(self):
         return staff_check(self.request.user)
