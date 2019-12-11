@@ -56,7 +56,7 @@ class Project(models.Model):
     creationdate = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.name
+        return "%s - %s" % (self.name, self.manager)
 
 
 class TimeOption(models.Model):
@@ -78,7 +78,8 @@ class TimeOption(models.Model):
         # return "%s" % (self.name)
         # Classes will have regular days
         if self.regular_days:
-            return "%s: %s - %s" % (
+            return "%s, %s: %s - %s" % (
+                self.name,
                 self.regular_days,
                 self.class_starttime.strftime("%H:%M"),
                 self.class_endtime.strftime("%H:%M"),
@@ -101,7 +102,7 @@ class Location(models.Model):
     indication = models.TextField(max_length=2000, null=True, blank=True)
 
     def __str__(self):
-        return "%s" % (self.address)
+        return "%s" % (self.name)
 
 
 class TimeLocation(models.Model):
@@ -109,7 +110,7 @@ class TimeLocation(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
 
     def __str__(self):
-        return " vs ".join(p.name for p in self.time_options.all())
+        return " - ".join(p.name for p in self.time_options.all()) + " | %s" % (self.location)
 
 
 class Irregularity(models.Model):
@@ -133,7 +134,10 @@ class PriceOption(models.Model):
     price_euro = models.CharField(max_length=5, null=True, blank=True)
 
     def __str__(self):
-        return "%s - %s" % (self.name, self.price_chf)
+        if price_euro:
+            return "%s, EUR:%s - CHF:%s" % (self.name, self.price_euro, self.price_chf)
+        else:
+            return "%s, CHF:%s" % (self.name, self.price_chf)
 
 
 # Sport Info
