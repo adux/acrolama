@@ -134,7 +134,7 @@ class PriceOption(models.Model):
     price_euro = models.CharField(max_length=5, null=True, blank=True)
 
     def __str__(self):
-        if price_euro:
+        if self.price_euro:
             return "%s, EUR:%s - CHF:%s" % (self.name, self.price_euro, self.price_chf)
         else:
             return "%s, CHF:%s" % (self.name, self.price_chf)
