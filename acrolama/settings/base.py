@@ -103,6 +103,9 @@ DATABASES = {
         'NAME': 'acrolama'
     }
 }
+# HTML MINIFY
+HTML_MINIFY = True
+KEEP_COMMENTS_ON_MINIFYING = True
 
 # Authentication allauth "allauth.socialaccount"
 INSTALLED_APPS += ["allauth", "allauth.account"]
