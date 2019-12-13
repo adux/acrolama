@@ -6,6 +6,8 @@ from acrolama.aws.conf import *
 # For Heroku
 import dj_database_url
 
+INSTALLED_APPS += ["anymail"]  # noqa F405
+
 # Sentry SDK
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
