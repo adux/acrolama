@@ -2,6 +2,7 @@ from .base import *
 from .anymail import *
 from .compress import *
 from acrolama.aws.conf import *
+
 # For Heroku
 import dj_database_url
 
@@ -37,7 +38,6 @@ db_from_env = dj_database_url.config()
 DATABASES['default'].update(db_from_env)
 # DATABASES['default']['CONN_MAX_AGE'] = 500
 
-
 # HTML MINIFY
 MIDDLEWARE += [
     'htmlmin.middleware.HtmlMinifyMiddleware',
@@ -47,6 +47,8 @@ MIDDLEWARE += [
 HTML_MINIFY = False
 KEEP_COMMENTS_ON_MINIFYING = True
 
+INSTALLED_APPS += ["compressor"]
+COMPRESS_ENABLED = True
 
 # Secure
 CORS_REPLACE_HTTPS_REFERER = True

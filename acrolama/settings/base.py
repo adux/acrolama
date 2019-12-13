@@ -1,5 +1,6 @@
 import os
 import sys
+
 from .allauth import *
 from .todo import *
 
@@ -53,6 +54,9 @@ INSTALLED_APPS = [
     'storages',
     'widget_tweaks',
     'tinycontent',
+    'todo',
+    'allauth',
+    'allauth.account',
     # Own
     'home',
     'project',
@@ -62,7 +66,6 @@ INSTALLED_APPS = [
     'booking',
     'users'
 ]
-
 
 AUTH_USER_MODEL = "users.User"
 SITE_ID = 1  # required by allauth

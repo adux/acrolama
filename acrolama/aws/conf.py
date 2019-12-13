@@ -8,16 +8,21 @@ AWS_PRELOAD_METADATA = True
 AWS_QUERYSTRING_AUTH = False
 
 DEFAULT_FILE_STORAGE = 'acrolama.aws.utils.MediaRootS3BotoStorage'
-STATICFILES_STORAGE = 'acrolama.aws.utils.StaticRootS3BotoStorage'
 
 AWS_STORAGE_BUCKET_NAME = 'acrolama'
 AWS_S3_REGION_NAME = 'eu-central-1'
 S3_URL = '//%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
-MEDIA_URL = '//%s.s3.amazonaws.com/media/' % AWS_STORAGE_BUCKET_NAME
 
+MEDIA_URL = S3_URL + 'media/'
 MEDIA_ROOT = MEDIA_URL
 
 STATIC_URL = S3_URL + 'static/'
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
+
+STATICFILES_STORAGE = 'acrolama.aws.utils.CachedS3BotoStorage'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
 
 ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 

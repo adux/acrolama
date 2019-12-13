@@ -1,5 +1,4 @@
 # Todo-specific settings
-INSTALLED_APPS += ["todo"]
 """
 Restrict access to ALL todo lists/views to `is_staff` users.
 If False or unset, all users can see all views 
