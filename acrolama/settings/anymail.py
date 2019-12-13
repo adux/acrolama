@@ -1,3 +1,5 @@
+import os
+
 # Anymail (Mailgun)
 # https://anymail.readthedocs.io/en/stable/installation/#installing-anymail
 EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
