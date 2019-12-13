@@ -1,5 +1,6 @@
 import os
 import sys
+from acrolama.aws.conf import STATIC_URL, STATICFILES_STORAGE
 
 COMPRESS_ENABLED = False
 COMPRESS_CSS_HASHTAG_METHOD = 'content'
