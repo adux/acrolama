@@ -60,7 +60,7 @@ HTML_MINIFY = False
 KEEP_COMMENTS_ON_MINIFYING = True
 
 INSTALLED_APPS += ["compressor"]
-COMPRESS_ENABLED = True
+COMPRESS_ENABLED = False
 COMPRESS_CSS_HASHTAG_METHOD = 'content'
 COMPRESS_CSS_FILTERS = [
     'compressor.filters.css_default.CssAbsoluteFilter',
