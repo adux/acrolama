@@ -51,6 +51,12 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
 
+COMPRESS_ENABLE = True
+COMPRESS_CSS_HASHTAG_METHOD = 'content'
+COMPRESS_CSS_FILTERS = [
+    'compressor.filters.css_default.CssAbsoluteFilter',
+    'compressor.filters.cssmin.CSSMinFilter',
+]
 COMPRESS_URL = S3_URL
 COMPRESS_STORAGE = STATICFILES_STORAGE
 COMPRESS_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
