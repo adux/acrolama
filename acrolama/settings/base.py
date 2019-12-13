@@ -16,6 +16,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'htmlmin.middleware.HtmlMinifyMiddleware',
+    'htmlmin.middleware.MarkRequestMiddleware',
 ]
 
 ROOT_URLCONF = 'acrolama.urls'
@@ -51,6 +53,7 @@ INSTALLED_APPS = [
     'storages',
     'widget_tweaks',
     'tinycontent',
+    'compressor',
     # Own
     'home',
     'project',
@@ -61,6 +64,12 @@ INSTALLED_APPS = [
     'users'
 ]
 
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    # other finders..
+    'compressor.finders.CompressorFinder',
+)
 
 AUTH_USER_MODEL = "users.User"
 SITE_ID = 1  # required by allauth

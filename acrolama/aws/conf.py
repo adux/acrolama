@@ -25,11 +25,6 @@ two_months = datetime.timedelta(days=61)
 date_two_months_later = datetime.date.today() + two_months
 expires = date_two_months_later.strftime("%A, %d %B %Y 20:00:00 GMT")
 
-# AWS_HEADERS = {
-#     'Expires': expires,
-#     'Cache-Control': 'max-age=%d' % (int(two_months.total_seconds()), ),
-# }
-
 AWS_S3_OBJECT_PARAMETERS = {
     'Expires': expires,
     'CacheControl': 'max-age=%d' % (int(two_months.total_seconds()), ),

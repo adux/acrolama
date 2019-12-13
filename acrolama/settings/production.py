@@ -48,7 +48,13 @@ DATABASES['default'].update(db_from_env)
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
+
+COMPRESS_URL = S3_URL
+COMPRESS_STORAGE = STATICFILES_STORAGE
+COMPRESS_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
+COMPRESS_URL = 'https:' + STATIC_URL
 
 # Admin URL
 ADMIN_URL = os.environ.get('DJANGO_ADMIN_URL')
