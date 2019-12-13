@@ -51,11 +51,20 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
 
-COMPRESS_ENABLE = False
+# HTML MINIFY
+MIDDLEWARE += [
+    'htmlmin.middleware.HtmlMinifyMiddleware',
+    'htmlmin.middleware.MarkRequestMiddleware'
+]
+HTML_MINIFY = False
+KEEP_COMMENTS_ON_MINIFYING = True
+
+INSTALLED_APPS += ["compressor"]
+COMPRESS_ENABLED = True
 COMPRESS_CSS_HASHTAG_METHOD = 'content'
 COMPRESS_CSS_FILTERS = [
     'compressor.filters.css_default.CssAbsoluteFilter',
-    'compressor.filters.cssmin.CSSMinFilter',
+    'compressor.filters.cssmin.CSSMinFilter'
 ]
 COMPRESS_URL = S3_URL
 COMPRESS_STORAGE = STATICFILES_STORAGE
