@@ -1,6 +1,6 @@
 import datetime
 import os
-from .base import BASE_DIR
+from acrolama.settings.base import BASE_DIR
 
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
