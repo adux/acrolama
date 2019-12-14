@@ -14,10 +14,10 @@ AWS_STORAGE_BUCKET_NAME = 'acrolama'
 AWS_S3_REGION_NAME = 'eu-central-1'
 S3_URL = '//%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 
-MEDIA_URL = 'https:' + S3_URL + 'media/'
-MEDIA_ROOT = MEDIA_URL
+MEDIA_URL = S3_URL + 'media/'
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media")
 
-STATIC_URL = 'https:' + S3_URL + 'static/'
+STATIC_URL = S3_URL + 'static/'
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
 
 STATICFILES_STORAGE = 'acrolama.aws.utils.CachedS3BotoStorage'
