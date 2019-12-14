@@ -20,7 +20,7 @@ MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media")
 STATIC_URL = S3_URL + 'static/'
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
 
-STATICFILES_STORAGE = 'acrolama.aws.utils.CachedS3BotoStorage'
+STATICFILES_STORAGE = 'acrolama.aws.utils.CachedS3Boto3Storage'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
