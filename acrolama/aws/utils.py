@@ -1,12 +1,11 @@
 from django.core.files.storage import get_storage_class
 from storages.backends.s3boto3 import S3Boto3Storage
-from storages.backends.s3boto import S3BotoStorage
 """
 Documentation on:
 and https://stackoverflow.com/questions/35417502/django-aws-s3-using-boto-with-compressor-fails-to-compress-uncompressablefileerr
 """
 
-class CachedS3BotoStorage(S3BotoStorage):
+class CachedS3BotoStorage(S3Boto3Storage):
     """
     S3 storage backend that saves files locally too.
     """
