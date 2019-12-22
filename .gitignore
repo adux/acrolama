@@ -13,6 +13,8 @@ pip-selfcheck.json
 # src/<yourproject>/settings/local.py
 /static  # any collected static files
 static/
+staticcollection/
+/staticcollection
 media/
 /media
 images/

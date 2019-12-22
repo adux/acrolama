@@ -1,6 +1,7 @@
-{% load static %}
+{% load compress static %}
         <!--Load JavaScript-->
         <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+        {% compress js %}
         <!-- sticking elements -->
         <script type='text/javascript' src='{% static 'home/js/jquery.sticky-kit.min.js' %}'></script>
         <script type='text/javascript' src='{% static 'home/js/jquery.smartmenus.min.js' %}'></script>
@@ -20,9 +21,8 @@
         <script type='text/javascript' src='{% static 'home/js/jquery.easing.1.3.js' %}'></script>
         <!-- Your images loaded or what -->
         <script type='text/javascript' src='{% static 'home/js/imagesloaded.pkgd.js' %}'></script>
-        <!-- Image Slide over -->
-        <script type='text/javascript' src='{% static 'home/js/jquery.prettyPhoto.js' %}'></script>
         <! -- Lightboy -->
         <script type='text/javascript' src='{% static 'home/js/lightbox.js' %}'></script>
         <!-- Main project -->
         <script type='text/javascript' src='{% static 'home/js/main.js' %}'></script>
+        {% endcompress %}
