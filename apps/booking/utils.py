@@ -1,3 +1,5 @@
+import datetime
+
 from django.utils.http import urlencode
 from django.urls import reverse
 
@@ -12,3 +14,13 @@ def build_url(*args, **kwargs):
     if get:
         url += "?" + urlencode(get)
     return url
+
+
+def dateselect(startdate, enddate, regularday):
+    dateList = []
+    delta = enddate - startdate + datetime.timedelta(days = 1)
+
+    for x in range(delta.days):
+        checkdate = startdate + datetime.timedelta(days = x)
+        if checkdate.weekday() == regularday:
+            dateList.append(checkdate)
