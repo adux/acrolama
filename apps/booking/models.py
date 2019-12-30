@@ -1,8 +1,10 @@
 from django.db import models
 from django.db.models.signals import pre_save
+from django.contrib.postgres.fields import ArrayField
 
+from project.models import Irregularity, TimeOption
 
-from project.models import Irregularity
+from booking.utils import datelistgenerator
 
 
 BOOKINGSTATUS = [
@@ -41,3 +43,26 @@ class Book(models.Model):
             self.user.first_name,
             self.user.last_name,
         )
+
+class Assistance(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    # TODO: This could be done with JSON.
+    # Not to much to use those, nor see the practical advantage now.
+    assistance_date = ArrayField(
+        models.DateField()
+    )
+    assistance_check = ArrayField(
+        models.BooleanField()
+    )
+
+    def __str__(self):
+        return "%s - %s" % (
+            self.book.event,
+            self.book.user,
+        )
+
+# def book_pre_save_receiver(sender, instance, **kwargs):
+#     pre_save_object = Book.objects.get(pk=instance.pk)
+#     if (pre_save_object.status == "PE") and (instance.status == "IN"):
+
+# pre_save.connect(book_pre_save_receiver, sender=Book)

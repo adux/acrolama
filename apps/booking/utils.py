@@ -16,7 +16,7 @@ def build_url(*args, **kwargs):
     return url
 
 
-def dateselect(startdate, enddate, regularday):
+def datelistgenerator(startdate, enddate, regularday):
     dateList = []
     delta = enddate - startdate + datetime.timedelta(days = 1)
 
@@ -24,3 +24,5 @@ def dateselect(startdate, enddate, regularday):
         checkdate = startdate + datetime.timedelta(days = x)
         if checkdate.weekday() == regularday:
             dateList.append(checkdate)
+
+    return dateList

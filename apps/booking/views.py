@@ -86,7 +86,7 @@ class ControlUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         instance = form.save(commit=False)
         """
         Separetes logic based on which action button was pressed and generates
-        logic based on it TODO:maybe a state machines makes more sense
+        logic based on it TODO: maybe a state machines makes more sense
         """
         if "update" in self.request.POST:
             # I think i needed this for if they book, since then the pk doesn't have
@@ -99,6 +99,8 @@ class ControlUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
             """
             pre_save_object = Book.objects.get(pk=instance.pk)
             if (pre_save_object.status == "PE") and (instance.status == "IN"):
+                # EMAIL 
+                # TODO: Change email to a class i guess
                 subject = "Acrolama - Confirmation - " + str(instance.event)
                 sender = "notmonkeys@acrolama.com"
                 to = [instance.user.email, "acrolama@acrolama.com"]
@@ -125,8 +127,33 @@ class ControlUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                     p,
                 )
 
-                send_mail(subject, msg_plain, sender, to, html_message=msg_html)
-                messages.success(self.request, "Update successful. Email Sent.")
+                send_mail(
+                    subject, msg_plain, sender, to, html_message=msg_html
+                )
+
+                #Assistance
+                start = instance.event.event_startdate
+                end = instance.event.event_enddate
+                times = instance.times.all()
+                obj = Assistance()
+                date = []
+                check = []
+                obj.book_id = instance.id
+                for to in times:
+                    num = to.regular_days.day
+                    li = datelistgenerator(start, end, int(num))
+                    date.extend(li)
+                    for time in li:
+                        check.append('False')
+                obj.assistance_date = date
+                obj.assistance_check = check
+                obj.save()
+
+
+                # Message
+                messages.success(
+                    self.request,
+                    "Update successful. Email Sent. Assistance created")
             else:
                 messages.success(self.request, "Update successful.")
 
@@ -155,7 +182,10 @@ class ControlUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                         "Next Cycle does not exist. Duplicate Created"
                     )
             else:
-                messages.success(self.request, "Booking of same event was duplicated.")
+                messages.success(
+                    self.request,
+                    "Booking of same event was duplicated."
+                )
         instance.save()
         return super().form_valid(form)
 

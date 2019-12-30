@@ -40,7 +40,7 @@ DAYS = [
     ("6", "Sunday"),
 ]
 
-
+# TODO:not why i didn't use the days as a simple liest. Doesn't make much sense
 class Day(models.Model):
     day = models.CharField(max_length=10, choices=DAYS)
 
@@ -236,6 +236,5 @@ class Event(models.Model):
 def event_pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)
-
 
 pre_save.connect(event_pre_save_receiver, sender=Event)
