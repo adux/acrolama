@@ -110,7 +110,9 @@ class TimeLocation(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
 
     def __str__(self):
-        return " - ".join(p.name for p in self.time_options.all()) + " | %s" % (self.location)
+        return " - ".join(
+            p.name for p in self.time_options.all()
+        ) + " | %s" % (self.location)
 
 
 class Irregularity(models.Model):
@@ -127,6 +129,7 @@ class Irregularity(models.Model):
 
 class PriceOption(models.Model):
     abonament = models.BooleanField(default=False)
+    cycles = models.IntegerField(verbose_name="Numbero of Cycles")
     name = models.CharField(max_length=30)
     description = models.TextField(max_length=1000)
     reduction = models.BooleanField(default=False)
@@ -135,7 +138,11 @@ class PriceOption(models.Model):
 
     def __str__(self):
         if self.price_euro:
-            return "%s, EUR:%s - CHF:%s" % (self.name, self.price_euro, self.price_chf)
+            return "%s, EUR:%s - CHF:%s" % (
+                self.name,
+                self.price_euro,
+                self.price_chf,
+            )
         else:
             return "%s, CHF:%s" % (self.name, self.price_chf)
 
@@ -236,5 +243,6 @@ class Event(models.Model):
 def event_pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)
+
 
 pre_save.connect(event_pre_save_receiver, sender=Event)

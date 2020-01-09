@@ -23,6 +23,7 @@ class BookAdmin(admin.ModelAdmin):
     ]
     save_as = True
 
+
 class AssistanceAdmin(admin.ModelAdmin):
     list_display = [
         "id",

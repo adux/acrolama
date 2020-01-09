@@ -38,28 +38,24 @@ class Book(models.Model):
         return ",\n".join([p.name for p in self.times.all()])
 
     def __str__(self):
-        return "%s - %s %s" % (
+        return "%s: %s - %s %s" % (
+            self.pk,
             self.event,
             self.user.first_name,
             self.user.last_name,
         )
 
+
 class Assistance(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     # TODO: This could be done with JSON.
     # Not to much to use those, nor see the practical advantage now.
-    assistance_date = ArrayField(
-        models.DateField()
-    )
-    assistance_check = ArrayField(
-        models.BooleanField()
-    )
+    assistance_date = ArrayField(models.DateField())
+    assistance_check = ArrayField(models.BooleanField())
 
     def __str__(self):
-        return "%s - %s" % (
-            self.book.event,
-            self.book.user,
-        )
+        return "%s - %s" % (self.book.event, self.book.user,)
+
 
 # def book_pre_save_receiver(sender, instance, **kwargs):
 #     pre_save_object = Book.objects.get(pk=instance.pk)

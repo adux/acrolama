@@ -1,8 +1,8 @@
 from django.db import models
 
-#Pillow Compress
+# Pillow Compress
 import sys
-import  PIL.Image
+import PIL.Image
 from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
@@ -13,8 +13,8 @@ class Image(models.Model):
     description = models.TextField(max_length=230, null=True, blank=True)
     image = models.ImageField(
         upload_to="images/",
-        height_field='image_height',
-        width_field='image_width'
+        height_field="image_height",
+        width_field="image_width",
     )
     image_height = models.PositiveIntegerField(null=True, blank=True)
     image_width = models.PositiveIntegerField(null=True, blank=True)
@@ -28,22 +28,23 @@ class Image(models.Model):
         imageTemproary = PIL.Image.open(image)
         outputIoStream = BytesIO()
         imageTemproaryResized = imageTemproary.thumbnail(
-            (1170,2340),
-            PIL.Image.ANTIALIAS
+            (1170, 2340), PIL.Image.ANTIALIAS
         )
         imageTemproary.save(
             outputIoStream,
-            format='JPEG',
+            format="JPEG",
             quality=75,
             subsampling=0,
-            optimize=True
+            optimize=True,
         )
         outputIoStream.seek(0)
         image = InMemoryUploadedFile(
-            outputIoStream,'ImageField',
-            "%s.jpg" % image.name.split('.')[0], 'image/jpeg',
+            outputIoStream,
+            "ImageField",
+            "%s.jpg" % image.name.split(".")[0],
+            "image/jpeg",
             sys.getsizeof(outputIoStream),
-            None
+            None,
         )
         return image
 
@@ -51,7 +52,7 @@ class Image(models.Model):
         """
         evaluate if dimension are good for portfolio
         """
-        proportions = self.image_height/self.image_width
+        proportions = self.image_height / self.image_width
 
         if proportions == 1:
             form = "square"
@@ -62,7 +63,6 @@ class Image(models.Model):
         else:
             form = "not"
         return form
-
 
     def __str__(self):
         return self.title

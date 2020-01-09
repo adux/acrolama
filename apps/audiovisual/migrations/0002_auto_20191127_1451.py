@@ -6,25 +6,29 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('audiovisual', '0001_initial'),
+        ("audiovisual", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='image',
-            name='image_height',
+            model_name="image",
+            name="image_height",
             field=models.PositiveIntegerField(default=0),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='image',
-            name='image_width',
+            model_name="image",
+            name="image_width",
             field=models.PositiveIntegerField(default=0),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='image',
-            name='image',
-            field=models.ImageField(height_field='image_height', upload_to='images/', width_field='image_width'),
+            model_name="image",
+            name="image",
+            field=models.ImageField(
+                height_field="image_height",
+                upload_to="images/",
+                width_field="image_width",
+            ),
         ),
     ]
