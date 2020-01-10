@@ -117,9 +117,9 @@ class ControlUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                 elif (
                     instance.price.cycles > 1
                 ):  #  This are Cycles, Events dont have prices of amount > 1
-                    print("cylces > 1")
                     try:
                         instance.save()
+                        createAssistance(instance)
                         createAmountBookingAssistance(
                             instance, "PA", instance.price.cycles
                         )

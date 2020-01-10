@@ -47,7 +47,7 @@ class Book(models.Model):
 
 
 class Assistance(models.Model):
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, unique=True, on_delete=models.CASCADE)
     # TODO: This could be done with JSON.
     # Not to much to use those, nor see the practical advantage now.
     assistance_date = ArrayField(models.DateField())

@@ -39,7 +39,7 @@ def createAmountBookingAssistance(instance, status, amount):
     for x in range(1, amount):
         obj.id = None
         obj.pk = None
-        if old - event.cycle + x > 12:
+        if old_event.cycle + x > 12: #all the cycles should go from 1 to 12
             x = x - 12
         obj.event = Event.objects.filter(
             level=old_event.level,
