@@ -1,5 +1,7 @@
-from django.conf import settings
+import datetime
 
+from django.conf import settings
+from django.contrib.postgres.fields import ArrayField
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext as _
@@ -85,7 +87,7 @@ class ControlUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         instance = form.save(commit=False)
         if "update" in self.request.POST:
             """
-            Separate logic depending on previous to recent status
+            Separate action depending on previous to recent status
             """
             pre_save_obj = Book.objects.get(pk=instance.pk)
             if (pre_save_obj.status == "PE") and (instance.status == "IN"):
@@ -114,12 +116,12 @@ class ControlUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                             messages.INFO,
                             _("Assitance created."),
                         )
-                elif (
-                    instance.price.cycles > 1
-                ):  #  This are Cycles, Events dont have prices of amount > 1
+                elif instance.price.cycles > 1:
+                    #  This are Cycles, Events dont have prices of amount > 1
                     try:
                         instance.save()
                         createAssistance(instance)
+                        print("Create Booking")
                         createAmountBookingAssistance(
                             instance, "PA", instance.price.cycles
                         )
@@ -215,6 +217,26 @@ class TeacherListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
 
     def test_func(self):
         return teacher_check(self.request.user)
+
+
+class AssistanceListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
+    model = Assistance
+    template_name = "booking/assistance_list.html"
+
+    def post(self, request, *args, **kwargs):
+        pk_list = request.POST.getlist('edit')
+        print(pk_list)
+        return request
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["assistance_list"] = Assistance.objects.filter(
+            assistance_date__contains=[datetime.datetime.now().date()]
+        )
+        return context
+
+    def test_func(self):
+        return staff_check(self.request.user)
 
 
 class HerdView(UserPassesTestMixin, LoginRequiredMixin, TemplateView):

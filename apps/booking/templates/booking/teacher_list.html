@@ -6,18 +6,18 @@
         <thead>
             <th>Date Booking</th>
             <th>Event</th>
-            <th>Time</th>
             <th>User</th>
+            <th>Date</th>
             <th>Status</th>
         </thead>
         <tbody>
-            {% for obj in event_list %}
+            {% for obj in assistance_list %}
             <tr>
-                    <td>{{obj.booked_at}}</td>
-                    <td>{{obj.event}}</td>
-                    <td>{{obj.time}}</td>
+                    <td>{{obj.book.booked_at}}</td>
+                    <td>{{obj.book.event}}</td>
                     <td>{{obj.user}}</td>
-                    <td>{{obj.get_display.status}}</td>
+                    <td>{{obj.get_assistance_date}}</td>
+                    <td>{{obj.get_assistance_check}}</td>
             </tr>
             {% endfor%}
         </tbody>
