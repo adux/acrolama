@@ -110,7 +110,7 @@ class TimeLocation(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
 
     def __str__(self):
-        return " - ".join(p.name for p in self.time_options.all()) + " | %s" % (self.location)
+        return " - ".join(p for p in self.time_options.all()) + " | %s" % (self.location)
 
 
 class Irregularity(models.Model):
