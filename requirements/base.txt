@@ -37,3 +37,4 @@ docutils==0.14
 jmespath==0.9.3
 django-storages==1.8
 s3transfer==0.2.1
+Collectfast==1.3.1
