@@ -38,12 +38,10 @@
                                 - {{ object.event_enddate }}
                                 {% endif %}
                             </li>
-                                {% if exceptions %}
-                                    {% with count = exceptions.count %}#}
+                            {% if exceptions %}{# TODO:Pluralize #}
                                     <li>
-                                        <strong>Exception{{ count|pluralize }}:</u></strong>
+                                        <strong>Exceptions:</u></strong>
                                     </li>
-                                    {% endwith %}
                                     {% for obj in exceptions %}
                                         <li>
                                             · {{obj.description}}
