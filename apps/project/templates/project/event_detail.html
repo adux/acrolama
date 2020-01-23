@@ -38,19 +38,19 @@
                                 - {{ object.event_enddate }}
                                 {% endif %}
                             </li>
-             <!-- if -->        {% if exceptions %}
-                                {% with count = exceptions.count %}#}
-                            <li>
-                                <strong>Exception{{ count|pluralize }}:</u></strong>
-                            </li>
-                                {#{% endwith %}#}
-                                {% for obj in exceptions %}
+                                {% if exceptions %}
+                                    {% with count = exceptions.count %}#}
                                     <li>
-                                        · {{obj.description}}
+                                        <strong>Exception{{ count|pluralize }}:</u></strong>
                                     </li>
-                                {% endfor %}
+                                    {% endwith %}
+                                    {% for obj in exceptions %}
+                                        <li>
+                                            · {{obj.description}}
+                                        </li>
+                                    {% endfor %}
                                 {% endif %}
-                                {# So this would be the recent option #}
+
                                 {%for option in timelocations_list%}
                                 {%if option.1 %}
                                     <li>
