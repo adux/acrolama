@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
-{% block head_title %}{{block.super}}Acro, Yoga and Acroyoga Classes{% endblock%}
+{% block head_title %}{{block.super}}Acro and Acroyoga Classes{% endblock%}
+{% block meta_description %}<meta name="description" content="Swiss Acro & Acroyoga team that offers weekly classes, organize Workshops and Training Camps internationally. Hosts of the Winter & Urban Acro Festival Zürich."/>{% endblock %}
 {% block content %}
 {% load static %}
 {% include 'snippets/nav.html' %}
@@ -24,7 +25,7 @@
                         </div>
                         <div class="info">
                                 <div class="author vcard "><a href="/classes/{{object.slug}}/">
-                                        {{ object.level.get_name_display }} {{ object.get_category_display }} - 
+                                        {{ object.level.get_name_display }} {{ object.get_category_display }} -
                                         {% for ad in object.time_locations.all %}
                                         {% ifchanged %} {{ad.location.name }} {% endifchanged %}
                                     {% endfor %}</a></div>
