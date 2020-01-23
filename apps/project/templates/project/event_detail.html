@@ -38,39 +38,60 @@
                                 - {{ object.event_enddate }}
                                 {% endif %}
                             </li>
-                                {% if object.irregularities %}
-                                {% with count=object.irregularities.count %}
+             <!-- if -->        {% if object.irregularities %}
+                                {#{% with count=object.irregularities.count %}#}
                             <li>
                                 <strong>Exception{{ count|pluralize }}:</u></strong>
                             </li>
-                                {% endwith %}
+                                {#{% endwith %}#}
                                 {% for obj in exception %}
-                            <li>
-                                · {{obj.description}}
-                            </li>
+                                    <li>
+                                        · {{obj.description}}
+                                    </li>
                                 {% endfor %}
                                 {% endif %}
+                                {# So this would be the recent option #}
+                                <!--
                                 {% for to in timeoption %}
-                                {% if to.regular_days %}
-                            <li>
-                                <h3>{{ to.regular_days }}</h3>
-                            </li>
-                                {% endif %}
-                                    {% for tl in to.timelocation_set.all %}
-                            <li>
-                                <strong>Address</strong> : {{tl.location.name }} | {{ tl.location.address }}
-                            </li>
+                                        {% if to.regular_days %}
+                                    <li>
+                                        <h3>{{ to.regular_days }}</h3>
+                                    </li>
+                                        {% endif %}
+                                            {% for tl in to.timelocation_set.all %}
+                                    <li>
+                                        <strong>Address</strong> : {{tl.location.name }} | {{ tl.location.address }}
+                                    </li>
+                                            {% endfor %}
+                                    <li>
+                                        <strong>Door Open</strong>: {{ to.open_starttime }}  - {{ to.open_endtime }}
+                                    </li>
+                                        {% if to.class_starttime %}
+                                    <li>
+                                        <strong>Class</strong>: {{ to.class_starttime }} - {{ to.class_endtime }}
+                                    </li>
+                                        {% endif %}
+                                        {% endfor %}-->
+                                {# So this would be the recent option #}
+                                    {%for option in timelocations_list%}
+                                    {%if option.1 %}
+                                        <li>
+                                            <h3>{{ option.1 }}</h3>
+                                        </li>
+                                    {% endif %}
+                                    <li>
+                                        <strong>Address</strong> : {{option.0 }} || {{option.0.address }}
+                                    </li>
+                                    <li>
+                                        <strong>Door Open</strong>: {{ option.2 }}  - {{ option.3 }}
+                                    </li>
+                                    {% if option.4 %}
+                                        <li>
+                                            <strong>Class</strong>: {{ option.6 }} - {{ option.5 }}
+                                        </li>
+                                    {% endif %}
                                     {% endfor %}
-                            <li>
-                                <strong>Door Open</strong>: {{ to.open_starttime }}  - {{ to.open_endtime }}
-                            </li>
-                                {% if to.class_starttime %}
-                            <li>
-                                <strong>Class</strong>: {{ to.class_starttime }} - {{ to.class_endtime }}
-                            </li>
-                                {% endif %}
-                            {% endfor %}
-                    <br>
+                                <br>
                             <li>
                                 <strong>Max. Participants</strong> : {{ object.max_participants }}
                             </li>

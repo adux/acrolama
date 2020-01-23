@@ -62,6 +62,7 @@ class Project(models.Model):
 class TimeOption(models.Model):
     name = models.CharField(max_length=30)
     description = models.TextField(max_length=1000)
+    #this should be singular
     regular_days = models.ForeignKey(
         Day, null=True, blank=True, on_delete=models.CASCADE
     )
@@ -106,6 +107,10 @@ class Location(models.Model):
 
 
 class TimeLocation(models.Model):
+    """
+    time_options as a many to many was not the best desition ever probably
+    it spears no practical time nor space
+    """
     time_options = models.ManyToManyField(TimeOption)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
 
