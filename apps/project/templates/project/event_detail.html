@@ -38,59 +38,37 @@
                                 - {{ object.event_enddate }}
                                 {% endif %}
                             </li>
-             <!-- if -->        {% if object.irregularities %}
-                                {#{% with count=object.irregularities.count %}#}
+             <!-- if -->        {% if exceptions %}
+                                {% with count = exceptions.count %}#}
                             <li>
                                 <strong>Exception{{ count|pluralize }}:</u></strong>
                             </li>
                                 {#{% endwith %}#}
-                                {% for obj in exception %}
+                                {% for obj in exceptions %}
                                     <li>
                                         · {{obj.description}}
                                     </li>
                                 {% endfor %}
                                 {% endif %}
                                 {# So this would be the recent option #}
-                                <!--
-                                {% for to in timeoption %}
-                                        {% if to.regular_days %}
+                                {%for option in timelocations_list%}
+                                {%if option.1 %}
                                     <li>
-                                        <h3>{{ to.regular_days }}</h3>
+                                        <h3>{{ option.1 }}</h3>
                                     </li>
-                                        {% endif %}
-                                            {% for tl in to.timelocation_set.all %}
+                                {% endif %}
+                                <li>
+                                    <strong>Address</strong> : {{option.0 }} || {{option.0.address }}
+                                </li>
+                                <li>
+                                    <strong>Door Open</strong>: {{ option.2 }}  - {{ option.3 }}
+                                </li>
+                                {% if option.4 %}
                                     <li>
-                                        <strong>Address</strong> : {{tl.location.name }} | {{ tl.location.address }}
+                                        <strong>Class</strong>: {{ option.4 }} - {{ option.5 }}
                                     </li>
-                                            {% endfor %}
-                                    <li>
-                                        <strong>Door Open</strong>: {{ to.open_starttime }}  - {{ to.open_endtime }}
-                                    </li>
-                                        {% if to.class_starttime %}
-                                    <li>
-                                        <strong>Class</strong>: {{ to.class_starttime }} - {{ to.class_endtime }}
-                                    </li>
-                                        {% endif %}
-                                        {% endfor %}-->
-                                {# So this would be the recent option #}
-                                    {%for option in timelocations_list%}
-                                    {%if option.1 %}
-                                        <li>
-                                            <h3>{{ option.1 }}</h3>
-                                        </li>
-                                    {% endif %}
-                                    <li>
-                                        <strong>Address</strong> : {{option.0 }} || {{option.0.address }}
-                                    </li>
-                                    <li>
-                                        <strong>Door Open</strong>: {{ option.2 }}  - {{ option.3 }}
-                                    </li>
-                                    {% if option.4 %}
-                                        <li>
-                                            <strong>Class</strong>: {{ option.6 }} - {{ option.5 }}
-                                        </li>
-                                    {% endif %}
-                                    {% endfor %}
+                                {% endif %}
+                                {% endfor %}
                                 <br>
                             <li>
                                 <strong>Max. Participants</strong> : {{ object.max_participants }}
@@ -113,7 +91,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for po in priceoption %}
+                                            {% for po in priceoptions %}
                                             <tr>
                                                 <td scope="row" data-label="Name">{{ po.name }}</td>
                                                 <td data-label="Price">
@@ -159,7 +137,7 @@
                             <a id="aboutmember_next" class="image_slider_next" href="#"></a>
                             <div class="caroufredsel_wrapper">
                                 <ul id="aboutmember" class="image-slider slides">
-                                    {% for teacher in teacher %}
+                                    {% for teacher in teachers %}
                                     <li>
                                         <div class="member-content-holder">
                                             <h4 class="member-name">{{ teacher.first_name }}</h4>

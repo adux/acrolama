@@ -20,14 +20,10 @@ class EventDisplay(DetailView):
         context = super().get_context_data(**kwargs)
         slug = self.kwargs
         context["form"] = BookForm(slug)
-        # context["timeoption"] = TimeOption.objects.filter(
-        #     timelocation__event__slug=self.object.slug
-        # )
 
-
-        # si i need to create a list of lists so that the list does something like this
-        # (('regular_day','address','open_time'),('regular day...)
-        # not sure where this code should go TODO
+        # Creates a list of lists:
+        # (('location','regular_day','open_time...),('regu..)..)
+        # TODO:not sure where this code should go
         timelocations = TimeLocation.objects.filter(
             event__slug=self.object.slug
         )
@@ -45,13 +41,13 @@ class EventDisplay(DetailView):
             main_tl_list.append(tmp_list)
 
         context["timelocations_list"] = main_tl_list
-        context["priceoption"] = PriceOption.objects.filter(
+        context["priceoptions"] = PriceOption.objects.filter(
             event__slug=self.object.slug
         )
-        context["teacher"] = User.objects.filter(
+        context["teachers"] = User.objects.filter(
             eventteacher__slug=self.object.slug
         )
-        context["exception"] = Irregularity.objects.filter(
+        context["exceptions"] = Irregularity.objects.filter(
             event__slug=self.object.slug
         )
         return context
