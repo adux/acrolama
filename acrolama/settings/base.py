@@ -50,6 +50,7 @@ DJANGO_APPS = [
     'django.contrib.messages',  # allauth
     'django.contrib.staticfiles',  # django debuger uses this
     'django.contrib.sites',  # allauth
+    'django.contrib.sitemaps',
 ]
 
 EXTERNAL_APPS = [

@@ -1,5 +1,7 @@
 from django.db import models
 from django.db.models.signals import pre_save
+from django.urls import reverse
+
 from home.utils import unique_slug_generator
 
 # Reference Data
@@ -175,22 +177,18 @@ class Policy(models.Model):
 
 class Event(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    # Home
     category = models.CharField(max_length=50, choices=EVENTCATEGORY)
     cycle = models.IntegerField(
         default=0, choices=CYCLE, blank=True, null=True
     )
     title = models.CharField(max_length=100)
-    # Home
     event_startdate = models.DateField(
         auto_now_add=False, auto_now=False, blank=True, null=True
     )
-    # Home
     event_enddate = models.DateField(
         auto_now_add=False, auto_now=False, blank=True, null=True
     )
     description = models.TextField(max_length=3000)
-    # Home
     time_locations = models.ManyToManyField(TimeLocation)
     irregularities = models.ManyToManyField(Irregularity, blank=True)
     price_options = models.ManyToManyField(PriceOption)
@@ -198,11 +196,9 @@ class Event(models.Model):
     max_participants = models.CharField(max_length=5, null=True, blank=True)
     images = models.ManyToManyField("audiovisual.Image")
     videos = models.ManyToManyField("audiovisual.Video", blank=True)
-    # Home
     level = models.ForeignKey(
         Level, null=True, blank=True, on_delete=models.CASCADE
     )
-    # Home
     discipline = models.ForeignKey(
         Discipline, null=True, blank=True, on_delete=models.CASCADE
     )
@@ -216,7 +212,6 @@ class Event(models.Model):
     )
     published = models.BooleanField()
     registration = models.BooleanField(default=True)
-    # All
     slug = models.SlugField(unique=True, null=True, blank=True)
 
     def fulltitle(self):
@@ -227,6 +222,12 @@ class Event(models.Model):
                 return "Cycle " + str(self.cycle) + " - " + self.title
             else:
                 return self.title
+
+    def get_absolute_url(self):
+        if self.category == "fas fa-cogs":
+            return reverse('class', args=[str(self.slug)])
+        else:
+            return reverse('event', args=[str(self.slug)])
 
     def __str__(self):
         return self.title
