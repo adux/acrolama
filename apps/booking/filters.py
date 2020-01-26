@@ -2,7 +2,7 @@ from django import forms
 
 import django_filters
 
-from booking.models import Book
+from booking.models import Book, Assistance
 from project.models import TimeOption
 
 
@@ -10,6 +10,7 @@ class BookFilter(django_filters.FilterSet):
     year_joined = django_filters.NumberFilter(
         field_name="booked_at", lookup_expr="year"
     )
+
     month_joined = django_filters.NumberFilter(
         field_name="booked_at", lookup_expr="month"
     )
@@ -21,3 +22,10 @@ class BookFilter(django_filters.FilterSet):
     class Meta:
         model = Book
         fields = {"user", "event", "status", "times"}  # : ['contains'],
+
+
+class AssistanceFilter(django_filters.FilterSet):
+
+    class Meta:
+        model = Assistance
+        fields = {"book"}

@@ -1,0 +1,28 @@
+{% extends "booking/base_bs.html" %}
+{% block head_title%}List{% endblock %}
+{% load widget_tweaks %}
+{% block content %}
+<form method="get">
+    <table class="table table-bordered">
+        <thead>
+            <th>Check</th>
+            <th>Booking Id</th>
+            <th>Booked Event</th>
+            <th>Full Name</th>
+            <th>Time Option</th>
+            <th>Price Option</th>
+        </thead>
+        <tbody>
+            {% for obj in assistance_list %}
+            <tr>
+                <td><a href=#> Link</a></td>
+                <td>{{obj.book.id}}</td>
+                <td>{{obj.book.event}}</td>
+                <td>{{obj.book.user.get_full_name}}</td>
+                <td>{{obj.assistance_date}}</td>
+                <td>{{obj.assistance_check}}</td>
+            </tr>
+            {% endfor%}
+        </tbody>
+    </table>
+{% endblock %}

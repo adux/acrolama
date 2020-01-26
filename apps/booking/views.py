@@ -18,7 +18,7 @@ from django.template.loader import render_to_string
 # from django.db.models import Q
 
 from .models import Book, Assistance
-from .filters import BookFilter
+from .filters import BookFilter, AssistanceFilter
 from .forms import UpdateForm, CreateForm
 from .utils import build_url, email_sender, datelistgenerator
 from .services import createAssistance, createAmountBookingAssistance
@@ -206,22 +206,9 @@ class ControlCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
         return staff_check(self.request.user)
 
 
-class TeacherListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
-    model = Book
-    template_name = "booking/teacher_list.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["event_list"] = Book.objects.order_by("event")
-        return context
-
-    def test_func(self):
-        return staff_check(self.request.user)
-
-
-class AssistanceListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
+class AssistanceDailyListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
     model = Assistance
-    template_name = "booking/assistance_list.html"
+    template_name = "booking/assistance_list_daily.html"
 
     def post(self, request, *args, **kwargs):
         pk_list = request.POST.getlist('edit')
@@ -230,14 +217,39 @@ class AssistanceListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["assistance_list"] = Assistance.objects.filter(
-            assistance_date__contains=[datetime.datetime.now().date()]
-        )
+        context["assistance_list"] = Assistance.objects.all()
+        #TODO: Add filter per teacher
+        # context["assistance_list"] = Assistance.objects.filter(
+        #     assistance_date__contains=[datetime.datetime.now().date()]
+        # )
         return context
 
     def test_func(self):
-        return teacher_check(self.request.user)
+        return staff_check(self.request.user)
 
+class AssistanceMainListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
+    model = Assistance
+    template_name = "booking/assistance_list_main.html"
+
+    def post(self, request, *args, **kwargs):
+        pk_list = request.POST.getlist('edit')
+        print(pk_list)
+        return request
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["assistance_filter"] = AsstianceFilter(
+            self.request.GET,
+            queryset=(
+                Assitance.objects.all()
+                .select_related("book")
+            ),
+        )
+        return context
+
+
+    def test_func(self):
+        return staff_check(self.request.user)
 
 class HerdView(UserPassesTestMixin, LoginRequiredMixin, TemplateView):
     template_name = "booking/herd.html"

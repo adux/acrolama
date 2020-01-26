@@ -12,12 +12,13 @@ from home.views import (
 )
 from project.views import EventDetail
 from booking.views import (
-    HerdView,
+    #Assistance
+    AssistanceDailyListView,
+    AssistanceMainListView,
     ControlListView,
     ControlUpdateView,
     ControlCreateView,
-    TeacherListView,
-    AssistanceListView,
+    HerdView,
 )
 
 urlpatterns = [
@@ -37,8 +38,8 @@ urlpatterns = [
     path("herd/control/", ControlListView.as_view(), name="control_list"),
     path("herd/control/<int:pk>/update/", ControlUpdateView.as_view(), name="control_update"),
     path("herd/control/create/", ControlCreateView.as_view(), name="control_create"),
-    path("herd/teacher/", TeacherListView.as_view(), name="teacher"),
-    path("herd/assistance/", AssistanceListView.as_view(), name="assistance"),
+    path("herd/teacher/assistance", AssistanceDailyListView.as_view(), name="teacher_assistance"),
+    path("herd/assistance/", AssistanceMainListView.as_view(), name="assistance"),
     path("todo/", include("todo.urls", namespace="todo")),
 ]
 
