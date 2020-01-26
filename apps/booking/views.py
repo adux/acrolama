@@ -217,11 +217,11 @@ class AssistanceDailyListView(UserPassesTestMixin, LoginRequiredMixin, ListView)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["assistance_list"] = Assistance.objects.all()
-        #TODO: Add filter per teacher
         assistance_today = Assistance.objects.filter(
             assistance_date__contains=[datetime.datetime.now().date()]
         )
+        context["assistance_list"] = assistance_today
+
         return context
 
     def test_func(self):
@@ -247,9 +247,9 @@ class AssistanceMainListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
         )
         return context
 
-
     def test_func(self):
         return staff_check(self.request.user)
+
 
 class HerdView(UserPassesTestMixin, LoginRequiredMixin, TemplateView):
     template_name = "booking/herd.html"

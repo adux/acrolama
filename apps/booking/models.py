@@ -59,18 +59,19 @@ class Assistance(models.Model):
         return "%s - %s" % (self.book.event, self.book.user,)
 
     def get_assistance_today(self):
-        today = self.assistance_date__contains=[datetime.datetime.now().date()]
-        return today
-
-    def get_assistance(self):
         for num, date in enumerate(self.assistance_date):
             if date == datetime.datetime.now().date():
                 return date
 
-    def get_check(self):
+    def get_check_today(self):
         for num, date in enumerate(self.assistance_date):
             if date == datetime.datetime.now().date():
                 return self.assistance_check[num]
+
+    def get_num_today(self):
+        for num, date in enumerate(self.assistance_date):
+            if date == datetime.datetime.now().date():
+                return num
 
 
 # def book_pre_save_receiver(sender, instance, **kwargs):

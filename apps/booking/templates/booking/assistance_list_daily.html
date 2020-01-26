@@ -7,19 +7,19 @@
             <th>Check</th>
             <th>Booking Id</th>
             <th>Booked Event</th>
-            <th>Full Name</th>
-            <th>Time Option</th>
+            <th>Name</th>
+            <th>Today Date</th>
             <th>Price Option</th>
         </thead>
         <tbody>
             {% for obj in assistance_list %}
             <tr>
-                <td><a href=#> Link</a></td>
+                <td><input type="radio" name="foobar"></td>
                 <td>{{obj.book.id}}</td>
                 <td>{{obj.book.event}}</td>
                 <td>{{obj.book.user.get_full_name}}</td>
-                <td>{% for obj in obj.assistance_date %}{{obj}}{% endfor %}</td>
-                <td>{% for obj in obj.assistance_check %}{{obj}}{% endfor %}</td>
+                <td>{{obj.get_assistance_today}}</td>
+                <td>{{obj.get_check_today}}</td>
             </tr>
             {% endfor%}
         </tbody>
