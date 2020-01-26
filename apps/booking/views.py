@@ -219,9 +219,9 @@ class AssistanceDailyListView(UserPassesTestMixin, LoginRequiredMixin, ListView)
         context = super().get_context_data(**kwargs)
         context["assistance_list"] = Assistance.objects.all()
         #TODO: Add filter per teacher
-        # context["assistance_list"] = Assistance.objects.filter(
-        #     assistance_date__contains=[datetime.datetime.now().date()]
-        # )
+        assistance_today = Assistance.objects.filter(
+            assistance_date__contains=[datetime.datetime.now().date()]
+        )
         return context
 
     def test_func(self):

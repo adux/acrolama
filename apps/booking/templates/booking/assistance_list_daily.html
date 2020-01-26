@@ -2,7 +2,6 @@
 {% block head_title%}List{% endblock %}
 {% load widget_tweaks %}
 {% block content %}
-<form method="get">
     <table class="table table-bordered">
         <thead>
             <th>Check</th>
@@ -19,8 +18,8 @@
                 <td>{{obj.book.id}}</td>
                 <td>{{obj.book.event}}</td>
                 <td>{{obj.book.user.get_full_name}}</td>
-                <td>{{obj.assistance_date}}</td>
-                <td>{{obj.assistance_check}}</td>
+                <td>{% for obj in obj.assistance_date %}{{obj}}{% endfor %}</td>
+                <td>{% for obj in obj.assistance_check %}{{obj}}{% endfor %}</td>
             </tr>
             {% endfor%}
         </tbody>
