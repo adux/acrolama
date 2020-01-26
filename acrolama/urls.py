@@ -17,6 +17,7 @@ from booking.views import (
     ControlUpdateView,
     ControlCreateView,
     TeacherListView,
+    AssistanceListView,
 )
 
 urlpatterns = [
@@ -37,6 +38,7 @@ urlpatterns = [
     path("herd/control/<int:pk>/update/", ControlUpdateView.as_view(), name="control_update"),
     path("herd/control/create/", ControlCreateView.as_view(), name="control_create"),
     path("herd/teacher/", TeacherListView.as_view(), name="teacher"),
+    path("herd/assistance/", AssistanceListView.as_view(), name="assistance"),
     path("todo/", include("todo.urls", namespace="todo")),
 ]
 

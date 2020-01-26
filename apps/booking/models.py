@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.db.models.signals import pre_save
 from django.contrib.postgres.fields import ArrayField
@@ -55,6 +57,20 @@ class Assistance(models.Model):
 
     def __str__(self):
         return "%s - %s" % (self.book.event, self.book.user,)
+
+    def get_assistance_today(self):
+        today = self.assistance_date__contains=[datetime.datetime.now().date()]
+        return today
+
+    def get_assistance(self):
+        for num, date in enumerate(self.assistance_date):
+            if date == datetime.datetime.now().date():
+                return date
+
+    def get_check(self):
+        for num, date in enumerate(self.assistance_date):
+            if date == datetime.datetime.now().date():
+                return self.assistance_check[num]
 
 
 # def book_pre_save_receiver(sender, instance, **kwargs):
