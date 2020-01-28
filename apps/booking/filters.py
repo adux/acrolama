@@ -2,7 +2,7 @@ from django import forms
 
 import django_filters
 
-from booking.models import Book, Assistance
+from booking.models import Book, Attendance
 from project.models import TimeOption
 
 
@@ -24,8 +24,8 @@ class BookFilter(django_filters.FilterSet):
         fields = {"user", "event", "status", "times"}  # : ['contains'],
 
 
-class AssistanceFilter(django_filters.FilterSet):
+class AttendanceFilter(django_filters.FilterSet):
 
     class Meta:
-        model = Assistance
+        model = Attendance
         fields = {"book"}

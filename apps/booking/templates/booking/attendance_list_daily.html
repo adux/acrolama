@@ -2,26 +2,29 @@
 {% block head_title%}List{% endblock %}
 {% load widget_tweaks %}
 {% block content %}
+<form action="{% url 'teacher_attendance' %}" method="POST">{% csrf_token %}
     <table class="table table-bordered">
         <thead>
-            <th>Check</th>
             <th>Booking Id</th>
             <th>Booked Event</th>
             <th>Name</th>
-            <th>Today Date</th>
-            <th>Price Option</th>
+            <th>Attendance</th>
+            <th>Switch</th>
         </thead>
         <tbody>
-            {% for obj in assistance_list %}
+            {% for obj in attendance_list %}
             <tr>
-                <td><input type="radio" name="foobar"></td>
                 <td>{{obj.book.id}}</td>
                 <td>{{obj.book.event}}</td>
                 <td>{{obj.book.user.get_full_name}}</td>
-                <td>{{obj.get_assistance_today}}</td>
                 <td>{{obj.get_check_today}}</td>
+                <td><input type="checkbox" name="check" value="{{obj.id}} {{obj.get_num_today}}"></td>
             </tr>
             {% endfor%}
         </tbody>
     </table>
+        <button type="submit" name="update" class="btn btn-warning">
+        <i class="fas fa-edit"></i> Check
+        </button>
+</form>
 {% endblock %}

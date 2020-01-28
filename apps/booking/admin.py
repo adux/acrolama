@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Book, Assistance
+from .models import Book, Attendance
 
 
 class BookAdmin(admin.ModelAdmin):
@@ -24,7 +24,7 @@ class BookAdmin(admin.ModelAdmin):
     save_as = True
 
 
-class AssistanceAdmin(admin.ModelAdmin):
+class AttendanceAdmin(admin.ModelAdmin):
     list_display = [
         "id",
         "book",
@@ -32,4 +32,4 @@ class AssistanceAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Book, BookAdmin)
-admin.site.register(Assistance, AssistanceAdmin)
+admin.site.register(Attendance, AttendanceAdmin)

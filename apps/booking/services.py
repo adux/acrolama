@@ -1,19 +1,25 @@
 from django.core.exceptions import MultipleObjectsReturned, EmptyResultSet
 
-from .models import Book, Assistance
+from .models import Book, Attendance
 from project.models import Event
 from .utils import datelistgenerator
 
 
-def createAssistance(instance):
+def updateSwitchCheckAttendance(id, position):
+    attendance = Attendance.objects.get(pk=id)
+    attendance.attendance_check[position] = not attendance.attendance_check[position]
+    attendance.save()
+
+
+def createAttendance(instance):
     start = instance.event.event_startdate
     end = instance.event.event_enddate
     times = instance.times.all()
-    obj = Assistance()
+    obj = Attendance()
     date = []
     check = []
     obj.book_id = instance.id
-    print("Assistance Variables Loaded")
+    print("Attendance Variables Loaded")
     for to in times:
         num = to.regular_days.day
         li = datelistgenerator(start, end, int(num))
@@ -23,13 +29,13 @@ def createAssistance(instance):
         for time in li:
             check.append("False")
             print(check)
-    obj.assistance_date = date
-    obj.assistance_check = check
+    obj.attendance_date = date
+    obj.attendance_check = check
     obj.save()
-    print("Save Assistance")
+    print("Save Attendance")
 
 
-def createAmountBookingAssistance(instance, status, amount):
+def createAmountBookingAttendance(instance, status, amount):
     """
     Creates a Booking from a instance of the form in booking system
     """
@@ -67,6 +73,6 @@ def createAmountBookingAssistance(instance, status, amount):
         instance.id = obj.id
         instance.pk = obj.pk
         try:
-            createAssistance(instance)
+            createAttendance(instance)
         except:
-            print("Error creating Assistance")
+            print("Error creating Attendance")

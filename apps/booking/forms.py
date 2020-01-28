@@ -2,8 +2,8 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from booking.models import Book
 from project.models import PriceOption, TimeOption
-# FIXME: Rename this classes
 
+# FIXME: Rename this classes to something related to the model 
 class UpdateForm(forms.ModelForm):
     class Meta:
         model = Book

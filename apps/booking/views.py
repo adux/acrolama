@@ -3,12 +3,19 @@ import datetime
 from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
 from django.contrib import messages
-from django.shortcuts import get_object_or_404
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext as _
 
 from django.core.mail import send_mail
 
-from django.views.generic import TemplateView, UpdateView, ListView, CreateView
+from django.views.generic import (
+    TemplateView,
+    CreateView,
+    UpdateView,
+    ListView,
+    FormView,
+)
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 # Render for email template
@@ -17,11 +24,15 @@ from django.template.loader import render_to_string
 # Allows querries with OR statments
 # from django.db.models import Q
 
-from .models import Book, Assistance
-from .filters import BookFilter, AssistanceFilter
-from .forms import UpdateForm, CreateForm
+from .models import Book, Attendance
+from .filters import BookFilter, AttendanceFilter
+from .forms import UpdateForm, CreateForm # AttendanceDailyForm
 from .utils import build_url, email_sender, datelistgenerator
-from .services import createAssistance, createAmountBookingAssistance
+from .services import (
+    createAttendance,
+    updateSwitchCheckAttendance,
+    createAmountBookingAttendance,
+)
 
 from project.models import Event, Irregularity
 
@@ -105,10 +116,10 @@ class ControlUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                 if instance.price.cycles == 1:
                     try:
                         instance.save()
-                        createAssistance(instance)
+                        createAttendance(instance)
                     except:
                         messages.add_message(
-                            self.request, messages.ERROR, _("Error Assistance")
+                            self.request, messages.ERROR, _("Error Attendance")
                         )
                     else:
                         messages.add_message(
@@ -120,9 +131,9 @@ class ControlUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                     #  This are Cycles, Events dont have prices of amount > 1
                     try:
                         instance.save()
-                        createAssistance(instance)
+                        createAttendance(instance)
                         print("Create Booking")
-                        createAmountBookingAssistance(
+                        createAmountBookingAttendance(
                             instance, "PA", instance.price.cycles
                         )
                     except:
@@ -206,9 +217,43 @@ class ControlCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
         return staff_check(self.request.user)
 
 
-class AssistanceDailyListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
-    model = Assistance
-    template_name = "booking/assistance_list_daily.html"
+#TEst for teachers only
+def attendance_daily_view(request):
+    template = "booking/attendance_list_daily.html"
+    attendance_today_list = Attendance.objects.filter(
+        attendance_date__contains=[datetime.datetime.now().date()]
+    )
+
+    context = {'attendance_list' : attendance_today_list}
+
+    if request.method == 'POST':
+        check_list= request.POST.getlist('check')
+        try:
+            for values in check_list:
+                values_split = values.split(' ')
+                attendance_id = values_split[0]
+                check_pos = values_split[1]
+                #Check that booking exists
+                if attendance_today_list.filter(id=attendance_id).exists():
+                    attendance = attendance_today_list.get(id=attendance_id)
+                    # And checking is false
+                    # if not attendance.attendance_check[int(check_pos)]:
+                    updateSwitchCheckAttendance(attendance_id, int(check_pos))
+
+            messages.add_message(
+                request, messages.SUCCESS, _("List Updated")
+            )
+        except:
+            messages.add_message(
+                request, messages.ERROR, _("Make a manual list and report the error please.")
+            )
+
+    return render(request, template, context)
+
+
+class AttendanceMainListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
+    model = Attendance
+    template_name = "booking/attendance_list_main.html"
 
     def post(self, request, *args, **kwargs):
         pk_list = request.POST.getlist('edit')
@@ -217,28 +262,7 @@ class AssistanceDailyListView(UserPassesTestMixin, LoginRequiredMixin, ListView)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        assistance_today = Assistance.objects.filter(
-            assistance_date__contains=[datetime.datetime.now().date()]
-        )
-        context["assistance_list"] = assistance_today
-
-        return context
-
-    def test_func(self):
-        return staff_check(self.request.user)
-
-class AssistanceMainListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
-    model = Assistance
-    template_name = "booking/assistance_list_main.html"
-
-    def post(self, request, *args, **kwargs):
-        pk_list = request.POST.getlist('edit')
-        print(pk_list)
-        return request
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["assistance_filter"] = AsstianceFilter(
+        context["attendance_filter"] = AsstianceFilter(
             self.request.GET,
             queryset=(
                 Assitance.objects.all()
@@ -251,9 +275,9 @@ class AssistanceMainListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
         return staff_check(self.request.user)
 
 
-class AssistanceListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
-    model = Assistance
-    template_name = "booking/assistance_list.html"
+class AttendanceListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
+    model = Attendance
+    template_name = "booking/attendance_list.html"
 
     def post(self, request, *args, **kwargs):
         pk_list = request.POST.getlist('edit')
@@ -262,8 +286,8 @@ class AssistanceListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["assistance_list"] = Assistance.objects.filter(
-            assistance_date__contains=[datetime.datetime.now().date()]
+        context["attendance_list"] = Attendance.objects.filter(
+            attendance_date__contains=[datetime.datetime.now().date()]
         )
         return context
 

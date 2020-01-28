@@ -11,13 +11,13 @@
             <th>Status</th>
         </thead>
         <tbody>
-            {% for obj in assistance_list %}
+            {% for obj in attendance_list %}
             <tr>
                     <td>{{obj.book.booked_at}}</td>
                     <td>{{obj.book.event}}</td>
                     <td>{{obj.user}}</td>
-                    <td>{{obj.get_assistance_date}}</td>
-                    <td>{{obj.get_assistance_check}}</td>
+                    <td>{{obj.get_attendance_date}}</td>
+                    <td>{{obj.get_attendance_check}}</td>
             </tr>
             {% endfor%}
         </tbody>

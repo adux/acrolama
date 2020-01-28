@@ -48,28 +48,31 @@ class Book(models.Model):
         )
 
 
-class Assistance(models.Model):
+class Attendance(models.Model):
     book = models.ForeignKey(Book, unique=True, on_delete=models.CASCADE)
     # TODO: This could be done with JSON.
     # Not to much to use those, nor see the practical advantage now.
-    assistance_date = ArrayField(models.DateField())
-    assistance_check = ArrayField(models.BooleanField())
+    attendance_date = ArrayField(models.DateField())
+    attendance_check = ArrayField(models.BooleanField())
 
     def __str__(self):
         return "%s - %s" % (self.book.event, self.book.user,)
 
-    def get_assistance_today(self):
-        for num, date in enumerate(self.assistance_date):
+    # TODO: this might need to go to services.py but later.
+    # Priority is to make it work
+
+    def get_date_today(self):
+        for num, date in enumerate(self.attendance_date):
             if date == datetime.datetime.now().date():
                 return date
 
     def get_check_today(self):
-        for num, date in enumerate(self.assistance_date):
+        for num, date in enumerate(self.attendance_date):
             if date == datetime.datetime.now().date():
-                return self.assistance_check[num]
+                return self.attendance_check[num]
 
     def get_num_today(self):
-        for num, date in enumerate(self.assistance_date):
+        for num, date in enumerate(self.attendance_date):
             if date == datetime.datetime.now().date():
                 return num
 
