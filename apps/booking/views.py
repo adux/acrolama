@@ -1,20 +1,22 @@
-from django.conf import settings
+import datetime
 
+from django.conf import settings
+from django.contrib.postgres.fields import ArrayField
 from django.contrib import messages
-from django.shortcuts import get_object_or_404
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
+from django.utils.translation import gettext as _
 
 from django.core.mail import send_mail
 
 from django.views.generic import (
     TemplateView,
+    CreateView,
     UpdateView,
     ListView,
-    CreateView
+    FormView,
 )
-from django.contrib.auth.mixins import (
-    LoginRequiredMixin,
-    UserPassesTestMixin
-)
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 # Render for email template
 from django.template.loader import render_to_string
@@ -22,17 +24,21 @@ from django.template.loader import render_to_string
 # Allows querries with OR statments
 # from django.db.models import Q
 
-from .models import Book
-from .filters import BookFilter
-from .forms import UpdateForm, CreateForm
-from .utils import build_url
+from .models import Book, Attendance
+from .filters import BookFilter, AttendanceFilter
+from .forms import UpdateForm, CreateForm # AttendanceDailyForm
+from .utils import build_url, email_sender, datelistgenerator
+from .services import (
+    createAttendance,
+    updateSwitchCheckAttendance,
+    createAmountBookingAttendance,
+)
 
 from project.models import Event, Irregularity
 
 # Tests for the UserPassesTestMixin
 def staff_check(user):
     return user.is_staff
-
 
 def teacher_check(user):
     return user.is_teacher
@@ -48,13 +54,14 @@ class ControlListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context["book_filter"] = BookFilter(
             self.request.GET,
-            queryset= ( Book.objects.all()
-            .select_related('event')
-            .select_related('user')
-            .select_related('price')
-            .prefetch_related('times')
-            .prefetch_related('times__regular_days')
-                       )
+            queryset=(
+                Book.objects.all()
+                .select_related("event")
+                .select_related("user")
+                .select_related("price")
+                .prefetch_related("times")
+                .prefetch_related("times__regular_days")
+            ),
         )
         context["filter"] = self.request.GET
         return context
@@ -72,91 +79,99 @@ class ControlUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         context["book_filter"] = BookFilter(
             self.request.GET,
-            queryset= ( Book.objects.all()
-            .select_related('event')
-            .select_related('user')
-            .select_related('price')
-            .prefetch_related('times')
-            .prefetch_related('times__regular_days')
-                       )
+            queryset=(
+                Book.objects.all()
+                .select_related("event")
+                .select_related("user")
+                .select_related("price")
+                .prefetch_related("times")
+                .prefetch_related("times__regular_days")
+            ),
         )
         return context
 
     def form_valid(self, form):
+        """
+        Separetes logic depending on which action button was pressed.
+        """
         instance = form.save(commit=False)
-        """
-        Separetes logic based on which action button was pressed and generates
-        logic based on it TODO:maybe a state machines makes more sense
-        """
         if "update" in self.request.POST:
-            # I think i needed this for if they book, since then the pk doesn't have
-            # and id. Maybe in views its not so. TODO: check
-            # if instance.pk:
             """
-            Taken from
-            https://stackoverflow.com/questions/2809547/creating-email-templates-with-django
-            Theres another Method with Multi wich helps for headers if needed
+            Separate action depending on previous to recent status
             """
-            pre_save_object = Book.objects.get(pk=instance.pk)
-            if (pre_save_object.status == "PE") and (instance.status == "IN"):
-                subject = "Acrolama - Confirmation - " + str(instance.event)
-                sender = "notmonkeys@acrolama.com"
-                to = [instance.user.email, "acrolama@acrolama.com"]
-                irregularities = Irregularity.objects.filter(
-                    event__slug=instance.event.slug
-                )
-
-                p = {
-                    "event": instance.event,
-                    "user": instance.user,
-                    "price": instance.price,
-                    "times": instance.times.all(),
-                    "irregularities": irregularities,
-                }
-
-                msg_plain = render_to_string(
-                    settings.BASE_DIR
-                    + "/apps/booking/templates/booking/email_informed.txt",
-                    p,
-                )
-                msg_html = render_to_string(
-                    settings.BASE_DIR
-                    + "/apps/booking/templates/booking/email_informed.html",
-                    p,
-                )
-
-                send_mail(subject, msg_plain, sender, to, html_message=msg_html)
-                messages.success(self.request, "Update successful. Email Sent.")
+            pre_save_obj = Book.objects.get(pk=instance.pk)
+            if (pre_save_obj.status == "PE") and (instance.status == "IN"):
+                try:
+                    email_sender(instance, "Informed")
+                except:
+                    messages.add_message(
+                        self.request, messages.ERROR, _("Error Email")
+                    )
+                else:
+                    messages.add_message(
+                        self.request, messages.INFO, _("Informed email sent.")
+                    )
+            elif (pre_save_obj.status == "IN") and (instance.status == "PA"):
+                if instance.price.cycles == 1:
+                    try:
+                        instance.save()
+                        createAttendance(instance)
+                    except:
+                        messages.add_message(
+                            self.request, messages.ERROR, _("Error Attendance")
+                        )
+                    else:
+                        messages.add_message(
+                            self.request,
+                            messages.INFO,
+                            _("Assitance created."),
+                        )
+                elif instance.price.cycles > 1:
+                    #  This are Cycles, Events dont have prices of amount > 1
+                    try:
+                        instance.save()
+                        createAttendance(instance)
+                        print("Create Booking")
+                        createAmountBookingAttendance(
+                            instance, "PA", instance.price.cycles
+                        )
+                    except:
+                        messages.add_message(
+                            self.request,
+                            messages.ERROR,
+                            _("Error Create Book")
+                        )
+                    else:
+                        messages.add_message(
+                            self.request, messages.INFO, _("Booking Created")
+                        )
             else:
                 messages.success(self.request, "Update successful.")
-
         elif "create" in self.request.POST:
             instance.pk = None
             instance.id = None
-            instance.status = 'PE'
-            if instance.event.category == 'fas fa-cogs':
+            instance.status = "PE"
+            if instance.event.category == "fas fa-cogs":
                 old_event = instance.event
                 try:
-                    event = (
-                        Event.objects.filter(
-                            level=old_event.level,
-                            category=old_event.category,
-                            event_startdate__gt=old_event.event_enddate
-                        ).get(cycle=old_event.cycle + 1)
-                    )
+                    event = Event.objects.filter(
+                        level=old_event.level,
+                        category=old_event.category,
+                        event_startdate__gt=old_event.event_enddate,
+                    ).get(cycle=old_event.cycle + 1)
                     instance.event = event
                     messages.success(
-                        self.request,
-                        "Booking for next cycle was created."
+                        self.request, "Booking for next cycle was created."
                     )
                 except Event.DoesNotExist:
                     messages.warning(
                         self.request,
-                        "Next Cycle does not exist. Duplicate Created"
+                        "Next Cycle does not exist. Duplicate Created",
                     )
             else:
-                messages.success(self.request, "Booking of same event was duplicated.")
-        instance.save()
+                messages.success(
+                    self.request, "Booking of same event was duplicated."
+                )
         return super().form_valid(form)
 
     # TODO: There is probably a way to get all the GETs and process them?
@@ -186,13 +201,14 @@ class ControlCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context["book_filter"] = BookFilter(
             self.request.GET,
-            queryset= ( Book.objects.all()
-            .select_related('event')
-            .select_related('user')
-            .select_related('price')
-            .prefetch_related('times')
-            .prefetch_related('times__regular_days')
-                       )
+            queryset=(
+                Book.objects.all()
+                .select_related("event")
+                .select_related("user")
+                .select_related("price")
+                .prefetch_related("times")
+                .prefetch_related("times__regular_days")
+            ),
         )
         return context
 
@@ -200,17 +216,85 @@ class ControlCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
         return staff_check(self.request.user)
 
 
-class TeacherListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
-    model = Book
-    template_name = "booking/teacher_list.html"
+#TEst for teachers only
+def attendance_daily_view(request):
+    template = "booking/attendance_list_daily.html"
+    attendance_today_list = Attendance.objects.filter(
+        attendance_date__contains=[datetime.datetime.now().date()]
+    )
+
+    context = {
+        'attendance_list' : attendance_today_list,
+        'date_today' : datetime.datetime.now().date()
+    }
+
+    if request.method == 'POST':
+        check_list= request.POST.getlist('check')
+        try:
+            for values in check_list:
+                values_split = values.split(' ')
+                attendance_id = values_split[0]
+                check_pos = values_split[1]
+                #Check that booking exists
+                if attendance_today_list.filter(id=attendance_id).exists():
+                    attendance = attendance_today_list.get(id=attendance_id)
+                    # And checking is false
+                    # if not attendance.attendance_check[int(check_pos)]:
+                    updateSwitchCheckAttendance(attendance_id, int(check_pos))
+
+            messages.add_message(
+                request, messages.SUCCESS, _("List Updated")
+            )
+        except:
+            messages.add_message(
+                request, messages.ERROR, _("Make a manual list and report the error please.")
+            )
+
+    return render(request, template, context)
+
+
+class AttendanceMainListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
+    model = Attendance
+    template_name = "booking/attendance_list_main.html"
+
+    def post(self, request, *args, **kwargs):
+        pk_list = request.POST.getlist('edit')
+        print(pk_list)
+        return request
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["event_list"] = Book.objects.order_by("event")
+        context["attendance_filter"] = AsstianceFilter(
+            self.request.GET,
+            queryset=(
+                Assitance.objects.all()
+                .select_related("book")
+            ),
+        )
         return context
 
     def test_func(self):
-        return teacher_check(self.request.user)
+        return staff_check(self.request.user)
+
+
+class AttendanceListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
+    model = Attendance
+    template_name = "booking/attendance_list.html"
+
+    def post(self, request, *args, **kwargs):
+        pk_list = request.POST.getlist('edit')
+        print(pk_list)
+        return request
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["attendance_list"] = Attendance.objects.filter(
+            attendance_date__contains=[datetime.datetime.now().date()]
+        )
+        return context
+
+    def test_func(self):
+        return staff_check(self.request.user)
 
 
 class HerdView(UserPassesTestMixin, LoginRequiredMixin, TemplateView):

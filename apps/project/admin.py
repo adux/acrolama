@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import (
+    Day,
     Discipline,
     Event,
     Irregularity,
@@ -29,9 +30,18 @@ class EventAdmin(admin.ModelAdmin):
     search_fields = ["title", "event_startdate", "event_enddate"]
     save_as = True
 
+class ProjectAdmin(admin.ModelAdmin):
+    list_display = [
+        "name",
+        "description",
+        "manager",
+        "todo",
+    ]
+    list_filter = ["manager"]
 
+admin.site.register(Day)
 admin.site.register(Discipline)
-admin.site.register(Project)
+admin.site.register(Project, ProjectAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(Irregularity)
 admin.site.register(TimeOption)

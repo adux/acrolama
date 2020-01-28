@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Book
+from .models import Book, Attendance
 
 
 class BookAdmin(admin.ModelAdmin):
@@ -24,4 +24,12 @@ class BookAdmin(admin.ModelAdmin):
     save_as = True
 
 
+class AttendanceAdmin(admin.ModelAdmin):
+    list_display = [
+        "id",
+        "book",
+    ]
+
+
 admin.site.register(Book, BookAdmin)
+admin.site.register(Attendance, AttendanceAdmin)

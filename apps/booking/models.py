@@ -1,8 +1,12 @@
+import datetime
+
 from django.db import models
 from django.db.models.signals import pre_save
+from django.contrib.postgres.fields import ArrayField
 
+from project.models import Irregularity, TimeOption
 
-from project.models import Irregularity
+from booking.utils import datelistgenerator
 
 
 BOOKINGSTATUS = [
@@ -36,8 +40,45 @@ class Book(models.Model):
         return ",\n".join([p.name for p in self.times.all()])
 
     def __str__(self):
-        return "%s - %s %s" % (
+        return "%s: %s - %s %s" % (
+            self.pk,
             self.event,
             self.user.first_name,
             self.user.last_name,
         )
+
+
+class Attendance(models.Model):
+    book = models.ForeignKey(Book, unique=True, on_delete=models.CASCADE)
+    # TODO: This could be done with JSON.
+    # Not to much to use those, nor see the practical advantage now.
+    attendance_date = ArrayField(models.DateField())
+    attendance_check = ArrayField(models.BooleanField())
+
+    def __str__(self):
+        return "%s - %s" % (self.book.event, self.book.user,)
+
+    # TODO: this might need to go to services.py but later.
+    # Priority is to make it work
+
+    def get_date_today(self):
+        for num, date in enumerate(self.attendance_date):
+            if date == datetime.datetime.now().date():
+                return date
+
+    def get_check_today(self):
+        for num, date in enumerate(self.attendance_date):
+            if date == datetime.datetime.now().date():
+                return self.attendance_check[num]
+
+    def get_num_today(self):
+        for num, date in enumerate(self.attendance_date):
+            if date == datetime.datetime.now().date():
+                return num
+
+
+# def book_pre_save_receiver(sender, instance, **kwargs):
+#     pre_save_object = Book.objects.get(pk=instance.pk)
+#     if (pre_save_object.status == "PE") and (instance.status == "IN"):
+
+# pre_save.connect(book_pre_save_receiver, sender=Book)

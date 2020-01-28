@@ -1,0 +1,32 @@
+{% extends "booking/base_bs.html" %}
+{% load widget_tweaks %}
+{% block content %}
+<h4>Assistance Control</h4>
+<table class="table table-bordered" id="theTable">
+        <thead>
+            <th>Assisted</th>
+            <th>Name</th>
+            <th>Event</th>
+            <th>Note</th>
+            <th>Date</th>
+            <th>Check</th>
+        </thead>
+    <form method="POST">{% csrf_token %}
+        <tbody>
+            {% for obj in assistance_list %}
+            <tr>
+                <td><input name="edit" type="checkbox" value="{{obj.id}}" /></td>
+                <td>{{obj.book.user.get_full_name}}</td>
+                <td>{{obj.book.event}}</td>
+                <td>{{obj.book.note}}</td>
+                <td>{{obj.get_assistance}}</td>
+                <td>{{obj.get_check}}</td>
+            </tr>
+            {% endfor%}
+        </tbody>
+</table>
+    <button type="submit" name="update" class="btn btn-warning">
+    <i class="fas fa-edit"></i> Check
+    </button>
+</form>
+{% endblock %}

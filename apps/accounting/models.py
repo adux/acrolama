@@ -33,7 +33,9 @@ class Partner(models.Model):
         max_length=15, choices=METHODE, null=True, blank=True
     )
     description_pay = models.TextField(max_length=15, null=True, blank=True)
-    account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, blank=True)
+    account = models.ForeignKey(
+        Account, on_delete=models.CASCADE, null=True, blank=True
+    )
 
     def __str__(self):
         return self.name
@@ -46,7 +48,9 @@ class Invoice(models.Model):
     partner = models.ForeignKey(
         Partner, on_delete=models.CASCADE, null=True, blank=True
     )
-    status = models.CharField(max_length=10, choices=INVOICESTATUS, default="PE")
+    status = models.CharField(
+        max_length=10, choices=INVOICESTATUS, default="PE"
+    )
     amount = models.CharField(max_length=10)
     pay_till = models.DateField(
         auto_now_add=False, auto_now=False, null=True, blank=True
