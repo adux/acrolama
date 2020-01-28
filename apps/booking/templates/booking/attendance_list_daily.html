@@ -2,27 +2,31 @@
 {% block head_title%}List{% endblock %}
 {% load widget_tweaks %}
 {% block content %}
+{# TODO: The Attendance and Switch Col can be combined #}
 <form action="{% url 'teacher_attendance' %}" method="POST">{% csrf_token %}
-    <table class="table table-bordered">
+    <div class="table-responsive">
+    <table class="table table-hover table-borderless">
+        <caption>Attendance list {{date_today}}</caption>
         <thead>
-            <th>Booking Id</th>
-            <th>Booked Event</th>
-            <th>Name</th>
-            <th>Attendance</th>
-            <th>Switch</th>
+            <th scope="col">Name</th>
+            <th scope="col">Attendance</th>
+            <th scope="col">Switch</th>
+            <th scope="col">Id</th>
+            <th scope="col">Event</th>
         </thead>
         <tbody>
             {% for obj in attendance_list %}
             <tr>
-                <td>{{obj.book.id}}</td>
-                <td>{{obj.book.event}}</td>
-                <td>{{obj.book.user.get_full_name}}</td>
+                <th scope="row">{{obj.book.user.get_full_name}}</td>
                 <td>{{obj.get_check_today}}</td>
                 <td><input type="checkbox" name="check" value="{{obj.id}} {{obj.get_num_today}}"></td>
+                <td>{{obj.book.id}}</td>
+                <td>{{obj.book.event}}</td>
             </tr>
             {% endfor%}
         </tbody>
     </table>
+    </div>
         <button type="submit" name="update" class="btn btn-warning">
         <i class="fas fa-edit"></i> Check
         </button>

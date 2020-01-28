@@ -224,7 +224,10 @@ def attendance_daily_view(request):
         attendance_date__contains=[datetime.datetime.now().date()]
     )
 
-    context = {'attendance_list' : attendance_today_list}
+    context = {
+        'attendance_list' : attendance_today_list,
+        'date_today' : datetime.datetime.now().date()
+    }
 
     if request.method == 'POST':
         check_list= request.POST.getlist('check')
