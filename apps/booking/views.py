@@ -40,7 +40,6 @@ from project.models import Event, Irregularity
 def staff_check(user):
     return user.is_staff
 
-
 def teacher_check(user):
     return user.is_teacher
 
