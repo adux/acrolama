@@ -155,6 +155,7 @@ class ControlUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                 old_event = instance.event
                 try:
                     event = Event.objects.filter(
+                        project=old_event.project,
                         level=old_event.level,
                         category=old_event.category,
                         event_startdate__gt=old_event.event_enddate,
@@ -163,10 +164,10 @@ class ControlUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                     messages.success(
                         self.request, "Booking for next cycle was created."
                     )
-                except Event.DoesNotExist:
+                except:
                     messages.warning(
                         self.request,
-                        "Next Cycle does not exist. Duplicate Created",
+                        "Error: Please port Error. Event doesn't existe or multiple events",
                     )
             else:
                 messages.success(
