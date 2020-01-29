@@ -58,7 +58,7 @@ def email_sender(instance, flag):
         to += [instance.user.email]
 
         p = {
-            "event": instance.event,
+            "event": instance.event.title,
             "user": instance.user,
             "price": instance.price,
             "times": instance.times.all,
