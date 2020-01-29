@@ -34,7 +34,6 @@ class ProjectAdmin(admin.ModelAdmin):
     list_display = [
         "name",
         "description",
-        "manager",
         "todo",
     ]
     list_filter = ["manager"]

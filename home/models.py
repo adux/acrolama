@@ -1,7 +1,10 @@
 from django.db import models
 from django.db.models.signals import pre_save
-from home.utils import unique_slug_generator
+from django.urls import reverse
 from django.utils.translation import ugettext as _
+
+
+from home.utils import unique_slug_generator
 
 
 # Static Content of Webpage
@@ -61,6 +64,10 @@ class Info(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('info', args=[str(self.slug)])
+
 
 
 def info_pre_save_receiver(sender, instance, *args, **kwargs):

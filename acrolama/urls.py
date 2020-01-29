@@ -21,6 +21,22 @@ from booking.views import (
     HerdView,
 )
 
+# Sitemap
+from django.contrib.sitemaps.views import sitemap
+from home.sitemaps import (
+    StaticViewSitemap,
+    InfoViewSite,
+    EventViewSite,
+    MainViewSitemap,
+)
+
+sitemaps = {
+    'faq': StaticViewSitemap,
+    'infos': InfoViewSite,
+    'events': EventViewSite,
+    'main' : MainViewSitemap,
+}
+
 urlpatterns = [
     # Users Registration
     path("accounts/", include("allauth.urls")),
@@ -32,6 +48,10 @@ urlpatterns = [
     path("classes/<slug:slug>/", EventDetail.as_view(), name="class"),
     path("info/<slug:slug>/", InfoDetailView.as_view(), name="info"),
     path("faq/", faqview, name="faq"),
+    # Sitemaps
+    path('sitemap.xml', sitemap,
+         {'sitemaps': sitemaps},
+         name='django.contrib.sitemaps.views.sitemap'),
     # Admin stuff
     url(settings.ADMIN_URL, admin.site.urls),
     path("herd/", HerdView.as_view(), name="herd"),

@@ -8,7 +8,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.contrib import messages
 
-from project.models import Event, TimeOption, PriceOption, Irregularity
+from project.models import Event, TimeOption, PriceOption, Irregularity, TimeLocation
 from booking.forms import BookForm
 from users.models import User
 
@@ -20,16 +20,34 @@ class EventDisplay(DetailView):
         context = super().get_context_data(**kwargs)
         slug = self.kwargs
         context["form"] = BookForm(slug)
-        context["timeoption"] = TimeOption.objects.filter(
-            timelocation__event__slug=self.object.slug
-        )
-        context["priceoption"] = PriceOption.objects.filter(
+
+        # Creates a list of lists:
+        # (('location','regular_day','open_time...),('regu..)..)
+        # TODO:not sure where this code should go
+        timelocations = TimeLocation.objects.filter(
             event__slug=self.object.slug
         )
-        context["teacher"] = User.objects.filter(
+        main_tl_list = []
+        for timelocation in timelocations:
+            tmp_list = []
+            tmp_list.append(timelocation.location)
+            timeoptions = timelocation.time_options.all()
+            for timeoption in timeoptions:
+                tmp_list.append(timeoption.regular_days)
+                tmp_list.append(timeoption.open_starttime)
+                tmp_list.append(timeoption.open_endtime)
+                tmp_list.append(timeoption.class_starttime)
+                tmp_list.append(timeoption.class_endtime)
+            main_tl_list.append(tmp_list)
+
+        context["timelocations_list"] = main_tl_list
+        context["priceoptions"] = PriceOption.objects.filter(
+            event__slug=self.object.slug
+        )
+        context["teachers"] = User.objects.filter(
             eventteacher__slug=self.object.slug
         )
-        context["exception"] = Irregularity.objects.filter(
+        context["exceptions"] = Irregularity.objects.filter(
             event__slug=self.object.slug
         )
         return context
@@ -52,6 +70,7 @@ class EventInterest(SingleObjectMixin, FormView):
     def form_valid(self, form, user):
         # TODO: I think there are some optimisations to be done here. Args
         # don't seem to right.
+        # Go through send email
         instance = form.save(commit=False)
         instance.event = Event.objects.get(slug=self.object.slug)
         # TODO: can't i just use self.request.user ? TEST
