@@ -244,6 +244,13 @@ class Event(models.Model):
                 self.event_startdate.strftime("%b %Y"),
                 self.title,
             )
+        else:
+            return "%s %s %s: %s" % (
+                self.get_category_display(),
+                self.level,
+                self.event_startdate.strftime("%b %Y"),
+                self.title,
+            )
 
 # def event_pre_save_title(sender, instance, *args, **kwargs):
 
