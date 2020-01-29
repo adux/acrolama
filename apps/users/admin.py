@@ -15,6 +15,7 @@ class UserAdmin(UserAdmin):
         "email",
         "first_name",
         "last_name",
+        "phone",
         "is_staff",
         "is_teacher",
     ]
