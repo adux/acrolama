@@ -4,7 +4,7 @@ from .models import Book, Attendance
 
 class BookAdmin(admin.ModelAdmin):
     list_display = [
-        "event__fulltitle",
+        "event",
         "user",
         "price",
         "get_times",
