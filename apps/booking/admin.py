@@ -12,7 +12,7 @@ class BookAdmin(admin.ModelAdmin):
         "note",
         "booked_at",
     ]
-    list_filter = ["event", "event__level", "status"]
+    list_filter = ["event__category", "event__level", "status"]
     search_fields = [
         "event__title",
         "user__email",
