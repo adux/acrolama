@@ -237,8 +237,13 @@ class Event(models.Model):
             return reverse('event', args=[str(self.slug)])
 
     def __str__(self):
-        return self.title
-
+        if self.category == "fas fa-cogs":
+            return "%s %s %s: %s" % (
+                self.level,
+                self.cycle,
+                self.event_startdate.strftime("%b %Y"),
+                self.title,
+            )
 
 # def event_pre_save_title(sender, instance, *args, **kwargs):
 
