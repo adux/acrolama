@@ -52,7 +52,7 @@ class Invoice(models.Model):
         max_length=10, choices=INVOICESTATUS, default="PE"
     )
     to_pay = models.PositiveIntegerField()
-    payed = models.PositiveIntegerField(null=True,blank=True)
+    paid = models.PositiveIntegerField(null=True,blank=True)
     pay_till = models.DateField(
         auto_now_add=False, auto_now=False, null=True, blank=True
     )
