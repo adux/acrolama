@@ -15,9 +15,9 @@ from booking.views import (
     #Attendance
     attendance_daily_view,
     AttendanceMainListView,
-    ControlListView,
-    ControlUpdateView,
-    ControlCreateView,
+    BookListView,
+    BookUpdateView,
+    BookCreateView,
     HerdView,
 )
 
@@ -54,10 +54,14 @@ urlpatterns = [
          name='django.contrib.sitemaps.views.sitemap'),
     # Admin stuff
     url(settings.ADMIN_URL, admin.site.urls),
+    # TODO: Add to Admin url 
     path("herd/", HerdView.as_view(), name="herd"),
-    path("herd/control/", ControlListView.as_view(), name="control_list"),
-    path("herd/control/<int:pk>/update/", ControlUpdateView.as_view(), name="control_update"),
-    path("herd/control/create/", ControlCreateView.as_view(), name="control_create"),
+    path("herd/booking/", BookListView.as_view(), name="booking_list"),
+    path("herd/booking/<int:pk>/update/", BookUpdateView.as_view(), name="booking_update"),
+    path("herd/booking/create/", BookCreateView.as_view(), name="booking_create"),
+    path("herd/accounting/", BookListView.as_view(), name="accounting_list"),
+    path("herd/accounting/<int:pk>/update/", BookUpdateView.as_view(), name="accounting_update"),
+    path("herd/accounting/create/", BookCreateView.as_view(), name="accounting_create"),
     path("herd/teacher/attendance", attendance_daily_view, name="teacher_attendance"),
     path("herd/attendance/", AttendanceMainListView.as_view(), name="attendance_list"),
     path("todo/", include("todo.urls", namespace="todo")),

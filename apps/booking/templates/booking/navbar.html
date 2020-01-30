@@ -9,10 +9,13 @@
           <a class="nav-link" href="{% url 'herd' %}">Herd <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item ">
-        <a class="nav-link" href="{% url 'control_list' %}">Booking</a>
+        <a class="nav-link" href="{% url 'booking_list' %}">Booking</a>
+      </li>
+      <li class="nav-item ">
+        <a class="nav-link" href="{% url 'accounting_list' %}">Accounting</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link disabled" href="#">Attendance</a>
+        <a class="nav-link disabled" href="{% url 'attendance_list' %}">Attendance</a>
       </li>
     </ul>
   </div>

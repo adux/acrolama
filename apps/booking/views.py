@@ -45,10 +45,9 @@ def teacher_check(user):
 
 
 # General Update view
-class ControlListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
+class BookListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
     model = Book
-    template_name = "booking/control_list.html"
-    ordering = ["event"]
+    template_name = "booking/booking_list.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -61,6 +60,7 @@ class ControlListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
                 .select_related("price")
                 .prefetch_related("times")
                 .prefetch_related("times__regular_days")
+                .order_by("-booked_at")
             ),
         )
         context["filter"] = self.request.GET
@@ -70,9 +70,9 @@ class ControlListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
         return staff_check(self.request.user)
 
 
-class ControlUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
+class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Book
-    template_name = "booking/control_update.html"
+    template_name = "booking/booking_update.html"
     form_class = UpdateForm
 
     def get_context_data(self, **kwargs):
@@ -86,6 +86,7 @@ class ControlUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                 .select_related("price")
                 .prefetch_related("times")
                 .prefetch_related("times__regular_days")
+                .order_by("-booked_at")
             ),
         )
         return context
@@ -193,9 +194,9 @@ class ControlUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         return staff_check(self.request.user)
 
 
-class ControlCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
+class BookCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
     model = Book
-    template_name = "booking/control_create.html"
+    template_name = "booking/booking_create.html"
     form_class = CreateForm
 
     def get_context_data(self, **kwargs):
@@ -209,6 +210,7 @@ class ControlCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
                 .select_related("price")
                 .prefetch_related("times")
                 .prefetch_related("times__regular_days")
+                .order_by("-booked_at")
             ),
         )
         return context

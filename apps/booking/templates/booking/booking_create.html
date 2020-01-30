@@ -98,7 +98,7 @@
                 <td>{% for obj in obj.times.all %}{{obj}}, {% endfor %}</td>
                 <td>{{obj.price}}</td>
                 <td>{{obj.get_status_display}}</td>
-                <td><a href="{% url 'control_update' obj.pk %}?event={{request.GET.event}}&user={{request.GET.user}}&status={{request.GET.status}}&times={{request.GET.times}}"><i class="fas fa-edit"></i></a>
+                <td><a href="{% url 'booking_update' obj.pk %}?event={{request.GET.event}}&user={{request.GET.user}}&status={{request.GET.status}}&times={{request.GET.times}}"><i class="fas fa-edit"></i></a>
         </tr>
         {% endfor%}
     </tbody>

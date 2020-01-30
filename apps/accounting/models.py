@@ -6,8 +6,10 @@ INVOICESTATUS = [
     ("CA", "Canceled"),
     ("ST", "Storno"),
 ]
-BALANCE = [("AS", "Assets"), ("EQ", "Equity"), ("LI", "Liabilities")]
-
+BALANCE = [
+    ("DB", "DEBIT"),
+    ("CR", "CREDIT")
+]
 
 METHODE = [
     ("BT", "Bank"),
@@ -18,67 +20,54 @@ METHODE = [
     ("UN", "Unclasified"),
 ]
 
-
-class Account(models.Model):
-    name = models.CharField(max_length=30)
-    balance = models.CharField(max_length=11, choices=BALANCE)
-    description = models.TextField(max_length=1000, null=True, blank=True)
-
-
 class Partner(models.Model):
     name = models.CharField(max_length=50)
-    email = models.CharField(max_length=50, null=True, blank=True)
+    address = models.ForeignKey(
+        "address.Address", null=True, blank=True, on_delete=models.CASCADE
+    )
     phone = models.CharField(max_length=50, null=True, blank=True)
+    email = models.CharField(max_length=50, null=True, blank=True)
+    bank_name = models.CharField(max_length=50, null=True, blank=True)
+    iban = models.CharField(max_length=50, null=True, blank=True)
+    swift = models.CharField(max_length=50, null=True, blank=True)
     prefered_pay = models.CharField(
         max_length=15, choices=METHODE, null=True, blank=True
     )
-    description_pay = models.TextField(max_length=15, null=True, blank=True)
-    account = models.ForeignKey(
-        Account, on_delete=models.CASCADE, null=True, blank=True
-    )
+    notes = models.TextField(max_length=500, null=True, blank=True)
 
     def __str__(self):
         return self.name
 
 
 class Invoice(models.Model):
+    balance = models.CharField(max_length=11, choices=BALANCE)
     book = models.ForeignKey(
         "booking.Book", null=True, blank=True, on_delete=models.CASCADE
     )
     partner = models.ForeignKey(
         Partner, on_delete=models.CASCADE, null=True, blank=True
     )
+    id_code = models.CharField(max_length=100, null=True, blank=True)
     status = models.CharField(
         max_length=10, choices=INVOICESTATUS, default="PE"
     )
-    amount = models.CharField(max_length=10)
+    to_pay = models.PositiveIntegerField()
+    payed = models.PositiveIntegerField(null=True,blank=True)
     pay_till = models.DateField(
         auto_now_add=False, auto_now=False, null=True, blank=True
     )
+
+    pay_date = models.DateField(
+        auto_now_add=False, auto_now=False, null=True, blank=True
+    )
+
+    methode = models.CharField(
+        max_length=15, choices=METHODE, default="UN", null=True, blank=True
+    )
+    notes = models.TextField(max_length=500, null=True, blank=True)
 
     def __str__(self):
         if self.book:
             return "%s - %s" % (self.id, self.book)
         else:
             return "%s - %s" % (self.id, self.partner)
-
-
-class Payment(models.Model):
-    amount = models.CharField(max_length=9)
-    pay_date = models.DateField(
-        auto_now_add=False, auto_now=False, null=True, blank=True
-    )
-    methode = models.CharField(
-        max_length=15, choices=METHODE, default="UN", null=True, blank=True
-    )
-    degistered_at = models.DateTimeField(auto_now_add=True)
-
-
-class Transaction(models.Model):
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)
-    invoice = models.ForeignKey(
-        Invoice, null=True, blank=True, on_delete=models.CASCADE
-    )
-    payment = models.ForeignKey(Payment, on_delete=models.CASCADE)
-    translation_amount = models.CharField(max_length=10)
-    transaction_date = models.DateTimeField(auto_now_add=True)
