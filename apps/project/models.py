@@ -221,6 +221,9 @@ class Event(models.Model):
     registration = models.BooleanField(default=True)
     slug = models.SlugField(unique=True, null=True, blank=True)
 
+    class Meta:
+        ordering = ["-name"]
+
     def fulltitle(self):
         if self.category == "fas fa-cogs" and self.cycle:
             if self.level.name == "2":
