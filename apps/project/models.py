@@ -241,10 +241,10 @@ class Event(models.Model):
 
     def __str__(self):
         if self.category == "fas fa-cogs":
-            return "%s %s %s - %s" % (
+            return "%s %s (%s) - %s" % (
                 self.level,
                 self.cycle,
-                self.event_startdate.strftime("%b %Y"),
+                self.event_startdate.strftime("%d %b"),
                 self.title,
             )
         else:
