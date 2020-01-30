@@ -45,13 +45,13 @@
     </div>
 </form>
     <hr>
-    <table class="table table-bordered">
+    <table class="table table-hover table-borderless">
         <thead>
-            <th>pk</th>
-            <th>Date Booking</th>
+            <th>#</th>
+            <th>Booked</th>
             <th>Event</th>
-            <th>Time Option</th>
-            <th>Price Option</th>
+            <th>Time</th>
+            <th>Price</th>
             <th>Status</th>
             <th>User</th>
         </thead>
@@ -59,12 +59,12 @@
             {% for obj in book_filter.qs %}
             <tr>
                 <td>{{obj.pk}}</td>
-                <td>{{obj.booked_at}}</td>
+                <td>{{obj.booked_at|date:'d.m.y'}}</td>
                 <td>{{obj.event}}</td>
-                <td>{% for obj in obj.times.all %}{{obj}}, {% endfor %}</td>
-                <td>{{obj.price}}</td>
+                <td>{% for obj in obj.times.all %}{{obj.name}}, {% endfor %}</td>
+                <td>{{obj.price.name}}</td>
                 <td>{{obj.get_status_display}}</td>
-                <td>{{obj.user}}</td>
+                <td>{{obj.user.get_full_name}}</td>
                 <td><a href="{% url 'booking_update' obj.pk %}?event={{request.GET.event}}&user={{request.GET.user}}&status={{request.GET.status}}&times={{request.GET.times}}"><i class="fas fa-edit"></i></a>
             </tr>
             {% endfor%}
