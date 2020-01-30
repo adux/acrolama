@@ -11,7 +11,7 @@ class BookFilter(django_filters.FilterSet):
     user = django_filters.CharFilter(method='filter_by_all_name_fields')
     event = django_filters.ChoiceFilter(
         choices=[
-            [o.pk, o.__str__] for o in Event.objects.all().order_by('event_startdate')
+            [o.pk, o.__str__] for o in Event.objects.all().order_by('-event_startdate')
         ]
     )
 
