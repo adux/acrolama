@@ -8,7 +8,7 @@ from project.models import TimeOption
 
 class BookFilter(django_filters.FilterSet):
     user = django_filters.CharFilter(
-        field_name="user__first_nam__first_namee", lookup_expr='icontains'
+        field_name="user__first_name", lookup_expr='icontains'
     )
     year_joined = django_filters.NumberFilter(
         field_name="booked_at", lookup_expr="year"
