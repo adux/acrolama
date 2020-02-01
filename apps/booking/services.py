@@ -7,72 +7,136 @@ from .utils import datelistgenerator
 
 def updateSwitchCheckAttendance(id, position):
     attendance = Attendance.objects.get(pk=id)
-    attendance.attendance_check[position] = not attendance.attendance_check[position]
+    attendance.attendance_check[position] = not attendance.attendance_check[
+        position
+    ]
     attendance.save()
 
 
-def createAttendance(instance):
-    start = instance.event.event_startdate
-    end = instance.event.event_enddate
-    times = instance.times.all()
+def get_book(book):
+    print(type(book))
+
+    # If its str or int treat it as id
+    if isinstance(book, (str, int)):
+        print("its a string ?")
+        book_pk = int(book)
+    else:
+        print("its a book")
+        return book
+
+    if book_pk:
+        print("here")
+        try:
+            print("here")
+            book = Book.objects.get(pk=book_pk)
+        except:
+            print("Booking doesn't exist")
+
+    return book
+
+
+def createAttendance(book):
+    """
+    Creates an Attendance to a particular booking
+    """
+    # Get a book
+    book = get_book(book)
+
+    # Get time infos
+    start = book.event.event_startdate
+    end = book.event.event_enddate
+    times = book.times.all()
+
+    # Create Attendance
     obj = Attendance()
-    date = []
-    check = []
-    obj.book_id = instance.id
-    print("Attendance Variables Loaded")
+    obj.book_id = book.id
+    obj.attendance_date = []
+    obj.attendance_check = []
+    # For each TimeOption we get the dates and for dates check as False
     for to in times:
         num = to.regular_days.day
         li = datelistgenerator(start, end, int(num))
-        print(li)
-        date.extend(li)
-        print(date)
+        obj.attendance_date.extend(li)
         for time in li:
-            check.append("False")
-            print(check)
-    obj.attendance_date = date
-    obj.attendance_check = check
+            obj.attendance_check.append("False")
     obj.save()
     print("Save Attendance")
 
 
-def createAmountBookingAttendance(instance, status, amount):
+def createNextBook(book, status):
     """
-    Creates a Booking from a instance of the form in booking system
+    Gets and Workshop Booking and creates the next based on cycle
     """
+    book = get_book(book)
+    print("in function book")
+    print(type(book))
+
     obj = Book()
-    obj.user = instance.user
-    obj.price = instance.price
-    obj.status = status
-    old_event = instance.event
-    times = instance.times.all()
+    obj.pk = None
+    obj.id = None
+    # Event resolved below
+    obj.user = book.user
+    obj.price = book.price
+    # Times resolved below
+    obj.note = "\nAutomatic created booking, please report if error."
+
+    # Resolve Status
+    try:
+        obj.status = status
+    except:
+        obj.status = "PE"
+
+    # Resolve Event
+    old_event = book.event
+
+    # Reset cycle num if needed
+    try:
+        new_event = Event.objects.filter(
+            project=old_event.project,
+            level=old_event.level,
+            category=old_event.category,
+            event_startdate__gt=old_event.event_enddate,
+        ).get(cycle=old_event.cycle + 1)
+    except (EmptyResultSet) as e:
+        new_event = Event.objects.filter(
+            project=old_event.project,
+            level=old_event.level,
+            category=old_event.category,
+            event_startdate__gt=old_event.event_enddate,
+        ).get(cycle=1)
+    except (MultipleObjectsReturned) as e:
+        print("MultipleObjectes")
+    except:
+        print("Error with new_event. Doesn't have a next event?")
+
+    else:
+        print("New Event success")
+
+    obj.event = new_event
+
+    # Resolve Times
     times_pk = []
-    for to in times:
+    for to in book.times.all():
         times_pk.append(to.pk)
-    obj.comment = "Automatic created booking, please report if error"
-    for x in range(1, amount):
-        if old_event.cycle + x > 12: #all the cycles should go from 1 to 12
-            x = x - 12
-            print("12 Cycles over getting to 1")
-        obj.id = None
-        obj.pk = None
-        try:
-            obj.event = Event.objects.filter(
-                level=old_event.level,
-                category=old_event.category,
-                event_startdate__gt=old_event.event_enddate,
-            ).get(cycle=old_event.cycle + x)
-        except (EmptyResultSet, MultipleObjectsReturned) as e:
-            print("Either None or Multiple Objects Found")
-        try:
-            obj.save()
-            for x in times_pk:
-                obj.times.add(x)
-        except:
-            print("Save extra booking error")
-        instance.event = obj.event
-        instance.id = obj.id
-        instance.pk = obj.pk
-        try:
-            createAttendance(instance)
-        except:
-            print("Error creating Attendance")
+
+    obj.save()
+    try:
+        for x in times_pk:
+            obj.times.add(x)
+    except:
+        print("Times adding error")
+
+    return obj
+
+
+def createNextBookAttendance(book):
+    """
+    This function should be called only to create
+    future Books and Attendance at the same time
+    """
+    book = get_book(book)
+
+    # For Abos > 1
+    for x in range(1, book.price.cycles):
+        book = createNextBook(book, "PA")
+        createAttendance(book)

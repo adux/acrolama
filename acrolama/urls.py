@@ -12,10 +12,10 @@ from home.views import (
 )
 from project.views import EventDetail
 from booking.views import (
-    #Attendance
+    accountinglistview,
     attendance_daily_view,
     AttendanceMainListView,
-    BookListView,
+    bookinglistview,
     BookUpdateView,
     BookCreateView,
     HerdView,
@@ -56,10 +56,10 @@ urlpatterns = [
     url(settings.ADMIN_URL, admin.site.urls),
     # TODO: Add to Admin url 
     path("herd/", HerdView.as_view(), name="herd"),
-    path("herd/booking/", BookListView.as_view(), name="booking_list"),
+    path("herd/booking/", bookinglistview, name="booking_list"),
     path("herd/booking/<int:pk>/update/", BookUpdateView.as_view(), name="booking_update"),
     path("herd/booking/create/", BookCreateView.as_view(), name="booking_create"),
-    path("herd/accounting/", BookListView.as_view(), name="accounting_list"),
+    path("herd/accounting/", accountinglistview, name="accounting_list"),
     path("herd/accounting/<int:pk>/update/", BookUpdateView.as_view(), name="accounting_update"),
     path("herd/accounting/create/", BookCreateView.as_view(), name="accounting_create"),
     path("herd/teacher/attendance", attendance_daily_view, name="teacher_attendance"),

@@ -42,29 +42,71 @@
         </button>
     </div>
 </form>
+
 <hr>
-<table class="table table-hover table-borderless">
-    <thead>
-        <th>#</th>
-        <th>Booked</th>
-        <th>Event</th>
-        <th>Time</th>
-        <th>Price</th>
-        <th>Status</th>
-        <th>User</th>
-    </thead>
-    <tbody>
-        {% for obj in book_filter.qs %}
-        <tr>
-            <td>{{obj.pk}}</td>
-            <td>{{obj.booked_at|date:'d.m.y'}}</td>
-            <td>{{obj.event}}</td>
-            <td>{% for obj in obj.times.all %}{{obj.name}}, {% endfor %}</td>
-            <td>{{obj.price.name}}</td>
-            <td>{{obj.get_status_display}}</td>
-            <td>{{obj.user.get_full_name}}</td>
-            <td><a href="{% url 'booking_update' obj.pk %}?event={{request.GET.event}}&user={{request.GET.user}}&status={{request.GET.status}}&times={{request.GET.times}}"><i class="fas fa-edit"></i></a>
-        </tr>
-        {% endfor%}
-    </tbody>
-</table>
+
+<script language="Javascript">
+    function toggle(source) {
+        var checkboxes = document.querySelectorAll('input[name="check"]');
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i] != source)
+                checkboxes[i].checked = source.checked;
+        }
+    }
+</script>
+
+<form action="{% url 'booking_list' %}" method="POST">{% csrf_token %}
+    <table class="table table-hover table-borderless">
+        <thead>
+            <th><input type="checkbox" onClick="toggle(this);"></th>
+            <th>#</th>
+            <th>Booked</th>
+            <th>Event</th>
+            <th>Time</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>User</th>
+        </thead>
+        <tbody>
+            {% for obj in page_obj %}
+            <tr>
+                    <td><input type="checkbox" name="check" value="{{obj.id}}"></td>
+                    <td>{{obj.pk}}</td>
+                    <td>{{obj.booked_at|date:'d b'}}</td>
+                    <td>{{obj.event.title}}</td>
+                    <td>{% for obj in obj.times.all %}{{obj}}, {% endfor %}</td>
+                    <td>{{obj.price.name}}</td>
+                    <td>{{obj.get_status_display}}</td>
+                    <td>{{obj.user.get_full_name}}</td>
+                    <td><a href="{% url 'booking_update' obj.pk %}?event={{request.GET.event}}&user={{request.GET.user}}&status={{request.GET.status}}&times={{request.GET.times}}"><i class="fas fa-edit"></i></a>
+            </tr>
+            {% endfor%}
+        </tbody>
+    </table>
+    <button type="submit" name="create" class="btn btn-warning">
+    <i class="fas fa-edit"></i> Duplicate Next Event
+    </button>
+</form>
+<nav aria-label="Booking List Paginator">
+    <ul class="pagination justify-content-center">
+    {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page=1">&laquo; first</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">previous</a>
+        </li>
+    {% endif %}
+        <li class="page-item disabled">
+            <a class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</a>
+        </li>
+    {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">next</a>
+        </li>
+        <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        </li>
+    {% endif %}
+    </ul>
+</nav>

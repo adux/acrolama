@@ -7,13 +7,15 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('booking', '0007_assistance'),
+        ("booking", "0007_assistance"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='assistance',
-            name='book',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='booking.Book'),
+            model_name="assistance",
+            name="book",
+            field=models.OneToOneField(
+                on_delete=django.db.models.deletion.CASCADE, to="booking.Book"
+            ),
         ),
     ]

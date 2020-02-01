@@ -3,6 +3,7 @@ import datetime
 from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
 from django.contrib import messages
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext as _
@@ -16,6 +17,7 @@ from django.views.generic import (
     ListView,
     FormView,
 )
+
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 # Render for email template
@@ -26,12 +28,14 @@ from django.template.loader import render_to_string
 
 from .models import Book, Attendance
 from .filters import BookFilter, AttendanceFilter
-from .forms import UpdateForm, CreateForm # AttendanceDailyForm
+from .forms import UpdateForm, CreateForm  # AttendanceDailyForm
 from .utils import build_url, email_sender, datelistgenerator
 from .services import (
+    get_book,
+    createNextBook,
     createAttendance,
+    createNextBookAttendance,
     updateSwitchCheckAttendance,
-    createAmountBookingAttendance,
 )
 
 from project.models import Event, Irregularity
@@ -40,34 +44,104 @@ from project.models import Event, Irregularity
 def staff_check(user):
     return user.is_staff
 
+
 def teacher_check(user):
     return user.is_teacher
 
 
-# General Update view
-class BookListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
-    model = Book
-    template_name = "booking/booking_list.html"
+def accountinglistview(request):
+    pass
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["book_filter"] = BookFilter(
-            self.request.GET,
-            queryset=(
-                Book.objects.all()
-                .select_related("event")
-                .select_related("user")
-                .select_related("price")
-                .prefetch_related("times")
-                .prefetch_related("times__regular_days")
-                .order_by("-booked_at")
-            ),
-        )
-        context["filter"] = self.request.GET
-        return context
 
-    def test_func(self):
-        return staff_check(self.request.user)
+def bookinglistview(request):
+    template = "booking/booking_list.html"
+    booking_filter = BookFilter(
+        request.GET,
+        queryset=(
+            Book.objects.all()
+            .select_related("event")
+            .select_related("user")
+            .select_related("price")
+            .prefetch_related("times")
+            .prefetch_related("times__regular_days")
+            .order_by("-booked_at")
+        ),
+    )
+
+    # Pagination
+    paginator = Paginator(booking_filter.qs, 15)  # Show 25 contacts per page.
+    page = request.GET.get("page")
+    try:
+        response = paginator.page(page)
+    except PageNotAnInteger:
+        response = paginator.page(1)
+    except EmptyPage:
+        response = paginator.page(paginator.num_pages)
+
+    # End Paginator
+
+    context = {
+        "book_filter": booking_filter,
+        "filter": request.GET,
+        "page_obj": response,
+    }
+
+    if request.method == "POST":
+        checked_list = request.POST.getlist("check")
+        if "create" in request.POST:
+            for pk in checked_list:
+                book = get_book(pk)
+                # TODO: remove when debug ready
+                # print(book)
+                # print("Abo:")
+                # print(book.price.abonament)
+                # print("Cycles:")
+                # print(book.price.cycles)
+                if book.price.abonament & (book.price.cycles == 1):
+                    try:
+                        new_book = createNextBook(book, "PE")
+                    except:
+                        messages.add_message(
+                            request,
+                            messages.WARNING,
+                            _(
+                                "Book N°"
+                                + str(book.id)
+                                + ": Doesn't seem to have a next Event"
+                            ),
+                        )
+                    else:
+                        messages.add_message(
+                            request,
+                            messages.SUCCESS,
+                            _(
+                                "Book N°"
+                                + str(new_book.id)
+                                + ": Book Created"
+                            ),
+                        )
+                elif book.price.abonament & (book.price.cycles > 1):
+                    messages.add_message(
+                        request,
+                        messages.INFO,
+                        _(
+                            "Book N°"
+                            + str(book.id)
+                            + ": Abo for more then 1 Cycle. Next are created after payment"
+                        ),
+                    )
+                else:
+                    messages.add_message(
+                        request,
+                        messages.WARNING,
+                        _(
+                            "Book N°"
+                            + str(book.id)
+                            + ": Not a Cycle."
+                        ),
+                    )
+
+    return render(request, template, context)
 
 
 class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
@@ -77,7 +151,7 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["book_filter"] = BookFilter(
+        booking_filter = BookFilter(
             self.request.GET,
             queryset=(
                 Book.objects.all()
@@ -89,90 +163,68 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                 .order_by("-booked_at")
             ),
         )
+
+        context["book_filter"] = booking_filter
+        paginator = Paginator(
+            booking_filter.qs, 20
+        )  # Show 25 contacts per page.
+        page = self.request.GET.get("page")
+        try:
+            response = paginator.page(page)
+        except PageNotAnInteger:
+            response = paginator.page(1)
+        except EmptyPage:
+            response = paginator.page(paginator.num_pages)
+        context["page_obj"] = response
+        context["filter"] = self.request.GET
         return context
 
     def form_valid(self, form):
-        """
-        Separetes logic depending on which action button was pressed.
-        """
         instance = form.save(commit=False)
+        book = get_book(instance)
+
         if "update" in self.request.POST:
-            """
-            Separate action depending on previous to recent status
-            """
-            pre_save_obj = Book.objects.get(pk=instance.pk)
-            if (pre_save_obj.status == "PE") and (instance.status == "IN"):
+            if (book.status == "PE") and (instance.status == "IN"):
                 try:
                     email_sender(instance, "Informed")
+                    createAttendance(book = instance)
                 except:
                     messages.add_message(
-                        self.request, messages.ERROR, _("Error Email")
+                        self.request, messages.WARNING, _("Error Email")
                     )
                 else:
                     messages.add_message(
                         self.request, messages.INFO, _("Informed email sent.")
                     )
-            elif (pre_save_obj.status == "IN") and (instance.status == "PA"):
-                if instance.price.cycles == 1:
-                    try:
-                        instance.save()
-                        createAttendance(instance)
-                    except:
-                        messages.add_message(
-                            self.request, messages.ERROR, _("Error Attendance")
-                        )
-                    else:
-                        messages.add_message(
-                            self.request,
-                            messages.INFO,
-                            _("Assitance created."),
-                        )
-                elif instance.price.cycles > 1:
-                    #  This are Cycles, Events dont have prices of amount > 1
-                    try:
-                        instance.save()
-                        createAttendance(instance)
-                        print("Create Booking")
-                        createAmountBookingAttendance(
-                            instance, "PA", instance.price.cycles
-                        )
-                    except:
-                        messages.add_message(
-                            self.request,
-                            messages.ERROR,
-                            _("Error Create Book")
-                        )
-                    else:
-                        messages.add_message(
-                            self.request, messages.INFO, _("Booking Created")
-                        )
-            else:
-                messages.success(self.request, "Update successful.")
+            elif (book.status == "IN") and (instance.status == "PA"):
+                messages.add_message(
+                    self.request,
+                    messages.INFO,
+                    _("Please change to participant based from Invoice"),
+                )
+            instance.save()
         elif "create" in self.request.POST:
-            instance.pk = None
-            instance.id = None
-            instance.status = "PE"
-            if instance.event.category == "fas fa-cogs":
-                old_event = instance.event
-                try:
-                    event = Event.objects.filter(
-                        project=old_event.project,
-                        level=old_event.level,
-                        category=old_event.category,
-                        event_startdate__gt=old_event.event_enddate,
-                    ).get(cycle=old_event.cycle + 1)
-                    instance.event = event
-                    messages.success(
-                        self.request, "Booking for next cycle was created."
-                    )
-                except:
-                    messages.warning(
-                        self.request,
-                        "Error: Please port Error. Event doesn't existe or multiple events",
-                    )
+            try:
+                book = createNextBook(instance, "PE")
+            except UnboundLocalError:
+                messages.add_message(
+                    self.request,
+                    messages.WARNING,
+                    _(
+                        "Book N°"
+                        + str(book.id)
+                        + ": Doesn't seem to have a next Event"
+                    ),
+                )
             else:
-                messages.success(
-                    self.request, "Booking of same event was duplicated."
+                messages.add_message(
+                    self.request,
+                    messages.SUCCESS,
+                    _(
+                        "Book N°"
+                        + str(book.id)
+                        + ": Book Created"
+                    ),
                 )
         return super().form_valid(form)
 
@@ -182,6 +234,8 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         event = self.request.GET.get("event", "")
         status = self.request.GET.get("status", "")
         pk = self.object.id
+        print("pk for success url")
+        print(pk)
         url = build_url(
             "booking_update",
             get={"user": user, "event": event, "status": status},
@@ -219,7 +273,7 @@ class BookCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
         return staff_check(self.request.user)
 
 
-#TEst for teachers only
+# TODO: Test for teachers on their future classes
 def attendance_daily_view(request):
     template = "booking/attendance_list_daily.html"
     attendance_today_list = Attendance.objects.filter(
@@ -227,41 +281,43 @@ def attendance_daily_view(request):
     )
 
     context = {
-        'attendance_list' : attendance_today_list,
-        'date_today' : datetime.datetime.now().date()
+        "attendance_list": attendance_today_list,
+        "date_today": datetime.datetime.now().date(),
     }
 
-    if request.method == 'POST':
-        check_list= request.POST.getlist('check')
+    if request.method == "POST":
+        check_list = request.POST.getlist("check")
         try:
             for values in check_list:
-                values_split = values.split(' ')
+                values_split = values.split(" ")
                 attendance_id = values_split[0]
                 check_pos = values_split[1]
-                #Check that booking exists
+                # Check that booking exists
                 if attendance_today_list.filter(id=attendance_id).exists():
                     attendance = attendance_today_list.get(id=attendance_id)
                     # And checking is false
                     # if not attendance.attendance_check[int(check_pos)]:
                     updateSwitchCheckAttendance(attendance_id, int(check_pos))
 
-            messages.add_message(
-                request, messages.SUCCESS, _("List Updated")
-            )
+            messages.add_message(request, messages.SUCCESS, _("List Updated"))
         except:
             messages.add_message(
-                request, messages.ERROR, _("Make a manual list and report the error please.")
+                request,
+                messages.ERROR,
+                _("Make a manual list and report the error please."),
             )
 
     return render(request, template, context)
 
 
-class AttendanceMainListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
+class AttendanceMainListView(
+    UserPassesTestMixin, LoginRequiredMixin, ListView
+):
     model = Attendance
     template_name = "booking/attendance_list_main.html"
 
     def post(self, request, *args, **kwargs):
-        pk_list = request.POST.getlist('edit')
+        pk_list = request.POST.getlist("edit")
         print(pk_list)
         return request
 
@@ -269,10 +325,7 @@ class AttendanceMainListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context["attendance_filter"] = AsstianceFilter(
             self.request.GET,
-            queryset=(
-                Assitance.objects.all()
-                .select_related("book")
-            ),
+            queryset=(Assitance.objects.all().select_related("book")),
         )
         return context
 
@@ -285,7 +338,7 @@ class AttendanceListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
     template_name = "booking/attendance_list.html"
 
     def post(self, request, *args, **kwargs):
-        pk_list = request.POST.getlist('edit')
+        pk_list = request.POST.getlist("edit")
         print(pk_list)
         return request
 
