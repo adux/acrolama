@@ -110,6 +110,7 @@ class EventListView(ListView):
             Event.objects.order_by("event_startdate")
             .exclude(category="fas fa-cogs")
             .exclude(published=False)
+            .filter(event_enddate__gte=timezone.now()),
         )
         return context
 
@@ -123,6 +124,7 @@ class ClassListView(ListView):
         context["list"] = (
             Event.objects.order_by("event_startdate")
             .filter(category="fas fa-cogs")
+            .filter(event_enddate__gte=timezone.now()),
             .exclude(published=False)
         )
         return context
