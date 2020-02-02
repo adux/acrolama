@@ -41,13 +41,13 @@ class Partner(models.Model):
 
 class Invoice(models.Model):
     balance = models.CharField(max_length=11, choices=BALANCE)
-    book = models.ForeignKey(
+    book = models.OneToOneField(
         "booking.Book", null=True, blank=True, on_delete=models.CASCADE
     )
     partner = models.ForeignKey(
         Partner, on_delete=models.CASCADE, null=True, blank=True
     )
-    id_code = models.CharField(max_length=100, null=True, blank=True)
+    referral_code = models.CharField(max_length=100, null=True, blank=True)
     status = models.CharField(
         max_length=10, choices=INVOICESTATUS, default="PE"
     )
