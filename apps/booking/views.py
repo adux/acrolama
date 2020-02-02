@@ -181,7 +181,7 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         instance = form.save(commit=False)
-        book = get_book(instance)
+        book = get_book(instance.id)
 
         if "update" in self.request.POST:
             if (book.status == "PE") and (instance.status == "IN"):

@@ -54,11 +54,11 @@ def email_sender(instance, flag):
     to = ["acrolama@acrolama.com"]
 
     if flag == "Informed":
-        subject = "Acrolama - Confirmation - " + str(instance.event)
+        subject = "Acrolama - Confirmation - " + str(instance.event.title)
         to += [instance.user.email]
 
         p = {
-            "event": instance.event.title,
+            "event": instance.event,
             "user": instance.user,
             "price": instance.price,
             "times": instance.times.all,
