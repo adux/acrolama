@@ -3,6 +3,7 @@ import datetime
 from django.conf import settings
 #from django.contrib.postgres.fields import ArrayField
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
@@ -49,6 +50,8 @@ from .services import (
 from project.models import Event, Irregularity
 
 
+@login_required
+@user_passes_test(staff_check)
 def bookinglistview(request):
     template = "booking/booking_list.html"
     booking_filter = BookFilter(
@@ -271,6 +274,8 @@ class BookCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
 
 
 # TODO: Test for teachers on their future classes
+@login_required
+@user_passes_test(staff_check)
 def attendance_daily_view(request):
     template = "booking/attendance_list_daily.html"
     attendance_today_list = Attendance.objects.filter(

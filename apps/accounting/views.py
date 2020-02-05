@@ -19,6 +19,8 @@ from accounting.forms import UpdateInvoiceForm
 
 # Create your views here.
 
+@login_required
+@user_passes_test(staff_check)
 def accountinglistview(request):
     template = "accounting/accounting_list.html"
     accounting_filter = AccountFilter(
