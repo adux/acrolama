@@ -11,6 +11,8 @@ from django.views.generic import (
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from booking.utils import (
+    build_url,
+    email_sender,
     teacher_check,
     staff_check,
 )
