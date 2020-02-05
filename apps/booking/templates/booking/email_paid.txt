@@ -1,0 +1,31 @@
+Hola {{user.first_name}}
+{% load tinycontent_tags %}
+A robolama that checks payments just <b>confirmed your payment</b> for:
+{{event.title}} {{event.event_startdate|date:'d M.'}}{% if event.event_startdate != event.event_enddate %}- {{ event.event_enddate|date:'d M. y'}}{% endif %}
+{% if event.category == 'fas fa-cogs' %}Event details: https://www.acrolama.com/classes/{{event.slug}}/{% else %}Details: https://www.acrolama.com/events/{{event.slug}}/{% endif %}
+
+Write us to acrolama@acrolama.com if you can't attend a particular day.
+
+Booking details:
+{% if event.category == 'fas fa-cogs' %}Regular{% if times %}{% with count=times.count %} day{{ count|pluralize }}:{% endwith %}{% for d in times.all %} · {{d}}{% endfor %}{% endif %}{% endif %}
+
+{% if irregularities %}{% with count=irregularities.count %}Please note the event has the following exception{{ count|pluralize }}:{% endwith %}{% for obj in irregularities %} ·{{obj.description}}{% endfor %}\n\r{% endif %}
+
+Get the latest news in our Whatsapp Group:
+{% tinycontent_simple 'email_whatsapp' %}
+
+See you soon!
+Big hug
+Adrian & Danica
+The Lamas ;-)
+
+---
+Möchtest du fliegen wie ein Lama? Wir haben verschiedene Acroyoga
+Events! Check out: www.acrolama.com
+
+Acrolmaa KLG
+Tramstrasse 65, Oerlikon, ZH 8050
+View Class Policy[1] | Unsubscribe[2]
+
+[1]: https://acrolama.com/info/acrolama-policy/
+[2]: https://acrolama.com/accounts/

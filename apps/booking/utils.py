@@ -7,8 +7,6 @@ from django.urls import reverse
 
 from django.template.loader import render_to_string
 
-from pprint import pprint
-
 from project.models import Event, PriceOption, TimeOption, Irregularity
 from users.models import User
 
@@ -53,9 +51,6 @@ def email_sender(instance, flag):
     https://stackoverflow.com/questions/2809547/creating-email-templates-with-django
     Theres another Method with Multi wich helps for headers if needed
     """
-    irregularities = Irregularity.objects.filter(
-        event__slug=instance.event.slug
-    )
     # TODO: could come from config.
     sender = "notmonkeys@acrolama.com"
     to = ["acrolama@acrolama.com"]
@@ -63,6 +58,10 @@ def email_sender(instance, flag):
     if flag == "Informed":
         subject = "Acrolama - Confirmation - " + str(instance.event.title)
         to += [instance.user.email]
+
+        irregularities = Irregularity.objects.filter(
+            event__slug=instance.event.slug
+        )
 
         p = {
             "event": instance.event,
@@ -83,4 +82,32 @@ def email_sender(instance, flag):
             p,
         )
 
+        send_mail(subject, msg_plain, sender, to, html_message=msg_html)
+
+    elif flag == "Paid":
+        subject = "Acrolama - Accounting - " + str(instance.book.event.title)
+        to += [instance.book.user.email]
+
+        irregularities = Irregularity.objects.filter(
+            event__slug=instance.book.event.slug
+        )
+
+        p = {
+            "event": instance.book.event,
+            "user": instance.book.user,
+            "price": instance.book.price,
+            "times": instance.book.times.all,
+            "irregularities": irregularities,
+        }
+
+        msg_plain = render_to_string(
+            settings.BASE_DIR
+            + "/apps/booking/templates/booking/email_informed.txt",
+            p,
+        )
+        msg_html = render_to_string(
+            settings.BASE_DIR
+            + "/apps/booking/templates/booking/email_informed.html",
+            p,
+        )
         send_mail(subject, msg_plain, sender, to, html_message=msg_html)

@@ -1,6 +1,7 @@
 
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils.translation import gettext as _
 from django.shortcuts import render
 
@@ -20,6 +21,7 @@ from booking.utils import (
 from accounting.models import Invoice
 from accounting.filters import AccountFilter
 from accounting.forms import UpdateInvoiceForm
+from accounting.services import get_invoice
 
 # Create your views here.
 
@@ -92,8 +94,22 @@ class InvoiceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         instance = form.save(commit=False)
+        invoice = get_invoice(instance.id)
 
         if "update" in self.request.POST:
+            if (invoice.status == "PE") and (instance.status == "PY"):
+                try:
+                    email_sender(instance, "Paid")
+                    #Update Booking to Participant
+                    #If its an Abo do the necesarry Bookings and Attendances
+                except:
+                    messages.add_message(
+                        self.request, messages.WARNING, _("Error Email")
+                    )
+                else:
+                    messages.add_message(
+                        self.request, messages.INFO, _("Informed email sent.")
+                    )
             instance.save()
         return super().form_valid(form)
 
