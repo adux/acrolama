@@ -16,14 +16,6 @@
             {{ book_filter.form.status.label_tag }}
             {% render_field book_filter.form.status class="form-control" %}
             </div>
-            <div class="form-group col-sm-4 col-md-3">
-            {{ book_filter.form.month_joined.label_tag }}
-            {% render_field book_filter.form.month_joined class="form-control" min="1" max="12" %}
-            </div>
-            <div class="form-group col-sm-4 col-md-3">
-            {{ book_filter.form.year_joined.label_tag }}
-            {% render_field book_filter.form.year_joined class="form-control" min="2019" %}
-            </div>
             <div class="form-group col-sm-8 col-md-6">
             {{ book_filter.form.times.label_tag }}
                 <ul style=" list-style-type: none; max-height: 200px; overflow-y: auto;" >
@@ -84,7 +76,7 @@
         </tbody>
     </table>
     <button type="submit" name="create" class="btn btn-warning">
-    <i class="fas fa-edit"></i> Duplicate Next Event
+    <i class="fas fa-copy"></i> Duplicate Booking for next Cycle
     </button>
 </form>
 <nav aria-label="Booking List Paginator">

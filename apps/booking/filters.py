@@ -16,14 +16,6 @@ class BookFilter(django_filters.FilterSet):
         ]
     )
 
-    year_joined = django_filters.NumberFilter(
-        field_name="booked_at", lookup_expr="year"
-    )
-
-    month_joined = django_filters.NumberFilter(
-        field_name="booked_at", lookup_expr="month"
-    )
-
     times = django_filters.ModelMultipleChoiceFilter(
         queryset=TimeOption.objects.all(), widget=forms.CheckboxSelectMultiple
     )
