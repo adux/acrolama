@@ -1,7 +1,9 @@
+import datetime
 from django.core.exceptions import MultipleObjectsReturned, EmptyResultSet
 
 from .models import Book, Attendance
 from project.models import Event
+from accounting.models import Invoice
 from .utils import datelistgenerator
 
 
@@ -33,6 +35,19 @@ def get_book(book):
             print("Booking doesn't exist")
 
     return book
+
+def createInvoiceFromBook(book):
+    book = get_book(book)
+
+    obj = Invoice()
+    obj.balance = "CR"
+    obj.book = book
+    #TODO create a smart referral code
+    obj.status = "PE"
+    obj.to_pay = int(book.price.price_chf)
+    obj.pay_till = datetime.datetime.now().date() + datetime.timedelta(days = 10)
+    obj.notes = "\n Automatic created Invoice"
+    obj.save()
 
 
 def createAttendance(book):

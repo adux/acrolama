@@ -1,0 +1,92 @@
+{% load widget_tweaks %}
+<hr>
+<form method="get">
+    <div class="card card-body bg-light">
+        <h4>Filter</h4>
+        <div class="row">
+            <div class="form-group col-sm-4 col-md-4">
+            {{ account_filter.form.book__user.label_tag }}
+            {% render_field account_filter.form.book__user class="form-control" %}
+            </div>
+            <div class="form-group col-sm-4 col-md-6">
+            {{ account_filter.form.book__event.label_tag }}
+            {% render_field account_filter.form.book__event class="form-control" %}
+            </div>
+            <div class="form-group col-sm-4 col-md-2">
+            {{ account_filter.form.status.label_tag }}
+            {% render_field account_filter.form.status class="form-control" %}
+            </div>
+            <div class="form-group col-sm-4 col-md-2">
+            {{ account_filter.form.pay_till.label_tag }}
+            {% render_field account_filter.form.pay_till class="datepicker form-control" %}
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">
+        <i class="fas fa-search"></i> Search
+        </button>
+    </div>
+</form>
+<hr>
+<script language="Javascript">
+    function toggle(source) {
+        var checkboxes = document.querySelectorAll('input[name="check"]');
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i] != source)
+                checkboxes[i].checked = source.checked;
+        }
+    }
+</script>
+<form action="{% url 'accounting_list' %}" method="POST">{% csrf_token %}
+    <table class="table table-hover table-borderless">
+        <thead>
+            <th><input type="checkbox" onClick="toggle(this);"></th>
+            <th>#</th>
+            <th>Name</th>
+            <th>Event</th>
+            <th>Pay till</th>
+            <th>To Pay</th>
+            <th>Status</th>
+            <th>Edit</th>
+        </thead>
+        <tbody>
+            {% for obj in page_obj %}
+            <tr>
+                    <td><input type="checkbox" name="check" value="{{obj.id}}"></td>
+                    <td>{{obj.pk}}</td>
+                    <td>{% if obj.partner %}{{ obj.partner.name}}{% else %}{{obj.book.user.get_full_name}}{% endif %}</td>
+                    <td>{% if obj.book %}{{obj.book.event.title}}{% else %}-{% endif %}</td>
+                    <td>{{obj.pay_till}}</td>
+                    <td>{{obj.to_pay}}</td>
+                    <td>{{obj.get_status_display}}</td>
+                    <td><a href="{% url 'accounting_update' obj.pk %}?event={{request.GET.event}}&user={{request.GET.user}}&status={{request.GET.status}}&times={{request.GET.times}}"><i class="fas fa-edit"></i></a>
+            </tr>
+            {% endfor%}
+        </tbody>
+    </table>
+    <button type="submit" name="create" class="btn btn-warning">
+    <i class="fas fa-edit"></i> Duplicate Next Event
+    </button>
+</form>
+<nav aria-label="Booking List Paginator">
+    <ul class="pagination justify-content-center">
+    {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page=1">&laquo; first</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">previous</a>
+        </li>
+    {% endif %}
+        <li class="page-item disabled">
+            <a class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</a>
+        </li>
+    {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">next</a>
+        </li>
+        <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        </li>
+    {% endif %}
+    </ul>
+</nav>

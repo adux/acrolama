@@ -12,13 +12,17 @@ from home.views import (
 )
 from project.views import EventDetail
 from booking.views import (
-    accountinglistview,
     attendance_daily_view,
     AttendanceMainListView,
     bookinglistview,
     BookUpdateView,
     BookCreateView,
     HerdView,
+)
+
+from accounting.views import (
+    accountinglistview,
+    InvoiceUpdateView,
 )
 
 # Sitemap
@@ -60,8 +64,7 @@ urlpatterns = [
     path("herd/booking/<int:pk>/update/", BookUpdateView.as_view(), name="booking_update"),
     path("herd/booking/create/", BookCreateView.as_view(), name="booking_create"),
     path("herd/accounting/", accountinglistview, name="accounting_list"),
-    path("herd/accounting/<int:pk>/update/", BookUpdateView.as_view(), name="accounting_update"),
-    path("herd/accounting/create/", BookCreateView.as_view(), name="accounting_create"),
+    path("herd/accounting/<int:pk>/update/", InvoiceUpdateView.as_view(), name="accounting_update"),
     path("herd/teacher/attendance", attendance_daily_view, name="teacher_attendance"),
     path("herd/attendance/", AttendanceMainListView.as_view(), name="attendance_list"),
     path("todo/", include("todo.urls", namespace="todo")),

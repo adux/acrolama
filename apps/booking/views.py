@@ -1,7 +1,7 @@
 import datetime
 
 from django.conf import settings
-from django.contrib.postgres.fields import ArrayField
+#from django.contrib.postgres.fields import ArrayField
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse, HttpResponseRedirect
@@ -27,30 +27,26 @@ from django.template.loader import render_to_string
 # from django.db.models import Q
 
 from .models import Book, Attendance
-from .filters import BookFilter, AttendanceFilter
-from .forms import UpdateForm, CreateForm  # AttendanceDailyForm
-from .utils import build_url, email_sender, datelistgenerator
+from booking.filters import BookFilter, AttendanceFilter
+from .forms import UpdateBookForm, CreateBookForm  # AttendanceDailyForm
+from .utils import (
+    build_url,
+    email_sender,
+    datelistgenerator,
+    teacher_check,
+    staff_check,
+)
+
 from .services import (
     get_book,
     createNextBook,
+    createInvoiceFromBook,
     createAttendance,
     createNextBookAttendance,
     updateSwitchCheckAttendance,
 )
 
 from project.models import Event, Irregularity
-
-# Tests for the UserPassesTestMixin
-def staff_check(user):
-    return user.is_staff
-
-
-def teacher_check(user):
-    return user.is_teacher
-
-
-def accountinglistview(request):
-    pass
 
 
 def bookinglistview(request):
@@ -147,7 +143,7 @@ def bookinglistview(request):
 class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Book
     template_name = "booking/booking_update.html"
-    form_class = UpdateForm
+    form_class = UpdateBookForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -187,7 +183,8 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
             if (book.status == "PE") and (instance.status == "IN"):
                 try:
                     email_sender(instance, "Informed")
-                    createAttendance(book = instance)
+                    createAttendance(instance)
+                    createInvoiceFromBook(instance)
                 except:
                     messages.add_message(
                         self.request, messages.WARNING, _("Error Email")
@@ -251,7 +248,7 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 class BookCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
     model = Book
     template_name = "booking/booking_create.html"
-    form_class = CreateForm
+    form_class = CreateBookForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

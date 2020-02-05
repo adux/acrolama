@@ -4,14 +4,14 @@ from booking.models import Book
 from project.models import PriceOption, TimeOption
 
 # FIXME: Rename this classes to something related to the model
-class UpdateForm(forms.ModelForm):
+class UpdateBookForm(forms.ModelForm):
     class Meta:
         model = Book
         fields = ("user", "event", "status", "times")
         widgets = {"times": forms.CheckboxSelectMultiple}
 
 
-class CreateForm(forms.ModelForm):
+class CreateBookForm(forms.ModelForm):
     class Meta:
         model = Book
         fields = ("user", "event", "times", "price")

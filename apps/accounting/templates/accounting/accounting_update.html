@@ -1,0 +1,33 @@
+{% extends "booking/base_bs.html" %}
+{% block head_title%}Accounting | Update{% endblock %}
+{% load widget_tweaks %}
+{% block content %}
+<form method="POST">{% csrf_token %}
+    <div class="card card-body bg-light">
+        <h4>Booking n°{{object.pk}} {{object.user.first_name}} {{object.user.last_name}} - {{object.booked_at|date:'d M.'}}</h4>
+        <div class="row">
+            <div class="form-group col-sm-2 col-md-2">
+              {{ form.paid.label_tag }}
+              {% render_field form.paid class="form-control" %}
+            </div>
+            <div class="form-group col-sm-3 col-md-3">
+              {{ form.pay_date.label_tag }}
+              {% render_field form.pay_date class="form-control" %}
+            </div>
+            <div class="form-group col-sm-4 col-md-5">
+              {{ form.methode.label_tag }}
+              {% render_field form.methode class="form-control" %}
+            </div>
+            <div class="form-group col-sm-4 col-md-2">
+              {{ form.status.label_tag }}
+              {% render_field form.status class="form-control" %}
+            </div>
+        </div>
+        <hr>
+        <button type="submit" name="update" class="btn btn-danger">
+            <i class="fas fa-edit"></i> DANGER - Update
+        </button>
+    </div>
+</form>
+{% include "booking/snippets/booking_filter.html" %}
+{% endblock %}

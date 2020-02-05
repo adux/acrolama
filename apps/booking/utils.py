@@ -12,6 +12,13 @@ from pprint import pprint
 from project.models import Event, PriceOption, TimeOption, Irregularity
 from users.models import User
 
+# Tests for the UserPassesTestMixin
+def staff_check(user):
+    return user.is_staff
+
+
+def teacher_check(user):
+    return user.is_teacher
 
 #  TODO: im not sure what kwargs.pop does. or if i can handle it differently
 def build_url(*args, **kwargs):
