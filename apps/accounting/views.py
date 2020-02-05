@@ -31,6 +31,7 @@ def accountinglistview(request):
         request.GET,
         queryset=(
             Invoice.objects.all()
+            .select_related("book")
         ),
     )
 
@@ -94,15 +95,18 @@ class InvoiceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
         if "update" in self.request.POST:
             instance.save()
-        elif "create" in self.request.POST:
-            pass
         return super().form_valid(form)
 
     # TODO: There is probably a way to get all the GETs and process them?
     def get_success_url(self, **kwargs):
+        user = self.request.GET.get("book__user", "")
+        event = self.request.GET.get("book__event", "")
+        status = self.request.GET.get("status", "")
+        date = self.request.GET.get("pay_till", "")
+        pk = self.object.id
         url = build_url(
-            "booking_update",
-            get={"user": user, "event": event, "status": status},
+            "accounting_update",
+            get={"book__user": user, "book__event": event, "status": status, "pay_till": date},
             pk={"pk": pk},
         )
         return url
