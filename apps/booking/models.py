@@ -49,17 +49,18 @@ class Book(models.Model):
 
 
 class Attendance(models.Model):
+    """
+    Contains the dates a Person should participate depending on the booking they did
+    TODO: This could be done with JSON.
+    Not to much to use those, nor see the practical advantage now.
+    TODO: num should be position
+    """
     book = models.ForeignKey(Book, unique=True, on_delete=models.CASCADE)
-    # TODO: This could be done with JSON.
-    # Not to much to use those, nor see the practical advantage now.
     attendance_date = ArrayField(models.DateField())
     attendance_check = ArrayField(models.BooleanField())
 
     def __str__(self):
         return "%s - %s" % (self.book.event, self.book.user,)
-
-    # TODO: this might need to go to services.py but later.
-    # Priority is to make it work
 
     def get_date_today(self):
         for num, date in enumerate(self.attendance_date):
@@ -76,9 +77,9 @@ class Attendance(models.Model):
             if date == datetime.datetime.now().date():
                 return num
 
-
-# def book_pre_save_receiver(sender, instance, **kwargs):
-#     pre_save_object = Book.objects.get(pk=instance.pk)
-#     if (pre_save_object.status == "PE") and (instance.status == "IN"):
-
-# pre_save.connect(book_pre_save_receiver, sender=Book)
+    def count_attendance(self):
+        count = 0
+        for position,check in enumerate(self.attendance_check):
+            if check == True:
+                count += 1
+        return count

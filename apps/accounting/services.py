@@ -1,7 +1,5 @@
 
-
 from accounting.models import Invoice
-
 
 def get_invoice(invoice):
     # If its str or int treat it as Invoice Obj

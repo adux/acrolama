@@ -29,26 +29,23 @@
 <hr>
     <table class="table table-hover table-borderless">
         <thead>
-            <th>Account</th>
             <th>#</th>
             <th>Name</th>
             <th>Event</th>
-            <th>Pay till</th>
-            <th>To Pay</th>
-            <th>Status</th>
+            <th>Time Option</th>
+            <th>Attendance</th>
             <th>Edit</th>
         </thead>
         <tbody>
             {% for obj in page_obj %}
             <tr>
-                <td>{{obj.get_balance_display}}</td>
-                    <td>{{obj.pk}}</td>
-                    <td>{% if obj.partner %}{{ obj.partner.name}}{% else %}{{obj.book.user.get_full_name}}{% endif %}</td>
-                    <td>{% if obj.book %}{{obj.book.event.title}}{% else %}-{% endif %}</td>
-                    <td>{{obj.pay_till}}</td>
-                    <td>{{obj.to_pay}}</td>
-                    <td>{{obj.get_status_display}}</td>
-                    <td><a href="{% url 'accounting_update' obj.pk %}?book__event={{request.GET.book__event}}&book__user={{request.GET.book__user}}&status={{request.GET.status}}&pay_till={{request.GET.pay_till}}"><i class="fas fa-edit"></i></a>
+                <td>{{obj.pk}}</td>
+                <td>{{obj.book.user.get_full_name}}</td>
+                <td>{{obj.book.event.title}}</td>
+                {# TODO: Getting times for view should be done somewhere else #}
+                <td>{% for obj in obj.times.all %}{{obj}}, {% endfor %}</td>
+                <td>{{obj.count_attendance}}</td>
+                <td><a href="{% url 'accounting_update' obj.pk %}?book__event={{request.GET.book__event}}&book__user={{request.GET.book__user}}&status={{request.GET.status}}&pay_till={{request.GET.pay_till}}"><i class="fas fa-edit"></i></a>
             </tr>
             {% endfor%}
         </tbody>

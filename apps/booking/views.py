@@ -91,12 +91,6 @@ def bookinglistview(request):
         if "create" in request.POST:
             for pk in checked_list:
                 book = get_book(pk)
-                # TODO: remove when debug ready
-                # print(book)
-                # print("Abo:")
-                # print(book.price.abonament)
-                # print("Cycles:")
-                # print(book.price.cycles)
                 if book.price.abonament & (book.price.cycles == 1):
                     try:
                         new_book = createNextBook(book, "PE")
@@ -140,7 +134,6 @@ def bookinglistview(request):
                             + ": Not a Cycle."
                         ),
                     )
-
     return render(request, template, context)
 
 
@@ -163,7 +156,7 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                 .order_by("-booked_at")
             ),
         )
-
+        # related_invoice = Invoice.objects.get(
         context["book_filter"] = booking_filter
         paginator = Paginator(
             booking_filter.qs, 20
@@ -187,8 +180,6 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
             if (book.status == "PE") and (instance.status == "IN"):
                 try:
                     email_sender(instance, "Informed")
-                    createAttendance(instance)
-                    createInvoiceFromBook(instance)
                 except:
                     messages.add_message(
                         self.request, messages.WARNING, _("Error Email")
@@ -197,10 +188,29 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                     messages.add_message(
                         self.request, messages.INFO, _("Informed email sent.")
                     )
+                try:
+                    createAttendance(instance)
+                except:
+                    messages.add_message(
+                        self.request, messages.WARNING, _("Error creating Attendance")
+                    )
+                else:
+                    messages.add_message(
+                        self.request, messages.INFO, _("Attendance created")
+                    )
+                try:
+                    createInvoiceFromBook(instance)
+                except:
+                    messages.add_message(
+                        self.request, messages.WARNING, _("Error creating Invoice")
+                    )
+                else:
+                    messages.add_message(
+                        self.request, messages.INFO, _("Invoice Created")
+                    )
             elif (book.status == "IN") and (instance.status == "PA"):
                 messages.add_message(
-                    self.request,
-                    messages.INFO,
+                    self.request, messages.INFO,
                     _("Please change to participant based from Invoice"),
                 )
             instance.save()
@@ -274,6 +284,43 @@ class BookCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
         return staff_check(self.request.user)
 
 
+@login_required
+@user_passes_test(staff_check)
+def attendancelistview(request):
+    template = "booking/attendance_list.html"
+    attendance_filter = AttendanceFilter(
+        request.GET,
+        queryset=(
+            Attendance.objects.all()
+            .select_related("book")
+        ),
+    )
+
+    # Pagination
+    paginator = Paginator(attendance_filter.qs, 15)  # Show 25 contacts per page.
+    page = request.GET.get("page")
+    try:
+        response = paginator.page(page)
+    except PageNotAnInteger:
+        response = paginator.page(1)
+    except EmptyPage:
+        response = paginator.page(paginator.num_pages)
+
+    # End Paginator
+
+    context = {
+        "attendance_filter": attendance_filter,
+        "filter": request.GET,
+        "page_obj": response,
+    }
+
+    if request.method == "POST":
+        checked_list = request.POST.getlist("check")
+        if "create" in request.POST:
+            pass
+    return render(request, template, context)
+
+
 # TODO: Test for teachers on their future classes
 @login_required
 @user_passes_test(staff_check)
@@ -312,48 +359,6 @@ def attendance_daily_view(request):
 
     return render(request, template, context)
 
-
-class AttendanceMainListView(
-    UserPassesTestMixin, LoginRequiredMixin, ListView
-):
-    model = Attendance
-    template_name = "booking/attendance_list_main.html"
-
-    def post(self, request, *args, **kwargs):
-        pk_list = request.POST.getlist("edit")
-        print(pk_list)
-        return request
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["attendance_filter"] = AsstianceFilter(
-            self.request.GET,
-            queryset=(Assitance.objects.all().select_related("book")),
-        )
-        return context
-
-    def test_func(self):
-        return staff_check(self.request.user)
-
-
-class AttendanceListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
-    model = Attendance
-    template_name = "booking/attendance_list.html"
-
-    def post(self, request, *args, **kwargs):
-        pk_list = request.POST.getlist("edit")
-        print(pk_list)
-        return request
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["attendance_list"] = Attendance.objects.filter(
-            attendance_date__contains=[datetime.datetime.now().date()]
-        )
-        return context
-
-    def test_func(self):
-        return staff_check(self.request.user)
 
 
 class HerdView(UserPassesTestMixin, LoginRequiredMixin, TemplateView):

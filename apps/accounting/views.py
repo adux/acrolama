@@ -18,6 +18,8 @@ from booking.utils import (
     staff_check,
 )
 
+from booking.services import updateBookStatus, createNextBookAttendance
+
 from accounting.models import Invoice
 from accounting.filters import AccountFilter
 from accounting.forms import UpdateInvoiceForm
@@ -74,6 +76,7 @@ class InvoiceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
             self.request.GET,
             queryset=(
                 Invoice.objects.all()
+                .select_related("book")
             ),
         )
 
@@ -98,18 +101,40 @@ class InvoiceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
         if "update" in self.request.POST:
             if (invoice.status == "PE") and (instance.status == "PY"):
-                try:
-                    email_sender(instance, "Paid")
-                    #Update Booking to Participant
-                    #If its an Abo do the necesarry Bookings and Attendances
-                except:
-                    messages.add_message(
-                        self.request, messages.WARNING, _("Error Email")
-                    )
-                else:
-                    messages.add_message(
-                        self.request, messages.INFO, _("Informed email sent.")
-                    )
+                if invoice.book.event.category == "fas fa-cogs":
+                    try:
+                        email_sender(instance, "Paid")
+                        #If its an Abo do the necesarry Bookings and Attendances
+                    except:
+                        messages.add_message(
+                            self.request, messages.WARNING, _("Error in Email")
+                        )
+                    else:
+                        messages.add_message(
+                            self.request, messages.INFO, _("Paid Email sent")
+                        )
+                    try:
+                        updateBookStatus(instance.book.id, "PA")
+                    except:
+                        messages.add_message(
+                            self.request, messages.WARNING, _("Error updating booking N°" + str(instance.book.id))
+                        )
+                    else:
+                        messages.add_message(
+                            self.request, messages.INFO, _("Updated status Booking")
+                        )
+                    print(invoice.book.price.cycles)
+                    if invoice.book.price.cycles > 1:
+                        try:
+                            createNextBookAttendance(invoice.book.id)
+                        except:
+                            messages.add_message(
+                                self.request, messages.WARNING, _("Error creating Next Booking for Abo")
+                            )
+                        else:
+                            messages.add_message(
+                                self.request, messages.INFO, _("Booking and Attendance created")
+                            )
             instance.save()
         return super().form_valid(form)
 
