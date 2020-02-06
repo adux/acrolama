@@ -28,10 +28,10 @@ from django.template.loader import render_to_string
 # Allows querries with OR statments
 # from django.db.models import Q
 
-from .models import Book, Attendance
+from booking.models import Book, Attendance
 from booking.filters import BookFilter, AttendanceFilter
-from .forms import UpdateBookForm, CreateBookForm  # AttendanceDailyForm
-from .utils import (
+from booking.forms import UpdateBookForm, CreateBookForm, UpdateAttendanceForm
+from booking.utils import (
     build_url,
     email_sender,
     datelistgenerator,
@@ -39,7 +39,7 @@ from .utils import (
     staff_check,
 )
 
-from .services import (
+from booking.services import (
     get_book,
     createNextBook,
     createInvoiceFromBook,
@@ -359,6 +359,59 @@ def attendance_daily_view(request):
 
     return render(request, template, context)
 
+class AttendanceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
+    model = Attendance
+    template_name = "booking/attendance_update.html"
+    form_class = UpdateAttendanceForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        attendance_filter = AttendanceFilter(
+            self.request.GET,
+            queryset=(
+                Attendance.objects.all()
+                .select_related("book")
+            ),
+        )
+
+        context["attendance_filter"] = attendance_filter
+        paginator = Paginator(
+            attendance_filter.qs, 20
+        )  # Show 25 contacts per page.
+        page = self.request.GET.get("page")
+        try:
+            response = paginator.page(page)
+        except PageNotAnInteger:
+            response = paginator.page(1)
+        except EmptyPage:
+            response = paginator.page(paginator.num_pages)
+        context["page_obj"] = response
+        context["filter"] = self.request.GET
+        return context
+
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+
+        if "update" in self.request.POST:
+            instance.save()
+        return super().form_valid(form)
+
+    # TODO: There is probably a way to get all the GETs and process them?
+    def get_success_url(self, **kwargs):
+        user = self.request.GET.get("book__user", "")
+        event = self.request.GET.get("book__event", "")
+        status = self.request.GET.get("status", "")
+        date = self.request.GET.get("pay_till", "")
+        pk = self.object.id
+        url = build_url(
+            "attendance_update",
+            get={"book__user": user, "book__event": event, "status": status, "pay_till": date},
+            pk={"pk": pk},
+        )
+        return url
+
+    def test_func(self):
+        return staff_check(self.request.user)
 
 
 class HerdView(UserPassesTestMixin, LoginRequiredMixin, TemplateView):

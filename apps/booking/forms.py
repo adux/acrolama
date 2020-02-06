@@ -1,9 +1,14 @@
 from django import forms
+from django.contrib.postgres.forms import SimpleArrayField
 from django.utils.translation import ugettext_lazy as _
-from booking.models import Book
+from booking.models import Book, Attendance
 from project.models import PriceOption, TimeOption
 
-# FIXME: Rename this classes to something related to the model
+class UpdateAttendanceForm(forms.ModelForm):
+    class Meta:
+        model = Attendance
+        fields = ("book", "attendance_date", "attendance_check")
+
 class UpdateBookForm(forms.ModelForm):
     class Meta:
         model = Book

@@ -14,6 +14,7 @@ from project.views import EventDetail
 from booking.views import (
     attendance_daily_view,
     attendancelistview,
+    AttendanceUpdateView,
     bookinglistview,
     BookUpdateView,
     BookCreateView,
@@ -67,6 +68,7 @@ urlpatterns = [
     path("herd/accounting/<int:pk>/update/", InvoiceUpdateView.as_view(), name="accounting_update"),
     path("herd/teacher/attendance", attendance_daily_view, name="teacher_attendance"),
     path("herd/attendance/", attendancelistview, name="attendance_list"),
+    path("herd/attendance/<int:pk>/update/", AttendanceUpdateView.as_view(), name="attendance_update"),
     path("todo/", include("todo.urls", namespace="todo")),
 ]
 

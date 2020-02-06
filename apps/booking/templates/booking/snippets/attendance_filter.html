@@ -9,8 +9,8 @@
             {% render_field attendance_filter.form.book__user class="form-control" %}
             </div>
             <div class="form-group col-sm-4 col-md-4">
-            {{ attendance_filter.form.event.label_tag }}
-            {% render_field attendance_filter.form.event class="form-control" %}
+            {{ attendance_filter.form.book__event.label_tag }}
+            {% render_field attendance_filter.form.book__event class="form-control" %}
             </div>
             <div class="form-group col-sm-4 col-md-2">
             {{ attendance_filter.form.attendance_date.label_tag }}
@@ -41,7 +41,7 @@
                 {# TODO: Getting times for view should be done somewhere else #}
                 <td>{% for obj in obj.book.times.all %}{{obj.name}}, {% endfor %}</td>
                 <td>{{obj.count_attendance}}</td>
-                <td><a href="{% url 'accounting_update' obj.pk %}?book__event={{request.GET.book__event}}&book__user={{request.GET.book__user}}&status={{request.GET.status}}&pay_till={{request.GET.pay_till}}"><i class="fas fa-edit"></i></a>
+                <td><a href="{% url 'attendance_update' obj.pk %}?book__event={{request.GET.book__event}}&book__user={{request.GET.book__user}}&status={{request.GET.status}}&pay_till={{request.GET.pay_till}}"><i class="fas fa-edit"></i></a>
             </tr>
             {% endfor%}
         </tbody>
