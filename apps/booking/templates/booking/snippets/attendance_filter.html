@@ -41,7 +41,7 @@
                 {# TODO: Getting times for view should be done somewhere else #}
                 <td>{% for obj in obj.book.times.all %}{{obj.name}}, {% endfor %}</td>
                 <td>{{obj.count_attendance}}</td>
-                <td><a href="{% url 'attendance_update' obj.pk %}?book__event={{request.GET.book__event}}&book__user={{request.GET.book__user}}&status={{request.GET.status}}&pay_till={{request.GET.pay_till}}"><i class="fas fa-edit"></i></a>
+                <td><a href="{% url 'attendance_update' obj.pk %}?book__event={{request.GET.book__event}}&book__user={{request.GET.book__user}}&attendance_date={{request.GET.attendance_date}}"><i class="fas fa-edit"></i></a>
             </tr>
             {% endfor%}
         </tbody>

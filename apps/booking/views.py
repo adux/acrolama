@@ -410,12 +410,11 @@ class AttendanceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     def get_success_url(self, **kwargs):
         user = self.request.GET.get("book__user", "")
         event = self.request.GET.get("book__event", "")
-        status = self.request.GET.get("status", "")
-        date = self.request.GET.get("pay_till", "")
+        attendance_date = self.request.GET.get("attendance_date", "")
         pk = self.object.id
         url = build_url(
             "attendance_update",
-            get={"book__user": user, "book__event": event, "status": status, "pay_till": date},
+            get={"book__user": user, "book__event": event, "attendance_date": attendance_date },
             pk={"pk": pk},
         )
         return url
