@@ -4,38 +4,21 @@
 {% block content %}
 <form method="POST">{% csrf_token %}
     <div class="card card-body bg-light">
-        <h4>{{object.price.name}} Booking N°{{object.pk}} by {{object.user.get_full_name}} of {{object.booked_at|date:'d-M.'}} {% if object.invoice %}, with <a href="{% url 'accounting_update' object.invoice.pk %}">Invoice N°{{object.invoice.pk}}</a>{% else %}No Invoice{% endif %}{% if object.attendance %} and <a href="{% url 'attendance_update' object.attendance.pk %}">Attendance N°{{obj.attendance.pk}}</a> {% endif %}</h4>
+        <h4>Attendance List of {{object.book.user.get_full_name}} for {{object.book.event.title}} {% if object.book %}, with <a href="{% url 'booking_update' object.book.pk %}">Booking N°{{object.book.pk}}</a>{% else %}No Booking{% endif %}{% if object.book.invoice %} and <a href="{% url 'accountingc_update' object.book.invoice.pk %}">Invoice N°{{object.book.invoice.pk}}</a>{% endif %}</h4>
         <div class="row">
-            <div class="form-group col-sm-4 col-md-5">
-              {{ form.user.label_tag }}
-              {% render_field form.user class="form-control" %}
+            <div class="form-group col-sm-4 col-md-6">
+              {{ form.attendance_date.label_tag }}
+              {% render_field form.attendance_date class="datepicker form-control" %}
             </div>
-            <div class="form-group col-sm-4 col-md-5">
-              {{ form.event.label_tag }}
-              {% render_field form.event class="form-control" %}
+            <div class="form-group col-sm-4 col-md-6">
+              {{ form.attendance_check.label_tag }}
+              {% render_field form.attendance_check class="form-control" %}
             </div>
-            <div class="form-group col-sm-4 col-md-2">
-              {{ form.status.label_tag }}
-              {% render_field form.status class="form-control" %}
-            </div>
-            {{form}}
         </div>
-        <hr>
-        <p> If update status from <u>Pending</u> to <u>Informed</u>:<br>
-        <li><strong>an automatic email will be sent</strong>.</li>
-        <li><strong>an assistance of book will be created</strong>.</li>
-        </p>
         <button type="submit" name="update" class="btn btn-danger">
             <i class="fas fa-edit"></i> DANGER - Update
         </button>
-        <hr>
-        <p> If duplicate is a <u>Cycle</u>:
-        <li>Book with <b>next cycle</b>.</li>
-        </p>
-        <button type="submit" name="create" class="btn btn-warning">
-        <i class="fas fa-copy"></i> Dulicate Booking for next Cycle
-        </button>
     </div>
 </form>
-{% include "booking/snippets/booking_filter.html" %}
+{% include "booking/snippets/attendance_filter.html" %}
 {% endblock %}

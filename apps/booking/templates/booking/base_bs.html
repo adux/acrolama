@@ -10,6 +10,7 @@
 <!-- Bootstrap 4.3.1 -->
     <link rel="stylesheet" href="{% static 'booking/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'booking/bootstrap-datepicker3.standalone.min.css' %}">
+    <link rel="stylesheet" href="{% static 'booking/project.css' %}">
 
 <!-- Other Stuff -->
     <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css"> -->
@@ -42,9 +43,10 @@
 <!-- Popper and Bootstrap -->
 <script src="{% static 'booking/bootstrap.bundle.min.js' %}"></script>
 <script src="{% static 'booking/bootstrap-datepicker.min.js' %}"></script>
+<script src="{% static 'booking/project.js' %}"></script>
 <script>
     $('.datepicker').datepicker({
-		format: "mm/dd/yyyy",
+		format: "yyyy-mm-dd",
 		weekStart: 1,
 		maxViewMode: 0,
 		todayBtn: "linked",

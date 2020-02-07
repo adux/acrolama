@@ -4,7 +4,7 @@
 {% block content %}
 <form method="POST">{% csrf_token %}
     <div class="card card-body bg-light">
-        <h4>Invoice N°{{object.pk}} of <a href="{% url 'booking_update' object.book.id %}">Booking N°{{object.book.id}}</a> - {% if object.book %}{{object.book.user.get_full_name}}{% else %}{{object.partner.name}}{% endif %} - Pay till: {{object.pay_till|date:'d M.'}} CHF {{object.to_pay}}.-</h4>
+        <h4>Invoice N°{{object.pk}} {% if object.book %}of <a href="{% url 'booking_update' object.book.id %}">Booking N°{{object.book.id}}</a>{% endif %} - {% if object.book %}{{object.book.user.get_full_name}}{% else %}{{object.partner.name}}{% endif %} - Pay till: {{object.pay_till|date:'d M.'}} CHF {{object.to_pay}}.-</h4>
         <div class="row">
             <div class="form-group col-sm-2 col-md-2">
               {{ form.paid.label_tag }}

@@ -292,7 +292,12 @@ def attendancelistview(request):
         request.GET,
         queryset=(
             Attendance.objects.all()
-            .select_related("book")
+                .select_related("book")
+                .select_related("book__event")
+                .select_related("book__user")
+                .select_related("book__price")
+                .prefetch_related("book__times")
+                .prefetch_related("book__times__regular_days")
         ),
     )
 
@@ -371,12 +376,17 @@ class AttendanceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
             queryset=(
                 Attendance.objects.all()
                 .select_related("book")
+                .select_related("book__event")
+                .select_related("book__user")
+                .select_related("book__price")
+                .prefetch_related("book__times")
+                .prefetch_related("book__times__regular_days")
             ),
         )
 
         context["attendance_filter"] = attendance_filter
         paginator = Paginator(
-            attendance_filter.qs, 20
+            attendance_filter.qs, 10
         )  # Show 25 contacts per page.
         page = self.request.GET.get("page")
         try:
