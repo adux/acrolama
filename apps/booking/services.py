@@ -1,5 +1,5 @@
 import datetime
-from django.core.exceptions import MultipleObjectsReturned, EmptyResultSet
+from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 
 from .models import Book, Attendance
 from project.models import Event
@@ -125,7 +125,7 @@ def createNextBook(book, status):
             category=old_event.category,
             event_startdate__gt=old_event.event_enddate,
         ).get(cycle=old_event.cycle + 1)
-    except (EmptyResultSet) as e:
+    except (ObjectDoesNotExist) as e:
         new_event = Event.objects.filter(
             project=old_event.project,
             level=old_event.level,
