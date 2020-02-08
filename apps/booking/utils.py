@@ -8,12 +8,11 @@ from django.urls import reverse
 from django.template.loader import render_to_string
 
 from project.models import Event, PriceOption, TimeOption, Irregularity
-from users.models import User
+#from users.models import User
 
 # Tests for the UserPassesTestMixin
 def staff_check(user):
     return user.is_staff
-
 
 def teacher_check(user):
     return user.is_teacher
@@ -85,7 +84,7 @@ def email_sender(instance, flag):
         send_mail(subject, msg_plain, sender, to, html_message=msg_html)
 
     elif flag == "Paid":
-        subject = "Acrolama - Accounting - " + str(instance.book.event.title)
+        subject = "Acrolama - Payment Confirmation - " + str(instance.book.event.title)
         to += [instance.book.user.email]
 
         irregularities = Irregularity.objects.filter(
@@ -102,12 +101,36 @@ def email_sender(instance, flag):
 
         msg_plain = render_to_string(
             settings.BASE_DIR
-            + "/apps/booking/templates/booking/email_informed.txt",
+            + "/apps/booking/templates/booking/email_paid.txt",
             p,
         )
         msg_html = render_to_string(
             settings.BASE_DIR
-            + "/apps/booking/templates/booking/email_informed.html",
+            + "/apps/booking/templates/booking/email_paid.html",
             p,
         )
         send_mail(subject, msg_plain, sender, to, html_message=msg_html)
+
+    elif flag == "Registered":
+        subject = "Acrolama - Registration - " + str(instance.event.title)
+        sender = "notmonkeys@acrolama.com"
+        to += [instance.user.email]
+
+        p = {
+            "event": instance.event,
+            "user": instance.user,
+        }
+
+        msg_plain = render_to_string(
+            settings.BASE_DIR
+            + "/apps/booking/templates/booking/email_registration.txt",
+            p,
+        )
+        msg_html = render_to_string(
+            settings.BASE_DIR
+            + "/apps/booking/templates/booking/email_registration.html",
+            p,
+        )
+        send_mail(subject, msg_plain, sender, to, html_message=msg_html)
+
+

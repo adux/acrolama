@@ -1,17 +1,19 @@
-from django.conf import settings
-
 from django.views import View
 from django.views.generic import DetailView, FormView
 from django.views.generic.detail import SingleObjectMixin
 
-from django.core.mail import send_mail
-from django.template.loader import render_to_string
 from django.contrib import messages
 
-from project.models import Event, TimeOption, PriceOption, Irregularity, TimeLocation
+from project.models import (
+    Event,
+    TimeOption,
+    PriceOption,
+    Irregularity,
+    TimeLocation
+)
 from booking.forms import BookForm
+from booking.utils import email_sender
 from users.models import User
-
 
 class EventDisplay(DetailView):
     model = Event
@@ -68,32 +70,11 @@ class EventInterest(SingleObjectMixin, FormView):
             return self.form_invalid(form, user)
 
     def form_valid(self, form, user):
-        # TODO: I think there are some optimisations to be done here. Args
-        # don't seem to right.
-        # Go through send email
         instance = form.save(commit=False)
         instance.event = Event.objects.get(slug=self.object.slug)
-        # TODO: can't i just use self.request.user ? TEST
-        instance.user = user
-        subject = "Acrolama - Registration - " + str(instance.event)
-        sender = "notmonkeys@acrolama.com"
-        to = [instance.user.email, "acrolama@acrolama.com"]
-        p = {
-            "event": instance.event,
-            "user": instance.user,
-        }
-
-        msg_plain = render_to_string(
-            settings.BASE_DIR
-            + "/apps/booking/templates/booking/email_registration.txt",
-            p,
-        )
-        msg_html = render_to_string(
-            settings.BASE_DIR
-            + "/apps/booking/templates/booking/email_registration.html",
-            p,
-        )
-        send_mail(subject, msg_plain, sender, to, html_message=msg_html)
+        #otherqise user
+        instance.user = self.request.user
+        email_sender(instance, "Registered")
         instance.save()
         form.save_m2m()
         return super().form_valid(form)
