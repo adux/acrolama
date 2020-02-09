@@ -193,7 +193,8 @@
                             <div>
                               {{ form.comment.label_tag }}
                               {% render_field form.comment %}
-                            </div>
+ .                           </div>
+                    <input type="hidden" name="next" value="{{ request.path }}">
                 <p><input value="Submit" type="submit"></p>
             </form>
         </div>

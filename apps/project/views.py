@@ -1,3 +1,4 @@
+from django.http import HttpResponseRedirect
 from django.views import View
 from django.views.generic import DetailView, FormView
 from django.views.generic.detail import SingleObjectMixin
@@ -89,6 +90,17 @@ class EventInterest(SingleObjectMixin, FormView):
             return self.form_valid(form, user)
         else:
             return self.form_invalid(form)
+
+    def form_invalid(self, form):
+        #TODO: i would actually like to pass the form to EventDetail,
+        #but passing context sucks speciall with all the slug workarround
+        previous_url = self.request.POST.get('next', '/')
+        messages.add_message(
+            self.request,
+            messages.WARNING,
+            'Booking Failed: Did you select a Time Preference?'
+        )
+        return HttpResponseRedirect(previous_url)
 
     def form_valid(self, form, user):
         instance = form.save(commit=False)
