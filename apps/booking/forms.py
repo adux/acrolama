@@ -32,8 +32,11 @@ class BookForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if args:
-            slug = args[0]
-            slug = slug.get("slug", "")
+            #Args from view, since its a tuple need to get the position and
+            #then get slug from the dictionary
+            #not sure how to improve this. Don't understand the whole Form
+            # Schizzle yet
+            slug = args[0].get("slug")
             if self.instance:
                 self.fields["price"].queryset = PriceOption.objects.filter(
                     event__slug=slug
@@ -41,6 +44,7 @@ class BookForm(forms.ModelForm):
                 self.fields["times"].queryset = TimeOption.objects.filter(
                     timelocation__event__slug=slug
                 )
+                self.fields["times"].label_from_instance = lambda obj: "%s %s" % (obj.regular_days if obj.regular_days else obj.name, obj.get_class_start_times() if obj.get_class_start_times else obj.get_open_start_times())
                 self.fields["price"].empty_label = "Select a Pricing Option"
                 self.fields["times"].empty_label = None
 
@@ -59,3 +63,19 @@ class BookForm(forms.ModelForm):
             "times": {"required": _("Time preference:")},
             "price": {"required": _("Pricing preference:")},
         }
+
+    def clean(self):
+        #run the standard clean method first
+        cleaned_data=super(BookForm, self).clean()
+        times_verify = cleaned_data.get("times")
+        print("CLEANED DATA")
+        print(times_verify)
+        print("END CLEAN DATA")
+        #check if passwords are entered and match
+        if not times_verify == None :
+            print("we have a time ok")
+        else:
+            raise forms.ValidationError("No times selected")
+
+        #always return the cleaned data
+        return cleaned_data

@@ -15,17 +15,33 @@ from booking.forms import BookForm
 from booking.utils import email_sender
 from users.models import User
 
+# EvenDetail for Explain
 class EventDisplay(DetailView):
+    """"
+        Handels how the Form is going to look like in the First paint
+        main_tl_list
+        # Creates a list of lists:
+        # (('location','regular_day','open_time...),('regu..)..)
+
+
+        gets template from DetailView model_detail.html
+        you could repain
+    """
     model = Event
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        slug = self.kwargs
-        context["form"] = BookForm(slug)
+        #kwargs is the object Event
+        #self.kwargs contains the slug passed form the link
+        #TODO: Still don't understand why i can't pass only the slug
+        #ModelForm expects a dict so we pass the whole kwargs
+        context["form"] = BookForm(self.kwargs)
 
-        # Creates a list of lists:
-        # (('location','regular_day','open_time...),('regu..)..)
-        # TODO:not sure where this code should go
+        # Time Location list solution.
+        # TODO: Make this a dictionary.
+        #Maybe better way. Problem could be in
+        # how models are allready done.
+        # TODO: Im sure this is cachable for each event
         timelocations = TimeLocation.objects.filter(
             event__slug=self.object.slug
         )
@@ -52,28 +68,32 @@ class EventDisplay(DetailView):
         context["exceptions"] = Irregularity.objects.filter(
             event__slug=self.object.slug
         )
+        #rest of the context as usual
         return context
 
 
 class EventInterest(SingleObjectMixin, FormView):
+    """
+    This ones writes the template again after the post
+    """
     template_name = "project/event_detail.html"
     form_class = BookForm
     model = Event
 
     def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
         form = self.get_form()
+        #Need to get user form request. self if Event Interest with obj Book
         user = request.user
         if form.is_valid():
+            #pass the user to the instance
             return self.form_valid(form, user)
         else:
-            return self.form_invalid(form, user)
+            return self.form_invalid(form)
 
     def form_valid(self, form, user):
         instance = form.save(commit=False)
-        instance.event = Event.objects.get(slug=self.object.slug)
-        #otherqise user
-        instance.user = self.request.user
+        instance.event = self.get_object()
+        instance.user = user
         email_sender(instance, "Registered")
         instance.save()
         form.save_m2m()
@@ -85,6 +105,9 @@ class EventInterest(SingleObjectMixin, FormView):
 
 
 class EventDetail(View):
+    """
+    Passes the display in get and forms in the post
+    """
     def get(self, request, *args, **kwargs):
         view = EventDisplay.as_view()
         return view(request, *args, **kwargs)

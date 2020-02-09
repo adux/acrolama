@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block head_title %}{{block.super}}{{ object.get_discipline_display }}{{ object.level }}{{ object.get_category_display }}: {{object.title}}{% endblock%}
-{% block content %}
+{% block content %}{% load widget_tweaks %}
 {% load static %}{% load tinycontent_tags %}
 {% include 'snippets/nav.html'%}
 <div class="single-portfolio">
@@ -177,35 +177,27 @@
 <!-- Sign in pop up -->
 {#TODO: REVIEW#}
 <div class="popup" role="alert">
-  <div class="popup-container">
-    <a href="#0" class="popup-close img-replace">Close</a>
-    <div class ="center-text">
-    <h1>Booking</h1>
+    <div class="popup-container">
+        <a href="#0" class="popup-close img-replace">Close</a>
+        <div class ="center-text"><h1>Booking</h1></div>
+        <div class="popup-form text-left">
+            <form method="post"> {% csrf_token %}
+                            <div>
+                              {{ form.times.label_tag }}
+                              {% render_field form.times %}
+                            </div>
+                            <div>
+                              {{ form.price.label_tag }}
+                              {% render_field form.price  %}
+                            </div>
+                            <div>
+                              {{ form.comment.label_tag }}
+                              {% render_field form.comment %}
+                            </div>
+                <p><input value="Submit" type="submit"></p>
+            </form>
+        </div>
     </div>
-    <div class="popup-form text-left">
-    <form method="POST">{% csrf_token %}
-        {% if form.errors.non_field_errors %}
-        {{ form.errors.non_field_errors }}
-        {% endif %}
-        {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-            <li {% if message.tags %}
-                style="color: #f3d216; text-align:center;"
-                class="{{ message.tags }}"
-                {% endif %}>
-                {{ message }}
-            </li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        <form method="post"> {% csrf_token %}
-            {{form.as_p}}
-            <p><input value="Submit" type="submit"></p>
-        </form>
-    </form>
-    </div>
-  </div>
 </div>
 {% include 'footer.html' %}
 {% endblock %}

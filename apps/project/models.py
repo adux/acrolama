@@ -95,6 +95,18 @@ class TimeOption(models.Model):
                 self.open_endtime.strftime("%H:%M"),
             )
 
+    def get_class_start_times(self):
+        return "%s - %s" % (
+            self.class_starttime.strftime("%H:%M"),
+            self.class_endtime.strftime("%H:%M"),
+        )
+
+    def get_open_start_times(self):
+        return "%s - %s" % (
+            self.open_starttime.strftime("%H:%M"),
+            self.open_endtime.strftime("%H:%M"),
+        )
+
 
 class Location(models.Model):
     name = models.CharField(max_length=120)
