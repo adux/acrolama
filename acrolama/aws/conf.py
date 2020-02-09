@@ -51,7 +51,7 @@ STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
 ADMIN_MEDIA_PREFI  = STATIC_URL + 'admin/'
 
 ### Compress
-COMPRESS_ENABLED = True
+COMPRESS_ENABLED = False
 COMPRESS_OFFLINE = True
 COMPRESS_CSS_HASHTAG_METHOD = 'content'
 COMPRESS_CSS_FILTERS = [
