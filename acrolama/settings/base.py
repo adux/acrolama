@@ -112,6 +112,11 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 
+#Audiovisual
+IMAGE_SIZE = os.environ.get('IMAGE_SIZE', default=(1170, 2240)),
+THUMB_SIZE = os.environ.get('THUMB_SIZE', default=(600, 600)),
+
+
 # Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Europe/Zurich'

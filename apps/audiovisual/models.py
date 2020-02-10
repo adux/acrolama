@@ -1,13 +1,19 @@
-
 # Pillow Compress
 import sys
 import os.path
 import PIL.Image
+
 from io import BytesIO
+
 from django.db import models
+from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.files.base import ContentFile
 
+"""
+Thumbnail
+https://stackoverflow.com/questions/23922289/django-pil-save-thumbnail-version-right-when-image-is-uploaded
+"""
 
 class Image(models.Model):
     date_creation = models.DateTimeField(auto_now_add=True)
@@ -25,16 +31,14 @@ class Image(models.Model):
     def save(self, *args, **kwargs):
         if not self.id:
             self.image = self.compressImage(self.image)
-        if not self.make_thumbnail():
-        # set to a default thumbnail
-            raise Exception('Could not create thumbnail - is the file type valid?')
         super(Image, self).save(*args, **kwargs)
 
     def compressImage(self, image):
         imageTemproary = PIL.Image.open(image)
         outputIoStream = BytesIO()
         imageTemproaryResized = imageTemproary.thumbnail(
-            (1170, 2340), PIL.Image.ANTIALIAS
+            settings.IMAGE_SIZE[0],
+            PIL.Image.ANTIALIAS
         )
         imageTemproary.save(
             outputIoStream,
@@ -72,7 +76,7 @@ class Image(models.Model):
 
     def make_thumbnail(self):
         image = PIL.Image.open(self.image)
-        image.thumbnail((200,200), PIL.Image.ANTIALIAS)
+        image.thumbnail(settings.THUMB_SIZE[0], PIL.Image.ANTIALIAS)
         thumb_name, thumb_extension = os.path.splitext(self.image.name)
         thumb_extension = thumb_extension.lower()
         thumb_filename = thumb_name + '_thumb' + thumb_extension
