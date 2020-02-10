@@ -29,8 +29,11 @@ class Image(models.Model):
     image_width = models.PositiveIntegerField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        if not self.id:
-            self.image = self.compressImage(self.image)
+        # if not self.id:
+        #     self.image = self.compressImage(self.image)
+        if not self.image.closed:
+            if not self.make_thumbnail():
+                raise Exception('Could not create thumbnail - is the file type valid?')
         super(Image, self).save(*args, **kwargs)
 
     def compressImage(self, image):
