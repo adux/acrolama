@@ -7,6 +7,7 @@ class ImageAdmin(admin.ModelAdmin):
         "title",
         "formImage",
         "image",
+        "thumbnail",
         "image_height",
         "image_width",
     ]
