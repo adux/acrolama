@@ -130,7 +130,7 @@ class TimeLocation(models.Model):
 
     def __str__(self):
         return " - ".join(
-            p for p in self.time_options.all()
+            p.__str__ for p in self.time_options.all()
         ) + " | %s" % (self.location)
 
 
