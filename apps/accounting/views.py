@@ -101,7 +101,7 @@ class InvoiceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
         if "update" in self.request.POST:
             if (invoice.status == "PE") and (instance.status == "PY"):
-                if invoice.book.event.category == "fas fa-cogs" or "fas fa-cog":
+                if invoice.book:
                     try:
                         email_sender(instance, "Paid")
                         #If its an Abo do the necesarry Bookings and Attendances
