@@ -9,25 +9,22 @@ AWS_PRELOAD_METADATA = True
 AWS_QUERYSTRING_AUTH = False
 AWS_DEFAULT_ACL = 'public-read'
 
-DEFAULT_FILE_STORAGE = 'acrolama.aws.utils.MediaRootS3BotoStorage'
 
 AWS_STORAGE_BUCKET_NAME = 'acrolama'
 AWS_S3_REGION_NAME = 'eu-central-1'
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
-S3_URL = '//%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
+# S3_URL = '//%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 
-MEDIA_URL = S3_URL + 'media/'
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media")
+# MEDIA_URL = S3_URL + 'media/'
+# MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media")
 
-STATIC_URL = S3_URL + 'static/'
-STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
+# STATIC_URL = S3_URL + 'static/'
+# STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
 
-STATICFILES_STORAGE = 'acrolama.aws.utils.CachedS3BotoStorage'
+# STATICFILES_STORAGE = 'acrolama.aws.utils.CachedS3BotoStorage'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, 'static'),
 ]
-
-ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 
 two_months = datetime.timedelta(days=61)
 date_two_months_later = datetime.date.today() + two_months
@@ -43,15 +40,17 @@ AWS_MEDIA_LOCATION = 'media'
 
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_MEDIA_LOCATION}/'
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media")
+DEFAULT_FILE_STORAGE = 'acrolama.aws.utils.MediaRootS3BotoStorage'
 
 STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_STATIC_LOCATION}/'
+# STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
+STATIC_ROOT = 'static'
 STATICFILES_STORAGE = 'acrolama.aws.utils.CachedS3Boto3Storage'
-STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
 
 ADMIN_MEDIA_PREFI  = STATIC_URL + 'admin/'
 
 ### Compress
-COMPRESS_ENABLED = False
+COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = True
 COMPRESS_CSS_HASHTAG_METHOD = 'content'
 COMPRESS_CSS_FILTERS = [
