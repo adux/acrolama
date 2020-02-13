@@ -22,9 +22,9 @@ AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
 # STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
 
 # STATICFILES_STORAGE = 'acrolama.aws.utils.CachedS3BotoStorage'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),
+# ]
 
 two_months = datetime.timedelta(days=61)
 date_two_months_later = datetime.date.today() + two_months
