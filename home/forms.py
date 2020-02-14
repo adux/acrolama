@@ -52,17 +52,17 @@ from home.models import Portfolio, NewsList
 # Multiple Forms Seccion
 
 
-class MultipleForms(forms.ModelForm):
-    action = forms.CharField(max_length=60, widget=forms.HiddenInput())
+# class MultipleForms(forms.ModelForm):
+#     action = forms.CharField(max_length=60, widget=forms.HiddenInput())
 
 
-class NewsForm(forms.ModelForm):
-    action = forms.CharField(max_length=60, widget=forms.HiddenInput())
+# class NewsForm(forms.ModelForm):
+#     action = forms.CharField(max_length=60, widget=forms.HiddenInput())
 
-    class Meta:
-        model = NewsList
-        fields = ("email",)
-        labels = {"email": _("")}
-        widgets = {
-            "email": forms.EmailInput(attrs={"placeholder": "Your Email"})
-        }
+#     class Meta:
+#         model = NewsList
+#         fields = ("email",)
+#         labels = {"email": _("")}
+#         widgets = {
+#             "email": forms.EmailInput(attrs={"placeholder": "Your Email"})
+#         }

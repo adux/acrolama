@@ -39,8 +39,7 @@ class InfoAdmin(admin.ModelAdmin):
 
 
 class NewsAdmin(admin.ModelAdmin):
-    list_display = ("email", "active", "inscribed_at")
-    list_filter = ("active",)
+    list_display = ("event", "image")
 
 
 admin.site.register(AboutImage, AboutImageAdmin)

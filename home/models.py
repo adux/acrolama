@@ -88,12 +88,17 @@ class InfoImage(models.Model):
 
 
 class NewsList(models.Model):
-    email = models.CharField(max_length=100, blank=True, null=True)
-    active = models.BooleanField(default=True)
-    inscribed_at = models.DateField(auto_now_add=True)
+    """
+    TODO: I want to automatize this with a job that takes the next 3 events, with workshops
+    as preferences and sets it every week?
+    Cleans, image included, the previous events, so only 3 are used.
+    """
+    event = models.ForeignKey("project.Event", on_delete=models.CASCADE)
+    image = models.ImageField(upload_to="ads")
+    added_at = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return self.email
+        return self.event.title
 
 
 class Portfolio(models.Model):

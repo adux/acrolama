@@ -19,8 +19,8 @@ from home.models import (
     Info,
     Testimonial,
     Portfolio,
+    NewsList,
 )
-from home.forms import NewsForm
 
 from project.models import Event, TimeOption
 
@@ -28,10 +28,10 @@ from project.models import Event, TimeOption
 class HomeFormView(MultiFormsView):
     template_name = "home/home.html"
     form_classes = {
-        "news": NewsForm,
+        # "news": NewsForm,
     }
     success_urls = {
-        "news": reverse_lazy("home"),
+        # "news": reverse_lazy("home"),
     }
 
     def get_context_data(self, **kwargs):
@@ -72,6 +72,7 @@ class HomeFormView(MultiFormsView):
         context["intro"] = classes.filter(level="1")
         context["intermediate"] = classes.filter(Q(level="2") | Q(level="3"))
         context["advanced"] = classes.filter(level="4")
+        context["news"] = NewsList.objects.all()
 
         return context
 

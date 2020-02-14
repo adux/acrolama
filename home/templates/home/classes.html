@@ -20,7 +20,7 @@
                         </div>
                         <div class="info">
                             <div class="author vcard ">
-                                <a href="classes/{{obj.slug}}">
+                                <a href="{{ obj.get_absolute_url }}">
                                     {{ obj.discipline.name }} {{ obj.level.get_name_display }} {{ obj.get_category_display }}
                                     {% for ad in obj.time_locations.all %}
                                         {% ifchanged %} - {{ad.location.address.city }} {% endifchanged %}
@@ -30,7 +30,7 @@
                             <div class="cat-links green">
                                 <ul>
                                     <li>
-                                        <a href="classes/{{obj.slug}}">
+                                        <a href="{{ obj.get_absolute_url }}">
                                             {{ obj.event_startdate }}
                                             {% if obj.event_enddate != obj.event_startdate %}
                                             - {{ obj.event_enddate }}
@@ -42,7 +42,7 @@
                             <div class="cat-links green">
                                 <ul>
                                     <li>
-                                        <a href="classes/{{obj.slug}}">
+                                        <a href="{{ obj.get_absolute_url }}">
                                             {% for to in obj.time_locations.all %}
                                                 {% for rd in to.time_options.all %}
                                                     {% ifchanged %}
@@ -58,7 +58,7 @@
                             </div>
                         </div>
                         <h3 class="entry-title">
-                            <a href="classes/{{obj.slug}}">{{ obj.fulltitle}}</a>
+                            <a href="{{ obj.get_absolute_url }}">{{ obj.fulltitle}}</a>
                         </h3>
                         <div class="clear"></div>
                     </article>
@@ -90,7 +90,7 @@
                         </div>
                         <div class="info">
                             <div class="author vcard ">
-                                <a href="classes/{{obj.slug}}">
+                                <a href="{{ obj.get_absolute_url }}">
                                     {{ obj.discipline.name }} {{ obj.level.get_name_display }} {{ obj.get_category_display }}
                                     {% for ad in obj.time_locations.all %}
                                         {% ifchanged %} - {{ad.location.address.city }} {% endifchanged %}
@@ -100,7 +100,7 @@
                             <div class="cat-links">
                                 <ul>
                                     <li>
-                                        <a href="classes/{{obj.slug}}">
+                                        <a href="{{ obj.get_absolute_url }}">
                                             {{ obj.event_startdate }}
                                             {% if obj.event_enddate != obj.event_startdate %}
                                             - {{ obj.event_enddate }}
@@ -112,7 +112,7 @@
                             <div class="cat-links">
                                 <ul>
                                     <li>
-                                        <a href="classes/{{obj.slug}}">
+                                        <a href="{{ obj.get_absolute_url }}">
                                             {% for to in obj.time_locations.all %}
                                                 {% for rd in to.time_options.all %}
                                                     {% ifchanged %}
@@ -128,7 +128,7 @@
                             </div>
                         </div>
                         <h3 class="entry-title">
-                            <a href="classes/{{obj.slug}}">{{ obj.fulltitle}}</a>
+                            <a href="{{ obj.get_absolute_url }}">{{ obj.fulltitle}}</a>
                         </h3>
                         <div class="clear"></div>
                     </article>
@@ -160,7 +160,7 @@
                         </div>
                         <div class="info">
                             <div class="author vcard ">
-                                <a href="classes/{{obj.slug}}">
+                                <a href="{{ obj.get_absolute_url }}">
                                     {{ obj.discipline.name }} {{ obj.level.get_name_display }} {{ obj.get_category_display }}
                                     {% for ad in obj.time_locations.all %}
                                         {% ifchanged %} - {{ad.location.address.city }} {% endifchanged %}
@@ -170,7 +170,7 @@
                             <div class="cat-links green">
                                 <ul>
                                     <li>
-                                        <a href="classes/{{obj.slug}}">
+                                        <a href="{{ obj.get_absolute_url }}">
                                             {{ obj.event_startdate }}
                                             {% if obj.event_enddate != obj.event_startdate %}
                                             - {{ obj.event_enddate }}
@@ -182,7 +182,7 @@
                             <div class="cat-links green">
                                 <ul>
                                     <li>
-                                        <a href="classes/{{obj.slug}}">
+                                        <a href="{{ obj.get_absolute_url }}">
                                             {% for to in obj.time_locations.all %}
                                                 {% for rd in to.time_options.all %}
                                                     {% ifchanged %}
@@ -198,7 +198,7 @@
                             </div>
                         </div>
                         <h3 class="entry-title">
-                            <a href="classes/{{obj.slug}}">{{ obj.fulltitle}}</a>
+                            <a href="{{ obj.get_absolute_url }}">{{ obj.fulltitle}}</a>
                         </h3>
                         <div class="clear"></div>
                     </article>

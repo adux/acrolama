@@ -20,7 +20,7 @@
                         </div>
                         <div class="info">
                             <div class="author vcard ">
-                                <a href="events/{{obj.slug}}">
+                                <a href="{{ obj.get_absolute_url}}">
                                     {{ obj.level.get_name_display }} {{ obj.get_category_display }} -
                                     {% for ad in obj.time_locations.all %}
                                         {% ifchanged %} {{ad.location.address.city }} {% endifchanged %}
@@ -30,7 +30,7 @@
                             <div class="cat-links">
                                 <ul>
                                     <li>
-                                        <a href="events/{{obj.slug}}">
+                                        <a href="{{ obj.get_absolute_url}}">
                                             {{ obj.event_startdate}}
                                             {% if obj.event_enddate != obj.event_startdate %}
                                             - {{ obj.event_enddate }}
@@ -46,7 +46,7 @@
                             </div>
                         </div>
                         <h3 class="entry-title">
-                            <a href="events/{{obj.slug}}">{{obj.title}}</a>
+                            <a href="{{obj.get_absolute_url}}">{{obj.title}}</a>
                         </h3>
                         <div class="clear"></div>
                     </article>
