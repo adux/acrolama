@@ -1,0 +1,56 @@
+{% load static %}{% load tinycontent_tags %}
+        <div id="about" class="section">
+            <div class="block content-1170 center-relative">
+                <div class="section-title-holder left">
+                    <div class="section-num">
+                        <span>
+                          <i class="fas fa-exclamation-circle"></i>
+                        </span>
+                    </div>
+                    <h2 class="entry-title">Content</h2>
+                </div>
+                <div class="section-content-holder right">
+                    <div class="content-wrapper">
+                      <div class="content-title-holder">
+                        <p class="content-title">Video</p>
+                      </div>
+                    </div>
+                    <div class="full-width ">
+                        <a class="video-popup-holder" href="https://www.youtube.com/watch?v=hpBMOpybPhw" data-rel="prettyPhoto[gallery-video1]">
+                            <img class="thumb" src="" alt="">
+                            <img class="popup-play" src="images/icon_video.svg" alt="Play">
+                        </a>
+                    </div>
+                    <div class="full-width">
+                        <script>
+                            var aboutmember_speed = "2000";
+                            var aboutmember_auto = "true";
+                            var aboutmember_hover = "false";
+                        </script>
+                        <div class="image-slider-wrapper relative team team1">
+                            <!-- Next Arrow -->
+                            <a id="aboutmember_next" class="image_slider_next" href="#"></a>
+                            <div class="caroufredsel_wrapper">
+                                <ul id="aboutmember" class="image-slider slides">
+                                    {% for teacher in teachers %}
+                                    <li>
+                                        <div class="member-content-holder">
+                                            <h4 class="member-name">{{ teacher.first_name }}</h4>
+                                            <p class="member-position">{{ teacher.title }}</p>
+                                            <div class="member-content">{{ teacher.long_description|safe }}<br></div>
+                                        </div>
+                                        <div class="member-image-holder">
+                                            <img src="{{ teacher.avatar.url }}" alt="{{ teacher.short_description }}">
+                                        </div>
+                                        <div class="clear"></div>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>   <!-- end full-width div -->
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>

@@ -29,8 +29,8 @@ class Image(models.Model):
     image_width = models.PositiveIntegerField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        # if not self.id:
-        #     self.image = self.compressImage(self.image)
+        if not self.id:
+            self.image = self.compressImage(self.image)
         if not self.image.closed:
             if not self.make_thumbnail():
                 raise Exception('Could not create thumbnail - is the file type valid?')
@@ -121,3 +121,43 @@ class Video(models.Model):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.image = self.compressImage(self.image)
+        super(Video, self).save(*args, **kwargs)
+
+    def compressImage(self, image):
+        imageTemproary = PIL.Image.open(image)
+        outputIoStream = BytesIO()
+        imageTemproaryResized = imageTemproary.thumbnail(
+            (1170,1170),
+            PIL.Image.ANTIALIAS
+        )
+        width, height = imageTemproary.size   # Get dimensions
+
+        left = (width - 600)/2
+        top = (height - 300)/2
+        right = (width + 600)/2
+        bottom = (height + 300)/2
+
+        # Crop the center of the image
+        imageTemproaryCrop = imageTemproary.crop((left, top, right, bottom))
+
+        imageTemproaryCrop.save(
+            outputIoStream,
+            format="JPEG",
+            quality=60,
+            subsampling=0,
+            optimize=True,
+        )
+        outputIoStream.seek(0)
+        image = InMemoryUploadedFile(
+            outputIoStream,
+            "ImageField",
+            "%s.jpg" % image.name.split(".")[0],
+            "image/jpeg",
+            sys.getsizeof(outputIoStream),
+            None,
+        )
+        return image

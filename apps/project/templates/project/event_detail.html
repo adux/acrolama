@@ -8,66 +8,44 @@
         <div class="center-relative content-1170">
             <div class="entry-content">
                 <div class="content-wrap relative">
-    <script>
-            var aboutImage_speed = "1000";
-            var aboutImage_auto = "true";
-            var aboutImage_hover = "true";
-    </script>
+<!-- Image Start -->
+                    <script>
+                            var aboutImage_speed = "1000";
+                            var aboutImage_auto = "true";
+                            var aboutImage_hover = "true";
+                    </script>
                     <div class="image-slider-wrapper relative img aboutImage">
                         <a id="aboutImage_next" class="image_slider_next" href="#"></a>
                         <div class="caroufredsel_wrapper">
-                            <ul id="aboutImage" class="image-slider slides">{% for obj in event.images.all %}
+                            <ul id="aboutImage" class="image-slider slides">{% for obj in object.images.all %}
                                 <li><img src="{{ obj.image.url }}" alt="{{ obj.image.description }}"></li>{%endfor%}
                             </ul>
                         </div>
                         <div class="clear"></div>
                     </div>
                     <div class="clear"></div>
-                    <br>
-                    <br>
-                    <div class="one_half text-left">
+                    <!-- <br> -->
+                    <!-- <br> -->
+<!-- Image End -->
+<!-- General Info Start -->
+                    <div class="one top-50">
+                        <div><h2><b>{{ object.title }}</b>{% if object.discipline %} - {{ object.discipline.name }} {% endif %}{% if object.level %} {{ object.level }} {% endif %}{% if object.category %} {{ object.get_category_display }} {% endif %}</h2></div>
+                    </div>
+                    <div class="one_half">
                         <ul>
                             <li>
-                                {{ object.title }} -{% if object.discipline %} <strong>{{ object.discipline.name }}</strong>{% endif %}
-                                {% if object.level %} <strong>{{ object.level }}</strong>{% endif %}
-                                {% if object.category %} <strong>{{ object.get_category_display }}</strong>{% endif %}
+                                <strong>Date</strong>: {{ object.event_startdate }}{% if object.event_startdate != object.event_enddate %} - {{ object.event_enddate }}{% endif %}
                             </li>
+                    {% if exceptions %}{# TODO:Pluralize #}
                             <li>
-                                <strong>Date</strong>: {{ object.event_startdate }}
-                                {% if object.event_startdate != object.event_enddate %}
-                                - {{ object.event_enddate }}
-                                {% endif %}
+                                <strong>Exceptions:</u></strong>
                             </li>
-                            {% if exceptions %}{# TODO:Pluralize #}
-                                    <li>
-                                        <strong>Exceptions:</u></strong>
-                                    </li>
-                                    {% for obj in exceptions %}
-                                        <li>
-                                            · {{obj.description}}
-                                        </li>
-                                    {% endfor %}
-                                {% endif %}
-
-                                {%for option in timelocations_list%}
-                                {%if option.1 %}
-                                    <li>
-                                        <h3>{{ option.1 }}</h3>
-                                    </li>
-                                {% endif %}
+                            {% for obj in exceptions %}
                                 <li>
-                                    <strong>Address</strong> : {{option.0 }} || {{option.0.address }}
+                                    · {{obj.description}}
                                 </li>
-                                <li>
-                                    <strong>Door Open</strong>: {{ option.2 }}  - {{ option.3 }}
-                                </li>
-                                {% if option.4 %}
-                                    <li>
-                                        <strong>Class</strong>: {{ option.4 }} - {{ option.5 }}
-                                    </li>
-                                {% endif %}
-                                {% endfor %}
-                                <br>
+                            {% endfor %}
+                    {% endif %}
                             <li>
                                 <strong>Max. Participants</strong> : {{ object.max_participants }}
                             </li>
@@ -75,23 +53,22 @@
                                 <strong>Policy</strong> : {% tinycontent_simple 'event_policy' %}
                             </li>
                         </ul>
-                    <br>
-                        <div class="tab">
+                        <div class="tab" style="width:324px;">
                             <input id="tab-one" type="checkbox" name="tabs"/>
-                            <label for="tab-one"><b>PRICING</b></label>
+                            <label for="tab-one"><b>Pricing options ≡</b></label>
                             <div class="tab-content">
                                 <div class="table-wrapper text-left">
                                     <table class="alt">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Name</th>
-                                                <th scope="col">Price</th>
-                                            </tr>
-                                        </thead>
+                                        <!-- <thead> -->
+                                        <!--     <tr> -->
+                                        <!--         <th scope="col">Name</th> -->
+                                        <!--         <th scope="col">Price</th> -->
+                                        <!--     </tr> -->
+                                        <!-- </thead> -->
                                         <tbody>
                                             {% for po in priceoptions %}
                                             <tr>
-                                                <td scope="row" data-label="Name">{{ po.name }}</td>
+                                                <td scope="row" data-label="Name"><b>{{ po.name }}</b></td>
                                                 <td data-label="Price">
                                                     {% if po.price_chf %}CHF {{po.price_chf}} {% endif %}{% if por.price_euro %}EURO {{po.price.euro}}{% endif %}
                                                 </td>
@@ -108,23 +85,70 @@
                         <ul class="actions">
                         {% if user.is_authenticated %}
                         <!-- <li> Your one of us &#128151;, feel like flying?:</li> -->
-                            <li><a class="button popup-trigger" style="width=100%;"><b>Book</b></a></li>
+                            <li><a class="button popup-trigger" style="width:252px;"><b>Book</b></a></li>
                         {% else %}
                             <li><a class="button" href="{% url "account_signup" %}"><b>Register</b></a></li>
                             <li>Allready have an account? <a href="{% url "account_login" %}">Sign in</a></li>
-                        </ul>
                         {% endif %}
+                        </ul>
                     </div>
+                    {%for option in timelocations_list%}
                     <div class="one_half last">
-                        <h1>{{object.title}}</h1>
+                        <ul>
+                        {%if option.1 %}
+                            <li>
+                                <h5>{{ option.1 }} Class</h5>
+                            </li>
+                        {% endif %}
+                        <li>
+                            <strong>Address</strong> : {{option.0 }} || {{option.0.address }}
+                        </li>
+                        <li>
+                            <strong>Door Open</strong>: {{ option.2 }}  - {{ option.3 }}
+                        </li>
+                        {% if option.4 %}
+                            <li>
+                                <strong>Class</strong>: {{ option.4 }} - {{ option.5 }}
+                            </li>
+                        {% endif %}
+                        </ul>
+                    </div>
+                    {% endfor %}
+                    <div class="clear"></div>
+<!-- General Info End -->
+                    <div class="one">
+                        <h1>Description</h1>
                         <p>{{object.description|safe}}</p>
+                    </div>
+                    <div class="one">
                         {% if object.prerequisites %}
                         <h1>Prerequisites</h1>
                         <p>{{object.prerequisites|safe}}</p>
                         {% endif%}
                     </div>
-                    <!-- TEACHER SECTION -->
-                    <div class="one" style="background: #afdece;">
+                </div>
+            </div>
+        <div id="extra" class="section">
+            <div class="block content-1170 center-relative">
+                <div class="section-title-holder left">
+                    <div class="section-num">
+                        <span>
+                          <i class="fas fa-plus-circle"></i>
+                        </span>
+                    </div>
+                    <h2 class="entry-title">Infos</h2>
+                </div>
+                <div class="section-content-holder right">
+                     <!-- If video -->
+                    <div class="full-width ">
+                        {% for obj in event.videos.all %}
+                        <a class="video-popup-holder" href="{{ obj.link}}" data-rel="prettyPhoto[gallery-video1]">
+                            <img class="thumb" src="{{ obj.image.url }}" alt="{{ obj.description }}">
+                            <img class="popup-play" src="{% static "home/images/icon_video.svg" %}" alt="Play">
+                        </a>
+                        {% endfor %}
+                    </div>
+                    <div class="full-width">
                         <script>
                             var aboutmember_speed = "2000";
                             var aboutmember_auto = "true";
@@ -152,9 +176,14 @@
                             </div>
                             <div class="clear"></div>
                         </div>
-                    </div>
-                    <!-- END TEACHER -->
+                    </div>   <!-- end full-width div -->
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+        {% if object.highlights or object.included or object.food %}
                     <div class="one">
+                        qwdqwdqwd
                         {% if object.highlights %}
                         <h1 class="right">Highlights</h1>
                             <p>{{object.highlights|safe}}</p>
@@ -168,6 +197,7 @@
                             <p>{{object.food|safe}}</p>
                         {% endif %}
                     </div>
+        {% endif %}
                     <div class="clear"></div>
                 </div>
             </div>
