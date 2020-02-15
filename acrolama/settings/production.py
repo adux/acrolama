@@ -1,25 +1,9 @@
 from .base import *
-from .anymail import *
 from acrolama.aws.conf import *
 
-# For Heroku
-import dj_database_url
-
-INSTALLED_APPS = ["collectfast"] + INSTALLED_APPS
-COLLECTFAST_STRATEGY = "collectfast.strategies.boto3.Boto3Strategy"
-
-INSTALLED_APPS += ["anymail"]
-
-# Sentry SDK
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
-
-sentry_sdk.init(
-    dsn="https://449183d07de2455ba0ecf384ca29a77f@sentry.io/1310482",
-    integrations=[DjangoIntegration()]
-)
-
-DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
+# General
+# ------------------------------------------------------------------------------
+ADMIN_URL = os.environ.get('DJANGO_ADMIN_URL')
 
 ADMINS = (
     ('Adrian Garate', 'adrian@acrolama.com'),
@@ -27,9 +11,8 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-ADMIN_URL = os.environ.get('DJANGO_ADMIN_URL')
-
 # SECURITY WARNING: keep the secret key used in production secret!
+
 SECRET_KEY = os.environ.get(
     'SECRET_KEY',
     's9+nemt@ka=)v2dsqwdQWDQWDQEQWRGQERVQWEFcu^##"w2#abu)v85)zh#ej2f2dqqwdq'
@@ -45,13 +28,48 @@ ALLOWED_HOSTS = [
     '.acrolama.com'
 ]
 
+# Collecting
+# ------------------------------------------------------------------------------
+
+INSTALLED_APPS = ["collectfast"] + INSTALLED_APPS
+COLLECTFAST_STRATEGY = "collectfast.strategies.boto3.Boto3Strategy"
+
+# Sentry SDK
+# ------------------------------------------------------------------------------
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+sentry_sdk.init(
+    dsn="https://449183d07de2455ba0ecf384ca29a77f@sentry.io/1310482",
+    integrations=[DjangoIntegration()]
+)
+
+# Anymail (Mailgun)
+# ------------------------------------------------------------------------------
+INSTALLED_APPS += ["anymail"]
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
+
+# https://anymail.readthedocs.io/en/stable/installation/#installing-anymail
+EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
+
+ANYMAIL = {
+    "MAILGUN_API_KEY": os.environ.get('MAILGUN_API_KEY'),
+    "MAILGUN_SENDER_DOMAIN": os.environ.get('MAILGUN_DOMAIN'),
+    "MAILGUN_API_URL": os.environ.get(
+        'MAILGUN_API_URL',
+        default='https://api.mailgun.net/v3'
+    ),
+}
+
+
 # Database for heroku
-# import dj_database_url
-db_from_env = dj_database_url.config()
+# ------------------------------------------------------------------------------
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=500, ssl_require=True)
 DATABASES['default'].update(db_from_env)
-# DATABASES['default']['CONN_MAX_AGE'] = 500
 
 # HTML MINIFY
+# ------------------------------------------------------------------------------
 MIDDLEWARE += [
     'htmlmin.middleware.HtmlMinifyMiddleware',
     'htmlmin.middleware.MarkRequestMiddleware'
@@ -60,7 +78,23 @@ MIDDLEWARE += [
 HTML_MINIFY = False
 KEEP_COMMENTS_ON_MINIFYING = True
 
-# Secure
+# CACHES
+# ------------------------------------------------------------------------------
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": os.environ.get('REDISCLOUD_URL'),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            # Mimicing memcache behavior.
+            # http://niwinz.github.io/django-redis/latest/#_memcached_exceptions_behavior
+            "IGNORE_EXCEPTIONS": True,
+        },
+    }
+}
+
+# HTTPS
+# ------------------------------------------------------------------------------
 CORS_REPLACE_HTTPS_REFERER = True
 HOST_SCHEME = "https://"
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
