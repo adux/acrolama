@@ -12,7 +12,8 @@ AWS_DEFAULT_ACL = 'public-read'
 
 AWS_STORAGE_BUCKET_NAME = 'acrolama'
 AWS_S3_REGION_NAME = 'eu-central-1'
-AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+# AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+AWS_S3_CUSTOM_DOMAIN = 'd1j4p94w54mk15.cloudfront.net'
 # S3_URL = '//%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 
 # MEDIA_URL = S3_URL + 'media/'
