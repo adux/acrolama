@@ -6,34 +6,32 @@
         <h1 class="big-title"><span>Be the monkey you want to be...<br>but we are lamas.</span></h1>
         <p class="title-desc">Flying lamas.</p>
     </div>
-                <div class="extra-content-top">
-                <script>
-                    var fwslider1_speed = "800";
-                    var fwslider1_auto = "true";
-                    var fwslider1_hover = "false";
-                    var fwslider1_start = "0";
-                    var fwslider1_width = "600";
-                    var fwslider1_num = "1";
-                </script>
-                <div class="fwslider1 fw-image-slider-holder list_carousel relative">
-                    <div class="caroufredsel_wrapper">
-                        <ul id="fwslider1" class="fw-image-slider">
-                            {% for obj in news %}
-                            <li class="fw-slide">
-                                <a href="{{ obj.event.get_absolute_url }}">
-                                    <img src="{{ obj.image.url }}" alt="Header image for Acrolama event {{obj.event.title}}">
-                                    <span class="fw-slide-text">{{obj.event.event_startdate|date:"j N" }} -{% if obj.event.discipline %} {{ obj.event.discipline.name }} {% endif %}{% if obj.event.level %} {{ obj.event.level }} {% endif %}{% if obj.event.category %} {{ obj.event.get_category_display }} {% endif %}</span>
-                                </a>
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    <div class="clear"></div>
-                    <div id="fwslider1_fw_image_slide_pager" class="fw_carousel_pagination"></div>
-                </div>
-                <!-- <a id="fwslider1_fw_next" class="carousel_fw_next" href="#"></a> -->
-                <div class="clear"></div>
-            </div>
+    <div class="extra-content-top">
+    <script>
+        var fwslider1_speed = "800";
+        var fwslider1_auto = "true";
+        var fwslider1_hover = "false";
+        var fwslider1_start = "0";
+        var fwslider1_width = "600";
+        var fwslider1_num = "1";
+    </script>
+    <div class="fwslider1 fw-image-slider-holder list_carousel relative">
+        <div class="caroufredsel_wrapper">
+            <ul id="fwslider1" class="fw-image-slider">
+                {% for obj in news %}
+                <li class="fw-slide">
+                    <a href="{{ obj.event.get_absolute_url }}">
+                        <img src="{{ obj.image.url }}" alt="Header image for Acrolama event {{obj.event.title}}">
+                        <span class="fw-slide-text">{{obj.event.event_startdate|date:"j N" }} -{% if obj.event.discipline %} {{ obj.event.discipline.name }} {% endif %}{% if obj.event.level %} {{ obj.event.level }} {% endif %}{% if obj.event.category %} {{ obj.event.get_category_display }} {% endif %}</span>
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
         </div>
+        <div class="clear"></div>
+        <div id="fwslider1_fw_image_slide_pager" class="fw_carousel_pagination"></div>
+    </div>
+    <!-- <a id="fwslider1_fw_next" class="carousel_fw_next" href="#"></a> -->
+    <div class="clear"></div>
 </div>
 

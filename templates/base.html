@@ -13,11 +13,11 @@
         {% analytical_head_bottom %}
     </head>
     <body>
-        {% if messages %}
-            {% for message in messages %}
-            <div class="alert-box {{ message.tags }}"><span>{{ message.tags }}: </span>{{ message }}</div>
-            {% endfor %}
-        {% endif %}
+{% if messages %}
+    {% for message in messages %}
+    <div class="alert-box {{ message.tags }}"><span>{{ message.tags }}: </span>{{ message }}</div>
+    {% endfor %}
+{% endif %}
         {% analytical_body_top %}
         {% block content %}{% endblock %}
         {% include 'snippets/js.html' %}{% analytical_body_bottom %}
