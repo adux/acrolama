@@ -1,3 +1,4 @@
+import urlparse
 from .base import *
 from acrolama.aws.conf import *
 
@@ -80,12 +81,15 @@ KEEP_COMMENTS_ON_MINIFYING = True
 
 # CACHES
 # ------------------------------------------------------------------------------
-INSTALLED_APPS += ["django_redis"]
+
+redis_url = urlparse.urlparse(os.environ.get('REDISCLOUD_URL'))
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": os.environ.get('REDISCLOUD_URL'),
+        'LOCATION': '%s:%s' % (redis_url.hostname, redis_url.port),
         "OPTIONS": {
+            "PASSWORD": redis_url.password,
+            "DB": 0,
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             # Mimicing memcache behavior.
             # http://niwinz.github.io/django-redis/latest/#_memcached_exceptions_behavior
