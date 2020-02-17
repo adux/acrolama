@@ -20,6 +20,7 @@ class UserAdmin(UserAdmin):
         "is_teacher",
     ]
     list_filter = ["is_staff", "is_teacher", "is_active", "email"]
+    search_fields = ["email", "first_name", "last_name"]
     ordering = ["email"]
     fieldsets = (
         (None, {"fields": ("email", "password")}),
