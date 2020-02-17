@@ -1,8 +1,14 @@
 from django.urls import path, include
-from django.conf.urls import url
 from django.conf import settings
+# CLEAN
+# from django.conf.urls import url
+
 from django.conf.urls.static import static
+
 from django.contrib import admin
+
+from django.views.decorators.cache import cache_page
+
 from home.views import (
     HomeFormView,
     faqview,
@@ -49,7 +55,7 @@ urlpatterns = [
     path('', HomeFormView.as_view(), name="home"),
     path("events/", EventListView.as_view(), name="events"),
     path("classes/", ClassListView.as_view(), name="classes"),
-    path("events/<slug:slug>/", EventDetail.as_view(), name="event"),
+    path("events/<slug:slug>/", cache_page(60*60)(EventDetail.as_view()), name="event"),
     path("classes/<slug:slug>/", EventDetail.as_view(), name="class"),
     path("info/<slug:slug>/", InfoDetailView.as_view(), name="info"),
     path("faq/", faqview, name="faq"),
@@ -58,7 +64,7 @@ urlpatterns = [
          {'sitemaps': sitemaps},
          name='django.contrib.sitemaps.views.sitemap'),
     # Admin stuff
-    url(settings.ADMIN_URL, admin.site.urls),
+    path(settings.ADMIN_URL, admin.site.urls),
     # TODO: Add to Admin url 
     path("herd/", HerdView.as_view(), name="herd"),
     path("herd/booking/", bookinglistview, name="booking_list"),
