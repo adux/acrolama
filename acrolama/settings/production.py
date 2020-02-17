@@ -1,4 +1,4 @@
-import urlparse
+import urllib.parse
 from .base import *
 from acrolama.aws.conf import *
 
@@ -82,7 +82,7 @@ KEEP_COMMENTS_ON_MINIFYING = True
 # CACHES
 # ------------------------------------------------------------------------------
 
-redis_url = urlparse.urlparse(os.environ.get('REDISCLOUD_URL'))
+redis_url = urllib.parse(os.environ.get('REDISCLOUD_URL'))
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
