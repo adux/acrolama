@@ -80,6 +80,7 @@ KEEP_COMMENTS_ON_MINIFYING = True
 
 # CACHES
 # ------------------------------------------------------------------------------
+INSTALLED_APPS += ["django_redis"]
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
