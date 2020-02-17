@@ -62,7 +62,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     birth_date = models.DateField(_("Birthday"), null=True, blank=True)
     # Teachers and Stuff can use this
     title = models.CharField(_("title"), max_length=45, blank=True)
-    avatar = models.ImageField(upload_to="avatars/", null=True, blank=True)
+    avatar = models.ForeignKey("audiovisual.Avatar",blank=True, null=True, on_delete=models.CASCADE)
     short_description = models.TextField(
         _("short description"), max_length=400, blank=True
     )

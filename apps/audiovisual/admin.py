@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Image, Video
+from .models import Avatar, Image, Video
 
 
 class ImageAdmin(admin.ModelAdmin):
@@ -12,7 +12,17 @@ class ImageAdmin(admin.ModelAdmin):
         "image_width",
     ]
 
+class AvatarAdmin(admin.ModelAdmin):
+    list_display = [
+        "formImage",
+        "image",
+        "thumbnail",
+        "image_height",
+        "image_width",
+    ]
 
+
+admin.site.register(Avatar, AvatarAdmin)
 admin.site.register(Image, ImageAdmin)
 admin.site.register(Video)
 # Register your models here.
