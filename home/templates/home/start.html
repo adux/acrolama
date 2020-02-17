@@ -21,7 +21,7 @@
                             {% for obj in news %}
                             <li class="fw-slide">
                                 <a href="{{ obj.event.get_absolute_url }}">
-                                    <img src="{{ obj.image.url }}" alt="Header image for Acrolama event {{obj.event.title}}"/>
+                                    <img src="{{ obj.image.url }}" />
                                     <span class="fw-slide-text">{{obj.event.event_startdate|date:"j N" }} -{% if obj.event.discipline %} {{ obj.event.discipline.name }} {% endif %}{% if obj.event.level %} {{ obj.event.level }} {% endif %}{% if obj.event.category %} {{ obj.event.get_category_display }} {% endif %}</span>
                                 </a>
                             </li>

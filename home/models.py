@@ -94,7 +94,7 @@ class NewsList(models.Model):
     Cleans, image included, the previous events, so only 3 are used.
     """
     event = models.ForeignKey("project.Event", on_delete=models.CASCADE)
-    image = models.ImageField(upload_to="ads")
+    image = models.ImageField(upload_to="news/")
     added_at = models.DateField(auto_now_add=True)
 
     def __str__(self):
