@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 {% include 'snippets/nav.html' %}
-<div class="info">
+<div id="info" class="info">
     <article class="section info" >
         <div class="center-relative content-1170">
             <div class="entry-content">
@@ -14,8 +14,12 @@
                     <div class="image-slider-wrapper relative img aboutImage">
                         <a id="aboutImage_next" class="image_slider_next" href="#"></a>
                         <div class="caroufredsel_wrapper">
-                                <ul id="aboutImage" class="image-slider slides">{% for obj in info.infoimage_set.all %}
-                                    <li><img src="{{obj.image.image.url}}" alt="{{obj.image.description}}"></li>{%endfor%}
+                            <ul id="aboutImage" class="image-slider slides">
+                                {% for obj in info.infoimage_set.all %}
+                                <li>
+                                    <img src="{{ obj.image.image.url }}" alt="{{ obj.image.description }}"/>
+                                </li>
+                                {% endfor %}
                             </ul>
                         </div>
                     </div>
@@ -23,7 +27,7 @@
                     <div class="one text-left">
                             <h2>{{object.title}}</h2>
                                 {{object.content|safe}}
-                            <br/><br//>
+                            <br/><br/>
                             <a class="button" onclick="goBack()">Go Back</a>
                             <script>
                             function goBack() {
