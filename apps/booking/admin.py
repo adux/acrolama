@@ -36,8 +36,13 @@ class BookAdmin(admin.ModelAdmin):
     save_as = True
 
 class AttendanceForm(forms.ModelForm):
-    class Meta:
-        exclude = ['book']
+    def __init__(self, *args,**kwargs):
+        super (AttendanceForm,self ).__init__(*args,**kwargs) # populate the post
+        self.fields['book'].queryset = Book.objects.select_related('user','event','event__level')
+
+    # class Meta:
+    #     exclude = ['book']
+
     # TODO: Make this global for all admin
     class Media:
         js = ("booking/project.js",)
