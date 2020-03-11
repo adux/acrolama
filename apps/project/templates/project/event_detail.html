@@ -182,8 +182,11 @@
             </div>
         </div>
         {% if object.highlights or object.included or object.food %}
+        <div class="center-relative content-1170">
+            <div class="entry-content">
+                <div class="content-wrap relative">
+        {% if object.highlights or object.included or object.food %}
                     <div class="one">
-                        qwdqwdqwd
                         {% if object.highlights %}
                         <h1 class="right">Highlights</h1>
                             <p>{{object.highlights|safe}}</p>
@@ -202,6 +205,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
     </article>
 </div>
 <!-- Sign in pop up -->
