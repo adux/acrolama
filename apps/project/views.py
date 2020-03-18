@@ -24,7 +24,6 @@ class EventDisplay(DetailView):
         # Creates a list of lists:
         # (('location','regular_day','open_time...),('regu..)..)
 
-
         gets template from DetailView model_detail.html
         you could repain
     """

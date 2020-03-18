@@ -1,4 +1,5 @@
 from urllib.parse import urlparse
+
 from .base import *
 from acrolama.aws.conf import *
 
@@ -61,7 +62,6 @@ ANYMAIL = {
         default='https://api.mailgun.net/v3'
     ),
 }
-
 
 # Database for heroku
 # ------------------------------------------------------------------------------

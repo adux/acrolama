@@ -8,7 +8,6 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
-
 # Config https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_AUTHENTICATION_METHOD = os.environ.get(
     'ACCOUNT_AUTHENTICATION_METHOD', default='email')
