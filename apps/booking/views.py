@@ -242,7 +242,7 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         pk = self.object.id
         url = build_url(
             "booking_update",
-            get={"user": user, "event": event, "status": status, "start_date": start_date, "end_dat": end_date},
+            get={"user": user, "event": event, "status": status, "start_date": start_date, "end_date": end_date},
             # TODO im not sure this way of passing the pk is ideal :)
             pk={"pk": pk},
         )
