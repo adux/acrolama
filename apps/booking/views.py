@@ -69,7 +69,7 @@ def bookinglistview(request):
     )
 
     # Pagination
-    paginator = Paginator(booking_filter.qs, 15)  # Show 25 contacts per page.
+    paginator = Paginator(booking_filter.qs, 20)  # Show 25 contacts per page.
     page = request.GET.get("page")
     try:
         response = paginator.page(page)
@@ -294,7 +294,7 @@ def attendancelistview(request):
 
     # Pagination
     paginator = Paginator(
-        attendance_filter.qs, 15
+        attendance_filter.qs, 20
     )  # Show 25 contacts per page.
     page = request.GET.get("page")
     try:
@@ -382,7 +382,7 @@ class AttendanceUpdateView(
 
         context["attendance_filter"] = attendance_filter
         paginator = Paginator(
-            attendance_filter.qs, 10
+            attendance_filter.qs, 20
         )  # Show 25 contacts per page.
         page = self.request.GET.get("page")
         try:
