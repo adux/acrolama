@@ -17,8 +17,24 @@
             {% render_field account_filter.form.status class="form-control" %}
             </div>
             <div class="form-group col-sm-4 col-md-2">
+            {{ account_filter.form.balance.label_tag }}
+            {% render_field account_filter.form.balance class="form-control" %}
+            </div>
+            <div class="form-group col-sm-4 col-md-2">
             {{ account_filter.form.pay_till.label_tag }}
             {% render_field account_filter.form.pay_till class="datepicker form-control" %}
+            </div>
+            <div class="form-group col-sm-4 col-md-2">
+            {{ account_filter.form.start_pay_date.label_tag }}
+            {% render_field account_filter.form.start_pay_date class="datepicker form-control" %}
+            </div>
+            <div class="form-group col-sm-4 col-md-2">
+            {{ account_filter.form.end_pay_date.label_tag }}
+            {% render_field account_filter.form.end_pay_date class="datepicker form-control" %}
+            </div>
+            <div class="form-group col-sm-4 col-md-2">
+            {{ account_filter.form.range_pay_date.label_tag }}
+            {% render_field account_filter.form.range_pay_date class="form-control" %}
             </div>
         </div>
         <button type="submit" class="btn btn-primary">
