@@ -34,6 +34,7 @@
             <th>Name</th>
             <th>Event</th>
             <th>Pay till</th>
+            <th>Paid date</th>
             <th>To Pay</th>
             <th>Status</th>
             <th>Edit</th>
@@ -46,6 +47,7 @@
                     <td>{% if obj.partner %}{{ obj.partner.name}}{% else %}{{obj.book.user.get_full_name}}{% endif %}</td>
                     <td>{% if obj.book %}{{obj.book.event.title}}{% else %}-{% endif %}</td>
                     <td>{{obj.pay_till}}</td>
+                    <td>{{obj.pay_date}}</td>
                     <td>{{obj.to_pay}}</td>
                     <td>{{obj.get_status_display}}</td>
                     <td><a href="{% url 'accounting_update' obj.pk %}?book__event={{request.GET.book__event}}&book__user={{request.GET.book__user}}&status={{request.GET.status}}&pay_till={{request.GET.pay_till}}"><i class="fas fa-edit"></i></a>
