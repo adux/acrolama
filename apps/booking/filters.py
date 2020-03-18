@@ -20,6 +20,22 @@ class BookFilter(django_filters.FilterSet):
         queryset=TimeOption.objects.all(), widget=forms.CheckboxSelectMultiple
     )
 
+    start_date = django_filters.DateFilter(
+        field_name='booked_at',
+        lookup_expr='gt',
+        label='Start date',
+    )
+    end_date = django_filters.DateFilter(
+        field_name='booked_at',
+        lookup_expr='lt',
+        label='End date',
+    )
+    date_range = django_filters.DateRangeFilter(
+        field_name='booked_at',
+        label='Range'
+    )
+
+
     class Meta:
         model = Book
         fields = {"status", "times"}

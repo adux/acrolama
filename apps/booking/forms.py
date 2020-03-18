@@ -78,14 +78,5 @@ class BookForm(forms.ModelForm):
         # run the standard clean method first
         cleaned_data = super(BookForm, self).clean()
         times_verify = cleaned_data.get("times")
-        print("CLEANED DATA")
-        print(times_verify)
-        print("END CLEAN DATA")
-        # check if passwords are entered and match
-        if not times_verify == None:
-            print("we have a time ok")
-        else:
-            raise forms.ValidationError("No times selected")
-
         # always return the cleaned data
         return cleaned_data
