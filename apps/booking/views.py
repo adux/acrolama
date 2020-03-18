@@ -2,7 +2,7 @@ import datetime
 
 from django.conf import settings
 
-#from django.contrib.postgres.fields import ArrayField
+# from django.contrib.postgres.fields import ArrayField
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -108,11 +108,7 @@ def bookinglistview(request):
                         messages.add_message(
                             request,
                             messages.SUCCESS,
-                            _(
-                                "Book N°"
-                                + str(new_book.id)
-                                + ": Book Created"
-                            ),
+                            _("Book N°" + str(new_book.id) + ": Book Created"),
                         )
                 elif book.price.abonament & (book.price.cycles > 1):
                     messages.add_message(
@@ -128,11 +124,7 @@ def bookinglistview(request):
                     messages.add_message(
                         request,
                         messages.WARNING,
-                        _(
-                            "Book N°"
-                            + str(book.id)
-                            + ": Not a Cycle."
-                        ),
+                        _("Book N°" + str(book.id) + ": Not a Abo, not posible to determine next Event."),
                     )
     return render(request, template, context)
 
@@ -192,7 +184,9 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                     createAttendance(instance)
                 except:
                     messages.add_message(
-                        self.request, messages.WARNING, _("Error creating Attendance")
+                        self.request,
+                        messages.WARNING,
+                        _("Error creating Attendance"),
                     )
                 else:
                     messages.add_message(
@@ -202,7 +196,9 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                     createInvoiceFromBook(instance)
                 except:
                     messages.add_message(
-                        self.request, messages.WARNING, _("Error creating Invoice")
+                        self.request,
+                        messages.WARNING,
+                        _("Error creating Invoice"),
                     )
                 else:
                     messages.add_message(
@@ -210,8 +206,9 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                     )
             elif (book.status == "IN") and (instance.status == "PA"):
                 messages.add_message(
-                    self.request, messages.INFO,
-                    _("Please change to participant based from Invoice"),
+                    self.request,
+                    messages.INFO,
+                    _("Please change to participant only if Invoice payed."),
                 )
             instance.save()
         elif "create" in self.request.POST:
@@ -231,11 +228,7 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                 messages.add_message(
                     self.request,
                     messages.SUCCESS,
-                    _(
-                        "Book N°"
-                        + str(book.id)
-                        + ": Book Created"
-                    ),
+                    _("Book N°" + str(book.id) + ": Book Created"),
                 )
         return super().form_valid(form)
 
@@ -245,8 +238,6 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         event = self.request.GET.get("event", "")
         status = self.request.GET.get("status", "")
         pk = self.object.id
-        print("pk for success url")
-        print(pk)
         url = build_url(
             "booking_update",
             get={"user": user, "event": event, "status": status},
@@ -292,17 +283,19 @@ def attendancelistview(request):
         request.GET,
         queryset=(
             Attendance.objects.all()
-                .select_related("book")
-                .select_related("book__event")
-                .select_related("book__user")
-                .select_related("book__price")
-                .prefetch_related("book__times")
-                .prefetch_related("book__times__regular_days")
+            .select_related("book")
+            .select_related("book__event")
+            .select_related("book__user")
+            .select_related("book__price")
+            .prefetch_related("book__times")
+            .prefetch_related("book__times__regular_days")
         ),
     )
 
     # Pagination
-    paginator = Paginator(attendance_filter.qs, 15)  # Show 25 contacts per page.
+    paginator = Paginator(
+        attendance_filter.qs, 15
+    )  # Show 25 contacts per page.
     page = request.GET.get("page")
     try:
         response = paginator.page(page)
@@ -364,7 +357,10 @@ def attendance_daily_view(request):
 
     return render(request, template, context)
 
-class AttendanceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
+
+class AttendanceUpdateView(
+    UserPassesTestMixin, LoginRequiredMixin, UpdateView
+):
     model = Attendance
     template_name = "booking/attendance_update.html"
     form_class = UpdateAttendanceForm
@@ -414,7 +410,11 @@ class AttendanceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         pk = self.object.id
         url = build_url(
             "attendance_update",
-            get={"book__user": user, "book__event": event, "attendance_date": attendance_date },
+            get={
+                "book__user": user,
+                "book__event": event,
+                "attendance_date": attendance_date,
+            },
             pk={"pk": pk},
         )
         return url

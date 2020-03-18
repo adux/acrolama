@@ -36,11 +36,13 @@ def get_book(book):
 
     return book
 
+
 def updateBookStatus(book, status):
     book = get_book(book)
     if status == "PA" or "Participant":
         book.status = "PA"
         book.save()
+
 
 def createInvoiceFromBook(book):
     book = get_book(book)
@@ -48,10 +50,10 @@ def createInvoiceFromBook(book):
     obj = Invoice()
     obj.balance = "CR"
     obj.book = book
-    #TODO create a smart referral code
+    # TODO create a smart referral code
     obj.status = "PE"
     obj.to_pay = int(book.price.price_chf)
-    obj.pay_till = datetime.datetime.now().date() + datetime.timedelta(days = 10)
+    obj.pay_till = datetime.datetime.now().date() + datetime.timedelta(days=10)
     obj.notes = "\n Automatic created Invoice"
     obj.save()
 

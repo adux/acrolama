@@ -8,14 +8,17 @@ from django.urls import reverse
 from django.template.loader import render_to_string
 
 from project.models import Event, PriceOption, TimeOption, Irregularity
-#from users.models import User
+
+# from users.models import User
 
 # Tests for the UserPassesTestMixin
 def staff_check(user):
     return user.is_staff
 
+
 def teacher_check(user):
     return user.is_teacher
+
 
 #  TODO: im not sure what kwargs.pop does. or if i can handle it differently
 def build_url(*args, **kwargs):
@@ -84,7 +87,9 @@ def email_sender(instance, flag):
         send_mail(subject, msg_plain, sender, to, html_message=msg_html)
 
     elif flag == "Paid":
-        subject = "Acrolama - Payment Confirmation - " + str(instance.book.event.title)
+        subject = "Acrolama - Payment Confirmation - " + str(
+            instance.book.event.title
+        )
         to += [instance.book.user.email]
 
         irregularities = Irregularity.objects.filter(
@@ -132,5 +137,3 @@ def email_sender(instance, flag):
             p,
         )
         send_mail(subject, msg_plain, sender, to, html_message=msg_html)
-
-

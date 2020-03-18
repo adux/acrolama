@@ -25,20 +25,30 @@ class BookAdmin(admin.ModelAdmin):
         "status",
     ]
     list_select_related = [
-        'user',
-        'price',
-        'event',
-        'event__level',
+        "user",
+        "price",
+        "event",
+        "event__level",
     ]
+
     def get_queryset(self, request):
-        return super(BookAdmin, self).get_queryset(request).prefetch_related(
-            'times')
+        return (
+            super(BookAdmin, self)
+            .get_queryset(request)
+            .prefetch_related("times")
+        )
+
     save_as = True
 
+
 class AttendanceForm(forms.ModelForm):
-    def __init__(self, *args,**kwargs):
-        super (AttendanceForm,self ).__init__(*args,**kwargs) # populate the post
-        self.fields['book'].queryset = Book.objects.select_related('user','event','event__level')
+    def __init__(self, *args, **kwargs):
+        super(AttendanceForm, self).__init__(
+            *args, **kwargs
+        )  # populate the post
+        self.fields["book"].queryset = Book.objects.select_related(
+            "user", "event", "event__level"
+        )
 
     # class Meta:
     #     exclude = ['book']
@@ -59,14 +69,18 @@ class AttendanceAdmin(admin.ModelAdmin):
         "book",
     ]
     list_select_related = [
-        'book',
-        'book__user',
-        'book__event',
-        'book__event__level',
+        "book",
+        "book__user",
+        "book__event",
+        "book__event__level",
     ]
+
     def get_queryset(self, request):
-        return super(AttendanceAdmin, self).get_queryset(request).prefetch_related(
-            'book__times')
+        return (
+            super(AttendanceAdmin, self)
+            .get_queryset(request)
+            .prefetch_related("book__times")
+        )
 
 
 admin.site.register(Book, BookAdmin)

@@ -11,7 +11,8 @@ class BookFilter(django_filters.FilterSet):
     user = django_filters.CharFilter(method="filter_by_all_name_fields")
     event = django_filters.ChoiceFilter(
         choices=[
-            [o.pk, o.__str__] for o in Event.objects.all().order_by("-event_startdate")
+            [o.pk, o.__str__]
+            for o in Event.objects.all().order_by("-event_startdate")
         ]
     )
 
@@ -40,8 +41,7 @@ class AttendanceFilter(django_filters.FilterSet):
         ]
     )
     attendance_date = django_filters.DateFilter(
-        field_name="attendance_date",
-        method="filter_by_date_contains",
+        field_name="attendance_date", method="filter_by_date_contains",
     )
 
     class Meta:
@@ -49,9 +49,7 @@ class AttendanceFilter(django_filters.FilterSet):
         fields = {}
 
     def filter_by_date_contains(self, queryset, name, value):
-        return queryset.filter(
-            Q(attendance_date__icontains=value)
-        )
+        return queryset.filter(Q(attendance_date__icontains=value))
 
     def filter_by_all_name_fields(self, queryset, name, value):
         return queryset.filter(

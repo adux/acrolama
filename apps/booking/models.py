@@ -2,6 +2,7 @@ import datetime
 
 from django.db import models
 from django.db.models.signals import pre_save
+
 # from django.contrib.postgres.fields import ArrayField
 
 from project.models import Irregularity, TimeOption
@@ -18,6 +19,7 @@ BOOKINGSTATUS = [
     ("CA", "Canceled"),
     ("SW", "Switched"),
 ]
+
 
 class Book(models.Model):
     event = models.ForeignKey("project.Event", on_delete=models.CASCADE)
@@ -55,6 +57,7 @@ class Attendance(models.Model):
     Not to much to use those, nor see the practical advantage now.
     TODO: num should be position
     """
+
     book = models.OneToOneField(Book, on_delete=models.CASCADE)
     attendance_date = ArrayField(models.DateField())
     attendance_check = ArrayField(models.BooleanField())
@@ -79,7 +82,7 @@ class Attendance(models.Model):
 
     def count_attendance(self):
         count = 0
-        for position,check in enumerate(self.attendance_check):
+        for position, check in enumerate(self.attendance_check):
             if check == True:
                 count += 1
         return count

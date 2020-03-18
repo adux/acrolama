@@ -16,10 +16,14 @@ class DynamicArrayWidget(forms.TextInput):
         for index, item in enumerate(context["widget"]["value"]):
             widget_attrs = final_attrs.copy()
             if id_:
-                widget_attrs["id"] = "{id_}_{index}".format(id_=id_, index=index)
+                widget_attrs["id"] = "{id_}_{index}".format(
+                    id_=id_, index=index
+                )
             widget = forms.TextInput()
             widget.is_required = self.is_required
-            subwidgets.append(widget.get_context(name, item, widget_attrs)["widget"])
+            subwidgets.append(
+                widget.get_context(name, item, widget_attrs)["widget"]
+            )
 
         context["widget"]["subwidgets"] = subwidgets
         return context
