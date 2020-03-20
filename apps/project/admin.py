@@ -61,12 +61,25 @@ class EventAdmin(admin.ModelAdmin):
                     .prefetch_related(
                         "time_locations",
                         "time_locations__time_options",
-                        "time_locations__location",
                         "team",
                         "teacher",
                     )
                     )
-        return qs.filter(teacher=request.user)
+        return (qs
+                .filter(teacher=request.user)
+                .select_related(
+                    "project",
+                    "policy",
+                    "level",
+                    "discipline",
+                )
+                .prefetch_related(
+                    "time_locations",
+                    "time_locations__time_options",
+                    "team",
+                    "teacher",
+                )
+                )
 
 class ProjectAdmin(admin.ModelAdmin):
     list_display = [
