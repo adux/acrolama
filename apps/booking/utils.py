@@ -19,6 +19,12 @@ def staff_check(user):
 def teacher_check(user):
     return user.is_teacher
 
+def herd_check(user):
+    if user.is_teacher or user.is_staff:
+        return True
+    else:
+        return False
+
 
 #  TODO: im not sure what kwargs.pop does. or if i can handle it differently
 def build_url(*args, **kwargs):

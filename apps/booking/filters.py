@@ -74,3 +74,18 @@ class AttendanceFilter(django_filters.FilterSet):
             | Q(book__user__email__icontains=value)
             | Q(book__event__title__icontains=value)
         )
+
+
+class AttendanceDailyFilter(django_filters.FilterSet):
+    book__event = django_filters.ChoiceFilter(field_name="book__event")
+    attendance_date = django_filters.DateFilter(
+        field_name="attendance_date", method="filter_by_date_contains",
+    )
+
+    class Meta:
+        model = Attendance
+        fields = {}
+
+    def filter_by_date_contains(self, queryset, name, value):
+        return queryset.filter(Q(attendance_date__icontains=value))
+

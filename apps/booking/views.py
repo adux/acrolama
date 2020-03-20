@@ -29,7 +29,7 @@ from django.template.loader import render_to_string
 # from django.db.models import Q
 
 from booking.models import Book, Attendance
-from booking.filters import BookFilter, AttendanceFilter
+from booking.filters import BookFilter, AttendanceFilter, AttendanceDailyFilter
 from booking.forms import UpdateBookForm, CreateBookForm, UpdateAttendanceForm
 from booking.utils import (
     build_url,
@@ -37,6 +37,7 @@ from booking.utils import (
     datelistgenerator,
     teacher_check,
     staff_check,
+    herd_check,
 )
 
 from booking.services import (
@@ -321,42 +322,52 @@ def attendancelistview(request):
     return render(request, template, context)
 
 
-# TODO: Test for teachers on their future classes
 @login_required
-@user_passes_test(staff_check)
+@user_passes_test(herd_check)
 def attendance_daily_view(request):
     template = "booking/attendance_list_daily.html"
-    attendance_today_list = Attendance.objects.filter(
-        attendance_date__contains=[datetime.datetime.now().date()]
+
+    if request.method == "POST":
+        if "update" in request.POST:
+            check_list = request.POST.getlist("check")
+            try:
+                for values in check_list:
+                    values_split = values.split(" ")
+                    attendance_id = values_split[0]
+                    check_pos = values_split[1]
+                    # Check that booking exists
+                    if attendance_today_list.filter(id=attendance_id).exists():
+                        attendance = attendance_today_list.get(id=attendance_id)
+                        # And checking is false
+                        # if not attendance.attendance_check[int(check_pos)]:
+                        updateSwitchCheckAttendance(attendance_id, int(check_pos))
+
+                messages.add_message(request, messages.SUCCESS, _("List Updated"))
+            except:
+                messages.add_message(
+                    request,
+                    messages.ERROR,
+                    _("Make a manual list and report the error please."),
+                )
+
+    attendance_filter = AttendanceDailyFilter(
+        request.GET,
+        queryset=(
+            Attendance.objects.filter(book__event__teacher=request.user)
+            .select_related("book")
+            .select_related("book__event")
+            .select_related("book__user")
+            .select_related("book__price")
+            .prefetch_related("book__times")
+            .prefetch_related("book__times__regular_days")
+        ),
     )
 
     context = {
-        "attendance_list": attendance_today_list,
+        "attendance_filter": attendance_filter,
+        "attendance_list": attendance_filter.qs,
         "date_today": datetime.datetime.now().date(),
     }
-
-    if request.method == "POST":
-        check_list = request.POST.getlist("check")
-        try:
-            for values in check_list:
-                values_split = values.split(" ")
-                attendance_id = values_split[0]
-                check_pos = values_split[1]
-                # Check that booking exists
-                if attendance_today_list.filter(id=attendance_id).exists():
-                    attendance = attendance_today_list.get(id=attendance_id)
-                    # And checking is false
-                    # if not attendance.attendance_check[int(check_pos)]:
-                    updateSwitchCheckAttendance(attendance_id, int(check_pos))
-
-            messages.add_message(request, messages.SUCCESS, _("List Updated"))
-        except:
-            messages.add_message(
-                request,
-                messages.ERROR,
-                _("Make a manual list and report the error please."),
-            )
-
     return render(request, template, context)
 
 
@@ -429,4 +440,4 @@ class HerdView(UserPassesTestMixin, LoginRequiredMixin, TemplateView):
     template_name = "booking/herd.html"
 
     def test_func(self):
-        return staff_check(self.request.user)
+        return herd_check(self.request.user)

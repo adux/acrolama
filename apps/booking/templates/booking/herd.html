@@ -11,32 +11,35 @@
 
 <div class="container">
 <!-- Example row of columns -->
-  <div class="row">
+<div class="row">
+    {% if user.is_staff %}
     <div class="col-md-6">
-      <h2>Booking Control Center</h2>
-      <p>Confirm Bookings</p>
-      <p>Access only for Admin</p>
-      <p><a class="btn btn-primary" href="{% url 'booking_list' %}" role="button">View &raquo;</a></p>
+        <h2>Booking Control Center</h2>
+        <p>Confirm Bookings</p>
+        <p>Access only for Admin</p>
+        <p><a class="btn btn-primary" href="{% url 'booking_list' %}" role="button">View &raquo;</a></p>
     </div>
     <div class="col-md-6">
-      <h2>Payment Control Center</h2>
-      <p>Confirm Payment and Filters</p>
-      <p>Access only for Admin</p>
-      <p><a class="btn btn-primary" href="{% url 'accounting_list' %}" role="button">View &raquo;</a></p>
+        <h2>Payment Control Center</h2>
+        <p>Confirm Payment and Filters</p>
+        <p>Access only for Admin</p>
+        <p><a class="btn btn-primary" href="{% url 'accounting_list' %}" role="button">View &raquo;</a></p>
     </div>
     <div class="col-md-6">
-      <h2>Main Attendance Control</h2>
-      <p>Check Attendances</p>
-      <p>Teachers only see their Class</p>
-      <p><a class="btn btn-primary" href="{% url 'attendance_list' %}" role="button">View &raquo;</a></p>
+        <h2>Main Attendance Control</h2>
+        <p>Check Attendances</p>
+        <p>Teachers only see their Class</p>
+        <p><a class="btn btn-primary" href="{% url 'attendance_list' %}" role="button">View &raquo;</a></p>
     </div>
+    {% endif %}
+
     <div class="col-md-6">
-      <h2>Daily Attendance Control</h2>
-      <p>As Teacher Control but as overview of Admin</p>
-      <p>Only Admins</p>
-      <p><a class="btn btn-secondary" href="{% url 'teacher_attendance' %}" role="button">View &raquo;</a></p>
+        <h2>Daily Attendance Control</h2>
+        <p>As Teacher Control but as overview of Admin</p>
+        <p>Only Admins</p>
+        <p><a class="btn btn-secondary" href="{% url 'teacher_attendance' %}" role="button">View &raquo;</a></p>
     </div>
-  </div>
+</div>
 
     <hr>
 </div> <!-- /container -->
