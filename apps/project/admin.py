@@ -51,7 +51,21 @@ class EventAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         if request.user.is_superuser:
-            return qs
+            return (qs
+                    .select_related(
+                        "project",
+                        "policy",
+                        "level",
+                        "discipline",
+                    )
+                    .prefetch_related(
+                        "time_locations",
+                        "time_locations__time_options",
+                        "time_locations__location",
+                        "team",
+                        "teacher",
+                    )
+                    )
         return qs.filter(teacher=request.user)
 
 class ProjectAdmin(admin.ModelAdmin):
