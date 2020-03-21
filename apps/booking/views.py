@@ -9,6 +9,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext as _
+from django.urls import reverse
 
 from django.core.mail import send_mail
 
@@ -50,7 +51,6 @@ from booking.services import (
 )
 
 from project.models import Event, Irregularity
-
 
 @login_required
 @user_passes_test(staff_check)
@@ -332,23 +332,31 @@ def attendance_daily_view(request):
             check_list = request.POST.getlist("check")
             try:
                 for values in check_list:
+                    #Prepare de data
                     values_split = values.split(" ")
                     attendance_id = values_split[0]
                     check_pos = values_split[1]
-                    # Check that booking exists
-                    if attendance_today_list.filter(id=attendance_id).exists():
-                        attendance = attendance_today_list.get(id=attendance_id)
-                        # And checking is false
-                        # if not attendance.attendance_check[int(check_pos)]:
-                        updateSwitchCheckAttendance(attendance_id, int(check_pos))
-
-                messages.add_message(request, messages.SUCCESS, _("List Updated"))
+                    #Make the actual Switch
+                    updateSwitchCheckAttendance(attendance_id, int(check_pos))
+                    #Send a message
+                    messages.add_message(request, messages.SUCCESS, _("Updated attendance id: " + str(attendance_id)))
             except:
                 messages.add_message(
                     request,
                     messages.ERROR,
                     _("Make a manual list and report the error please."),
                 )
+            else:
+                success_url = build_url(
+                    "teacher_attendance",
+                    get={
+                        "book__event": request.POST.get("filtered_event", ""),
+                        "attendance_date": request.POST.get("filtered_date"),
+                    },
+                )
+                print(success_url)
+                return HttpResponseRedirect(success_url)
+
 
     attendance_filter = AttendanceDailyFilter(
         request.GET,
@@ -361,11 +369,18 @@ def attendance_daily_view(request):
             .prefetch_related("book__times")
             .prefetch_related("book__times__regular_days")
         ),
+        user=request.user,
     )
+
+    if not request.GET.get('attendance_date'):
+        initial_date = str(datetime.datetime.now().date())
+    else:
+        initial_date = request.GET.get('attendance_date')
 
     context = {
         "attendance_filter": attendance_filter,
         "attendance_list": attendance_filter.qs,
+        "filtered_date": datetime.date.fromisoformat(initial_date),
         "date_today": datetime.datetime.now().date(),
     }
     return render(request, template, context)
@@ -415,7 +430,7 @@ class AttendanceUpdateView(
             instance.save()
         return super().form_valid(form)
 
-    # TODO: There is probably a way to get all the GETs and process them?
+    # TODO: There is probably a way to get all the GETs and process them all at ones.
     def get_success_url(self, **kwargs):
         user = self.request.GET.get("book__user", "")
         event = self.request.GET.get("book__event", "")

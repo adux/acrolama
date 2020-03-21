@@ -65,19 +65,14 @@ class Attendance(models.Model):
     def __str__(self):
         return "%s - %s" % (self.book.event, self.book.user,)
 
-    def get_date_today(self):
-        for num, date in enumerate(self.attendance_date):
-            if date == datetime.datetime.now().date():
-                return date
-
-    def get_check_today(self):
-        for num, date in enumerate(self.attendance_date):
-            if date == datetime.datetime.now().date():
+    def get_check(self, date):
+        for num, d in enumerate(self.attendance_date):
+            if d == date:
                 return self.attendance_check[num]
 
-    def get_num_today(self):
-        for num, date in enumerate(self.attendance_date):
-            if date == datetime.datetime.now().date():
+    def get_num(self, date):
+        for num, d in enumerate(self.attendance_date):
+            if d == date:
                 return num
 
     def count_attendance(self):

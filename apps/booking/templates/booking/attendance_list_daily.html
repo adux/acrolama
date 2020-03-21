@@ -1,6 +1,7 @@
 {% extends "booking/base_bs.html" %}
 {% block head_title%}List{% endblock %}
 {% load widget_tweaks %}
+{% load booking_tags %}
 {% block content %}
 <form method="get">
     <div class="card card-body bg-light">
@@ -35,10 +36,12 @@
             {% for obj in attendance_list %}
             <tr>
                 <th scope="row">{{obj.book.user.get_full_name}}</td>
-                <td>{{obj.get_check_today}}</td>
-                <td><input type="checkbox" name="check" value="{{obj.id}} {{obj.get_num_today}}"></td>
+                <td>{% get_attendance_check obj 'get_check' filtered_date %}</td>
+                <input type="hidden" name="filtered_date" value="{{filtered_date|date:"Y-m-d"}}">
+                <td><input type="checkbox" name="check" value="{{obj.id}} {% get_attendance_num obj 'get_num' filtered_date %}"></td>
                 <td>{{obj.book.id}}</td>
                 <td>{{obj.book.event}}</td>
+                <input type="hidden" name="filtered_event" value="{{obj.book.event.id}}">
             </tr>
             {% endfor%}
         </tbody>
