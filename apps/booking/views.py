@@ -265,26 +265,25 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 class BookCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
     model = Book
     template_name = "booking/booking_create.html"
-    form_class = CreateBookForm
+    form_class = CreateBookForm(request.POST, request)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["book_filter"] = BookFilter(
-            self.request.GET,
-            queryset=(
-                Book.objects.all()
-                .select_related("event")
-                .select_related("user")
-                .select_related("price")
-                .prefetch_related("times")
-                .prefetch_related("times__regular_days")
-                .order_by("-booked_at")
-            ),
+    def get_success_url(self, **kwargs):
+        success_url = build_url(
+            "teacher_attendance",
+            get={
+                "book__event": self.request.GET.get("book__event", ""),
+                "attendance_date": self.request.GET.get("attendance_date", ""),
+            },
         )
-        return context
+        messages.add_message(
+            self.request,
+            messages.SUCCESS,
+            _("Book created, we'll be in touch!"),
+        )
+        return success_url
 
     def test_func(self):
-        return staff_check(self.request.user)
+        return herd_check(self.request.user)
 
 
 @login_required
@@ -363,7 +362,6 @@ def attendance_daily_view(request):
                         "attendance_date": request.POST.get("filtered_date"),
                     },
                 )
-                print(success_url)
                 return HttpResponseRedirect(success_url)
 
 
