@@ -94,6 +94,7 @@ def email_sender(instance, flag):
             "user": instance.user,
             "price": instance.price,
             "referenznum": referenznum,
+            "pay_till": invoice.pay_till,
             "times": instance.times.all,
             "irregularities": irregularities,
         }

@@ -14,14 +14,16 @@ Reference number: {{referenznum}}
 Is there are a day you can't come?
 Find a answear to this in our FAQ https://acrolama.ch/faq/
 
-Find our payment methods and abos at: https://acrolama.ch/info/prices/
-
+Payment details:
+Pay till : {{pay_till}}
 Bank Transfer:
 Acrolama KLG
 Tramstrasse 65, 8050 Zürich
 IBAN: CH29 0022 5225 1202 6601 B
 BIC: UBSWCHZH80A
 Use reference number: {{ referenznum }}
+
+Find our payment methods and abos at: https://acrolama.ch/info/prices/
 
 Last but not least, get the latest news in our Whatsapp Group:
 {% tinycontent_simple 'email_whatsapp' %}
