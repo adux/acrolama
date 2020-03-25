@@ -29,9 +29,9 @@ class CreateBookForm(forms.ModelForm):
         fields = ("user", "event", "times", "price")
         widgets = {"times": forms.CheckboxSelectMultiple}
 
-    def __init__(self, *args, **kwargs):
-        super(WorklogCreateForm, self).__init__(self, *args, **kwargs)
-        self.fields['project'].queryset = Project.objects.filter(Project.status == 2)
+    # def __init__(self, *args, **kwargs):
+    #     super(WorklogCreateForm, self).__init__(self, *args, **kwargs)
+    #     self.fields['project'].queryset = Project.objects.filter(Project.status == 2)
 
 
 class BookForm(forms.ModelForm):

@@ -265,7 +265,7 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 class BookCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
     model = Book
     template_name = "booking/booking_create.html"
-    form_class = CreateBookForm(request.POST, request)
+    form_class = CreateBookForm
 
     def get_success_url(self, **kwargs):
         success_url = build_url(
