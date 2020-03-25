@@ -14,8 +14,8 @@ class AttendanceForm(forms.ModelForm):
             "user", "event", "event__level"
         )
 
-    class Meta:
-        exclude = ['book']
+    # class Meta:
+    #     exclude = ['book']
 
     class Media:
         js = ("booking/project.js",)
