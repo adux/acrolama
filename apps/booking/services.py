@@ -16,20 +16,15 @@ def updateSwitchCheckAttendance(id, position):
 
 
 def get_book(book):
-    print(type(book))
-
     # If its str or int treat it as id
     if isinstance(book, (str, int)):
-        print("its a string ?")
         book_pk = int(book)
     else:
-        print("its a book")
         return book
 
+    # if its a id get the book
     if book_pk:
-        print("here")
         try:
-            print("here")
             book = Book.objects.get(pk=book_pk)
         except:
             print("Booking doesn't exist")

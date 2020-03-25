@@ -9,6 +9,7 @@ Please let us know if there are any changes regarding your participation.
 Booking details:
 {% if event.category == 'fas fa-cogs' %}Regular{% if times %}{% with count=times.count %} day{{ count|pluralize }}:{% endwith %}{% for d in times.all %} · {{d}}{% endfor %}{% endif %}{% endif %}
 Preis: {{price}}
+Reference number: {{referenznum}}
 {% if irregularities %}{% with count=irregularities.count %}Please note the event has the following exception{{ count|pluralize }}:{% endwith %}{% for obj in irregularities %} ·{{obj.description}}{% endfor %}\n\r{% endif %}
 Is there are a day you can't come?
 Find a answear to this in our FAQ https://acrolama.ch/faq/
@@ -20,6 +21,7 @@ Acrolama KLG
 Tramstrasse 65, 8050 Zürich
 IBAN: CH29 0022 5225 1202 6601 B
 BIC: UBSWCHZH80A
+Use reference number: {{ referenznum }}
 
 Last but not least, get the latest news in our Whatsapp Group:
 {% tinycontent_simple 'email_whatsapp' %}

@@ -51,8 +51,8 @@ class Invoice(models.Model):
     status = models.CharField(
         max_length=10, choices=INVOICESTATUS, default="PE"
     )
-    to_pay = models.PositiveIntegerField()
-    paid = models.PositiveIntegerField(null=True,blank=True)
+    to_pay = models.DecimalField(max_digits=12, decimal_places=2)
+    paid = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
     pay_till = models.DateField(
         auto_now_add=False, auto_now=False, null=True, blank=True
     )

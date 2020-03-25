@@ -8,6 +8,7 @@ from django.urls import reverse
 from django.template.loader import render_to_string
 
 from project.models import Event, PriceOption, TimeOption, Irregularity
+from accounting.models import Invoice
 
 # from users.models import User
 
@@ -50,6 +51,10 @@ def datelistgenerator(startdate, enddate, regularday):
     return dateList
 
 
+def space_out(string, length):
+    return ' '.join(string[i:i+length] for i in range(0,len(string),length))
+
+
 def email_sender(instance, flag):
     """
     Signals could give Error cause you can call them from wherever.
@@ -71,10 +76,24 @@ def email_sender(instance, flag):
             event__slug=instance.event.slug
         )
 
+        #TODO: Unnecesary access to DB
+        invoice = Invoice.objects.get(book=instance.pk)
+        referenznum = space_out(
+            str(instance.user.pk)
+            + "00"
+            + str(instance.event.pk)
+            + "00"
+            + str(instance.pk)
+            + "00"
+            + str(invoice.pk)
+            ,4
+        )
+
         p = {
             "event": instance.event,
             "user": instance.user,
             "price": instance.price,
+            "referenznum": referenznum,
             "times": instance.times.all,
             "irregularities": irregularities,
         }

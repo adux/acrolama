@@ -7,7 +7,7 @@
 </head>
 <body style="margin: 0; padding: 0;">
   <body>
-  <table border="0" cellpadding="0" cellspacing="0" width="100%"> 
+  <table border="0" cellpadding="0" cellspacing="0" width="100%">
     <tr>
       <td style="padding: 10px 0 30px 0;">
         <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border: 1px solid #cccccc; border-collapse: collapse;">
@@ -48,7 +48,8 @@
                               <td style="padding: 25px 0 0 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;">
                                 <h4>Booking details: </h4>
                                 <p>{% if event.category == 'fas fa-cogs' %}<b>Regular{% if times %}{% with count=times.count %} day{{ count|pluralize }}</b>:{% endwith %}{% for d in times.all %}<br/>· {{d}}{% endfor %}{% endif %}{% endif %}</p>
-                                <b>Price</b>:<br/> {{price}}</p>
+                                <p><b>Price</b>:<br/> {{ price }}</p>
+                                <p><b>Reference number</b>: {{ referenznum }}</p>
                             {% if irregularities %}{% with count=irregularities.count %}<p><b>Please note the following exception{{ count|pluralize }}</b>:{% endwith %}{% for obj in irregularities %}<br/> ·{{obj.description}}{% endfor %}</p>{% endif %}
                               </td>
                             </tr>
@@ -71,10 +72,8 @@
                                   Acrolama KLG<br/>
                                   Tramstrasse 65, 8050 Zürich<br/>
                                   IBAN: CH29 0022 5225 1202 6601 B<br/>
-                                  BIC: UBSWCHZH80A<br/>
-                                </p>
-                                <p>
-                                    <img src="https://acrolama.s3.eu-central-1.amazonaws.com/static/home/images/acrolamatwint.png" alt="Twint for the Acrolama Payment system" width="195px" height="256px" style="display: block;" />
+                                  BIC: UBSWCHZH80A<br/><br/><br/>
+                                  <b>Use reference number: {{referenznum}}</b>
                                 </p>
                                 <p>Find out more about our abos <a href="https://acrolama.com/info/prices/" target="_blank">www.acrolama/info/prices/</a></p>
                               </td>

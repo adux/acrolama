@@ -171,28 +171,8 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
         if "update" in self.request.POST:
             if (book.status == "PE") and (instance.status == "IN"):
-                try:
-                    email_sender(instance, "Informed")
-                except:
-                    messages.add_message(
-                        self.request, messages.WARNING, _("Error Email")
-                    )
-                else:
-                    messages.add_message(
-                        self.request, messages.INFO, _("Informed email sent.")
-                    )
-                try:
-                    createAttendance(instance)
-                except:
-                    messages.add_message(
-                        self.request,
-                        messages.WARNING,
-                        _("Error creating Attendance"),
-                    )
-                else:
-                    messages.add_message(
-                        self.request, messages.INFO, _("Attendance created")
-                    )
+
+                # Invoice
                 try:
                     createInvoiceFromBook(instance)
                 except:
@@ -205,6 +185,35 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                     messages.add_message(
                         self.request, messages.INFO, _("Invoice Created")
                     )
+
+                # Attendance
+
+                try:
+                    createAttendance(instance)
+                except:
+                    messages.add_message(
+                        self.request,
+                        messages.WARNING,
+                        _("Error creating Attendance"),
+                    )
+                else:
+                    messages.add_message(
+                        self.request, messages.INFO, _("Attendance created")
+                    )
+
+                #Send Email
+
+                try:
+                    email_sender(instance, "Informed")
+                except:
+                    messages.add_message(
+                        self.request, messages.WARNING, _("Error Email")
+                    )
+                else:
+                    messages.add_message(
+                        self.request, messages.INFO, _("Informed email sent.")
+                    )
+
             elif (book.status == "IN") and (instance.status == "PA"):
                 messages.add_message(
                     self.request,
