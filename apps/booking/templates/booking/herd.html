@@ -1,10 +1,12 @@
 {% extends "booking/base_bs.html" %}
+{% block head_title %} Home {% endblock %}
 {% load widget_tweaks %}
 {% block content %}
-<div class="jumbotron">
+<div class="jumbotron" style="background-color: rgba(243, 210, 22, 0.8);">
   <div class="container">
-    <h1 class="display-3">Herd Center</h1>
-    <h4 class="display-4">The lamas control center</h4>
+      <h1 class="display-3">Herd - The Lama's tool</h1>
+    <h4 class="display-5">"Nothing is yours. It is to use. It is to share. If you will not share it, you cannot use it."</h4>
+    <h4 class="display-5">Ursula Le Guin</h4>
     <!-- <p><a class="btn btn-primary btn-lg" href="{% url 'home' %}" role="button">Back to Acrolama.com &raquo;</a></p> -->
   </div>
 </div>
@@ -26,7 +28,7 @@
         <p><a class="btn btn-primary" href="{% url 'accounting_list' %}" role="button">View &raquo;</a></p>
     </div>
     <div class="col-md-6">
-        <h2>Main Attendance Control</h2>
+        <h2>Attendance Control</h2>
         <p>Check Attendances</p>
         <p>Teachers only see their Class</p>
         <p><a class="btn btn-primary" href="{% url 'attendance_list' %}" role="button">View &raquo;</a></p>
@@ -35,9 +37,8 @@
 
     <div class="col-md-6">
         <h2>Daily Attendance Control</h2>
-        <p>As Teacher Control but as overview of Admin</p>
-        <p>Only Admins</p>
-        <p><a class="btn btn-secondary" href="{% url 'teacher_attendance' %}" role="button">View &raquo;</a></p>
+        <p>Please update each class your list of Attendies</p>
+        <p><a class="btn btn-info" href="{% url 'teacher_attendance' %}" role="button">View &raquo;</a></p>
     </div>
 </div>
 

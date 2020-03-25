@@ -251,6 +251,7 @@ class Event(models.Model):
         else:
             return reverse('event', args=[str(self.slug)])
 
+
     def __str__(self):
         if self.category == "fas fa-cogs":
             return "%s %s (%s) - %s" % (

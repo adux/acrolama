@@ -1,7 +1,7 @@
 -- Base --
 pytz==2019.3
 webencodings==0.5.1
-bleach==3.1.0
+bleach==3.1.1
 Pillow==7.0.0
 pycparser==2.18
 cryptography==2.7
@@ -15,7 +15,7 @@ python3-openid==3.1.0
 urllib3==1.25.8
 
 -- Django --
-django==2.2.10
+django==2.2.11
 django-crispy-forms==1.7.2
 django-allauth==0.41.0
 oauthlib==3.0.1

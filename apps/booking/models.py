@@ -3,11 +3,13 @@ import datetime
 from django.db import models
 from django.db.models.signals import pre_save
 
-# from django.contrib.postgres.fields import ArrayField
 
 from project.models import Irregularity, TimeOption
 
 from booking.utils import datelistgenerator
+
+#Original would be from postgres.field fields looks for other widgets
+# from django.contrib.postgres.fields import ArrayField
 from booking.fields import ArrayField
 
 
@@ -81,3 +83,32 @@ class Attendance(models.Model):
             if check == True:
                 count += 1
         return count
+
+class Quotation(models.Model):
+    event = models.ForeignKey("project.Event", on_delete=models.CASCADE)
+    time_location = models.ForeignKey("project.TimeLocation", on_delete=models.CASCADE)
+    teachers = models.ManyToManyField("users.User")
+
+    #Costs
+    related_rent = models.PositiveIntegerField(blank=True)
+    direct_costs = models.ManyToManyField("accounting.Invoice")
+
+    #Revenue
+    total_attendees = models.PositiveIntegerField(blank=True, null=True)
+    direct_revenue = models.PositiveIntegerField(blank=True, null=True)
+
+    #Profit
+    fix_profit = models.PositiveIntegerField(blank=True, null=True)
+    acrolama_profit = models.IntegerField(blank=True, null=True)
+    teachers_profit = models.IntegerField(blank=True, null=True)
+
+    #Control
+    locked = models.BooleanField(default=False)
+    locked_at = models.DateTimeField(blank=True, null=True)
+
+    #Info
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def get_teachers(self):
+        return ",\n".join([p.name for p in self.teachers.all()])

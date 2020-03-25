@@ -1,8 +1,49 @@
 from django import forms
 from django.contrib import admin
 from django.db import models
-from .models import Book, Attendance
+from .models import Book, Attendance, Quotation
 from booking.fields import ArrayField
+
+
+class AttendanceForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(AttendanceForm, self).__init__(
+            *args, **kwargs
+        )  # populate the post
+        self.fields["book"].queryset = Book.objects.select_related(
+            "user", "event", "event__level"
+        )
+
+    class Meta:
+        exclude = ['book']
+
+    class Media:
+        js = ("booking/project.js",)
+        css = {"all": ("booking/project.css",)}
+
+
+class AttendanceAdmin(admin.ModelAdmin):
+    form = AttendanceForm
+    # formfield_overrides = {
+    #     ArrayField: {'widget': forms.TextInput},
+    # }
+    list_display = [
+        "id",
+        "book",
+    ]
+    list_select_related = [
+        "book",
+        "book__user",
+        "book__event",
+        "book__event__level",
+    ]
+
+    def get_queryset(self, request):
+        return (
+            super(AttendanceAdmin, self)
+            .get_queryset(request)
+            .prefetch_related("book__times")
+        )
 
 
 class BookAdmin(admin.ModelAdmin):
@@ -41,47 +82,46 @@ class BookAdmin(admin.ModelAdmin):
     save_as = True
 
 
-class AttendanceForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(AttendanceForm, self).__init__(
-            *args, **kwargs
-        )  # populate the post
-        self.fields["book"].queryset = Book.objects.select_related(
-            "user", "event", "event__level"
-        )
-
-    # class Meta:
-    #     exclude = ['book']
-
-    # TODO: Make this global for all admin
-    class Media:
-        js = ("booking/project.js",)
-        css = {"all": ("booking/project.css",)}
-
-
-class AttendanceAdmin(admin.ModelAdmin):
-    form = AttendanceForm
-    # formfield_overrides = {
-    #     ArrayField: {'widget': forms.TextInput},
-    # }
+class QuotationAdmin(admin.ModelAdmin):
     list_display = [
-        "id",
-        "book",
+        "event",
+        "time_location",
+        "get_teachers",
+        "related_rent",
+        "direct_revenue",
+        "acrolama_profit",
+        "teachers_profit",
+        "updated_at",
+        "locked",
+        "locked_at",
+    ]
+    list_filter = [
+        "time_location",
+        "event__level",
+        "event__category",
+        "locked"
+    ]
+    search_fields = [
+        "event__title",
+        "teacher__user__email",
+        "teacher__user__last_name",
+        "teacher__user__first_name",
     ]
     list_select_related = [
-        "book",
-        "book__user",
-        "book__event",
-        "book__event__level",
+        "time_location",
+        "event",
+        "event__level",
     ]
 
     def get_queryset(self, request):
         return (
-            super(AttendanceAdmin, self)
+            super(QuotationAdmin, self)
             .get_queryset(request)
-            .prefetch_related("book__times")
+            .prefetch_related("teachers", "direct_costs")
         )
 
 
-admin.site.register(Book, BookAdmin)
+
 admin.site.register(Attendance, AttendanceAdmin)
+admin.site.register(Book, BookAdmin)
+admin.site.register(Quotation, QuotationAdmin)

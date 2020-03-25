@@ -79,7 +79,8 @@ class AttendanceFilter(django_filters.FilterSet):
 
 class AttendanceDailyFilter(django_filters.FilterSet):
     book__event = django_filters.ChoiceFilter(
-        field_name="book__event",
+    label="Your Events",
+    field_name="book__event",
     )
 
     attendance_date = django_filters.DateFilter(
