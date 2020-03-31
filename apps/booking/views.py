@@ -569,6 +569,7 @@ def quotationcreateview(request):
             book = book_filter.qs.first()
             teachers = [t.id for t in book.event.teacher.all()]
             direct_revenue = book_filter.qs.filter(status="PA").aggregate(Sum('price__price_chf'))
+            print(direct_revenue['price__price_chf__sum'])
             related_rent = 240
             fix_profit = 100
             profit = direct_revenue['price__price_chf__sum'] - related_rent - fix_profit
