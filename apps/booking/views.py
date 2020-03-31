@@ -567,12 +567,17 @@ def quotationcreateview(request):
             eventid = str(request.GET.get('event'))
             timelocationid = str(request.GET.get('event__time_locations'))
             book = book_filter.qs.first()
-            teachers = [t.id for t in book.event.teacher.all()]
+            try:
+                teachers = [t.id for t in book.event.teacher.all()]
+            except AttributeError:
+                print(book)
             direct_revenue = book_filter.qs.filter(status="PA").aggregate(Sum('price__price_chf'))
-            print(direct_revenue['price__price_chf__sum'])
             related_rent = 240
             fix_profit = 100
-            profit = direct_revenue['price__price_chf__sum'] - related_rent - fix_profit
+            try:
+                profit = direct_revenue['price__price_chf__sum'] - related_rent - fix_profit
+            except TypeError:
+                profit = 0
             acrolama_profit = profit * Decimal(0.25)
             teachers_profit = profit * Decimal(0.75)
             print(acrolama_profit)
