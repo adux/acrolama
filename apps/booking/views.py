@@ -76,6 +76,8 @@ from booking.utils import (
 # Services
 from booking.services import (
     get_book,
+    get_event,
+    get_timelocation,
     createNextBook,
     createInvoiceFromBook,
     createAttendance,
@@ -562,38 +564,77 @@ def quotationcreateview(request):
 
     if request.method == "GET":
         if "event" and "event__time_locations" in request.GET:
-            template = "booking/quotation_create.html"
-            #Logic to fill filtered fields
-            eventid = str(request.GET.get('event'))
-            timelocationid = str(request.GET.get('event__time_locations'))
-            book = book_filter.qs.first()
-            try:
-                teachers = [t.id for t in book.event.teacher.all()]
-            except AttributeError:
-                print(book)
-            direct_revenue = book_filter.qs.filter(status="PA").aggregate(Sum('price__price_chf'))
-            related_rent = 240
-            fix_profit = 100
-            try:
-                profit = direct_revenue['price__price_chf__sum'] - related_rent - fix_profit
-            except TypeError:
-                profit = 0
-            acrolama_profit = profit * Decimal(0.25)
-            teachers_profit = profit * Decimal(0.75)
-            print(acrolama_profit)
-            form = form(initial={
-                'event': eventid,
-                'time_location': timelocationid,
-                'teachers': teachers,
-                'related_rent': related_rent,
-                'direct_revenue': direct_revenue['price__price_chf__sum'],
-                'related_rent': related_rent,
-                'fix_profit': fix_profit,
-                'acrolama_profit': round(acrolama_profit,2),
-                'teachers_profit': round(teachers_profit,2),
-            }, auto_id=False)
-            #TODO: Logic for the stats
-            #Fill Costs
+            if request.GET.get('event') != '' and request.GET.get('event__time_locations') != '':
+                eventid = str(request.GET.get('event'))
+                timelocationid = str(request.GET.get('event__time_locations'))
+                event = get_event(eventid)
+                tls = event.time_locations.all()
+                tl = get_timelocation(timelocationid)
+                if tl in tls:
+                    # Get other template
+                    template = "booking/quotation_create.html"
+
+                    #Constants
+                    fix_profit = 100
+                    acrolama_rate = Decimal(0.25)
+                    teachers_rate = Decimal(0.75)
+
+                    #Variables
+
+                    #Revenue
+                    try:
+                        direct_revenue = book_filter.qs.filter(status="PA").aggregate(Sum('price__price_chf'))
+                        direct_revenue = direct_revenue['price__price_chf__sum']
+                    except:
+                        direct_revenue = Decimal(0)
+
+                    #Rent
+                    related_rent = 240
+
+                    #Calc
+                    profit = direct_revenue - related_rent - fix_profit
+                    acrolama_profit = round(profit * acrolama_rate, 2)
+                    teachers_profit = round(profit * teachers_rate, 2)
+
+                    # Select Initial
+
+                    #Teachers
+                    #TODO:Should every event have teachers ?
+                    #TODO: Should they be preselected
+                    try:
+                        teachers = [t.id for t in event.teacher.all()]
+                    except AttributeError:
+                        teachers = ['']
+
+                    form = form( initial={
+                        'event': eventid,
+                        'time_location': timelocationid,
+                        'teachers': teachers,
+                        'related_rent': related_rent,
+                        'direct_revenue': direct_revenue,
+                        'related_rent': related_rent,
+                        'fix_profit': fix_profit,
+                        'acrolama_profit': acrolama_profit,
+                        'teachers_profit': teachers_profit,
+                    }, auto_id=False)
+                else:
+                    messages.add_message(
+                        request,
+                        messages.WARNING,
+                        _("Event " + str(event) + " doesn't have Time Location " + str(tl)),
+                    )
+            else:
+                messages.add_message(
+                    request,
+                    messages.WARNING,
+                    _("Missing Event or Time Location"),
+                )
+        else:
+            messages.add_message(
+                request,
+                messages.WARNING,
+                _("Missing Event or Time Location"),
+            )
 
 
     #Context

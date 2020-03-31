@@ -1,9 +1,10 @@
 import datetime
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 
-from .models import Book, Attendance
-from project.models import Event
+from booking.models import Book, Attendance
+from project.models import Event, TimeLocation
 from accounting.models import Invoice
+
 from .utils import datelistgenerator
 
 
@@ -31,6 +32,37 @@ def get_book(book):
 
     return book
 
+def get_event(event):
+    # If its str or int treat it as id
+    if isinstance(event, (str, int)):
+        event_pk = int(event)
+    else:
+        return event
+
+    # if its a id get the book
+    if event_pk:
+        try:
+            event = Event.objects.get(pk=event_pk)
+        except:
+            print("Event doesn't exist")
+
+    return event
+
+def get_timelocation(tl):
+    # If its str or int treat it as id
+    if isinstance(tl, (str, int)):
+        tl_pk = int(tl)
+    else:
+        return tl
+
+    # if its a id get the book
+    if tl_pk:
+        try:
+            tl = TimeLocation.objects.get(pk=tl_pk)
+        except:
+            print("Event doesn't exist")
+
+    return tl
 
 def updateBookStatus(book, status):
     book = get_book(book)
