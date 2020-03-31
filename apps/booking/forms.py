@@ -1,8 +1,15 @@
 from django import forms
 from django.contrib.postgres.fields import ArrayField
 from django.utils.translation import ugettext_lazy as _
-from booking.models import Book, Attendance
+
+
+from accounting.models import Invoice
+from users.models import User
+
+from booking.models import Book, Attendance, Quotation
 from booking.widgets import DynamicArrayWidget
+
+
 from project.models import PriceOption, TimeOption
 
 
@@ -29,9 +36,42 @@ class CreateBookForm(forms.ModelForm):
         fields = ("user", "event", "times", "price")
         widgets = {"times": forms.CheckboxSelectMultiple}
 
-    # def __init__(self, *args, **kwargs):
-    #     super(WorklogCreateForm, self).__init__(self, *args, **kwargs)
-    #     self.fields['project'].queryset = Project.objects.filter(Project.status == 2)
+
+class CreateQuotationForm(forms.ModelForm):
+    direct_costs = forms.MultipleChoiceField(
+        choices=[
+            ["%s %s" % (o.id, o.to_pay), o.__str__]
+            for o in Invoice.objects.filter(balance='DB')
+        ]
+    )
+
+    class Meta:
+        model = Quotation
+        fields = (
+            "event",
+            "time_location",
+            "teachers",
+            "related_rent",
+            "total_attendees",
+            "direct_revenue",
+            "fix_profit",
+            "acrolama_profit",
+            "teachers_profit",
+        )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Filled
+        self.fields["teachers"].queryset = User.objects.filter(is_teacher=True)
+
+        #NOT required
+        self.fields["direct_costs"].required=False
+
+        #disabled
+        self.fields["direct_revenue"].disabled=True
+        # self.fields["acrolama_profit"].disabled=True
+        # self.fields["teachers_profit"].disabled=True
+
 
 
 class BookForm(forms.ModelForm):
@@ -84,3 +124,4 @@ class BookForm(forms.ModelForm):
         times_verify = cleaned_data.get("times")
         # always return the cleaned data
         return cleaned_data
+

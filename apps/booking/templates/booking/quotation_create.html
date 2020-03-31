@@ -1,0 +1,183 @@
+{% extends "booking/base_bs.html" %}
+{% block head_title%}Create{% endblock %}
+{% load widget_tweaks %}
+{% block content %}
+
+    <div class="card card-body bg-light">
+        <h4>Step 0 - Preparation</h4>
+        <div class="row">
+            <div class="col-md-12">
+                · Do and check for additional Costs Invoices
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <form method="GET">
+        <div class="card card-body bg-light">
+            <h4>Step 1 - Select Event and its Time Location</h4>
+            <div class="row">
+                <div class="form-group col-sm-4 col-md-6">
+                {{ book_filter.form.event.label_tag }}
+                {% render_field book_filter.form.event class="form-control" %}
+                </div>
+                <div class="form-group col-sm-4 col-md-6">
+                {{ book_filter.form.event__time_locations.label_tag }}
+                {% render_field book_filter.form.event__time_locations class="form-control" %}
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">
+            <i class="fas fa-search"></i> Search
+            </button>
+        </div>
+    </form>
+
+    <hr>
+
+    <form method="POST">{% csrf_token %}
+        <div class="card card-body bg-light">
+            <h4>Step 2 - Select Teachers</h4>
+            <hr>
+            <h4> General Info </h3>
+            <div class="row">
+                <div class="form-group col-sm-4 col-md-4">
+                    {{ form.event.label_tag }}
+                    {% render_field form.event class="form-control" %}
+                </div>
+                <div class="form-group col-sm-4 col-md-4">
+                    {{ form.time_location.label_tag }}
+                    {% render_field form.time_location class="form-control" %}
+                </div>
+                <div class="form-group col-sm-4 col-md-4">
+                    {{ form.teachers.label_tag }}
+                    {% render_field form.teachers class="form-control" %}
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="card card-body bg-light">
+            <h4>Step 3 - Check and if errors correct <b>and refresh</b></h4>
+            <hr>
+            <h4> Stats Event </h3>
+            <div class="row">
+                <div class="form-group col-sm-4 col-md-12">
+                    · Booking: Abos - Cycle: 12, Intensive:12 | Tickets - DropIn: XX FullWS: 12
+                </div>
+                <div class="form-group col-sm-4 col-md-12">
+                    · Invoice: Status - Paid: 12 Canceled: XX | OnTime: XX Late: YY
+                </div>
+                <div class="form-group col-sm-4 col-md-12">
+                    · Attendance: Attendees: 12, Missed: 2 (Note: DropIn and Canceled not adjusted)
+                </div>
+            </div>
+            <table class="table table-hover table-borderless">
+                <thead>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Option</th>
+                    <th>Book</th>
+                    <th>Invoice</th>
+                    <th>Pay Till</th>
+                    <th>Attendances</th>
+                    <th>Edit Book</th>
+                </thead>
+                <tbody>
+                    {% for obj in filtered_list %}
+                    <tr>
+                        <td>{{obj.user.id}}</td>
+                        <td>{{obj.user.get_full_name}}</td>
+                        <td>{{obj.price.name}}</td>
+                        <td>{{obj.get_status_display}}</td>
+                        <td>{{obj.invoice.get_status_display}}</td>
+                        <td>{{obj.invoice.pay_till}}</td>
+                        <td>{{obj.attendance.count_attendance}}</td>
+                        <td><a href="{% url 'booking_update' obj.pk %}?event={{request.GET.event}}&event__time_locations={{request.GET.event__time_locations}}"><i class="fas fa-edit"></i></a>
+                    </tr>
+                    {% endfor%}
+                </tbody>
+            </table>
+        </div>
+
+        <hr>
+
+        <div class="card card-body bg-light">
+            <h4>Step 4 - Rent adjust in Location. Only select <b>direct related</b> costs</h4>
+            <hr>
+            <h4>Costs</h4>
+            <div class="row">
+                <div class="form-group col-sm-4 col-md-3">
+                    {{ form.related_rent.label_tag }}
+                    {% render_field form.related_rent class="form-control" %}
+                </div>
+                <div class="form-group col-sm-4 col-md-9">
+                    {{ form.direct_costs.label_tag }}
+                    {% render_field form.direct_costs class="form-control" %}
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="card card-body bg-light">
+            <h4>Step 5 - Only <b>real revenue</b> should be set, no "expected" one.</h4>
+            <hr>
+            <h4>Revenue</h4>
+            <div class="row">
+                <div class="form-group col-sm-4 col-md-3">
+                    {{ form.direct_revenue.label_tag }}
+                    {% render_field form.direct_revenue class="form-control" %}
+                </div>
+                <div class="form-group col-sm-4 col-md-3">
+                    {{ form.fix_profit.label_tag }}
+                    {% render_field form.fix_profit class="form-control" %}
+                </div>
+                <div class="form-group col-sm-4 col-md-3">
+                    {{ form.acrolama_profit.label_tag }}
+                    {% render_field form.acrolama_profit class="form-control" %}
+                </div>
+                <div class="form-group col-sm-4 col-md-3">
+                    {{ form.teachers_profit.label_tag }}
+                    {% render_field form.teachers_profit class="form-control" %}
+                    <script type="text/javascript">
+                        window.onload = function () {
+                            // related rent
+                            document.getElementsByName("related_rent")[0].addEventListener('change', doCorrectRent);
+                            function doCorrectRent(related_rent, direct_revenue, fix_profit) {
+                                var direct_revenue = document.getElementsByName('direct_revenue')[0].value;
+                                var fix_profit = document.getElementsByName('fix_profit')[0].value;
+                                var profit = 0;
+                                var ap = 0;
+                                var tp = 0;
+                                profit = direct_revenue - this.value - fix_profit;
+                                ap = profit.toFixed(2) * 0.25.toFixed(2);
+                                tp = profit.toFixed(2) * 0.75.toFixed(2);
+                                document.getElementsByName('acrolama_profit')[0].value = ap.toFixed(2);
+                                document.getElementsByName('teachers_profit')[0].value = tp.toFixed(2);
+                            }
+                            //fix profit
+                            document.getElementsByName("fix_profit")[0].addEventListener('change', doCorrectFix);
+                            function doCorrectFix(related_rent, direct_revenue, fix_profit) {
+                                var direct_revenue = document.getElementsByName('direct_revenue')[0].value;
+                                var related_rent = document.getElementsByName('related_rent')[0].value;
+                                var profit = 0;
+                                var ap = 0;
+                                var tp = 0;
+                                profit = direct_revenue - related_rent - this.value;
+                                ap = profit.toFixed(2) * 0.25.toFixed(2);
+                                tp = profit.toFixed(2) * 0.75.toFixed(2);
+                                document.getElementsByName('acrolama_profit')[0].value = ap.toFixed(2);
+                                document.getElementsByName('teachers_profit')[0].value = tp.toFixed(2);
+                            }
+                        }
+                    </script>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-danger">
+            <i class="fas fa-edit"></i> Create
+           </button>
+        </div>
+    </form>
+{% endblock %}

@@ -1,17 +1,21 @@
 import datetime
 
+from decimal import Decimal, getcontext
+
 from django.conf import settings
 
 # from django.contrib.postgres.fields import ArrayField
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Sum
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext as _
 from django.urls import reverse
 
-from django.core.mail import send_mail
 
 from django.views.generic import (
     TemplateView,
@@ -29,9 +33,37 @@ from django.template.loader import render_to_string
 # Allows querries with OR statments
 # from django.db.models import Q
 
-from booking.models import Book, Attendance
-from booking.filters import BookFilter, AttendanceFilter, AttendanceDailyFilter
-from booking.forms import UpdateBookForm, CreateBookForm, UpdateAttendanceForm
+# Models
+from booking.models import (
+    Book,
+    Attendance,
+    Quotation,
+)
+
+from project.models import (
+    Event,
+    Irregularity
+)
+
+# Filters
+from booking.filters import (
+    AttendanceFilter,
+    AttendanceDailyFilter,
+    BookFilter,
+    QuotationFilter,
+    QuotationBookFilter,
+)
+
+# Forms
+# TODO: Rename with Model First
+from booking.forms import (
+    UpdateBookForm,
+    CreateBookForm,
+    UpdateAttendanceForm,
+    CreateQuotationForm,
+)
+
+# Utils
 from booking.utils import (
     build_url,
     email_sender,
@@ -41,6 +73,7 @@ from booking.utils import (
     herd_check,
 )
 
+# Services
 from booking.services import (
     get_book,
     createNextBook,
@@ -50,7 +83,6 @@ from booking.services import (
     updateSwitchCheckAttendance,
 )
 
-from project.models import Event, Irregularity
 
 @login_required
 @user_passes_test(staff_check)
@@ -458,8 +490,120 @@ class AttendanceUpdateView(
         return staff_check(self.request.user)
 
 
+@login_required
+@user_passes_test(staff_check)
+def quotationlistview(request):
+    template = "booking/quotation_list.html"
+    quotation_filter = QuotationFilter(
+        request.GET,
+        queryset=(
+            Quotation.objects.all()
+            .select_related("event", "time_location")
+            .prefetch_related("teachers", "direct_costs")
+        ),
+    )
+
+    # Pagination
+    paginator = Paginator(
+        quotation_filter.qs, 20
+    )  # Show 25 contacts per page.
+    page = request.GET.get("page")
+    try:
+        response = paginator.page(page)
+    except PageNotAnInteger:
+        response = paginator.page(1)
+    except EmptyPage:
+        response = paginator.page(paginator.num_pages)
+
+    # End Paginator
+
+    context = {
+        "quotation_filter": quotation_filter,
+        "page_obj": response,
+    }
+    return render(request, template, context)
+
+
+class QuotationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
+    model = Quotation
+    template_name = "booking/booking_create.html"
+
+    def get_success_url(self, **kwargs):
+        success_url = build_url(
+            "herd"
+        )
+        messages.add_message(
+            self.request,
+            messages.SUCCESS,
+            _("Quotation update, we'll be in touch!"),
+        )
+        return success_url
+
+    def test_func(self):
+        return staff_check(self.request.user)
+
+
+@login_required
+@user_passes_test(staff_check)
+def quotationcreateview(request):
+    template = "booking/quotation_filter.html"
+    form = CreateQuotationForm
+
+    #Filters
+
+    book_filter = QuotationBookFilter(
+        request.GET,
+        queryset=(
+            Book.objects.all()
+            .select_related("event__level", "user", "price")
+            .prefetch_related("invoice","attendance")
+        ),
+    )
+
+    if request.method == "GET":
+        if "event" and "event__time_locations" in request.GET:
+            template = "booking/quotation_create.html"
+            #Logic to fill filtered fields
+            eventid = str(request.GET.get('event'))
+            timelocationid = str(request.GET.get('event__time_locations'))
+            book = book_filter.qs.first()
+            teachers = [t.id for t in book.event.teacher.all()]
+            direct_revenue = book_filter.qs.filter(status="PA").aggregate(Sum('price__price_chf'))
+            related_rent = 240
+            fix_profit = 100
+            profit = direct_revenue['price__price_chf__sum'] - related_rent - fix_profit
+            acrolama_profit = profit * Decimal(0.25)
+            teachers_profit = profit * Decimal(0.75)
+            print(acrolama_profit)
+            form = form(initial={
+                'event': eventid,
+                'time_location': timelocationid,
+                'teachers': teachers,
+                'related_rent': related_rent,
+                'direct_revenue': direct_revenue['price__price_chf__sum'],
+                'related_rent': related_rent,
+                'fix_profit': fix_profit,
+                'acrolama_profit': round(acrolama_profit,2),
+                'teachers_profit': round(teachers_profit,2),
+            }, auto_id=False)
+            #TODO: Logic for the stats
+            #Fill Costs
+
+
+    #Context
+
+    context = {
+        "book_filter": book_filter,
+        "filtered_list": book_filter.qs,
+        "form": form,
+    }
+
+    return render(request, template, context)
+
+
 class HerdView(UserPassesTestMixin, LoginRequiredMixin, TemplateView):
     template_name = "booking/herd.html"
 
     def test_func(self):
         return herd_check(self.request.user)
+

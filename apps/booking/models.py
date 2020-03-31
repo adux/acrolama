@@ -84,6 +84,7 @@ class Attendance(models.Model):
                 count += 1
         return count
 
+
 class Quotation(models.Model):
     event = models.ForeignKey("project.Event", on_delete=models.CASCADE)
     time_location = models.ForeignKey("project.TimeLocation", on_delete=models.CASCADE)
@@ -94,13 +95,13 @@ class Quotation(models.Model):
     direct_costs = models.ManyToManyField("accounting.Invoice")
 
     #Revenue
-    total_attendees = models.PositiveIntegerField(blank=True, null=True)
-    direct_revenue = models.PositiveIntegerField(blank=True, null=True)
+    total_attendees = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    direct_revenue = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
 
     #Profit
-    fix_profit = models.PositiveIntegerField(blank=True, null=True)
-    acrolama_profit = models.IntegerField(blank=True, null=True)
-    teachers_profit = models.IntegerField(blank=True, null=True)
+    fix_profit = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    acrolama_profit = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    teachers_profit = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
 
     #Control
     locked = models.BooleanField(default=False)

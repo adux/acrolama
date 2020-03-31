@@ -4,8 +4,8 @@ from django.db.models import Q
 import django_filters
 import datetime
 
-from booking.models import Book, Attendance
-from project.models import Event, TimeOption
+from booking.models import Book, Attendance, Quotation
+from project.models import Event, TimeOption, TimeLocation
 
 
 class BookFilter(django_filters.FilterSet):
@@ -117,3 +117,29 @@ class AttendanceDailyFilter(django_filters.FilterSet):
     def filter_by_date_contains(self, queryset, name, value):
         return queryset.filter(Q(attendance_date__icontains=value))
 
+
+class QuotationFilter(django_filters.FilterSet):
+    class Meta:
+        model = Quotation
+        fields = {"event", "time_location", "teachers"}
+
+
+class QuotationBookFilter(django_filters.FilterSet):
+    event = django_filters.ChoiceFilter(
+        choices=[
+            [o.pk, o.__str__]
+            for o in Event.objects.all().order_by("-event_startdate")
+        ],
+        required=True
+    )
+    event__time_locations = django_filters.ChoiceFilter(
+        choices=[
+            [o.pk, o.__str__]
+            for o in TimeLocation.objects.all()
+        ],
+        required=True
+    )
+
+    class Meta:
+        model = Book
+        exclude = {"notes"}

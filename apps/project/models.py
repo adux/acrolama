@@ -112,7 +112,7 @@ class Location(models.Model):
     name = models.CharField(max_length=120)
     address = models.ForeignKey("address.Address", on_delete=models.CASCADE)
     image = models.ForeignKey("audiovisual.Image", on_delete=models.CASCADE)
-    max_capacity = models.CharField(max_length=5, null=True, blank=True)
+    max_capacity = models.PositiveIntegerField(default=2, null=True, blank=True)
     description = models.TextField(max_length=2000, null=True, blank=True)
     indication = models.TextField(max_length=2000, null=True, blank=True)
 
@@ -152,18 +152,18 @@ class PriceOption(models.Model):
     name = models.CharField(max_length=30)
     description = models.TextField(max_length=1000)
     reduction = models.BooleanField(default=False)
-    price_chf = models.CharField(max_length=5, null=True, blank=True)
-    price_euro = models.CharField(max_length=5, null=True, blank=True)
+    price_chf = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
+    price_euro = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
 
     def __str__(self):
         if self.price_euro:
-            return "%s, EUR:%s - CHF:%s" % (
+            return "%s, EUR: %s - CHF: %s" % (
                 self.name,
                 self.price_euro,
                 self.price_chf,
             )
         else:
-            return "%s, CHF:%s" % (self.name, self.price_chf)
+            return "%s, CHF: %s" % (self.name, self.price_chf)
 
 
 # Sport Info
@@ -212,7 +212,7 @@ class Event(models.Model):
     irregularities = models.ManyToManyField(Irregularity, blank=True)
     price_options = models.ManyToManyField(PriceOption)
     policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
-    max_participants = models.CharField(max_length=5, null=True, blank=True)
+    max_participants = models.PositiveIntegerField(default=2, null=True, blank=True)
     images = models.ManyToManyField("audiovisual.Image")
     videos = models.ManyToManyField("audiovisual.Video", blank=True)
     level = models.ForeignKey(
@@ -222,6 +222,7 @@ class Event(models.Model):
         Discipline, null=True, blank=True, on_delete=models.CASCADE
     )
     prerequisites = models.TextField(max_length=2000, null=True, blank=True)
+    #TODO: change to teachers
     teacher = models.ManyToManyField("users.User", related_name="eventteacher")
     highlights = models.TextField(max_length=2000, null=True, blank=True)
     included = models.TextField(max_length=2000, null=True, blank=True)
@@ -254,16 +255,17 @@ class Event(models.Model):
 
     def __str__(self):
         if self.category == "fas fa-cogs":
-            return "%s %s (%s) - %s" % (
-                self.level,
+            return "%s (%s) - %s" % (
+                #TODO: Find a smarter solution to get level in string
+                # self.level,
                 self.cycle,
                 self.event_startdate.strftime("%d %b"),
                 self.title,
             )
         else:
-            return "%s %s %s - %s" % (
+            return "%s %s - %s" % (
                 self.get_category_display(),
-                self.level,
+                # self.level,
                 self.event_startdate.strftime("%b %Y"),
                 self.title,
             )

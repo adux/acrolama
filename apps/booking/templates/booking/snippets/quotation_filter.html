@@ -1,0 +1,70 @@
+{% load widget_tweaks %}
+{% block content %}
+    <div class="card card-body bg-light">
+        <h4>Filter</h4>
+        <div class="row">
+            <div class="form-group col-sm-4 col-md-4">
+            {{ quotation_filter.form.book__user.label_tag }}
+            {% render_field quotation_filter.form.event class="form-control" %}
+            </div>
+            <div class="form-group col-sm-4 col-md-4">
+            {{ quotation_filter.form.book__event.label_tag }}
+            {% render_field quotation_filter.form.teachers class="form-control" %}
+            </div>
+            <div class="form-group col-sm-4 col-md-2">
+            {{ quotation_filter.form.quotation_date.label_tag }}
+            {% render_field quotation_filter.form.time_location class="form-control" %}
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">
+        <i class="fas fa-search"></i> Search
+        </button>
+    </div>
+</form>
+    <hr>
+    <table class="table table-hover table-borderless">
+        <thead>
+            <th>#</th>
+            <th>Event</th>
+            <th>Teachers</th>
+            <th>Time Location</th>
+            <th>Edit</th>
+        </thead>
+        <tbody>
+            {% for obj in page_obj %}
+            <tr>
+                <td>{{obj.pk}}</td>
+                <td>{{obj.event.title}}</td>
+                {# TODO: Getting times for view should be done somewhere else #}
+                <td>{% for obj in obj.teachers.all %}{{obj.name}}, {% endfor %}</td>
+                <td>{{obj.time_location.name}}</td>
+                <td><a href="{% url 'quotation_create' %}?event={{request.GET.event}}&teachers={{request.GET.teachers}}"><i class="fas fa-edit"></i></a>
+            </tr>
+            {% endfor%}
+        </tbody>
+    </table>
+    <a class="btn btn-danger" href={% url "quotation_create" %}?event={{request.GET.event}}&teachers={{request.GET.teachers}}><i class="fas fa-plus"></i> Add Quotation </a>
+<nav aria-label="Quotation List Paginator">
+    <ul class="pagination justify-content-center">
+    {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page=1">&laquo; first</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">previous</a>
+        </li>
+    {% endif %}
+        <li class="page-item disabled">
+            <a class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</a>
+        </li>
+    {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">next</a>
+        </li>
+        <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        </li>
+    {% endif %}
+    </ul>
+</nav>
+{% endblock %}
