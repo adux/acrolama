@@ -143,33 +143,84 @@
                     {% render_field form.teachers_profit class="form-control" %}
                     <script type="text/javascript">
                         window.onload = function () {
-                            // related rent
-                            document.getElementsByName("related_rent")[0].addEventListener('change', doCorrectRent);
-                            function doCorrectRent(related_rent, direct_revenue, fix_profit) {
-                                var direct_revenue = document.getElementsByName('direct_revenue')[0].value;
-                                var fix_profit = document.getElementsByName('fix_profit')[0].value;
-                                var profit = 0;
-                                var ap = 0;
-                                var tp = 0;
-                                profit = direct_revenue - this.value - fix_profit;
-                                ap = profit.toFixed(2) * 0.25.toFixed(2);
-                                tp = profit.toFixed(2) * 0.75.toFixed(2);
-                                document.getElementsByName('acrolama_profit')[0].value = ap.toFixed(2);
-                                document.getElementsByName('teachers_profit')[0].value = tp.toFixed(2);
+                            document.getElementsByName("related_rent")[0].addEventListener('change', doCorrect, false);
+                            document.getElementsByName("fix_profit")[0].addEventListener('change', doCorrect, false);
+                            document.getElementsByName("direct_costs")[0].addEventListener('change', doCorrectCost, false);
+
+                            function doCorrect() {
+                                var ap = parseFloat(document.getElementsByName('acrolama_profit')[0].value);
+                                console.log('profit');
+                                console.log(ap);
+                                var tp = parseFloat(document.getElementsByName('teachers_profit')[0].value);
+                                console.log(tp);
+                                console.log('rent');
+                                var rent = parseFloat(document.getElementsByName('related_rent')[0].defaultValue);
+                                console.log(rent);
+                                var new_rent = parseFloat(document.getElementsByName('related_rent')[0].value);
+                                console.log(new_rent);
+                                console.log('fix');
+                                var fix = parseFloat(document.getElementsByName('fix_profit')[0].defaultValue);
+                                console.log(fix);
+                                var new_fix = parseFloat(document.getElementsByName('fix_profit')[0].value);
+                                console.log(new_fix);
+
+                                var diff_rent = new_rent - rent;
+                                var diff_fix = new_fix - fix;
+                                var abs_diff = diff_fix + diff_rent;
+                                console.log('absolute diff');
+                                console.log(abs_diff.toFixed(2));
+
+                                var new_ap = ap - parseFloat(0.25 * abs_diff.toFixed(2));
+                                var new_tp = tp - parseFloat(0.75 * abs_diff.toFixed(2));
+                                console.log(new_ap);
+                                console.log(new_ap.toFixed(2));
+
+                                new_ap = new_ap.toFixed(2);
+                                new_tp = new_tp.toFixed(2);
+
+                                document.getElementsByName('acrolama_profit')[0].value = new_ap;
+                                document.getElementsByName('teachers_profit')[0].value = new_tp;
                             }
-                            //fix profit
-                            document.getElementsByName("fix_profit")[0].addEventListener('change', doCorrectFix);
-                            function doCorrectFix(related_rent, direct_revenue, fix_profit) {
-                                var direct_revenue = document.getElementsByName('direct_revenue')[0].value;
-                                var related_rent = document.getElementsByName('related_rent')[0].value;
-                                var profit = 0;
-                                var ap = 0;
-                                var tp = 0;
-                                profit = direct_revenue - related_rent - this.value;
-                                ap = profit.toFixed(2) * 0.25.toFixed(2);
-                                tp = profit.toFixed(2) * 0.75.toFixed(2);
-                                document.getElementsByName('acrolama_profit')[0].value = ap.toFixed(2);
-                                document.getElementsByName('teachers_profit')[0].value = tp.toFixed(2);
+
+                            function doCorrectCost() {
+                                var ap = parseFloat(document.getElementsByName('acrolama_profit')[0].value);
+                                console.log('profit');
+                                console.log(ap);
+                                var tp = parseFloat(document.getElementsByName('teachers_profit')[0].value);
+                                console.log(tp);
+
+                                var cd = document.getElementsByName('direct_costs')[0]
+                                var abs_diff = 0;
+
+                                var result = [];
+                                var options = cd && cd.options;
+                                var opt;
+
+                                for (var i=0, iLen=options.length; i<iLen; i++) {
+                                    opt = options[i];
+                                    if (opt.selected) {
+                                        result.push(opt.value);
+                                    }
+                                }
+
+                                for (var i=0, rLen=result.length; i < rLen; i++) {
+                                    opt = result[i];
+                                    opt = opt.split(' ');
+                                    opt = parseInt(opt[1]);
+                                    abs_diff += opt;
+                                }
+                                console.log(abs_diff);
+
+                                var new_ap = ap - parseFloat(0.25 * abs_diff.toFixed(2));
+                                var new_tp = tp - parseFloat(0.75 * abs_diff.toFixed(2));
+                                console.log(new_ap);
+                                console.log(new_ap.toFixed(2));
+
+                                new_ap = new_ap.toFixed(2);
+                                new_tp = new_tp.toFixed(2);
+
+                                document.getElementsByName('acrolama_profit')[0].value = new_ap;
+                                document.getElementsByName('teachers_profit')[0].value = new_tp;
                             }
                         }
                     </script>

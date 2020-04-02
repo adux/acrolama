@@ -91,7 +91,7 @@ class Quotation(models.Model):
     teachers = models.ManyToManyField("users.User")
 
     #Costs
-    related_rent = models.PositiveIntegerField(blank=True)
+    related_rent = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
     direct_costs = models.ManyToManyField("accounting.Invoice")
 
     #Revenue

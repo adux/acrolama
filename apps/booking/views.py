@@ -94,10 +94,7 @@ def bookinglistview(request):
         request.GET,
         queryset=(
             Book.objects.all()
-            .select_related("event")
-            .select_related("user")
-            .select_related("price")
-            .prefetch_related("times")
+            .select_related("event", "user", "price")
             .prefetch_related("times__regular_days")
             .order_by("-booked_at")
         ),
@@ -175,10 +172,7 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
             self.request.GET,
             queryset=(
                 Book.objects.all()
-                .select_related("event")
-                .select_related("user")
-                .select_related("price")
-                .prefetch_related("times")
+                .select_related("event", "user", "price")
                 .prefetch_related("times__regular_days")
                 .order_by("-booked_at")
             ),
@@ -328,11 +322,7 @@ def attendancelistview(request):
         request.GET,
         queryset=(
             Attendance.objects.all()
-            .select_related("book")
-            .select_related("book__event")
-            .select_related("book__user")
-            .select_related("book__price")
-            .prefetch_related("book__times")
+            .select_related("book", "book__event", "book__user", "book__price")
             .prefetch_related("book__times__regular_days")
         ),
     )
@@ -403,11 +393,7 @@ def attendance_daily_view(request):
         request.GET,
         queryset=(
             Attendance.objects.filter(book__event__teacher=request.user)
-            .select_related("book")
-            .select_related("book__event")
-            .select_related("book__user")
-            .select_related("book__price")
-            .prefetch_related("book__times")
+            .select_related("book", "book__user", "book__event", "book__price")
             .prefetch_related("book__times__regular_days")
         ),
         user=request.user,
@@ -440,11 +426,7 @@ class AttendanceUpdateView(
             self.request.GET,
             queryset=(
                 Attendance.objects.all()
-                .select_related("book")
-                .select_related("book__event")
-                .select_related("book__user")
-                .select_related("book__price")
-                .prefetch_related("book__times")
+                .select_related("book", "book__user", "book__event", "book__price")
                 .prefetch_related("book__times__regular_days")
             ),
         )
@@ -575,7 +557,7 @@ def quotationcreateview(request):
                     template = "booking/quotation_create.html"
 
                     #Constants
-                    fix_profit = 100
+                    fix_profit = Decimal(100.00)
                     acrolama_rate = Decimal(0.25)
                     teachers_rate = Decimal(0.75)
 
@@ -589,7 +571,7 @@ def quotationcreateview(request):
                         direct_revenue = Decimal(0)
 
                     #Rent
-                    related_rent = 240
+                    related_rent = Decimal(240.00)
 
                     #Calc
                     profit = direct_revenue - related_rent - fix_profit
