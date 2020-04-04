@@ -1,4 +1,5 @@
 {% load static %}
+{% load icon_tags %}
 <!-- News -->
 <div id="classes" class="section">
     <div class="block content-1170 center-relative">
@@ -16,7 +17,7 @@
                     {% for obj in intro %}
                     <article class="blog-item-holder relative">
                         <div class="num green">
-                                <i class="{{ obj.category }}"></i>
+                                <i class="{{ obj.category|get_icon }}"></i>
                         </div>
                         <div class="info">
                             <div class="author vcard ">
@@ -86,7 +87,7 @@
                     {% for obj in intermediate %}
                     <article class="blog-item-holder relative">
                         <div class="num">
-                                <i class="{{ obj.category }}"></i>
+                                <i class="{{ obj.category|get_icon }}"></i>
                         </div>
                         <div class="info">
                             <div class="author vcard ">
@@ -156,7 +157,7 @@
                     {% for obj in advanced %}
                     <article class="blog-item-holder relative">
                         <div class="num green">
-                                <i class="{{ obj.category }}"></i>
+                                <i class="{{ obj.category|get_icon }}"></i>
                         </div>
                         <div class="info">
                             <div class="author vcard ">

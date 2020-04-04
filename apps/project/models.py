@@ -7,12 +7,12 @@ from home.utils import unique_slug_generator
 # Reference Data
 
 EVENTCATEGORY = [
-    ("fas fa-redo", "Masterclass"),
-    ("fas fa-rocket", "Festival"),
-    ("fas fa-cogs", "Cycle"),
-    ("fas fa-cog", "Workshop"),
-    ("fas fa-star", "Camp"),
-    ("fas fa-seeding", "Retreat"),
+    ("MC", "Masterclass"),
+    ("FT", "Festival"),
+    ("CY", "Cycle"),
+    ("WS", "Workshop"),
+    ("CA", "Camp"),
+    ("RT", "Retreat"),
 ]
 
 EXCEPTIONCATEGORY = [
@@ -238,7 +238,7 @@ class Event(models.Model):
     #     ordering = [""]
 
     def fulltitle(self):
-        if self.category == "fas fa-cogs" and self.cycle:
+        if self.category == "CY" and self.cycle:
             if self.level.name == "2":
                 return "Cycle 0." + str(self.cycle) + " - " + self.title
             elif self.level.name == "3":
@@ -247,14 +247,14 @@ class Event(models.Model):
                 return self.title
 
     def get_absolute_url(self):
-        if self.category == "fas fa-cogs":
+        if self.category == "CY":
             return reverse('class', args=[str(self.slug)])
         else:
             return reverse('event', args=[str(self.slug)])
 
 
     def __str__(self):
-        if self.category == "fas fa-cogs":
+        if self.category == "CY":
             return "%s (%s) - %s" % (
                 #TODO: Find a smarter solution to get level in string
                 # self.level,

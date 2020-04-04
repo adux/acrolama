@@ -5,12 +5,12 @@ import django_filters
 
 
 Icon = (
-    ("fas fa-redo", "Masterclass"),
-    ("fas fa-rocket", "Festival"),
-    ("fas fa-cogs", "Cycle"),
-    ("fas fa-cog", "Workshop"),
-    ("fas fa-star", "Camp"),
-    ("fas fa-seedling", "Retreat"),
+    ("MC", "Masterclass"),
+    ("FT", "Festival"),
+    ("CY", "Cycle"),
+    ("WS", "Workshop"),
+    ("CA", "Camp"),
+    ("RT", "Retreat"),
 )
 
 

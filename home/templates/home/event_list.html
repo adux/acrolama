@@ -3,6 +3,7 @@
 {% block meta_description %}<meta name="description" content="Partner Acrobatics & Acroyoga Workshops & Traning Camps from Acrolama and the best international teachers. Hosts of Winter & Urban Acro Festival Zürich."/>{% endblock %}
 {% block content %}
 {% load static %}
+{% load icon_tags %}
 {% include 'snippets/nav.html' %}
 <!-- Events -->
 <div id="events" class="section">
@@ -21,7 +22,7 @@
                             {% for object in list %}
                             <article class="blog-item-holder relative">
                                 <div class="num">
-                                        <i class="{{ object.category }}"></i>
+                                        <i class="{{ object.category|get_icon }}"></i>
                                 </div>
                                 <div class="info">
                                     <div class="author vcard ">
@@ -34,19 +35,19 @@
                                     </div>
                                     <div class="cat-links">
                                         <ul>
-                                                <li><a href="/classes/{{object.slug}}/">
-                                                        {{ object.event_startdate }} {% if object.event_enddate != object.event_startdate %}- {{ object.event_enddate }} {% endif %}
-                                                        {% for obj in object.time_locations.all %}
-                                                        {% for rd in obj.time_options.all %}
-                                                        {% ifchanged %} | {{ rd.regular_days|default_if_none:"" }}{% endifchanged%}
-                                                        {% endfor %}
-                                                        {% endfor %}
-                                                    </a></li>
+                                            <li><a href="/classes/{{object.slug}}/">
+                                                    {{ object.event_startdate }} {% if object.event_enddate != object.event_startdate %}- {{ object.event_enddate }} {% endif %}
+                                                    {% for obj in object.time_locations.all %}
+                                                    {% for rd in obj.time_options.all %}
+                                                    {% ifchanged %} | {{ rd.regular_days|default_if_none:"" }}{% endifchanged%}
+                                                    {% endfor %}
+                                                    {% endfor %}
+                                                </a></li>
                                         </ul>
                                     </div>
                                 </div>
                                 <h3 class="entry-title">
-                                        <a href="/events/{{object.slug}}/">{{object.title}}</a>
+                                    <a href="/events/{{object.slug}}/">{{object.title}}</a>
                                 </h3>
                                 <div class="clear"></div>
                             </article>

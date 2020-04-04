@@ -43,9 +43,7 @@ class HomeFormView(MultiFormsView):
         context["portfolio"] = Portfolio.objects.all()[0:8]
         event_main = (
             Event.objects.all()
-            .select_related('level')
-            .select_related('discipline')
-            .prefetch_related('time_locations')
+            .select_related('level', 'discipline')
             .prefetch_related('time_locations__time_options')
             .prefetch_related('time_locations__location')
         )
@@ -53,7 +51,7 @@ class HomeFormView(MultiFormsView):
             event_main.filter(event_enddate__gte=timezone.now())
             .order_by("event_startdate", "level", "title")
             .exclude(published=False)
-            .exclude(category="fas fa-cogs")
+            .exclude(category="CY")
             .distinct()[:6]
         )
         context["event"] = event
@@ -62,7 +60,7 @@ class HomeFormView(MultiFormsView):
             event_main.filter(
                 event_enddate__gte=timezone.now(),
                 event_startdate__lt=timezone.now() + timezone.timedelta(days=90),
-                category="fas fa-cogs"
+                category="CY"
             )
             .order_by("event_startdate", "title")
             .exclude(published=False)
@@ -109,7 +107,7 @@ class EventListView(ListView):
         context = super().get_context_data(**kwargs)
         context["list"] = (
             Event.objects.order_by("event_startdate")
-            .exclude(category="fas fa-cogs")
+            .exclude(category="CY")
             .exclude(published=False)
             .filter(event_enddate__gte=timezone.now())
         )
@@ -124,7 +122,7 @@ class ClassListView(ListView):
         context = super().get_context_data(**kwargs)
         context["list"] = (
             Event.objects.order_by("event_startdate")
-            .filter(category="fas fa-cogs")
+            .filter(category="CY")
             .filter(event_enddate__gte=timezone.now())
             .exclude(published=False)
         )
