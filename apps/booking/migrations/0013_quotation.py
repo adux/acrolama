@@ -9,30 +9,71 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('project', '0013_priceoption_cycles'),
-        ('accounting', '0007_auto_20200202_1514'),
-        ('booking', '0012_auto_20200207_1055'),
+        ("project", "0013_priceoption_cycles"),
+        ("accounting", "0007_auto_20200202_1514"),
+        ("booking", "0012_auto_20200207_1055"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Quotation',
+            name="Quotation",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('related_rent', models.PositiveIntegerField(blank=True)),
-                ('total_attendees', models.PositiveIntegerField(blank=True, null=True)),
-                ('direct_revenue', models.PositiveIntegerField(blank=True, null=True)),
-                ('fix_profit', models.PositiveIntegerField(blank=True, null=True)),
-                ('acrolama_profit', models.PositiveIntegerField(blank=True, null=True)),
-                ('teachers_profit', models.PositiveIntegerField(blank=True, null=True)),
-                ('locked', models.BooleanField(blank=True)),
-                ('locked_at', models.DateTimeField(blank=True, null=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('direct_costs', models.ManyToManyField(to='accounting.Invoice')),
-                ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='project.Event')),
-                ('teachers', models.ManyToManyField(to=settings.AUTH_USER_MODEL)),
-                ('time_location', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='project.TimeLocation')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("related_rent", models.PositiveIntegerField(blank=True)),
+                (
+                    "total_attendees",
+                    models.PositiveIntegerField(blank=True, null=True),
+                ),
+                (
+                    "direct_revenue",
+                    models.PositiveIntegerField(blank=True, null=True),
+                ),
+                (
+                    "fix_profit",
+                    models.PositiveIntegerField(blank=True, null=True),
+                ),
+                (
+                    "acrolama_profit",
+                    models.PositiveIntegerField(blank=True, null=True),
+                ),
+                (
+                    "teachers_profit",
+                    models.PositiveIntegerField(blank=True, null=True),
+                ),
+                ("locked", models.BooleanField(blank=True)),
+                ("locked_at", models.DateTimeField(blank=True, null=True)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "direct_costs",
+                    models.ManyToManyField(to="accounting.Invoice"),
+                ),
+                (
+                    "event",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="project.Event",
+                    ),
+                ),
+                (
+                    "teachers",
+                    models.ManyToManyField(to=settings.AUTH_USER_MODEL),
+                ),
+                (
+                    "time_location",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="project.TimeLocation",
+                    ),
+                ),
             ],
         ),
     ]

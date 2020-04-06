@@ -10,8 +10,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db.models import Sum
-from django.http import HttpResponse, HttpResponseRedirect
+from django.db.models import Sum, Q, Count
 from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext as _
 from django.urls import reverse
@@ -40,10 +39,7 @@ from booking.models import (
     Quotation,
 )
 
-from project.models import (
-    Event,
-    Irregularity
-)
+from project.models import Event, Irregularity
 
 # Filters
 from booking.filters import (
@@ -61,6 +57,7 @@ from booking.forms import (
     CreateBookForm,
     UpdateAttendanceForm,
     CreateQuotationForm,
+    LockQuotationForm,
 )
 
 # Utils
@@ -156,7 +153,11 @@ def bookinglistview(request):
                     messages.add_message(
                         request,
                         messages.WARNING,
-                        _("Book N°" + str(book.id) + ": Not a Abo, not posible to determine next Event."),
+                        _(
+                            "Book N°"
+                            + str(book.id)
+                            + ": Not a Abo, not posible to determine next Event."
+                        ),
                     )
     return render(request, template, context)
 
@@ -229,7 +230,7 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                         self.request, messages.INFO, _("Attendance created")
                     )
 
-                #Send Email
+                # Send Email
 
                 try:
                     email_sender(instance, "Informed")
@@ -280,7 +281,13 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         pk = self.object.id
         url = build_url(
             "booking_update",
-            get={"user": user, "event": event, "status": status, "start_date": start_date, "end_date": end_date},
+            get={
+                "user": user,
+                "event": event,
+                "status": status,
+                "start_date": start_date,
+                "end_date": end_date,
+            },
             # TODO im not sure this way of passing the pk is ideal :)
             pk={"pk": pk},
         )
@@ -364,14 +371,18 @@ def attendance_daily_view(request):
             check_list = request.POST.getlist("check")
             try:
                 for values in check_list:
-                    #Prepare de data
+                    # Prepare de data
                     values_split = values.split(" ")
                     attendance_id = values_split[0]
                     check_pos = values_split[1]
-                    #Make the actual Switch
+                    # Make the actual Switch
                     updateSwitchCheckAttendance(attendance_id, int(check_pos))
-                    #Send a message
-                    messages.add_message(request, messages.SUCCESS, _("Updated attendance id: " + str(attendance_id)))
+                    # Send a message
+                    messages.add_message(
+                        request,
+                        messages.SUCCESS,
+                        _("Updated attendance id: " + str(attendance_id)),
+                    )
             except:
                 messages.add_message(
                     request,
@@ -388,7 +399,6 @@ def attendance_daily_view(request):
                 )
                 return HttpResponseRedirect(success_url)
 
-
     attendance_filter = AttendanceDailyFilter(
         request.GET,
         queryset=(
@@ -399,10 +409,10 @@ def attendance_daily_view(request):
         user=request.user,
     )
 
-    if not request.GET.get('attendance_date'):
+    if not request.GET.get("attendance_date"):
         initial_date = str(datetime.datetime.now().date())
     else:
-        initial_date = request.GET.get('attendance_date')
+        initial_date = request.GET.get("attendance_date")
 
     context = {
         "attendance_filter": attendance_filter,
@@ -426,7 +436,9 @@ class AttendanceUpdateView(
             self.request.GET,
             queryset=(
                 Attendance.objects.all()
-                .select_related("book", "book__user", "book__event", "book__price")
+                .select_related(
+                    "book", "book__user", "book__event", "book__price"
+                )
                 .prefetch_related("book__times__regular_days")
             ),
         )
@@ -510,12 +522,10 @@ def quotationlistview(request):
 
 class QuotationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Quotation
-    template_name = "booking/booking_create.html"
+    template_name = "booking/quotation_create.html"
 
     def get_success_url(self, **kwargs):
-        success_url = build_url(
-            "herd"
-        )
+        success_url = build_url("quotation_list")
         messages.add_message(
             self.request,
             messages.SUCCESS,
@@ -533,22 +543,25 @@ def quotationcreateview(request):
     template = "booking/quotation_filter.html"
     form = CreateQuotationForm
 
-    #Filters
+    # Filters
 
     book_filter = QuotationBookFilter(
         request.GET,
         queryset=(
             Book.objects.all()
             .select_related("event__level", "user", "price")
-            .prefetch_related("invoice","attendance")
+            .prefetch_related("invoice", "attendance")
         ),
     )
 
     if request.method == "GET":
         if "event" and "event__time_locations" in request.GET:
-            if request.GET.get('event') != '' and request.GET.get('event__time_locations') != '':
-                eventid = str(request.GET.get('event'))
-                timelocationid = str(request.GET.get('event__time_locations'))
+            if (
+                request.GET.get("event") != ""
+                and request.GET.get("event__time_locations") != ""
+            ):
+                eventid = str(request.GET.get("event"))
+                timelocationid = str(request.GET.get("event__time_locations"))
                 event = get_event(eventid)
                 tls = event.time_locations.all()
                 tl = get_timelocation(timelocationid)
@@ -556,54 +569,66 @@ def quotationcreateview(request):
                     # Get other template
                     template = "booking/quotation_create.html"
 
-                    #Constants
+                    # Constants
                     fix_profit = Decimal(100.00)
                     acrolama_rate = Decimal(0.25)
                     teachers_rate = Decimal(0.75)
 
-                    #Variables
+                    # Variables
 
-                    #Revenue
+                    # Revenue
                     try:
-                        direct_revenue = book_filter.qs.filter(status="PA").aggregate(Sum('price__price_chf'))
-                        direct_revenue = direct_revenue['price__price_chf__sum']
+                        direct_revenue = book_filter.qs.filter(
+                            status="PA"
+                        ).aggregate(Sum("price__price_chf"))
+                        direct_revenue = direct_revenue[
+                            "price__price_chf__sum"
+                        ]
                     except:
                         direct_revenue = Decimal(0)
 
-                    #Rent
+                    # Rent
                     related_rent = Decimal(240.00)
 
-                    #Calc
+                    # Calc
                     profit = direct_revenue - related_rent - fix_profit
                     acrolama_profit = round(profit * acrolama_rate, 2)
                     teachers_profit = round(profit * teachers_rate, 2)
 
                     # Select Initial
 
-                    #Teachers
-                    #TODO:Should every event have teachers ?
-                    #TODO: Should they be preselected
+                    # Teachers
+                    # TODO:Should every event have teachers ?
+                    # TODO: Should they be preselected
                     try:
                         teachers = [t.id for t in event.teacher.all()]
                     except AttributeError:
-                        teachers = ['']
+                        teachers = [""]
 
-                    form = form( initial={
-                        'event': eventid,
-                        'time_location': timelocationid,
-                        'teachers': teachers,
-                        'related_rent': related_rent,
-                        'direct_revenue': direct_revenue,
-                        'related_rent': related_rent,
-                        'fix_profit': fix_profit,
-                        'acrolama_profit': acrolama_profit,
-                        'teachers_profit': teachers_profit,
-                    }, auto_id=False)
+                    form = form(
+                        initial={
+                            "event": eventid,
+                            "time_location": timelocationid,
+                            "teachers": teachers,
+                            "related_rent": related_rent,
+                            "direct_revenue": direct_revenue,
+                            "related_rent": related_rent,
+                            "fix_profit": fix_profit,
+                            "acrolama_profit": acrolama_profit,
+                            "teachers_profit": teachers_profit,
+                        },
+                        auto_id=False,
+                    )
                 else:
                     messages.add_message(
                         request,
                         messages.WARNING,
-                        _("Event " + str(event) + " doesn't have Time Location " + str(tl)),
+                        _(
+                            "Event "
+                            + str(event)
+                            + " doesn't have Time Location "
+                            + str(tl)
+                        ),
                     )
             else:
                 messages.add_message(
@@ -613,13 +638,49 @@ def quotationcreateview(request):
                 )
         else:
             messages.add_message(
-                request,
-                messages.WARNING,
-                _("Missing Event or Time Location"),
+                request, messages.WARNING, _("Missing Event or Time Location"),
             )
 
+    if request.method == "POST":
+        form = form(request.POST)
+        if form.is_valid():
+            # process form data
+            obj = Quotation()  # gets new object
+            obj.event = form.cleaned_data["event"]
+            obj.time_location = form.cleaned_data["time_location"]
 
-    #Context
+            # Costs
+            obj.related_rent = form.cleaned_data["related_rent"]
+
+            # Revenue
+            obj.total_attendees = book_filter.qs.filter(status="PA").count()
+            obj.direct_revenue = form.cleaned_data["direct_revenue"]
+
+            # Profit
+            obj.fix_profit = form.cleaned_data["fix_profit"]
+            obj.acrolama_profit = form.cleaned_data["acrolama_profit"]
+            obj.teachers_profit = form.cleaned_data["teachers_profit"]
+
+            obj.save()
+
+            teachers = form.cleaned_data["teachers"]
+            for x in teachers:
+                teachersList = []
+                teachersList.append(str(x.id))
+            # NOTE: I've done this with if one by one, turns out add can accept
+            # any number of arguemnts. to get a list use the *
+            obj.teachers.add(*teachers)
+
+            direct_costs = form.cleaned_data["direct_costs"]
+            dc = []
+
+            for x in direct_costs:
+                x.split(" ")
+                dc.append(x[0])
+
+            obj.direct_costs.add(*dc)
+
+    # Context
 
     context = {
         "book_filter": book_filter,
@@ -629,10 +690,45 @@ def quotationcreateview(request):
 
     return render(request, template, context)
 
+@login_required
+@user_passes_test(staff_check)
+def quotationlockview(request, pk):
+    template = "booking/quotation_lock.html"
+
+    quotation = Quotation.objects.get(pk=pk)
+    books = Book.objects.filter(
+        event = quotation.event,
+        event__time_locations__id__exact = quotation.time_location.id
+    )
+
+    form = LockQuotationForm(
+        instance=quotation,
+        initial={
+        #     "event": quotation.event,
+        #     "time_location": quotation.time_location,
+        #     "teachers": quotation.teachers.all(),
+        #     "related_rent": quotation.related_rent,
+        #     "direct_revenue": quotation.direct_revenue,
+            "direct_costs": quotation.direct_costs.all(),
+        #     "related_rent": quotation.related_rent,
+        #     "fix_profit": quotation.fix_profit,
+        #     "acrolama_profit": quotation.acrolama_profit,
+        #     "teachers_profit": quotation.teachers_profit,
+        },
+    )
+
+    if request.method == "POST":
+        pass
+
+    context = {
+        "form": form,
+
+    }
+    return render(request, template, context)
+
 
 class HerdView(UserPassesTestMixin, LoginRequiredMixin, TemplateView):
     template_name = "booking/herd.html"
 
     def test_func(self):
         return herd_check(self.request.user)
-

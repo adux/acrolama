@@ -8,7 +8,7 @@ from project.models import Irregularity, TimeOption
 
 from booking.utils import datelistgenerator
 
-#Original would be from postgres.field fields looks for other widgets
+# Original would be from postgres.field fields looks for other widgets
 # from django.contrib.postgres.fields import ArrayField
 from booking.fields import ArrayField
 
@@ -87,29 +87,43 @@ class Attendance(models.Model):
 
 class Quotation(models.Model):
     event = models.ForeignKey("project.Event", on_delete=models.CASCADE)
-    time_location = models.ForeignKey("project.TimeLocation", on_delete=models.CASCADE)
+    time_location = models.ForeignKey(
+        "project.TimeLocation", on_delete=models.CASCADE
+    )
     teachers = models.ManyToManyField("users.User")
 
-    #Costs
-    related_rent = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    # Costs
+    related_rent = models.DecimalField(
+        max_digits=12, decimal_places=2, blank=True, null=True
+    )
     direct_costs = models.ManyToManyField("accounting.Invoice")
 
-    #Revenue
-    total_attendees = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
-    direct_revenue = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    # Revenue
+    total_attendees = models.DecimalField(
+        max_digits=12, decimal_places=2, blank=True, null=True
+    )
+    direct_revenue = models.DecimalField(
+        max_digits=12, decimal_places=2, blank=True, null=True
+    )
 
-    #Profit
-    fix_profit = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
-    acrolama_profit = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
-    teachers_profit = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    # Profit
+    fix_profit = models.DecimalField(
+        max_digits=12, decimal_places=2, blank=True, null=True
+    )
+    acrolama_profit = models.DecimalField(
+        max_digits=12, decimal_places=2, blank=True, null=True
+    )
+    teachers_profit = models.DecimalField(
+        max_digits=12, decimal_places=2, blank=True, null=True
+    )
 
-    #Control
+    # Control
     locked = models.BooleanField(default=False)
     locked_at = models.DateTimeField(blank=True, null=True)
 
-    #Info
+    # Info
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def get_teachers(self):
-        return ",\n".join([p.name for p in self.teachers.all()])
+        return ",\n".join([p.first_name for p in self.teachers.all()])

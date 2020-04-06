@@ -1,0 +1,70 @@
+{% extends "booking/base_bs.html" %}
+{% block head_title%}Create{% endblock %}
+{% load widget_tweaks %}
+{% block content %}
+
+    <form method="POST">{% csrf_token %}
+
+        <div class="card card-body bg-light">
+            <h4> Stats Event </h3>
+            <div class="row">
+                <div class="form-group col-sm-4 col-md-12">
+                    · Booking: Abos - Cycle: 12, Intensive:12 | Tickets - DropIn: XX FullWS: 12
+                </div>
+                <div class="form-group col-sm-4 col-md-12">
+                    · Invoice: Status - Paid: 12 Canceled: XX | OnTime: XX Late: YY
+                </div>
+                <div class="form-group col-sm-4 col-md-12">
+                    · Attendance: Attendees: 12, Missed: 2 (Note: DropIn and Canceled not adjusted)
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="card card-body bg-light">
+            <h4>Revenue</h4>
+            <div class="row">
+                <div class="form-group col-sm-4 col-md-4">
+                    {{ form.event.label_tag }}
+                    {% render_field form.event class="form-control" %}
+                </div>
+                <div class="form-group col-sm-4 col-md-4">
+                    {{ form.time_location.label_tag }}
+                    {% render_field form.time_location class="form-control" %}
+                </div>
+                <div class="form-group col-sm-4 col-md-4">
+                    {{ form.teachers.label_tag }}
+                    {% render_field form.teachers class="form-control" %}
+                </div>
+                <div class="form-group col-sm-4 col-md-3">
+                    {{ form.related_rent.label_tag }}
+                    {% render_field form.related_rent class="form-control" %}
+                </div>
+                <div class="form-group col-sm-4 col-md-9">
+                    {{ form.direct_costs.label_tag }}
+                    {% render_field form.direct_costs class="form-control" %}
+                </div>
+                <div class="form-group col-sm-4 col-md-3">
+                    {{ form.direct_revenue.label_tag }}
+                    {% render_field form.direct_revenue class="form-control" %}
+                </div>
+                <div class="form-group col-sm-4 col-md-3">
+                    {{ form.fix_profit.label_tag }}
+                    {% render_field form.fix_profit class="form-control" %}
+                </div>
+                <div class="form-group col-sm-4 col-md-3">
+                    {{ form.acrolama_profit.label_tag }}
+                    {% render_field form.acrolama_profit class="form-control" %}
+                </div>
+                <div class="form-group col-sm-4 col-md-3">
+                    {{ form.teachers_profit.label_tag }}
+                    {% render_field form.teachers_profit class="form-control" %}
+                </div>
+            </div>
+            <button type="submit" class="btn btn-danger">
+            <i class="fa fa-lock"></i> Lock
+           </button>
+        </div>
+    </form>
+{% endblock %}

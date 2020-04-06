@@ -99,7 +99,7 @@ class QuotationAdmin(admin.ModelAdmin):
         "time_location",
         "event__level",
         "event__category",
-        "locked"
+        "locked",
     ]
     search_fields = [
         "event__title",
@@ -119,7 +119,6 @@ class QuotationAdmin(admin.ModelAdmin):
             .get_queryset(request)
             .prefetch_related("teachers", "direct_costs")
         )
-
 
 
 admin.site.register(Attendance, AttendanceAdmin)

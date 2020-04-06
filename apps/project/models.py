@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models.signals import pre_save
+from django.utils.functional import cached_property
 from django.urls import reverse
 
 from home.utils import unique_slug_generator
@@ -87,7 +88,7 @@ class TimeOption(models.Model):
                 self.class_starttime.strftime("%H:%M"),
                 self.class_endtime.strftime("%H:%M"),
             )
-        # Events or not regular Events should not have and Name is used
+        # Events should not have and Name is used
         else:
             return "%s: %s - %s" % (
                 self.name,
@@ -237,6 +238,7 @@ class Event(models.Model):
     # class Meta:
     #     ordering = [""]
 
+    @cached_property
     def fulltitle(self):
         if self.category == "CY" and self.cycle:
             if self.level.name == "2":
@@ -253,20 +255,21 @@ class Event(models.Model):
             return reverse('event', args=[str(self.slug)])
 
 
+    # @cached_property
     def __str__(self):
         if self.category == "CY":
-            return "%s (%s) - %s" % (
-                #TODO: Find a smarter solution to get level in string
-                # self.level,
+            return "%s %s %s (%s) - %s" % (
+                self.get_category_display(),
+                self.level,
                 self.cycle,
                 self.event_startdate.strftime("%d %b"),
                 self.title,
             )
         else:
-            return "%s %s - %s" % (
+            return "%s %s (%s) - %s" % (
                 self.get_category_display(),
-                # self.level,
-                self.event_startdate.strftime("%b %Y"),
+                self.level,
+                self.event_startdate.strftime("%d %b"),
                 self.title,
             )
 

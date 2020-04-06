@@ -41,7 +41,7 @@ class CreateQuotationForm(forms.ModelForm):
     direct_costs = forms.MultipleChoiceField(
         choices=[
             ["%s %s" % (o.id, o.to_pay), o.__str__]
-            for o in Invoice.objects.filter(balance='DB')
+            for o in Invoice.objects.filter(balance="DB")
         ]
     )
 
@@ -64,14 +64,35 @@ class CreateQuotationForm(forms.ModelForm):
         # Filled
         self.fields["teachers"].queryset = User.objects.filter(is_teacher=True)
 
-        #NOT required
-        self.fields["direct_costs"].required=False
+        # NOT required
+        self.fields["direct_costs"].required = False
 
-        #disabled
-        self.fields["direct_revenue"].disabled=True
+        # disabledo
+        self.fields["direct_revenue"].widget.attrs["readonly"] = True
+
+        # self.fields["direct_revenue"].disabled=True
         # self.fields["acrolama_profit"].disabled=True
         # self.fields["teachers_profit"].disabled=True
 
+class LockQuotationForm(forms.ModelForm):
+    class Meta:
+        model = Quotation
+        fields = (
+            "event",
+            "time_location",
+            "teachers",
+            "related_rent",
+            "direct_costs",
+            "direct_revenue",
+            "fix_profit",
+            "acrolama_profit",
+            "teachers_profit",
+        )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["teachers"].queryset = User.objects.filter(is_teacher=True)
+        self.fields["direct_costs"].queryset = Invoice.objects.filter(balance="DB")
 
 
 class BookForm(forms.ModelForm):
@@ -124,4 +145,3 @@ class BookForm(forms.ModelForm):
         times_verify = cleaned_data.get("times")
         # always return the cleaned data
         return cleaned_data
-

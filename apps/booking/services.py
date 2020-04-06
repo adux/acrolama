@@ -32,6 +32,7 @@ def get_book(book):
 
     return book
 
+
 def get_event(event):
     # If its str or int treat it as id
     if isinstance(event, (str, int)):
@@ -48,6 +49,7 @@ def get_event(event):
 
     return event
 
+
 def get_timelocation(tl):
     # If its str or int treat it as id
     if isinstance(tl, (str, int)):
@@ -63,6 +65,7 @@ def get_timelocation(tl):
             print("Event doesn't exist")
 
     return tl
+
 
 def updateBookStatus(book, status):
     book = get_book(book)

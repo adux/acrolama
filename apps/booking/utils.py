@@ -16,8 +16,10 @@ from accounting.models import Invoice
 def staff_check(user):
     return user.is_staff
 
+
 def teacher_check(user):
     return user.is_teacher
+
 
 def herd_check(user):
     if user.is_teacher or user.is_staff:
@@ -51,7 +53,9 @@ def datelistgenerator(startdate, enddate, regularday):
 
 
 def space_out(string, length):
-    return ' '.join(string[i:i+length] for i in range(0,len(string),length))
+    return " ".join(
+        string[i : i + length] for i in range(0, len(string), length)
+    )
 
 
 def email_sender(instance, flag):
@@ -75,7 +79,7 @@ def email_sender(instance, flag):
             event__slug=instance.event.slug
         )
 
-        #TODO: Unnecesary access to DB
+        # TODO: Unnecesary access to DB
         invoice = Invoice.objects.get(book=instance.pk)
         referenznum = space_out(
             str(instance.user.pk)
@@ -84,8 +88,8 @@ def email_sender(instance, flag):
             + "00"
             + str(instance.pk)
             + "00"
-            + str(invoice.pk)
-            ,4
+            + str(invoice.pk),
+            4,
         )
 
         p = {

@@ -4,16 +4,16 @@
         <h4>Filter</h4>
         <div class="row">
             <div class="form-group col-sm-4 col-md-4">
-            {{ quotation_filter.form.book__user.label_tag }}
+            {{ quotation_filter.form.event.label_tag }}
             {% render_field quotation_filter.form.event class="form-control" %}
             </div>
             <div class="form-group col-sm-4 col-md-4">
-            {{ quotation_filter.form.book__event.label_tag }}
-            {% render_field quotation_filter.form.teachers class="form-control" %}
-            </div>
-            <div class="form-group col-sm-4 col-md-2">
-            {{ quotation_filter.form.quotation_date.label_tag }}
+            {{ quotation_filter.form.time_location.label_tag }}
             {% render_field quotation_filter.form.time_location class="form-control" %}
+            </div>
+            <div class="form-group col-sm-4 col-md-4">
+            {{ quotation_filter.form.teachers.label_tag }}
+            {% render_field quotation_filter.form.teachers class="form-control" %}
             </div>
         </div>
         <button type="submit" class="btn btn-primary">
@@ -29,6 +29,7 @@
             <th>Teachers</th>
             <th>Time Location</th>
             <th>Edit</th>
+            <th>Lock</th>
         </thead>
         <tbody>
             {% for obj in page_obj %}
@@ -36,9 +37,10 @@
                 <td>{{obj.pk}}</td>
                 <td>{{obj.event.title}}</td>
                 {# TODO: Getting times for view should be done somewhere else #}
-                <td>{% for obj in obj.teachers.all %}{{obj.name}}, {% endfor %}</td>
-                <td>{{obj.time_location.name}}</td>
-                <td><a href="{% url 'quotation_create' %}?event={{request.GET.event}}&teachers={{request.GET.teachers}}"><i class="fas fa-edit"></i></a>
+                <td>{{obj.get_teachers}}</td>
+                <td>{{obj.time_location}}</td>
+                <td><a href="{% url 'quotation_update' obj.pk %}?event={{request.GET.event}}&teachers={{request.GET.teachers}}"><i class="fas fa-edit"></i></a></td>
+                <td><a href={% url 'quotation_lock' obj.pk %}?event={{request.GET.event}}&teachers={{request.GET.teachers}}">{% if obj.locked == True %}<span class="text-success">{% else %}<span class="text-danger">{% endif %}<i class="fa fa-lock"></i></span></a></td>
             </tr>
             {% endfor%}
         </tbody>

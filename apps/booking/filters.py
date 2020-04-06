@@ -6,6 +6,7 @@ import datetime
 
 from booking.models import Book, Attendance, Quotation
 from project.models import Event, TimeOption, TimeLocation
+from users.models import User
 
 
 class BookFilter(django_filters.FilterSet):
@@ -22,20 +23,14 @@ class BookFilter(django_filters.FilterSet):
     )
 
     start_date = django_filters.DateFilter(
-        field_name='booked_at',
-        lookup_expr='gt',
-        label='Start date',
+        field_name="booked_at", lookup_expr="gt", label="Start date",
     )
     end_date = django_filters.DateFilter(
-        field_name='booked_at',
-        lookup_expr='lt',
-        label='End date',
+        field_name="booked_at", lookup_expr="lt", label="End date",
     )
     date_range = django_filters.DateRangeFilter(
-        field_name='booked_at',
-        label='Range'
+        field_name="booked_at", label="Range"
     )
-
 
     class Meta:
         model = Book
@@ -79,14 +74,13 @@ class AttendanceFilter(django_filters.FilterSet):
 
 class AttendanceDailyFilter(django_filters.FilterSet):
     book__event = django_filters.ChoiceFilter(
-    label="Your Events",
-    field_name="book__event",
+        label="Your Events", field_name="book__event",
     )
 
     attendance_date = django_filters.DateFilter(
         field_name="attendance_date",
         method="filter_by_date_contains",
-        initial = datetime.datetime.now().date()
+        initial=datetime.datetime.now().date(),
     )
 
     class Meta:
@@ -94,7 +88,7 @@ class AttendanceDailyFilter(django_filters.FilterSet):
         fields = {}
 
     def __init__(self, data=None, *args, **kwargs):
-        self.user = kwargs.pop('user')
+        self.user = kwargs.pop("user")
 
         # Simulates behaviour of the initial pre 1.0 in django-filters
         if data is not None:
@@ -102,7 +96,7 @@ class AttendanceDailyFilter(django_filters.FilterSet):
             data = data.copy()
 
             for name, f in self.base_filters.items():
-                initial = f.extra.get('initial')
+                initial = f.extra.get("initial")
 
                 # filter param is either missing or empty, use initial as default
                 if not data.get(name) and initial:
@@ -110,8 +104,9 @@ class AttendanceDailyFilter(django_filters.FilterSet):
 
         super(AttendanceDailyFilter, self).__init__(data, *args, **kwargs)
 
-        self.filters['book__event'].extra['choices'] = [
-            (event.id, event.__str__) for event in Event.objects.filter(teacher=self.user)
+        self.filters["book__event"].extra["choices"] = [
+            (event.id, event.__str__)
+            for event in Event.objects.filter(teacher=self.user)
         ]
 
     def filter_by_date_contains(self, queryset, name, value):
@@ -123,6 +118,13 @@ class QuotationFilter(django_filters.FilterSet):
         model = Quotation
         fields = {"event", "time_location", "teachers"}
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Filled
+        self.filters["teachers"].queryset = User.objects.filter(
+            is_teacher=True
+        )
+
 
 class QuotationBookFilter(django_filters.FilterSet):
     event = django_filters.ChoiceFilter(
@@ -130,14 +132,11 @@ class QuotationBookFilter(django_filters.FilterSet):
             [o.pk, o.__str__]
             for o in Event.objects.all().order_by("-event_startdate")
         ],
-        required=True
+        required=True,
     )
     event__time_locations = django_filters.ChoiceFilter(
-        choices=[
-            [o.pk, o.__str__]
-            for o in TimeLocation.objects.all()
-        ],
-        required=True
+        choices=[[o.pk, o.__str__] for o in TimeLocation.objects.all()],
+        required=True,
     )
 
     class Meta:
