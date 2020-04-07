@@ -1,3 +1,4 @@
+from dal import autocomplete
 from django import forms
 from django.contrib.postgres.fields import ArrayField
 from django.utils.translation import ugettext_lazy as _
@@ -5,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from accounting.models import Invoice
 from users.models import User
+from project.models import Event
 
 from booking.models import Book, Attendance, Quotation
 from booking.widgets import DynamicArrayWidget
@@ -70,9 +72,6 @@ class CreateQuotationForm(forms.ModelForm):
         # disabledo
         self.fields["direct_revenue"].widget.attrs["readonly"] = True
 
-        # self.fields["direct_revenue"].disabled=True
-        # self.fields["acrolama_profit"].disabled=True
-        # self.fields["teachers_profit"].disabled=True
 
 class LockQuotationForm(forms.ModelForm):
     class Meta:

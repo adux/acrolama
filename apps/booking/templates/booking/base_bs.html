@@ -4,17 +4,19 @@
     <title>Herd | {% block head_title %}{% endblock%}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<!-- Fonts Awesome -->
+    <!-- Fonts Awesome -->
     <script defer src="{% static 'booking/all.min.js' %}"></script>
 
-<!-- Bootstrap 4.3.1 -->
-    <link rel="stylesheet" href="{% static 'booking/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'booking/bootstrap-datepicker3.standalone.min.css' %}">
-    <link rel="stylesheet" href="{% static 'booking/project.css' %}">
+    <!-- Bootstrap 4.3.1 -->
+    <link rel="stylesheet" href="{% static 'booking/bootstrap.min.css' %}" type="text/css" media="screen" >
+    <link rel="stylesheet" href="{% static 'booking/bootstrap-datepicker3.standalone.min.css' %}" type="text/css" media="screen" >
+    <!-- Autocomplete -->
+    <link rel="stylesheet" href="{% static 'vendor/select2/dist/css/select2.css' %}" type="text/css" media="screen">
+    <link rel="stylesheet" href="{% static 'admin/css/autocomplete.css' %}" type="text/css" media="screen">
+    <link rel="stylesheet" href="{% static 'autocomplete_light/select2.css' %}" type="text/css" media="screen">
+    <!-- Project -->
+    <link rel="stylesheet" href="{% static 'booking/project.css' %}" type="text/css" media="screen" >
 
-<!-- Other Stuff -->
-    <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css"> -->
-    <!-- <link rel="stylesheet" href="{% static 'home/css/accounting.css' %}"> -->
     </head>
 <body>
     {% if messages %}
@@ -30,31 +32,57 @@
     {% block content %}
     {% endblock %}
     </div>
-<!-- Project Stuff -->
-<!-- <script src="https://code.jquery.com/jquery-1.12.4.js" integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU=" crossorigin="anonymous"></script> -->
-<!-- <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script> -->
 
-<!-- https://underscorejs.org/ -->
-<script src="https://underscorejs.org/underscore-min.js"></script>
-<!-- <script src="{% static 'home/js/accounting.js' %}"></script> -->
+    <!-- https://underscorejs.org/ -->
+    <script src="https://underscorejs.org/underscore-min.js"></script>
+    <!-- <script src="{% static 'home/js/accounting.js' %}"></script> -->
 
-<!-- Bootstrap 4.3.1 -->
-<script src="{% static 'booking/jquery-3.3.1.slim.min.js' %}"></script>
-<!-- Popper and Bootstrap -->
-<script src="{% static 'booking/bootstrap.bundle.min.js' %}"></script>
-<script src="{% static 'booking/bootstrap-datepicker.min.js' %}"></script>
-<script src="{% static 'booking/project.js' %}"></script>
-<script>
-    $('.datepicker').datepicker({
-		format: "yyyy-mm-dd",
-		weekStart: 1,
-		maxViewMode: 0,
-		todayBtn: "linked",
-		clearBtn: true,
-		orientation: "bottom auto",
-		autoclose: true,
-		todayHighlight: true
-    });
-</script>
+    <!-- Bootstrap 4.3.1 -->
+    <script src="{% static 'booking/jquery-3.4.1.min.js' %}"></script>
+
+    <!-- Popper and Bootstrap -->
+    <script src="{% static 'booking/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'booking/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'booking/project.js' %}"></script>
+    <script>
+        $('.datepicker').datepicker({
+            format: "yyyy-mm-dd",
+            weekStart: 1,
+            maxViewMode: 0,
+            todayBtn: "linked",
+            clearBtn: true,
+            orientation: "bottom auto",
+            autoclose: true,
+            todayHighlight: true
+        });
+    </script>
+    <!-- Auto -->
+    <script type="text/javascript" src="{% static 'autocomplete_light/jquery.init.js' %}"></script>
+    <script type="text/javascript" src="{% static 'vendor/select2/dist/js/select2.full.js' %}"></script>
+    <script type="text/javascript" src="{% static 'vendor/select2/dist/js/i18n/en.js' %}"></script>
+    <script type="text/javascript" src="{% static 'autocomplete_light/autocomplete.init.js' %}"></script>
+    <script type="text/javascript" src="{% static 'autocomplete_light/forward.js' %}"></script>
+    <script type="text/javascript" src="{% static 'autocomplete_light/select2.js' %}"></script>
+    <script type="text/javascript" src="{% static 'autocomplete_light/jquery.post-setup.js' %}"></script>
+    <script>
+    (function($) {
+        $('#add-form').click(function() {
+            var index = $('#id_inline_test_models-TOTAL_FORMS').val()
+            var newTable = $('#id_inline_test_models-__prefix__-DELETE').parents('table').clone()
+            newTable.find(':input').each(function() {
+                for (attr of ['name', 'id'])
+                    $(this).attr(
+                        attr,
+                        $(this).attr(attr).replace('__prefix__', index)
+                    )
+            })
+            newTable.insertBefore($(this))
+            $('#id_inline_test_models-TOTAL_FORMS').val(
+                parseInt($('#id_inline_test_models-TOTAL_FORMS').val()) + 1
+            )
+            newTable.slideDown()
+        })
+    })($)
+    </script>
 </body>
 </html>

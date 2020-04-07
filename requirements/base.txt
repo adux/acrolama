@@ -17,6 +17,7 @@ urllib3==1.25.8
 -- Django --
 django==2.2.12
 django-crispy-forms==1.7.2
+django-autocomplete-light==3.5.1
 django-allauth==0.41.0
 oauthlib==3.0.1
 sqlparse==0.3.0

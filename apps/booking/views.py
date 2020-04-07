@@ -1,5 +1,6 @@
 import datetime
 
+from dal import autocomplete
 from decimal import Decimal, getcontext
 
 from django.conf import settings
@@ -10,35 +11,18 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db.models import Sum, Q, Count
-from django.shortcuts import get_object_or_404, render
+# Allows querries with OR statments
+from django.db.models import Sum, Q
+from django.shortcuts import render
 from django.utils.translation import gettext as _
-from django.urls import reverse
 
 
-from django.views.generic import (
-    TemplateView,
-    CreateView,
-    UpdateView,
-    ListView,
-    FormView,
-)
-
+from django.views.generic import (TemplateView, CreateView, UpdateView)
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
-# Render for email template
-from django.template.loader import render_to_string
-
-# Allows querries with OR statments
-# from django.db.models import Q
 
 # Models
-from booking.models import (
-    Book,
-    Attendance,
-    Quotation,
-)
-
+from booking.models import (Book, Attendance, Quotation)
 from project.models import Event, Irregularity
 
 # Filters
@@ -81,6 +65,19 @@ from booking.services import (
     createNextBookAttendance,
     updateSwitchCheckAttendance,
 )
+
+class EventAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        #Don't forget to filter out results depending on the visitor !
+        if not self.request.user.is_staff:
+            return Event.objects.none()
+
+        qs = Event.objects.all()
+
+        if self.q:
+            qs = qs.filter(Q(category__icontains=self.q) | Q(level__name__icontains=self.q) | Q(title__icontains= self.q))
+
+        return qs
 
 
 @login_required
@@ -159,6 +156,7 @@ def bookinglistview(request):
                             + ": Not a Abo, not posible to determine next Event."
                         ),
                     )
+
     return render(request, template, context)
 
 

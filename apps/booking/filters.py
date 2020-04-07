@@ -1,3 +1,5 @@
+from dal import autocomplete
+
 from django import forms
 from django.db.models import Q
 
@@ -8,20 +10,15 @@ from booking.models import Book, Attendance, Quotation
 from project.models import Event, TimeOption, TimeLocation
 from users.models import User
 
-
 class BookFilter(django_filters.FilterSet):
     user = django_filters.CharFilter(method="filter_by_all_name_fields")
-    event = django_filters.ChoiceFilter(
-        choices=[
-            [o.pk, o.__str__]
-            for o in Event.objects.all().order_by("-event_startdate")
-        ]
+    event = django_filters.ModelChoiceFilter(
+        queryset=Event.objects.all(),
+        widget=autocomplete.ModelSelect2(url='event-autocomplete')
     )
-
     times = django_filters.ModelMultipleChoiceFilter(
         queryset=TimeOption.objects.all(), widget=forms.CheckboxSelectMultiple
     )
-
     start_date = django_filters.DateFilter(
         field_name="booked_at", lookup_expr="gt", label="Start date",
     )
