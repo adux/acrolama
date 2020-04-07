@@ -58,7 +58,8 @@ class EventAdmin(admin.ModelAdmin):
                 "team",
                 "teacher",
             )
-        return (
+        else:
+            return (
             qs.filter(teacher=request.user)
             .select_related("project", "policy", "level", "discipline")
             .prefetch_related(

@@ -225,20 +225,10 @@ class Event(models.Model):
             return reverse("event", args=[str(self.slug)])
 
     def __str__(self):
-        if self.category == "CY":
-            return "%s %s %s (%s) - %s" % (
-                self.get_category_display(),
-                self.level,
-                self.cycle,
-                self.event_startdate.strftime("%d %b"),
-                self.title,
-            )
-        else:
-            return "%s %s (%s) - %s" % (
-                self.get_category_display(),
-                self.level,
-                self.event_startdate.strftime("%d %b"),
-                self.title,
+        return "(%s) %s - %s" % (
+            self.event_startdate.strftime("%d %b"),
+            self.get_category_display(),
+            self.title,
             )
 
 
