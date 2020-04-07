@@ -39,39 +39,37 @@ class EventAdmin(admin.ModelAdmin):
         "published",
         "registration",
     ]
+    list_select_related = ['project', 'policy', 'level', 'discipline']
 
     list_filter = ["category", "level"]
     search_fields = ["title", "event_startdate", "event_enddate"]
     save_as = True
 
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        if request.user.is_superuser:
-            return qs.select_related(
-                "project", "policy", "level", "discipline"
-            ).prefetch_related(
-                "time_locations__time_options",
-                "irregularities",
-                "price_options",
-                "images",
-                "videos",
-                "team",
-                "teacher",
-            )
-        else:
-            return (
-            qs.filter(teacher=request.user)
-            .select_related("project", "policy", "level", "discipline")
-            .prefetch_related(
-                "time_locations__time_options",
-                "irregularities",
-                "price_options",
-                "images",
-                "videos",
-                "team",
-                "teacher",
-            )
-        )
+    # def get_queryset(self, request):
+    #     qs = super().get_queryset(request)
+    #     if request.user.is_superuser:
+    #         return qs.prefetch_related(
+    #             "time_locations__time_options",
+    #             "irregularities",
+    #             "price_options",
+    #             "images",
+    #             "videos",
+    #             "team",
+    #             "teacher",
+    #         )
+    #     else:
+    #         return (
+    #         qs.filter(teacher=request.user)
+    #         .prefetch_related(
+    #             "time_locations__time_options",
+    #             "irregularities",
+    #             "price_options",
+    #             "images",
+    #             "videos",
+    #             "team",
+    #             "teacher",
+    #         )
+    #     )
 
 
 class ProjectAdmin(admin.ModelAdmin):

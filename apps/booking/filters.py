@@ -43,11 +43,9 @@ class BookFilter(django_filters.FilterSet):
 
 class AttendanceFilter(django_filters.FilterSet):
     book__user = django_filters.CharFilter(method="filter_by_all_name_fields")
-    book__event = django_filters.ChoiceFilter(
-        choices=[
-            [o.pk, o.__str__]
-            for o in Event.objects.all()
-        ]
+    book__event = django_filters.ModelChoiceFilter(
+        queryset=Event.objects.all(),
+        widget=autocomplete.ModelSelect2(url='event-autocomplete')
     )
     attendance_date = django_filters.DateFilter(
         field_name="attendance_date", method="filter_by_date_contains",
@@ -111,6 +109,10 @@ class AttendanceDailyFilter(django_filters.FilterSet):
 
 
 class QuotationFilter(django_filters.FilterSet):
+    event = django_filters.ModelChoiceFilter(
+        queryset=Event.objects.all(),
+        widget=autocomplete.ModelSelect2(url='event-autocomplete')
+    )
     class Meta:
         model = Quotation
         fields = {"event", "time_location", "teachers"}
@@ -124,12 +126,10 @@ class QuotationFilter(django_filters.FilterSet):
 
 
 class QuotationBookFilter(django_filters.FilterSet):
-    event = django_filters.ChoiceFilter(
-        choices=[
-            [o.pk, o.__str__]
-            for o in Event.objects.all()
-        ],
+    event = django_filters.ModelChoiceFilter(
+        queryset=Event.objects.all(),
         required=True,
+        widget=autocomplete.ModelSelect2(url='event-autocomplete')
     )
     event__time_locations = django_filters.ChoiceFilter(
         choices=[[o.pk, o.__str__] for o in TimeLocation.objects.all()],
