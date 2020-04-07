@@ -72,7 +72,7 @@ class EventAutocomplete(autocomplete.Select2QuerySetView):
         if not self.request.user.is_staff:
             return Event.objects.none()
 
-        qs = Event.objects.all()
+        qs = Event.objects.all().order_by("-event_startdate")
 
         if self.q:
             qs = qs.filter(Q(category__icontains=self.q) | Q(level__name__icontains=self.q) | Q(title__icontains= self.q))

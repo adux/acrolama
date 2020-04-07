@@ -46,7 +46,7 @@ class AttendanceFilter(django_filters.FilterSet):
     book__event = django_filters.ChoiceFilter(
         choices=[
             [o.pk, o.__str__]
-            for o in Event.objects.all().order_by("-event_startdate")
+            for o in Event.objects.all()
         ]
     )
     attendance_date = django_filters.DateFilter(
@@ -127,7 +127,7 @@ class QuotationBookFilter(django_filters.FilterSet):
     event = django_filters.ChoiceFilter(
         choices=[
             [o.pk, o.__str__]
-            for o in Event.objects.all().order_by("-event_startdate")
+            for o in Event.objects.all()
         ],
         required=True,
     )

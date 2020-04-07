@@ -29,13 +29,7 @@ class Book(models.Model):
     price = models.ForeignKey("project.PriceOption", on_delete=models.CASCADE)
     times = models.ManyToManyField("project.TimeOption")
     comment = models.TextField(max_length=350, null=True, blank=True)
-    status = models.CharField(
-        max_length=15,
-        choices=BOOKINGSTATUS,
-        default="PE",
-        null=True,
-        blank=True,
-    )
+    status = models.CharField(max_length=15, choices=BOOKINGSTATUS, default="PE", null=True, blank=True,)
     note = models.TextField(max_length=1000, null=True, blank=True)
     booked_at = models.DateTimeField(auto_now_add=True)
 
@@ -44,12 +38,7 @@ class Book(models.Model):
         return ",\n".join([p.name for p in self.times.all()])
 
     def __str__(self):
-        return "%s: %s - %s %s" % (
-            self.pk,
-            self.event,
-            self.user.first_name,
-            self.user.last_name,
-        )
+        return "%s: %s - %s %s" % (self.pk, self.event, self.user.first_name, self.user.last_name,)
 
 
 class Attendance(models.Model):
@@ -87,35 +76,21 @@ class Attendance(models.Model):
 
 class Quotation(models.Model):
     event = models.ForeignKey("project.Event", on_delete=models.CASCADE)
-    time_location = models.ForeignKey(
-        "project.TimeLocation", on_delete=models.CASCADE
-    )
+    time_location = models.ForeignKey("project.TimeLocation", on_delete=models.CASCADE)
     teachers = models.ManyToManyField("users.User")
 
     # Costs
-    related_rent = models.DecimalField(
-        max_digits=12, decimal_places=2, blank=True, null=True
-    )
+    related_rent = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
     direct_costs = models.ManyToManyField("accounting.Invoice")
 
     # Revenue
-    total_attendees = models.DecimalField(
-        max_digits=12, decimal_places=2, blank=True, null=True
-    )
-    direct_revenue = models.DecimalField(
-        max_digits=12, decimal_places=2, blank=True, null=True
-    )
+    total_attendees = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    direct_revenue = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
 
     # Profit
-    fix_profit = models.DecimalField(
-        max_digits=12, decimal_places=2, blank=True, null=True
-    )
-    acrolama_profit = models.DecimalField(
-        max_digits=12, decimal_places=2, blank=True, null=True
-    )
-    teachers_profit = models.DecimalField(
-        max_digits=12, decimal_places=2, blank=True, null=True
-    )
+    fix_profit = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    acrolama_profit = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    teachers_profit = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
 
     # Control
     locked = models.BooleanField(default=False)
