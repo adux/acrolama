@@ -26,15 +26,15 @@ class FaqAdmin(admin.ModelAdmin):
     list_display = "question", "answer"
 
 
-class InfoImageInline(admin.StackedInline):
-    model = InfoImage
-    extra = 1
-    can_delete = True
-    show_change_link = True
+# class InfoImageInline(admin.StackedInline):
+#     model = InfoImage
+#     extra = 1
+#     can_delete = True
+#     show_change_link = True
 
 class InfoAdmin(admin.ModelAdmin):
     list_display = ("title", "slug")
-    inlines = [InfoImageInline]
+    # inlines = [InfoImageInline]
 
 
 class NewsAdmin(admin.ModelAdmin):
