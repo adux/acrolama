@@ -139,3 +139,12 @@ class QuotationBookFilter(django_filters.FilterSet):
     class Meta:
         model = Book
         exclude = {"notes"}
+
+    @property
+    def qs(self):
+        parent = super().qs
+        pk = self.data.get('event__time_locations', None)
+        if pk:
+            tl = TimeLocation.objects.filter(id=pk)
+            to_ids = tl.values_list('time_options__id', flat=True)
+            return parent.filter(times__in=list(to_ids))
