@@ -5,6 +5,10 @@ from django.views.generic.detail import SingleObjectMixin
 
 from django.contrib import messages
 
+#Utils
+from booking.utils import email_sender
+
+#Models
 from project.models import (
     Event,
     TimeOption,
@@ -12,9 +16,10 @@ from project.models import (
     Irregularity,
     TimeLocation
 )
-from booking.forms import BookForm
-from booking.utils import email_sender
 from users.models import User
+
+#Forms
+from booking.forms import BookForm
 
 # EvenDetail for Explain
 class EventDisplay(DetailView):
@@ -83,10 +88,9 @@ class EventInterest(SingleObjectMixin, FormView):
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         #Need to get user form request. self if Event Interest with obj Book
-        user = request.user
         if form.is_valid():
             #pass the user to the instance
-            return self.form_valid(form, user)
+            return self.form_valid(form)
         else:
             return self.form_invalid(form)
 
@@ -101,13 +105,15 @@ class EventInterest(SingleObjectMixin, FormView):
         )
         return HttpResponseRedirect(previous_url)
 
-    def form_valid(self, form, user):
+    def form_valid(self, form):
         instance = form.save(commit=False)
+        # Get the instance of the Model
         instance.event = self.get_object()
-        instance.user = user
-        email_sender(instance, "Registered")
+        instance.user = self.request.user
         instance.save()
+        #save all m2m of instance
         form.save_m2m()
+        email_sender(instance, "Registered")
         return super().form_valid(form)
 
     def get_success_url(self):
