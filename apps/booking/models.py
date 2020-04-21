@@ -12,6 +12,8 @@ from booking.utils import datelistgenerator
 # from django.contrib.postgres.fields import ArrayField
 from booking.fields import ArrayField
 
+from django.utils.translation import ugettext_lazy as _
+
 
 BOOKINGSTATUS = [
     ("PE", "Pending"),
@@ -24,9 +26,9 @@ BOOKINGSTATUS = [
 
 
 class Book(models.Model):
-    event = models.ForeignKey("project.Event", on_delete=models.CASCADE)
-    user = models.ForeignKey("users.User", on_delete=models.CASCADE)
-    price = models.ForeignKey("project.PriceOption", on_delete=models.CASCADE)
+    event = models.ForeignKey("project.Event", on_delete=models.PROTECT)
+    user = models.ForeignKey("users.User", on_delete=models.PROTECT)
+    price = models.ForeignKey("project.PriceOption", on_delete=models.PROTECT)
     times = models.ManyToManyField("project.TimeOption")
     comment = models.TextField(max_length=350, null=True, blank=True)
     status = models.CharField(max_length=15, choices=BOOKINGSTATUS, default="PE", null=True, blank=True,)
@@ -40,6 +42,22 @@ class Book(models.Model):
     def __str__(self):
         return "%s: %s - %s %s" % (self.pk, self.event, self.user.first_name, self.user.last_name,)
 
+class BookDuoInfo(models.Model):
+    book = models.OneToOneField(Book, on_delete=models.CASCADE)
+    user = models.ForeignKey("users.User", blank=True, null=True, on_delete=models.PROTECT)
+    first_name = models.CharField(_("first name"), max_length=30, blank=True)
+    last_name = models.CharField(_("last name"), max_length=30, blank=True)
+    phone = models.CharField(max_length=50, blank=True)
+    email = models.EmailField(_("email address"), blank=True)
+
+
+class BookDateInfo(models.Model):
+    """
+    TODO: Could contain also the range for Festivals
+    """
+    book = models.OneToOneField(Book, on_delete=models.CASCADE)
+    single_date = models.DateField(auto_now_add=False, auto_now=False)
+
 
 class Attendance(models.Model):
     """
@@ -49,7 +67,7 @@ class Attendance(models.Model):
     TODO: num should be position
     """
 
-    book = models.OneToOneField(Book, on_delete=models.CASCADE)
+    book = models.OneToOneField(Book, on_delete=models.PROTECT)
     attendance_date = ArrayField(models.DateField())
     attendance_check = ArrayField(models.BooleanField())
 
@@ -75,8 +93,8 @@ class Attendance(models.Model):
 
 
 class Quotation(models.Model):
-    event = models.ForeignKey("project.Event", on_delete=models.CASCADE)
-    time_location = models.ForeignKey("project.TimeLocation", on_delete=models.CASCADE)
+    event = models.ForeignKey("project.Event", on_delete=models.PROTECT)
+    time_location = models.ForeignKey("project.TimeLocation", on_delete=models.PROTECT)
     teachers = models.ManyToManyField("users.User")
 
     # Costs

@@ -3,14 +3,19 @@ from django import forms
 from django.contrib.postgres.fields import ArrayField
 from django.utils.translation import ugettext_lazy as _
 
-
 from accounting.models import Invoice
 from users.models import User
 from project.models import Event
 
-from booking.models import Book, Attendance, Quotation
-from booking.widgets import DynamicArrayWidget
+from booking.models import (
+    Book,
+    BookDuoInfo,
+    BookDateInfo,
+    Attendance,
+    Quotation
+)
 
+from booking.widgets import DynamicArrayWidget
 
 from project.models import PriceOption, TimeOption
 
@@ -18,7 +23,7 @@ from project.models import PriceOption, TimeOption
 class UpdateAttendanceForm(forms.ModelForm):
     class Meta:
         model = Attendance
-        fields = ("attendance_date", "attendance_check")
+        fields = ["attendance_date", "attendance_check"]
         widgets = {
             "attendance_check": DynamicArrayWidget(),
             "attendance_date": DynamicArrayWidget(),
@@ -28,14 +33,14 @@ class UpdateAttendanceForm(forms.ModelForm):
 class UpdateBookForm(forms.ModelForm):
     class Meta:
         model = Book
-        fields = ("user", "event", "status", "times")
+        fields = ["user", "event", "status", "times"]
         widgets = {"times": forms.CheckboxSelectMultiple}
 
 
 class CreateBookForm(forms.ModelForm):
     class Meta:
         model = Book
-        fields = ("user", "event", "times", "price")
+        fields = ["user", "event", "times", "price"]
         widgets = {"times": forms.CheckboxSelectMultiple}
 
 
@@ -124,7 +129,7 @@ class BookForm(forms.ModelForm):
 
     class Meta:
         model = Book
-        fields = ("times", "price", "comment")
+        fields = ["times", "price", "comment"]
         labels = {"price": _(""), "times": _(""), "comment": _("")}
         widgets = {
             "price": forms.Select(attrs={"checked": "checked"}),
@@ -144,3 +149,13 @@ class BookForm(forms.ModelForm):
         times_verify = cleaned_data.get("times")
         # always return the cleaned data
         return cleaned_data
+
+class BookDuoInfoForm(forms.ModelForm):
+    class Meta:
+        model = BookDuoInfo
+        fields = '__all__'
+
+class BookDateInfoForm(forms.ModelForm):
+    class Meta:
+        model = BookDateInfo
+        fields = '__all__'

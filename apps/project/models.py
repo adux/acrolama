@@ -119,6 +119,7 @@ class TimeLocation(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
 
     def __str__(self):
+        #TODO: I think i need to remove this name on Foreign Key or cache it
         return " - ".join(p.name for p in self.time_options.all()) + " | %s" % (self.location)
 
 
@@ -135,13 +136,14 @@ class Irregularity(models.Model):
 
 
 class PriceOption(models.Model):
-    abonament = models.BooleanField(default=False)
-    cycles = models.IntegerField(verbose_name="Numbero of Cycles")
+    duo = models.BooleanField(default=False)
+    single_date = models.BooleanField(default=False)
+    cycles = models.IntegerField(verbose_name="Numbero of Cycles", default=0)
     name = models.CharField(max_length=30)
     description = models.TextField(max_length=1000)
-    reduction = models.BooleanField(default=False)
     price_chf = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
     price_euro = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
+    published = models.BooleanField(default=False)
 
     def __str__(self):
         if self.price_euro:
