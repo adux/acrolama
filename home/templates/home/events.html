@@ -23,7 +23,7 @@
                             <div class="infos">
                                 <div class="author vcard ">
                                     <a href="{{ obj.get_absolute_url}}">
-                                        {{ obj.level.get_name_display }} {{ obj.get_category_display }} -
+                                        {{ obj.level.get_name_display|upper|stringformat:".5s" }} {{ obj.get_category_display }} -
                                         {% for ad in obj.time_locations.all %}
                                             {% ifchanged %} {{ad.location.address.city }} {% endifchanged %}
                                         {% endfor %}
@@ -33,9 +33,9 @@
                                     <ul>
                                         <li>
                                             <a href="{{ obj.get_absolute_url}}">
-                                                {{ obj.event_startdate}}
+                                                {{ obj.event_startdate|date:"d M"}}
                                                 {% if obj.event_enddate != obj.event_startdate %}
-                                                - {{ obj.event_enddate }}
+                                                - {{ obj.event_enddate|date:"d M Y" }}
                                                 {% endif %}
                                                 {% for to in obj.time_locations.all %}
                                                 {% for rd in to.time_options.all %}
