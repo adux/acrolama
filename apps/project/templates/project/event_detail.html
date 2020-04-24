@@ -215,22 +215,42 @@
         <a href="#0" class="popup-close img-replace">Close</a>
         <div class ="center-text"><h1>Booking</h1></div>
         <div class="popup-form text-left">
-            <form method="post"> {% csrf_token %}
-                            <div>
-                              {{ form.times.label_tag }}
-                              {% render_field form.times %}
-                            </div>
-                            <div>
-                              {{ form.price.label_tag }}
-                              {% render_field form.price  %}
-                            </div>
-                            <div>
-                              {{ form.comment.label_tag }}
-                              {% render_field form.comment %}
- .                           </div>
+            <form method="post" id="booking"> {% csrf_token %}
+                <div>
+                    {{ form.times.label_tag }}
+                    {% render_field form.times %}
+                </div>
+                <div>
+                    {{ form.price.label_tag }}
+                    {% render_field form.price  %}
+                </div>
+                <div>
+                    {{ form.comment.label_tag }}
+                    {% render_field form.comment %}
+                </div>
+                <div>
+                    {{ formduo.first_name.label_tag }}
+                    {% render_field formduo.first_name %}
+                </div>
+                <div>
+                    {{ formduo.last_name.label_tag }}
+                    {% render_field formduo.last_name %}
+                </div>
+                <div>
+                    {{ formduo.email.label_tag }}
+                    {% render_field formduo.email %}
+                </div>
+                <div>
+                    {{ formduo.phone.label_tag }}
+                    {% render_field formduo.phone %}
+                </div>
+                <div>
+                    {{ formdate.single_date.label_tag }}
+                    {% render_field formdate.single_date %}
+                </div>
                     <input type="hidden" name="next" value="{{ request.path }}">
-                <p><input value="Submit" type="submit"></p>
             </form>
+            <button type="submit" form="booking" value="Submit">Submit</button>
         </div>
     </div>
 </div>

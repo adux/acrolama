@@ -102,30 +102,17 @@ class LockQuotationForm(forms.ModelForm):
 class BookForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if args:
-            # Args from view, since its a tuple need to get the position and
-            # then get slug from the dictionary
-            # not sure how to improve this. Don't understand the whole Form
-            # Schizzle yet
-            slug = args[0].get("slug")
-            if self.instance:
-                self.fields["price"].queryset = PriceOption.objects.filter(
-                    event__slug=slug
-                )
-                self.fields["times"].queryset = TimeOption.objects.filter(
-                    timelocation__event__slug=slug
-                )
-                self.fields["times"].label_from_instance = (
-                    lambda obj: "%s %s"
-                    % (
-                        obj.regular_days if obj.regular_days else obj.name,
-                        obj.get_class_start_times()
-                        if obj.get_class_start_times
-                        else obj.get_open_start_times(),
-                    )
-                )
-                self.fields["price"].empty_label = "Select a Pricing Option"
-                self.fields["times"].empty_label = None
+        self.fields["times"].label_from_instance = (
+            lambda obj: "%s %s"
+            % (
+                obj.regular_days if obj.regular_days else obj.name,
+                obj.get_class_start_times()
+                if obj.get_class_start_times
+                else obj.get_open_start_times(),
+            )
+        )
+        self.fields["price"].empty_label = "Select a Pricing Option"
+        self.fields["times"].empty_label = None
 
     class Meta:
         model = Book
@@ -135,12 +122,8 @@ class BookForm(forms.ModelForm):
             "price": forms.Select(attrs={"checked": "checked"}),
             "times": forms.CheckboxSelectMultiple(attrs={}),
             "comment": forms.Textarea(
-                attrs={"cols": 35, "rows": 5, "placeholder": "Comment"}
+                attrs={"placeholder": "Comment"}
             ),
-        }
-        error_messages = {
-            "times": {"required": _("Time preference:")},
-            "price": {"required": _("Pricing preference:")},
         }
 
     def clean(self):
@@ -153,9 +136,21 @@ class BookForm(forms.ModelForm):
 class BookDuoInfoForm(forms.ModelForm):
     class Meta:
         model = BookDuoInfo
-        fields = '__all__'
+        fields = ["first_name", "last_name", "phone", "email"]
+
+    def clean_firstname(self):
+        first_name = self.cleaned_data['first_name']
+        return first_name[0].upper() + first_name[1:].lower()
+
+    def clean_last_name(self):
+        last_name = self.cleaned_data['last_name']
+        return last_name[0].upper() + last_name[1:].lower()
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        return email.lower()
 
 class BookDateInfoForm(forms.ModelForm):
     class Meta:
         model = BookDateInfo
-        fields = '__all__'
+        exclude = ['book']

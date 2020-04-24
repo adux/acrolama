@@ -19,7 +19,7 @@ from project.models import (
 from users.models import User
 
 #Forms
-from booking.forms import BookForm
+from booking.forms import BookForm, BookDuoInfoForm, BookDateInfoForm
 
 # EvenDetail for Explain
 class EventDisplay(DetailView):
@@ -36,16 +36,20 @@ class EventDisplay(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        #kwargs is the object Event
-        #self.kwargs contains the slug passed form the link
-        #TODO: Still don't understand why i can't pass only the slug
-        #ModelForm expects a dict so we pass the whole kwargs
-        context["form"] = BookForm(self.kwargs)
+        form = BookForm(prefix='booking')
+        slug = self.get_object().slug
+        form.fields["price"].queryset = PriceOption.objects.filter(
+            event__slug=slug
+        )
+        form.fields["times"].queryset = TimeOption.objects.filter(
+            timelocation__event__slug=slug
+        )
+        context["form"] = form
+        context["formduo"] = BookDuoInfoForm(prefix='duo')
+        context["formdate"] = BookDateInfoForm(prefix='date')
 
         # Time Location list solution.
         # TODO: Make this a dictionary.
-        #Maybe better way. Problem could be in
-        # how models are allready done.
         # TODO: Im sure this is cachable for each event
         timelocations = TimeLocation.objects.filter(
             event__slug=self.object.slug
@@ -86,11 +90,11 @@ class EventInterest(SingleObjectMixin, FormView):
     model = Event
 
     def post(self, request, *args, **kwargs):
-        form = self.get_form()
-        #Need to get user form request. self if Event Interest with obj Book
+        form = BookForm(self.request.POST, prefix='booking')
+        formduo = BookDuoInfoForm(self.request.POST, prefix='duo')
+        formdate = BookDateInfoForm(self.request.POST, prefix='date')
         if form.is_valid():
-            #pass the user to the instance
-            return self.form_valid(form)
+            return self.form_valid(form, formduo, formdate)
         else:
             return self.form_invalid(form)
 
@@ -105,14 +109,23 @@ class EventInterest(SingleObjectMixin, FormView):
         )
         return HttpResponseRedirect(previous_url)
 
-    def form_valid(self, form):
+    def form_valid(self, form, formduo, formdate):
         instance = form.save(commit=False)
-        # Get the instance of the Model
         instance.event = self.get_object()
         instance.user = self.request.user
         instance.save()
-        #save all m2m of instance
         form.save_m2m()
+        if formduo.is_bound:
+            if formduo.is_valid():
+                instance_duo = formduo.save(commit=False)
+                instance_duo.book = instance
+                instance_duo.save()
+        if formdate.is_bound:
+            if formduo.is_valid():
+                instance_date = formdate.save(commit=False)
+                instance_date.book = instance
+                instance_date.save()
+        #save all m2m of instance
         email_sender(instance, "Registered")
         return super().form_valid(form)
 
@@ -124,6 +137,7 @@ class EventInterest(SingleObjectMixin, FormView):
 class EventDetail(View):
     """
     Passes the display in get and forms in the post
+    https://docs.djangoproject.com/en/2.2/topics/class-based-views/mixins/#using-formmixin-with-detailview
     """
     def get(self, request, *args, **kwargs):
         view = EventDisplay.as_view()
