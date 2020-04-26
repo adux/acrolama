@@ -23,7 +23,7 @@
                             <div class="infos">
                                 <div class="author vcard ">
                                     <a href="{{ obj.get_absolute_url }}">
-                                        {{ obj.discipline.name }} {{ obj.level.get_name_display|upper|stringformat:".5s" }} {{ obj.get_category_display }}
+                                        {{ obj.discipline.name }} {{ obj.level.get_name_display }}
                                         {% for ad in obj.time_locations.all %}
                                             {% ifchanged %} - {{ad.location.address.city }} {% endifchanged %}
                                         {% endfor %}
@@ -95,7 +95,7 @@
                             <div class="infos">
                                 <div class="author vcard ">
                                     <a href="{{ obj.get_absolute_url }}">
-                                        {{ obj.discipline.name }} {{ obj.level.get_name_display|upper|stringformat:".5s" }} {{ obj.get_category_display }}
+                                        {{ obj.discipline.name }} {{ obj.level.get_name_display }}
                                         {% for ad in obj.time_locations.all %}
                                             {% ifchanged %} - {{ad.location.address.city }} {% endifchanged %}
                                         {% endfor %}
@@ -167,7 +167,7 @@
                             <div class="infos">
                                 <div class="author vcard ">
                                     <a href="{{ obj.get_absolute_url }}">
-                                        {{ obj.discipline.name }} {{ obj.level.get_name_display|upper|stringformat:".5s" }} {{ obj.get_category_display }}
+                                        {{ obj.discipline.name }} {{ obj.level.get_name_display }}
                                         {% for ad in obj.time_locations.all %}
                                             {% ifchanged %} - {{ad.location.address.city }} {% endifchanged %}
                                         {% endfor %}
