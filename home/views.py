@@ -41,6 +41,9 @@ class HomeFormView(MultiFormsView):
         context["about_date"] = AboutDate.objects.all()
         context["testimonial"] = Testimonial.objects.all()
         context["portfolio"] = Portfolio.objects.all()[0:8]
+        context["news"] = NewsList.objects.all()
+
+        #Events
         event_main = (
             Event.objects.all()
             .select_related('level', 'discipline')
@@ -49,29 +52,28 @@ class HomeFormView(MultiFormsView):
         )
         event = (
             event_main.filter(event_enddate__gte=timezone.now())
-            .order_by("event_startdate", "level", "title")
+            .order_by("event_startdate")
             .exclude(published=False)
             .exclude(category="CY")
             .distinct()[:6]
         )
         context["event"] = event
+
         # Classes
         classes = (
             event_main.filter(
                 event_enddate__gte=timezone.now(),
-                event_startdate__lt=timezone.now() + timezone.timedelta(days=90),
                 category="CY"
             )
-            .order_by("event_startdate", "title")
+            .order_by("event_startdate", "level", "title")
             .exclude(published=False)
             .distinct()
         )
 
-        context["intro"] = classes.filter(level="1")
-        context["intermediate"] = classes.filter(Q(level="2") | Q(level="3"))
-        context["advanced"] = classes.filter(level="4")
-        context["news"] = NewsList.objects.all()
+        context["current"] = classes
+        context["next"] = classes.event_startdate__gte=timezone.now() + timezone.timedelta(days=32),
 
+        # context["intermediate"] = classes.filter(Q(level="2") | Q(level="3"))
         return context
 
     def news_form_valid(self, form):

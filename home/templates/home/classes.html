@@ -6,12 +6,53 @@
         <div class="section-title-holder right pink">
             <div class="section-num pink">
                 <span>
-                    <i class="fas fa-magic"></i>
+                    <i class="fas fa-rocket"></i>
                 </span>
             </div>
-            <h2 class="entry-title">INTRO</h2>
+            <h2 class="entry-title">Classes</h2>
         </div>
         <div class="section-content-holder left pink">
+            <div class="content-wrapper">
+                <div class="content-title-holder">
+                    <p class="content-title">CYCLE</p>
+                </div>
+                <div class="one_half ">
+                    <b>Cycles consists of 4 classes</b>, one each week. Each one of them has is own main topic and highlight move.
+                    This format balances progress and compromise and <b>help you get the most out of each class</b>.</br></br>
+                    Some cycles allow "Drop ins", a good oportunity to check which class fits you best.
+                </div>
+                <div class="one_half last ">
+                    <span>
+                        <strong>
+                            Level
+                        </strong>
+                    </span>
+                    <span>
+                        <em>We have 4 levels each with different prerequisites and content.</em>
+                    </span>
+                    <br>
+                    <span>
+                        <strong>
+                            Prerequists
+                        </strong>
+                    </span>
+                    <span>
+                        <em>There are moves we recommend you to have in order to get the most of the class.</em>
+                    </span>
+                    <br>
+                    <span>
+                        <strong>
+                            Partners
+                        </strong>
+                    </span>
+                    <span>
+                        <em>You don't need a partner to register!</em>
+                    </span>
+                    <br>
+                </div>
+                <div class="clear"></div>
+                <br>
+            </div>
             <div class="content-wrapper">
                 <div class="blog-holder block center-relative">
                     {% for obj in intro %}
@@ -81,7 +122,7 @@
                     <i class="fas fa-flask"></i>
                 </span>
             </div>
-            <h2 class="entry-title">INTERMEDIATE</h2>
+            <h2 class="entry-title">NEXT</h2>
         </div>
         <div class="section-content-holder right green">
             <div class="content-wrapper">
@@ -114,78 +155,6 @@
                                     </ul>
                                 </div>
                                 <div class="cat-links">
-                                    <ul>
-                                        <li>
-                                            <a href="{{ obj.get_absolute_url }}">
-                                                {% for to in obj.time_locations.all %}
-                                                    {% for rd in to.time_options.all %}
-                                                        {% ifchanged %}
-                                                            {% if rd.regular_days != Null %}
-                                                            {{ rd.regular_days|default_if_none:"" }}'S {%if rd.regular_days.count == 1 %}·{% endif %}
-                                                            {% endif %}
-                                                        {% endifchanged%}
-                                                    {% endfor %}
-                                                {% endfor %}
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <h3 class="entry-title">
-                            <a href="{{ obj.get_absolute_url }}">{{ obj.fulltitle}}</a>
-                        </h3>
-                        <div class="clear"></div>
-                    </article>
-                    {% endfor %}
-                    <div class="clear"></div>
-                </div>
-            </div>
-        </div>
-        <div class="clear"></div>
-    </div>
-</div>
-<div id="classes" class="section">
-    <div class="block content-1170 center-relative">
-        <div class="section-title-holder right pink">
-            <div class="section-num pink">
-                <span>
-                    <i class="fas fa-rocket"></i>
-                </span>
-            </div>
-            <h2 class="entry-title">ADVANCED</h2>
-        </div>
-        <div class="section-content-holder left pink">
-            <div class="content-wrapper">
-                <div class="blog-holder block center-relative">
-                    {% for obj in advanced %}
-                    <article class="blog-item-holder relative">
-                        <div class="num-inf">
-                            <!-- <div class="num green"> -->
-                            <!--         <i class="{{ obj.category|get_icon }}"></i> -->
-                            <!-- </div> -->
-                            <div class="infos">
-                                <div class="author vcard ">
-                                    <a href="{{ obj.get_absolute_url }}">
-                                        {{ obj.discipline.name }} {{ obj.level.get_name_display }}
-                                        {% for ad in obj.time_locations.all %}
-                                            {% ifchanged %} - {{ad.location.address.city }} {% endifchanged %}
-                                        {% endfor %}
-                                    </a>
-                                </div>
-                                <div class="cat-links green">
-                                    <ul>
-                                        <li>
-                                            <a href="{{ obj.get_absolute_url }}">
-                                                {{ obj.event_startdate|date:"d M"}}
-                                                {% if obj.event_enddate != obj.event_startdate %}
-                                                - {{ obj.event_enddate|date:"d M Y" }}
-                                                {% endif %}
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="cat-links green">
                                     <ul>
                                         <li>
                                             <a href="{{ obj.get_absolute_url }}">
