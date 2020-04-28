@@ -25,11 +25,11 @@
                 <div class="one_half last ">
                     <h6>Level: </h6>
                     <p>
-                        <em>We want you to <b>feel comfortable with just the right the amount of challenge.</b> We split our clases in 4 levels you can swap on.</em>
+                        We want you to <b>feel comfortable with just the right amount of challenge.</b> We split our classes in 4 levels you can swap on.
                     </p>
                     <h6>Partner: </h6>
                     <p>
-                        <em>Only advanced classes require you to come with a partner. <b>We keep classes balanced.</b></em>
+                        Only advanced classes require you to come with a partner. <b>We keep classes balanced.</b>
                     </p>
                 </div>
                 <div class="clear"></div>
@@ -46,7 +46,7 @@
                             <div class="infos">
                                 <div class="author vcard ">
                                     <a href="{{ obj.get_absolute_url }}">
-                                        {{ obj.discipline.name }} {{ obj.level.get_name_display }}
+                                        {{ obj.discipline.name }} {{ obj.level.get_name_display|upper }}
                                         {% for ad in obj.time_locations.all %}
                                             {% ifchanged %} - {{ad.location.address.city }} {% endifchanged %}
                                         {% endfor %}
@@ -118,7 +118,7 @@
                             <div class="infos">
                                 <div class="author vcard ">
                                     <a href="{{ obj.get_absolute_url }}">
-                                        {{ obj.discipline.name }} {{ obj.level.get_name_display }}
+                                        {{ obj.discipline.name }} {{ obj.level.get_name_display|upper }}
                                         {% for ad in obj.time_locations.all %}
                                             {% ifchanged %} - {{ad.location.address.city }} {% endifchanged %}
                                         {% endfor %}
