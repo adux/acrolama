@@ -221,6 +221,7 @@
                     {% render_field form.times %}
                 </div>
                 <div>
+                    {# TODO: make wider#}
                     {{ form.price.label_tag }}
                     {% render_field form.price  %}
                 </div>
@@ -228,26 +229,26 @@
                     {{ form.comment.label_tag }}
                     {% render_field form.comment %}
                 </div>
-                <!-- <div> -->
-                <!--     {{ formduo.first_name.label_tag }} -->
-                <!--     {% render_field formduo.first_name %} -->
-                <!-- </div> -->
-                <!-- <div> -->
-                <!--     {{ formduo.last_name.label_tag }} -->
-                <!--     {% render_field formduo.last_name %} -->
-                <!-- </div> -->
-                <!-- <div> -->
-                <!--     {{ formduo.email.label_tag }} -->
-                <!--     {% render_field formduo.email %} -->
-                <!-- </div> -->
-                <!-- <div> -->
-                <!--     {{ formduo.phone.label_tag }} -->
-                <!--     {% render_field formduo.phone %} -->
-                <!-- </div> -->
-                <!-- <div> -->
-                <!--     {{ formdate.single_date.label_tag }} -->
-                <!--     {% render_field formdate.single_date %} -->
-                <!-- </div> -->
+                <div>
+                    {{ formduo.first_name.label_tag }}
+                    {% render_field formduo.first_name %}
+                </div>
+                <div>
+                    {{ formduo.last_name.label_tag }}
+                    {% render_field formduo.last_name %}
+                </div>
+                <div>
+                    {{ formduo.email.label_tag }}
+                    {% render_field formduo.email %}
+                </div>
+                <div>
+                    {{ formduo.phone.label_tag }}
+                    {% render_field formduo.phone %}
+                </div>
+                <div>
+                    {{ formdate.single_date.label_tag }}
+                    {% render_field formdate.single_date %}
+                </div>
                     <input type="hidden" name="next" value="{{ request.path }}">
             </form>
             <button type="submit" form="booking" value="Submit">Submit</button>
