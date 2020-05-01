@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from django.http import HttpResponseRedirect
 from django.views import View
 from django.views.generic import DetailView, FormView
@@ -34,50 +36,61 @@ class EventDisplay(DetailView):
     """
     model = Event
 
+    def get_formconditional(self, prices):
+        conditional = defaultdict(list)
+        for obj in prices:
+            if obj.duo:
+                conditional['formduo'].append(obj.id)
+            elif obj.single_date:
+                conditional['formdate'].append(obj.id)
+        return conditional
+
+    def get_fromatedtimelocations(self, timelocations):
+        formatedtimelocations = []
+        key = ['location', 'regular_days', 'open_starttime', 'open_endtime', 'class_starttime', 'class_endtime']
+        for obj in timelocations:
+            location = [obj.location]
+            time_options = obj.time_options.all()
+            for to in time_options:
+                timelocation = location + [to.regular_days,
+                            to.open_starttime,
+                            to.open_endtime,
+                            to.class_starttime,
+                            to.class_endtime
+                            ]
+            formatedtimelocations.append(dict(zip(key, timelocation)))
+        return formatedtimelocations
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        #Queries
+        exceptions = Irregularity.objects.filter(event__slug=self.object.slug)
+        teachers = User.objects.filter(eventteacher__slug=self.object.slug)
+        prices = PriceOption.objects.filter(event__slug=self.object.slug)
+        timelocations = TimeLocation.objects.filter(event__slug=self.object.slug)
+        timeoptions = TimeOption.objects.filter(timelocation__event__slug=self.object.slug)
+
+        # Extra Formats
+        conditional = self.get_formconditional(prices)
+        timelocations = self.get_fromatedtimelocations(timelocations)
+
+        #Forms
         form = BookForm(prefix='booking')
-        slug = self.get_object().slug
-        form.fields["price"].queryset = PriceOption.objects.filter(
-            event__slug=slug
-        )
-        form.fields["times"].queryset = TimeOption.objects.filter(
-            timelocation__event__slug=slug
-        )
+        form.fields["price"].queryset = prices
+        form.fields["times"].queryset = timeoptions
+        formduo = BookDuoInfoForm(prefix='duo')
+        formdate = BookDateInfoForm(prefix='date')
+
+        #Context
+        context["teachers"] = teachers
+        context["exceptions"] = exceptions
         context["form"] = form
-        context["formduo"] = BookDuoInfoForm(prefix='duo')
-        context["formdate"] = BookDateInfoForm(prefix='date')
-
-        # Time Location list solution.
-        # TODO: Make this a dictionary.
-        # TODO: Im sure this is cachable for each event
-        timelocations = TimeLocation.objects.filter(
-            event__slug=self.object.slug
-        )
-        main_tl_list = []
-        for timelocation in timelocations:
-            tmp_list = []
-            tmp_list.append(timelocation.location)
-            timeoptions = timelocation.time_options.all()
-            for timeoption in timeoptions:
-                tmp_list.append(timeoption.regular_days)
-                tmp_list.append(timeoption.open_starttime)
-                tmp_list.append(timeoption.open_endtime)
-                tmp_list.append(timeoption.class_starttime)
-                tmp_list.append(timeoption.class_endtime)
-            main_tl_list.append(tmp_list)
-
-        context["timelocations_list"] = main_tl_list
-        context["priceoptions"] = PriceOption.objects.filter(
-            event__slug=self.object.slug
-        )
-        context["teachers"] = User.objects.filter(
-            eventteacher__slug=self.object.slug
-        )
-        context["exceptions"] = Irregularity.objects.filter(
-            event__slug=self.object.slug
-        )
-        #rest of the context as usual
+        context["formduo"] = formduo
+        context["formdate"] = formdate
+        context["conditional"] = conditional
+        context["priceoptions"] = prices
+        context["timelocations"] = timelocations
         return context
 
 
@@ -87,44 +100,58 @@ class EventInterest(SingleObjectMixin, FormView):
     """
     template_name = "project/event_detail.html"
     form_class = BookForm
+    prefix = "booking"
     model = Event
 
-    def post(self, request, *args, **kwargs):
-        form = BookForm(self.request.POST, prefix='booking')
-        formduo = BookDuoInfoForm(self.request.POST, prefix='duo')
-        formdate = BookDateInfoForm(self.request.POST, prefix='date')
-        if form.is_valid():
-            return self.form_valid(form, formduo, formdate)
-        else:
-            return self.form_invalid(form)
+    # def post(self, request, *args, **kwargs):
+    #     form = BookForm(self.request.POST, prefix='booking')
+    #     if form.is_valid():
+    #         return self.form_valid(form)
+    #     else:
+    #         return self.form_invalid(form)
 
     def form_invalid(self, form):
-        #TODO: i would actually like to pass the form to EventDetail,
-        #but passing context sucks speciall with all the slug workarround
-        previous_url = self.request.POST.get('next', '/')
+        previous_url = self.get_object().get_absolute_url()
         messages.add_message(
             self.request,
-            messages.WARNING,
-            'Booking Failed: Did you select a Time Preference?'
+            messages.ERROR,
+            'Booking failed: Did you fill all the fields?'
         )
         return HttpResponseRedirect(previous_url)
 
-    def form_valid(self, form, formduo, formdate):
+    def form_valid(self, form):
         instance = form.save(commit=False)
         instance.event = self.get_object()
         instance.user = self.request.user
-        instance.save()
-        form.save_m2m()
-        if formduo.is_bound:
+
+        prices = instance.event.price_options.all()
+        conditionals = EventDisplay.get_formconditional(self, prices)
+
+        if instance.price.id in conditionals["formduo"]:
+            formduo = BookDuoInfoForm(self.request.POST, prefix='duo')
             if formduo.is_valid():
                 instance_duo = formduo.save(commit=False)
+                instance.save()
+                form.save_m2m()
                 instance_duo.book = instance
                 instance_duo.save()
-        if formdate.is_bound:
-            if formduo.is_valid():
+            else:
+                return form_invalid(self, form)
+
+        if instance.price.id in conditionals["formdate"]:
+            formdate = BookDateInfoForm(self.request.POST, prefix='date')
+            if formdate.is_valid():
                 instance_date = formdate.save(commit=False)
+                instance.save()
+                form.save_m2m()
                 instance_date.book = instance
                 instance_date.save()
+            else:
+                return form_invalid(self, form)
+
+        instance.save()
+        form.save_m2m()
+
         #save all m2m of instance
         email_sender(instance, "Registered")
         return super().form_valid(form)

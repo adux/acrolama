@@ -24,8 +24,6 @@
                         <div class="clear"></div>
                     </div>
                     <div class="clear"></div>
-                    <!-- <br> -->
-                    <!-- <br> -->
 <!-- Image End -->
 <!-- General Info Start -->
                     <div class="one top-50">
@@ -48,9 +46,6 @@
                     {% endif %}
                             <li>
                                 <strong>Max. Participants</strong> : {{ object.max_participants }}
-                            </li>
-                            <li>
-                                <strong>Policy</strong> : {% tinycontent_simple 'event_policy' %}
                             </li>
                         </ul>
                         <div class="tab" style="width:324px;">
@@ -92,23 +87,23 @@
                         {% endif %}
                         </ul>
                     </div>
-                    {%for option in timelocations_list%}
+                    {%for option in timelocations%}
                     <div class="one_half last">
                         <ul>
-                        {%if option.1 %}
+                        {%if option.location %}
                             <li>
-                                <h5>{{ option.1 }} Class</h5>
+                                <h5>{{ option.location }} Class</h5>
                             </li>
                         {% endif %}
                         <li>
-                            <strong>Address</strong> : {{option.0 }} || {{option.0.address }}
+                            <strong>Address</strong> : {{option.location }} || {{option.location.address }}
                         </li>
                         <li>
-                            <strong>Door Open</strong>: {{ option.2 }}  - {{ option.3 }}
+                            <strong>Door Open</strong>: {{ option.open_starttime }}  - {{ option.open_endtime }}
                         </li>
-                        {% if option.4 %}
+                        {% if option.class_starttime %}
                             <li>
-                                <strong>Class</strong>: {{ option.4 }} - {{ option.5 }}
+                                <strong>Class</strong>: {{ option.class_starttime }} - {{ option.class_endtime }}
                             </li>
                         {% endif %}
                         </ul>
@@ -209,49 +204,54 @@
     </article>
 </div>
 <!-- Sign in pop up -->
-{#TODO: REVIEW#}
 <div class="popup" role="alert">
     <div class="popup-container">
         <a href="#0" class="popup-close img-replace">Close</a>
-        <div class ="center-text"><h1>Booking</h1></div>
+        <div class ="center-text"><h2>Booking</h2></div>
         <div class="popup-form text-left">
-            <form method="post" id="booking"> {% csrf_token %}
+            <form method="POST" id="booking"> {% csrf_token %}
                 <div>
                     {{ form.times.label_tag }}
                     {% render_field form.times %}
                 </div>
-                <div>
+                <div >
                     {# TODO: make wider#}
                     {{ form.price.label_tag }}
-                    {% render_field form.price  %}
+                    {% render_field form.price %}
                 </div>
                 <div>
                     {{ form.comment.label_tag }}
                     {% render_field form.comment %}
                 </div>
                 <div>
-                    {{ formduo.first_name.label_tag }}
-                    {% render_field formduo.first_name %}
+                    {% render_field form.accepted_policy required=""%} I accept the <a href="{{ object.policy.get_absolute_url }}">Terms and Conditions</a>
                 </div>
-                <div>
-                    {{ formduo.last_name.label_tag }}
-                    {% render_field formduo.last_name %}
+                <div class="conditional" data-cond-option="booking-price" data-cond-value="{% for obj in conditional.formduo %}{{obj}} {% endfor %}">
+                    <hr>
+                <hr>
+                    <div>
+                        {{ formduo.first_name.label_tag }}
+                        {% render_field formduo.first_name %}
+                    </div>
+                    <div>
+                        {{ formduo.last_name.label_tag }}
+                        {% render_field formduo.last_name %}
+                    </div>
+                    <div>
+                        {{ formduo.email.label_tag }}
+                        {% render_field formduo.email %}
+                    </div>
+                    <div>
+                        {{ formduo.phone.label_tag }}
+                        {% render_field formduo.phone %}
+                    </div>
                 </div>
-                <div>
-                    {{ formduo.email.label_tag }}
-                    {% render_field formduo.email %}
-                </div>
-                <div>
-                    {{ formduo.phone.label_tag }}
-                    {% render_field formduo.phone %}
-                </div>
-                <div>
+                <div class="conditional" data-cond-option="booking-price" data-cond-value="{% for obj in conditional.formdate %}{{obj}} {% endfor %}">
                     {{ formdate.single_date.label_tag }}
-                    {% render_field formdate.single_date %}
+                    {% render_field formdate.single_date class="datepicker" %}
                 </div>
-                    <input type="hidden" name="next" value="{{ request.path }}">
             </form>
-            <button type="submit" form="booking" value="Submit">Submit</button>
+                    <button type="submit" form="booking">Submit</button>
         </div>
     </div>
 </div>

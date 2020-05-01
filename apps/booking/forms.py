@@ -116,7 +116,7 @@ class BookForm(forms.ModelForm):
 
     class Meta:
         model = Book
-        fields = ["times", "price", "comment"]
+        fields = ["times", "price", "comment", "accepted_policy"]
         labels = {"price": _(""), "times": _(""), "comment": _("")}
         widgets = {
             "price": forms.Select(attrs={"checked": "checked"}),
@@ -126,25 +126,30 @@ class BookForm(forms.ModelForm):
             ),
         }
 
-    def clean(self):
-        # run the standard clean method first
-        cleaned_data = super(BookForm, self).clean()
-        times_verify = cleaned_data.get("times")
-        # always return the cleaned data
-        return cleaned_data
+    # TODO: Clean times to only be part of Event
+
+    def clean_accepted_policy(self):
+        accepted_policy = self.cleaned_data['accepted_policy']
+        if not accepted_policy:
+            raise forms.ValidationError('This field is required')
 
 class BookDuoInfoForm(forms.ModelForm):
+
     class Meta:
         model = BookDuoInfo
         fields = ["first_name", "last_name", "phone", "email"]
 
     def clean_firstname(self):
         first_name = self.cleaned_data['first_name']
-        return first_name[0].upper() + first_name[1:].lower()
+        if first_name is not '':
+            return first_name[0].upper() + first_name[1:].lower()
+        return first_name
 
     def clean_last_name(self):
         last_name = self.cleaned_data['last_name']
-        return last_name[0].upper() + last_name[1:].lower()
+        if last_name is not '':
+            return last_name[0].upper() + last_name[1:].lower()
+        return last_name
 
     def clean_email(self):
         email = self.cleaned_data['email']

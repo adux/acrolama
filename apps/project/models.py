@@ -4,7 +4,7 @@ from django.utils.functional import cached_property
 from django.urls import reverse
 
 from home.utils import unique_slug_generator
-
+from home.services import createInfoFromPolicy
 # Reference Data
 
 EVENTCATEGORY = [
@@ -179,6 +179,14 @@ class Policy(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse("info", args=[str(self.name.replace(" ", ""))])
+
+def policy_pre_save_url(sender, instance, *args, **kwargs):
+    createInfoFromPolicy(instance)
+
+pre_save.connect(policy_pre_save_url, sender=Policy)
+
 
 class Event(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
@@ -233,16 +241,9 @@ class Event(models.Model):
             self.title,
             )
 
-
-# def event_pre_save_title(sender, instance, *args, **kwargs):
-
-
-# pre_save.connect(event_pre_save_title, sender=Event)
-
-
-def event_pre_save_receiver(sender, instance, *args, **kwargs):
+def event_pre_save_slug(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)
 
 
-pre_save.connect(event_pre_save_receiver, sender=Event)
+pre_save.connect(event_pre_save_slug, sender=Event)

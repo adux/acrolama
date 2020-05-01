@@ -68,8 +68,6 @@ class Info(models.Model):
     def get_absolute_url(self):
         return reverse('info', args=[str(self.slug)])
 
-
-
 def info_pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)

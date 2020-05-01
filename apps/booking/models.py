@@ -1,8 +1,6 @@
-import datetime
+# import datetime
 
 from django.db import models
-from django.db.models.signals import pre_save
-
 
 from project.models import Irregularity, TimeOption
 
@@ -31,6 +29,7 @@ class Book(models.Model):
     price = models.ForeignKey("project.PriceOption", on_delete=models.PROTECT)
     times = models.ManyToManyField("project.TimeOption")
     comment = models.TextField(max_length=350, null=True, blank=True)
+    accepted_policy = models.BooleanField(default=False)
     status = models.CharField(max_length=15, choices=BOOKINGSTATUS, default="PE", null=True, blank=True,)
     note = models.TextField(max_length=1000, null=True, blank=True)
     booked_at = models.DateTimeField(auto_now_add=True)
@@ -41,6 +40,7 @@ class Book(models.Model):
 
     def __str__(self):
         return "%s: %s - %s %s" % (self.pk, self.event, self.user.first_name, self.user.last_name,)
+
 
 class BookDuoInfo(models.Model):
     book = models.OneToOneField(Book, on_delete=models.CASCADE)
@@ -56,7 +56,7 @@ class BookDateInfo(models.Model):
     TODO: Could contain also the range for Festivals
     """
     book = models.OneToOneField(Book, on_delete=models.CASCADE)
-    single_date = models.DateField(auto_now_add=False, auto_now=False)
+    single_date = models.DateField(auto_now_add=False, auto_now=False, blank= True)
 
 
 class Attendance(models.Model):
