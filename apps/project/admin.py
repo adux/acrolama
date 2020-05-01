@@ -80,6 +80,18 @@ class ProjectAdmin(admin.ModelAdmin):
     ]
     list_filter = ["manager"]
 
+class PriceOptionAdmin(admin.ModelAdmin):
+    list_display = [
+        "published"
+        "name",
+        "cycles",
+        "descrption",
+        "price_chf",
+        "price_euro",
+        "duo",
+        "single_date",
+    ]
+
 
 admin.site.register(Day)
 admin.site.register(Discipline)
@@ -87,7 +99,7 @@ admin.site.register(Project, ProjectAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(Irregularity)
 admin.site.register(TimeOption)
-admin.site.register(PriceOption)
+admin.site.register(PriceOption, PriceOptionAdmin)
 admin.site.register(TimeLocation)
 admin.site.register(Location)
 admin.site.register(Level)
