@@ -82,7 +82,7 @@ class ProjectAdmin(admin.ModelAdmin):
 
 class PriceOptionAdmin(admin.ModelAdmin):
     list_display = [
-        "published"
+        "published",
         "name",
         "cycles",
         "descrption",
