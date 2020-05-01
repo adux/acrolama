@@ -85,7 +85,7 @@ class PriceOptionAdmin(admin.ModelAdmin):
         "published",
         "name",
         "cycles",
-        "descrption",
+        "description",
         "price_chf",
         "price_euro",
         "duo",
