@@ -246,6 +246,7 @@
                     </div>
                 </div>
                 <div class="conditional" data-cond-option="booking-price" data-cond-value="{% for obj in conditional.formdate %}{{obj}} {% endfor %}">
+                    <hr>
                     {{ formdate.single_date.label_tag }}
                     {% render_field formdate.single_date class="datepicker" %}
                 </div>
