@@ -6,7 +6,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         {% block meta_description %}{% endblock %}
         <meta name="keywords" content="Acroyoga, Acro yoga, zürich, danica wagner, acroyoga bern, adrian garate, acro yoga, acroyoga, acroyoga switzerland, acro schweiz, swiss acro, yoga zürich, winter acro festival, urban acro festival, acroyoga festival, acro yoga festival, acro lama, acro coaching, acro classes, acro yoga class, Acro workshop" />
-        <meta name="author" content="Adrian Garate" />
+        <meta name="author" content="Acrolama" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <link rel="shortcut icon" href="{% static "favicon.ico" %}" />
         {% include "snippets/css.html" %}
@@ -15,7 +15,7 @@
     <body>
         {% if messages %}
             {% for message in messages %}
-            <div class="alert-box {{ message.tags }}"><span>{{ message.tags }}: </span>{{ message }}</div>
+            <div class="alert-box {{ message.tags }}"><span style="margin: 20px;">{{ message.tags }}: </span>{{ message }}</div>
             {% endfor %}
         {% endif %}
         {% analytical_body_top %}
