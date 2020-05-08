@@ -103,12 +103,13 @@ class EventInterest(SingleObjectMixin, FormView):
     prefix = "booking"
     model = Event
 
-    # def post(self, request, *args, **kwargs):
-    #     form = BookForm(self.request.POST, prefix='booking')
-    #     if form.is_valid():
-    #         return self.form_valid(form)
-    #     else:
-    #         return self.form_invalid(form)
+    def post(self, request, *args, **kwargs):
+        form = BookForm(self.request.POST, prefix='booking')
+        if form.is_valid():
+        # import pdb; pdb.set_trace()
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
     def form_invalid(self, form):
         previous_url = self.get_object().get_absolute_url()
@@ -148,7 +149,7 @@ class EventInterest(SingleObjectMixin, FormView):
                 instance_date.save()
             else:
                 return form_invalid(self, form)
-
+        # import pdb; pdb.set_trace()
         instance.save()
         form.save_m2m()
 

@@ -102,7 +102,7 @@ class LockQuotationForm(forms.ModelForm):
 class BookForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["times"].label_from_instance = (
+        self.fields['times'].label_from_instance = (
             lambda obj: "%s %s"
             % (
                 obj.regular_days if obj.regular_days else obj.name,
@@ -111,27 +111,23 @@ class BookForm(forms.ModelForm):
                 else obj.get_open_start_times(),
             )
         )
-        self.fields["price"].empty_label = "Select a Pricing Option"
-        self.fields["times"].empty_label = None
-
+        self.fields['price'].empty_label = "Select a Pricing Option"
+        self.fields['times'].empty_label = None
+        self.fields['accepted_policy'].required = True
     class Meta:
         model = Book
         fields = ["times", "price", "comment", "accepted_policy"]
-        labels = {"price": _(""), "times": _(""), "comment": _("")}
+        labels = {'price': _(""), 'times': _(""), 'comment': _("")}
         widgets = {
-            "price": forms.Select(attrs={"checked": "checked"}),
-            "times": forms.CheckboxSelectMultiple(attrs={}),
-            "comment": forms.Textarea(
-                attrs={"placeholder": "Comment"}
+            'price': forms.Select(attrs={"checked": "checked"}),
+            'times': forms.CheckboxSelectMultiple(attrs={}),
+            'comment': forms.Textarea(
+                attrs={'placeholder': "Comment"}
             ),
         }
 
     # TODO: Clean times to only be part of Event
 
-    def clean_accepted_policy(self):
-        accepted_policy = self.cleaned_data['accepted_policy']
-        if not accepted_policy:
-            raise forms.ValidationError('This field is required')
 
 class BookDuoInfoForm(forms.ModelForm):
 

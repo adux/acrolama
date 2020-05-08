@@ -24,7 +24,7 @@ sqlparse==0.3.0
 
 -- Utils --
 django-annoying==0.10.4
-django-widget-tweaks==1.4.2
+django-widget-tweaks==1.4.8
 django-tinycontent
 django-autoslug
 django-filter==2.2.0
