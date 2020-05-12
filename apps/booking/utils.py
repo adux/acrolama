@@ -1,14 +1,13 @@
 import datetime
 
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
 from django.utils.http import urlencode
 from django.urls import reverse
 
 from django.template.loader import render_to_string
 
 from project.models import Event, PriceOption, TimeOption, Irregularity
-from accounting.models import Invoice
 
 # from users.models import User
 
@@ -28,12 +27,10 @@ def herd_check(user):
         return False
 
 
-#  TODO: im not sure what kwargs.pop does. or if i can handle it differently
 def build_url(*args, **kwargs):
     get = kwargs.pop("get", {})
     pk = kwargs.pop("pk", {})
-    # TODO: this kwargs=pk doesn't look good, works, but i think its
-    # super unelegant
+    # TODO: Go over this
     url = reverse(*args, kwargs=pk)
     if get:
         url += "?" + urlencode(get)
@@ -62,25 +59,22 @@ def email_sender(instance, flag):
     """
     Signals could give Error cause you can call them from wherever.
     Save slows down.
-    On the view in can be cached. an extra query is needed tho unless I pass
-    the form instance. Want to TEST.
     https://stackoverflow.com/questions/2809547/creating-email-templates-with-django
     Theres another Method with Multi wich helps for headers if needed
     """
     # TODO: could come from config.
     sender = "notmonkeys@acrolama.com"
-    to = ["acrolama@acrolama.com"]
+    bcc = ["acrolama@acrolama.com"]
 
     if flag == "Informed":
         subject = "Acrolama - Confirmation - " + str(instance.event.title)
-        to += [instance.user.email]
+        to = [instance.user.email]
 
         irregularities = Irregularity.objects.filter(
             event__slug=instance.event.slug
         )
 
         # TODO: Unnecesary access to DB
-        invoice = Invoice.objects.get(book=instance.pk)
         referenznum = space_out(
             str(instance.user.pk)
             + "00"
@@ -88,7 +82,7 @@ def email_sender(instance, flag):
             + "00"
             + str(instance.pk)
             + "00"
-            + str(invoice.pk),
+            + str(instance.invoice.pk),
             4,
         )
 
@@ -97,7 +91,7 @@ def email_sender(instance, flag):
             "user": instance.user,
             "price": instance.price,
             "referenznum": referenznum,
-            "pay_till": invoice.pay_till,
+            "pay_till": instance.invoice.pay_till,
             "times": instance.times.all,
             "irregularities": irregularities,
         }
@@ -113,13 +107,15 @@ def email_sender(instance, flag):
             p,
         )
 
-        send_mail(subject, msg_plain, sender, to, html_message=msg_html)
+        msg = EmailMultiAlternatives(subject, msg_plain, sender, bcc=bcc)
+        msg.attach_alternative(msg_html, "text/html")
+        msg.send()
 
     elif flag == "Paid":
         subject = "Acrolama - Payment Confirmation - " + str(
             instance.book.event.title
         )
-        to += [instance.book.user.email]
+        to = [instance.book.user.email]
 
         irregularities = Irregularity.objects.filter(
             event__slug=instance.book.event.slug
@@ -143,12 +139,14 @@ def email_sender(instance, flag):
             + "/apps/booking/templates/booking/email_paid.html",
             p,
         )
-        send_mail(subject, msg_plain, sender, to, html_message=msg_html)
+        msg = EmailMultiAlternatives(subject, msg_plain, sender, to, bcc)
+        msg.attach_alternative(msg_html, "text/html")
+        msg.send()
 
     elif flag == "Registered":
         subject = "Acrolama - Registration - " + str(instance.event.title)
         sender = "notmonkeys@acrolama.com"
-        to += [instance.user.email]
+        to = [instance.user.email]
 
         p = {
             "event": instance.event,
@@ -165,4 +163,7 @@ def email_sender(instance, flag):
             + "/apps/booking/templates/booking/email_registration.html",
             p,
         )
-        send_mail(subject, msg_plain, sender, to, html_message=msg_html)
+
+        msg = EmailMultiAlternatives(subject, msg_plain, sender, to, bcc)
+        msg.attach_alternative(msg_html, "text/html")
+        msg.send()

@@ -105,6 +105,7 @@ class EventInterest(SingleObjectMixin, FormView):
 
     def post(self, request, *args, **kwargs):
         form = BookForm(self.request.POST, prefix='booking')
+        import pdb; pdb.set_trace()
         if form.is_valid():
             return self.form_valid(form)
         else:
@@ -148,6 +149,7 @@ class EventInterest(SingleObjectMixin, FormView):
                 instance_date.save()
             else:
                 return form_invalid(self, form)
+
         instance.save()
         form.save_m2m()
 

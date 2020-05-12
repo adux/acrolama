@@ -248,7 +248,30 @@
                 <div class="conditional" data-cond-option="booking-price" data-cond-value="{% for obj in conditional.formdate %}{{obj}} {% endfor %}">
                     <hr>
                     {{ formdate.single_date.label_tag }}
+                    <span style=".datepicker table tr td.disabled,
+                                .datepicker table tr td.disabled:hover {
+                                 background:0 0;
+                                 color:#7777774a;
+                                 cursor:default
+                                 }">
                     {% render_field formdate.single_date class="datepicker" %}
+                    </span>
+                    <script type="text/javascript">
+                        window.onload = function() {
+                            $('.datepicker').datepicker({
+                                format: "yyyy-mm-dd",
+                                weekStart: 1,
+                                maxViewMode: 0,
+                                todayBtn: "linked",
+                                clearBtn: true,
+                                orientation: "bottom auto",
+                                autoclose: true,
+                                todayHighlight: true,
+                                startDate: "{{object.event_startdate|date:'Y-m-d'}}",
+                                endDate: "{{object.event_enddate|date:'Y-m-d'}}",
+                            });
+                        }
+                    </script>
                 </div>
             </form>
                     <button type="submit" form="booking">Submit</button>

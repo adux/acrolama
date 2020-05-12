@@ -14,23 +14,23 @@ from django.utils.translation import ugettext_lazy as _
 
 
 BOOKINGSTATUS = [
-    ("PE", "Pending"),
-    ("WL", "Waiting List"),
-    ("IN", "Informed"),
-    ("PA", "Participant"),
-    ("CA", "Canceled"),
-    ("SW", "Switched"),
+    ('PE', "Pending"),
+    ('WL', "Waiting List"),
+    ('IN', "Informed"),
+    ('PA', "Participant"),
+    ('CA', "Canceled"),
+    ('SW', "Switched"),
 ]
 
 
 class Book(models.Model):
-    event = models.ForeignKey("project.Event", on_delete=models.PROTECT)
-    user = models.ForeignKey("users.User", on_delete=models.PROTECT)
-    price = models.ForeignKey("project.PriceOption", on_delete=models.PROTECT)
-    times = models.ManyToManyField("project.TimeOption")
+    event = models.ForeignKey('project.Event', on_delete=models.PROTECT)
+    user = models.ForeignKey('users.User', on_delete=models.PROTECT)
+    price = models.ForeignKey('project.PriceOption', on_delete=models.PROTECT)
+    times = models.ManyToManyField('project.TimeOption')
     comment = models.TextField(max_length=350, null=True, blank=True)
     accepted_policy = models.BooleanField(default=False)
-    status = models.CharField(max_length=15, choices=BOOKINGSTATUS, default="PE", null=True, blank=True,)
+    status = models.CharField(max_length=15, choices=BOOKINGSTATUS, default='PE', null=True, blank=True,)
     note = models.TextField(max_length=1000, null=True, blank=True)
     booked_at = models.DateTimeField(auto_now_add=True)
 
@@ -43,8 +43,8 @@ class Book(models.Model):
 
 
 class BookDuoInfo(models.Model):
-    book = models.OneToOneField(Book, on_delete=models.CASCADE)
-    user = models.ForeignKey("users.User", blank=True, null=True, on_delete=models.PROTECT)
+    book = models.OneToOneField('booking.Book', on_delete=models.CASCADE)
+    user = models.ForeignKey('users.User', blank=True, null=True, on_delete=models.PROTECT)
     first_name = models.CharField(_("first name"), max_length=30, blank=True)
     last_name = models.CharField(_("last name"), max_length=30, blank=True)
     phone = models.CharField(max_length=50, blank=True)
@@ -55,7 +55,7 @@ class BookDateInfo(models.Model):
     """
     TODO: Could contain also the range for Festivals
     """
-    book = models.OneToOneField(Book, on_delete=models.CASCADE)
+    book = models.OneToOneField('booking.Book', on_delete=models.CASCADE)
     single_date = models.DateField(auto_now_add=False, auto_now=False, blank= True)
 
 
@@ -67,7 +67,7 @@ class Attendance(models.Model):
     TODO: num should be position
     """
 
-    book = models.OneToOneField(Book, on_delete=models.PROTECT)
+    book = models.OneToOneField('booking.Book', on_delete=models.PROTECT)
     attendance_date = ArrayField(models.DateField())
     attendance_check = ArrayField(models.BooleanField())
 
@@ -93,13 +93,13 @@ class Attendance(models.Model):
 
 
 class Quotation(models.Model):
-    event = models.ForeignKey("project.Event", on_delete=models.PROTECT)
-    time_location = models.ForeignKey("project.TimeLocation", on_delete=models.PROTECT)
-    teachers = models.ManyToManyField("users.User")
+    event = models.ForeignKey('project.Event', on_delete=models.PROTECT)
+    time_location = models.ForeignKey('project.TimeLocation', on_delete=models.PROTECT)
+    teachers = models.ManyToManyField('users.User')
 
     # Costs
     related_rent = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
-    direct_costs = models.ManyToManyField("accounting.Invoice")
+    direct_costs = models.ManyToManyField('accounting.Invoice')
 
     # Revenue
     total_attendees = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)

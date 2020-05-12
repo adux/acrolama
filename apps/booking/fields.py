@@ -4,6 +4,8 @@ from booking.widgets import DynamicArrayWidget
 from itertools import chain
 
 from django import forms
+from django.forms import MultipleChoiceField
+from django.forms.widgets import Select
 from django.contrib.postgres.utils import prefix_validation_error
 
 
@@ -52,3 +54,5 @@ class DynamicArrayField(forms.Field):
 class ArrayField(DjangoArrayField):
     def formfield(self, **kwargs):
         return super().formfield(**{"form_class": DynamicArrayField, **kwargs})
+
+

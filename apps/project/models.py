@@ -5,6 +5,7 @@ from django.urls import reverse
 
 from home.utils import unique_slug_generator
 from home.services import createInfoFromPolicy
+
 # Reference Data
 
 EVENTCATEGORY = [
@@ -91,7 +92,8 @@ class TimeOption(models.Model):
             )
 
     def get_class_start_times(self):
-        return "%s - %s" % (self.class_starttime.strftime("%H:%M"), self.class_endtime.strftime("%H:%M"),)
+        if self.class_starttime is not None:
+            return "%s - %s" % (self.class_starttime.strftime("%H:%M"), self.class_endtime.strftime("%H:%M"),)
 
     def get_open_start_times(self):
         return "%s - %s" % (self.open_starttime.strftime("%H:%M"), self.open_endtime.strftime("%H:%M"),)
@@ -136,9 +138,12 @@ class Irregularity(models.Model):
 
 
 class PriceOption(models.Model):
+    #Options
     duo = models.BooleanField(default=False)
     single_date = models.BooleanField(default=False)
     cycles = models.IntegerField(verbose_name="Numbero of Cycles", default=0)
+
+    #Info
     name = models.CharField(max_length=30)
     description = models.TextField(max_length=1000)
     price_chf = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
@@ -150,6 +155,13 @@ class PriceOption(models.Model):
             return "%s, EUR: %s - CHF: %s" % (self.name, self.price_euro, self.price_chf,)
         else:
             return "%s, CHF: %s" % (self.name, self.price_chf)
+
+    def clean(self):
+        if self.duo and self.single_date:
+            raise ValidationError("Can't be 'Duo' and 'Single date'")
+        if self.single_date and self.cycles > 0:
+            raise ValidationError("Can't use 'Single date' with Cycles Abos")
+
 
 
 # Sport Info

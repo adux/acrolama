@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.datastructures import MultiValueDict, DictWrapper
 
 
 class DynamicArrayWidget(forms.TextInput):
@@ -37,3 +38,10 @@ class DynamicArrayWidget(forms.TextInput):
 
     def format_value(self, value):
         return value or []
+
+
+class M2MSelect(forms.Select):
+    def value_from_datadict(self, data, files, name):
+        if isinstance(data, (MultiValueDict, DictWrapper)):
+            return data.getlist(name)
+        return data.get(name, None)

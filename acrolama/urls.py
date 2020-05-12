@@ -14,6 +14,7 @@ from home.views import (
 )
 
 from project.views import EventDetail
+
 from booking.views import (
     EventAutocomplete,
     attendance_daily_view,

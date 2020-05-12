@@ -9,7 +9,6 @@ from django.conf import settings
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Allows querries with OR statments
@@ -99,8 +98,9 @@ def bookinglistview(request):
     )
 
     # Pagination
-    paginator = Paginator(booking_filter.qs, 20)  # Show 25 contacts per page.
+    paginator = Paginator(booking_filter.qs, 24)  # Show 24 contacts per page.
     page = request.GET.get("page")
+
     try:
         response = paginator.page(page)
     except PageNotAnInteger:
@@ -121,7 +121,7 @@ def bookinglistview(request):
         if "create" in request.POST:
             for pk in checked_list:
                 book = get_book(pk)
-                if book.price.abonament & (book.price.cycles == 1):
+                if book.price.cycles == 1:
                     try:
                         new_book = createNextBook(book, "PE")
                     except:
@@ -134,7 +134,7 @@ def bookinglistview(request):
                         messages.add_message(
                             request, messages.SUCCESS, _("Book N°" + str(new_book.id) + ": Book Created"),
                         )
-                elif book.price.abonament & (book.price.cycles > 1):
+                elif (book.price.cycles > 1):
                     messages.add_message(
                         request,
                         messages.INFO,
@@ -168,7 +168,7 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         )
         # related_invoice = Invoice.objects.get(
         context["book_filter"] = booking_filter
-        paginator = Paginator(booking_filter.qs, 20)  # Show 25 contacts per page.
+        paginator = Paginator(booking_filter.qs, 24)  # Show 24 contacts per page.
         page = self.request.GET.get("page")
         try:
             response = paginator.page(page)
@@ -299,8 +299,6 @@ def attendancelistview(request):
         response = paginator.page(1)
     except EmptyPage:
         response = paginator.page(paginator.num_pages)
-
-    # End Paginator
 
     context = {
         "attendance_filter": attendance_filter,
@@ -484,7 +482,9 @@ def quotationcreateview(request):
     book_filter = QuotationBookFilter(
         request.GET,
         queryset=(
-            Book.objects.all().select_related("event__level", "user", "price").prefetch_related("invoice", "attendance")
+            Book.objects.all()
+            .select_related("event__level", "user", "price")
+            .prefetch_related("invoice", "attendance")
         ),
     )
 
@@ -501,26 +501,30 @@ def quotationcreateview(request):
                     template = "booking/quotation_create.html"
 
                     # Constants
-                    fix_profit = Decimal(100.00)
-                    acrolama_rate = Decimal(0.25)
-                    teachers_rate = Decimal(0.75)
+                    # TODO: Change names to more generic
+                    FIX_PROFIT = Decimal(100.00)
+                    ACROLAMA_RATE = Decimal(0.25)
+                    TEACHERS_RATE = Decimal(0.75)
 
                     # Variables
 
                     # Revenue
-                    try:
-                        direct_revenue = book_filter.qs.filter(status="PA").aggregate(Sum("price__price_chf"))
-                        direct_revenue = direct_revenue["price__price_chf__sum"]
-                    except:
+                    booksparticipants = book_filter.qs.filter(status="PA")
+
+                    if not booksparticipants:
                         direct_revenue = Decimal(0)
+                    else:
+                        direct_revenue = booksparticipants.aggregate(Sum("price__price_chf"))
+                        direct_revenue = direct_revenue["price__price_chf__sum"]
 
                     # Rent
+                    # TODO: Get rent based on place
                     related_rent = Decimal(240.00)
 
                     # Calc
-                    profit = direct_revenue - related_rent - fix_profit
-                    acrolama_profit = round(profit * acrolama_rate, 2)
-                    teachers_profit = round(profit * teachers_rate, 2)
+                    profit = direct_revenue - related_rent - FIX_PROFIT
+                    acrolama_profit = round(profit * ACROLAMA_RATE, 2)
+                    teachers_profit = round(profit * TEACHERS_RATE, 2)
 
                     # Select Initial
 
@@ -540,7 +544,7 @@ def quotationcreateview(request):
                             "related_rent": related_rent,
                             "direct_revenue": direct_revenue,
                             "related_rent": related_rent,
-                            "fix_profit": fix_profit,
+                            "fix_profit": FIX_PROFIT,
                             "acrolama_profit": acrolama_profit,
                             "teachers_profit": teachers_profit,
                         },

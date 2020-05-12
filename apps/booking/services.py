@@ -95,23 +95,28 @@ def createAttendance(book):
     # Get a book
     book = get_book(book)
 
-    # Get time infos
-    start = book.event.event_startdate
-    end = book.event.event_enddate
-    times = book.times.all()
-
     # Create Attendance
     obj = Attendance()
     obj.book_id = book.id
     obj.attendance_date = []
     obj.attendance_check = []
-    # For each TimeOption we get the dates and for dates check as False
-    for to in times:
-        num = to.regular_days.day
-        li = datelistgenerator(start, end, int(num))
-        obj.attendance_date.extend(li)
-        for time in li:
-            obj.attendance_check.append("False")
+
+    if not hasattr(book, 'bookdateinfo'):
+        # Get time infos
+        start = book.event.event_startdate
+        end = book.event.event_enddate
+        times = book.times.all()
+
+        for to in times:
+            num = to.regular_days.day
+            li = datelistgenerator(start, end, int(num))
+            obj.attendance_date.extend(li)
+            for time in li:
+                obj.attendance_check.append("False")
+    else:
+        obj.attendance_date.append(book.bookdateinfo.single_date)
+        obj.attendance_check.append("False")
+
     obj.save()
 
 
