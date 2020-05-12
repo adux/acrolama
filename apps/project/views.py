@@ -105,7 +105,6 @@ class EventInterest(SingleObjectMixin, FormView):
 
     def post(self, request, *args, **kwargs):
         form = BookForm(self.request.POST, prefix='booking')
-        import pdb; pdb.set_trace()
         if form.is_valid():
             return self.form_valid(form)
         else:
