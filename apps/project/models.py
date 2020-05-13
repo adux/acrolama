@@ -183,7 +183,7 @@ class Discipline(models.Model):
 
 class Policy(models.Model):
     name = models.CharField(max_length=120)
-    description = models.TextField(max_length=2000)
+    description = models.TextField(max_length=5000)
 
     class Meta:
         verbose_name_plural = "Policies"
