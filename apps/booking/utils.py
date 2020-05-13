@@ -107,7 +107,7 @@ def email_sender(instance, flag):
             p,
         )
 
-        msg = EmailMultiAlternatives(subject, msg_plain, sender, bcc=bcc)
+        msg = EmailMultiAlternatives(subject, msg_plain, sender, to, bcc)
         msg.attach_alternative(msg_html, "text/html")
         msg.send()
 
