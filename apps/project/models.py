@@ -44,7 +44,7 @@ DAYS = [
     ("6", "Sunday"),
 ]
 
-# TODO:not why i didn't use the days as a simple liest. Doesn't make much sense
+# TODO:not why i didn't use the days as a simple list.
 class Day(models.Model):
     day = models.CharField(max_length=10, choices=DAYS)
 
@@ -66,7 +66,7 @@ class Project(models.Model):
 class TimeOption(models.Model):
     name = models.CharField(max_length=30)
     description = models.TextField(max_length=1000)
-    # this should be singular
+    # TODO: this should be singular
     regular_days = models.ForeignKey(Day, null=True, blank=True, on_delete=models.CASCADE)
     class_starttime = models.TimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
     class_endtime = models.TimeField(auto_now=False, auto_now_add=False, null=True, blank=True)

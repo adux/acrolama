@@ -134,7 +134,7 @@ def bookinglistview(request):
                         messages.add_message(
                             request, messages.SUCCESS, _("Book N°" + str(new_book.id) + ": Book Created"),
                         )
-                elif (book.price.cycles > 1):
+                elif book.price.cycles > 1:
                     messages.add_message(
                         request,
                         messages.INFO,
@@ -166,7 +166,6 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                 .order_by("-booked_at")
             ),
         )
-        # related_invoice = Invoice.objects.get(
         context["book_filter"] = booking_filter
         paginator = Paginator(booking_filter.qs, 24)  # Show 24 contacts per page.
         page = self.request.GET.get("page")
@@ -185,7 +184,7 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         book = get_book(instance.id)
 
         if "update" in self.request.POST:
-            if (book.status == "PE") and (instance.status == "IN"):
+            if (book.status == "PE" or "WL") and (instance.status == "IN"):
 
                 # Invoice
                 try:
@@ -198,7 +197,6 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                     messages.add_message(self.request, messages.INFO, _("Invoice Created"))
 
                 # Attendance
-
                 try:
                     createAttendance(instance)
                 except:
@@ -209,13 +207,17 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                     messages.add_message(self.request, messages.INFO, _("Attendance created"))
 
                 # Send Email
-
                 try:
                     email_sender(instance, "Informed")
                 except:
                     messages.add_message(self.request, messages.WARNING, _("Error Email"))
                 else:
                     messages.add_message(self.request, messages.INFO, _("Informed email sent."))
+
+            elif (book.status == "PE") and (instance.status == "PA"):
+                messages.add_message(
+                    self.request, messages.INFO, _("Please change to participant only if Invoice payed."),
+                )
 
             elif (book.status == "IN") and (instance.status == "PA"):
                 messages.add_message(
@@ -482,9 +484,7 @@ def quotationcreateview(request):
     book_filter = QuotationBookFilter(
         request.GET,
         queryset=(
-            Book.objects.all()
-            .select_related("event__level", "user", "price")
-            .prefetch_related("invoice", "attendance")
+            Book.objects.all().select_related("event__level", "user", "price").prefetch_related("invoice", "attendance")
         ),
     )
 

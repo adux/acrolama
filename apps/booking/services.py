@@ -106,13 +106,17 @@ def createAttendance(book):
         start = book.event.event_startdate
         end = book.event.event_enddate
         times = book.times.all()
-
+        #TODO: times won't be many2many anymore.
         for to in times:
-            num = to.regular_days.day
-            li = datelistgenerator(start, end, int(num))
-            obj.attendance_date.extend(li)
-            for time in li:
+            if to.regular_days is None:
+                obj.attendance_date.append(book.event.event_startdate)
                 obj.attendance_check.append("False")
+            else:
+                num = to.regular_days.day
+                li = datelistgenerator(start, end, int(num))
+                obj.attendance_date.extend(li)
+                for time in li:
+                    obj.attendance_check.append("False")
     else:
         obj.attendance_date.append(book.bookdateinfo.single_date)
         obj.attendance_check.append("False")
