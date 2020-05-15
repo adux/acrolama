@@ -184,7 +184,7 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         book = get_book(instance.id)
 
         if "update" in self.request.POST:
-            if (book.status == "PE" or "WL") and (instance.status == "IN"):
+            if (book.status == "PE" or book.status == "WL") and (instance.status == "IN"):
 
                 # Invoice
                 try:
@@ -213,11 +213,6 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                     messages.add_message(self.request, messages.WARNING, _("Error Email"))
                 else:
                     messages.add_message(self.request, messages.INFO, _("Informed email sent."))
-
-            elif (book.status == "PE") and (instance.status == "PA"):
-                messages.add_message(
-                    self.request, messages.INFO, _("Please change to participant only if Invoice payed."),
-                )
 
             elif (book.status == "IN") and (instance.status == "PA"):
                 messages.add_message(
