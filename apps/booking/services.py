@@ -10,9 +10,7 @@ from .utils import datelistgenerator
 
 def updateSwitchCheckAttendance(id, position):
     attendance = Attendance.objects.get(pk=id)
-    attendance.attendance_check[position] = not attendance.attendance_check[
-        position
-    ]
+    attendance.attendance_check[position] = not attendance.attendance_check[position]
     attendance.save()
 
 
@@ -101,12 +99,12 @@ def createAttendance(book):
     obj.attendance_date = []
     obj.attendance_check = []
 
-    if not hasattr(book, 'bookdateinfo'):
+    if not hasattr(book, "bookdateinfo"):
         # Get time infos
         start = book.event.event_startdate
         end = book.event.event_enddate
         times = book.times.all()
-        #TODO: times won't be many2many anymore.
+        # TODO: times won't be many2many anymore.
         for to in times:
             if to.regular_days is None:
                 obj.attendance_date.append(book.event.event_startdate)

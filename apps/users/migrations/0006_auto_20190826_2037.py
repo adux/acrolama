@@ -13,43 +13,26 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="user",
             name="long_description",
-            field=models.TextField(
-                blank=True, max_length=1200, verbose_name="long description"
-            ),
+            field=models.TextField(blank=True, max_length=1200, verbose_name="long description"),
         ),
         migrations.AddField(
             model_name="user",
             name="pronoun",
             field=models.CharField(
-                blank=True,
-                choices=[
-                    ("NN", "None"),
-                    ("Mr.", "Mr"),
-                    ("Ms.", "Ms"),
-                    ("Mx.", "Mx"),
-                ],
-                max_length=10,
+                blank=True, choices=[("NN", "None"), ("Mr.", "Mr"), ("Ms.", "Ms"), ("Mx.", "Mx"),], max_length=10,
             ),
         ),
         migrations.AddField(
             model_name="user",
             name="short_description",
-            field=models.TextField(
-                blank=True, max_length=400, verbose_name="short description"
-            ),
+            field=models.TextField(blank=True, max_length=400, verbose_name="short description"),
         ),
         migrations.AddField(
-            model_name="user",
-            name="title",
-            field=models.CharField(
-                blank=True, max_length=45, verbose_name="title"
-            ),
+            model_name="user", name="title", field=models.CharField(blank=True, max_length=45, verbose_name="title"),
         ),
         migrations.AlterField(
             model_name="user",
             name="birth_date",
-            field=models.DateField(
-                blank=True, null=True, verbose_name="Birthday"
-            ),
+            field=models.DateField(blank=True, null=True, verbose_name="Birthday"),
         ),
     ]

@@ -7,14 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from accounting.models import Invoice
 from users.models import User
 from project.models import Event, PriceOption, TimeOption
-from booking.models import (
-    BOOKINGSTATUS,
-    Book,
-    BookDuoInfo,
-    BookDateInfo,
-    Attendance,
-    Quotation
-)
+from booking.models import BOOKINGSTATUS, Book, BookDuoInfo, BookDateInfo, Attendance, Quotation
 
 from booking.widgets import DynamicArrayWidget, M2MSelect
 

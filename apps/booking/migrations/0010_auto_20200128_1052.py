@@ -11,14 +11,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RenameModel(old_name="Assistance", new_name="Attendance",),
-        migrations.RenameField(
-            model_name="attendance",
-            old_name="assistance_check",
-            new_name="attendance_check",
-        ),
-        migrations.RenameField(
-            model_name="attendance",
-            old_name="assistance_date",
-            new_name="attendance_date",
-        ),
+        migrations.RenameField(model_name="attendance", old_name="assistance_check", new_name="attendance_check",),
+        migrations.RenameField(model_name="attendance", old_name="assistance_date", new_name="attendance_date",),
     ]

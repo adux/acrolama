@@ -11,9 +11,7 @@ from django.contrib.postgres.utils import prefix_validation_error
 
 class DynamicArrayField(forms.Field):
 
-    default_error_messages = {
-        "item_invalid": "Item %(nth)s in the array did not validate: "
-    }
+    default_error_messages = {"item_invalid": "Item %(nth)s in the array did not validate: "}
 
     def __init__(self, base_field, **kwargs):
         self.base_field = base_field
@@ -33,10 +31,7 @@ class DynamicArrayField(forms.Field):
             except forms.ValidationError as error:
                 errors.append(
                     prefix_validation_error(
-                        error,
-                        self.error_messages["item_invalid"],
-                        code="item_invalid",
-                        params={"nth": index},
+                        error, self.error_messages["item_invalid"], code="item_invalid", params={"nth": index},
                     )
                 )
         if errors:
@@ -54,5 +49,3 @@ class DynamicArrayField(forms.Field):
 class ArrayField(DjangoArrayField):
     def formfield(self, **kwargs):
         return super().formfield(**{"form_class": DynamicArrayField, **kwargs})
-
-

@@ -15,10 +15,7 @@ class Migration(migrations.Migration):
             model_name="partner",
             name="account",
             field=models.ForeignKey(
-                blank=True,
-                null=True,
-                on_delete=django.db.models.deletion.CASCADE,
-                to="accounting.Account",
+                blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to="accounting.Account",
             ),
         ),
     ]

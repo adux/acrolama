@@ -6,13 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('project', '0015_auto_20200330_2101'),
+        ("project", "0015_auto_20200330_2101"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='event',
-            name='category',
-            field=models.CharField(choices=[('MC', 'Masterclass'), ('fas fa-rocket', 'Festival'), ('fas fa-cogs', 'Cycle'), ('fas fa-cog', 'Workshop'), ('fas fa-star', 'Camp'), ('fas fa-seeding', 'Retreat')], max_length=50),
+            model_name="event",
+            name="category",
+            field=models.CharField(
+                choices=[
+                    ("MC", "Masterclass"),
+                    ("fas fa-rocket", "Festival"),
+                    ("fas fa-cogs", "Cycle"),
+                    ("fas fa-cog", "Workshop"),
+                    ("fas fa-star", "Camp"),
+                    ("fas fa-seeding", "Retreat"),
+                ],
+                max_length=50,
+            ),
         ),
     ]

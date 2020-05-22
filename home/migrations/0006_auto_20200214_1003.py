@@ -7,34 +7,24 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('project', '0013_priceoption_cycles'),
-        ('home', '0005_auto_20191009_1242'),
+        ("project", "0013_priceoption_cycles"),
+        ("home", "0005_auto_20191009_1242"),
     ]
 
     operations = [
-        migrations.RenameField(
-            model_name='newslist',
-            old_name='inscribed_at',
-            new_name='added_at',
-        ),
-        migrations.RemoveField(
-            model_name='newslist',
-            name='active',
-        ),
-        migrations.RemoveField(
-            model_name='newslist',
-            name='email',
-        ),
+        migrations.RenameField(model_name="newslist", old_name="inscribed_at", new_name="added_at",),
+        migrations.RemoveField(model_name="newslist", name="active",),
+        migrations.RemoveField(model_name="newslist", name="email",),
         migrations.AddField(
-            model_name='newslist',
-            name='event',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='project.Event'),
+            model_name="newslist",
+            name="event",
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to="project.Event"),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='newslist',
-            name='image',
-            field=models.ImageField(default=1, upload_to='ads'),
+            model_name="newslist",
+            name="image",
+            field=models.ImageField(default=1, upload_to="ads"),
             preserve_default=False,
         ),
     ]

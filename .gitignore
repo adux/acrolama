@@ -129,9 +129,6 @@ ENV/
 
 # mypy
 .mypy_cache/
-<<<<<<< HEAD
 
 #Vim
 Session.vim
-=======
->>>>>>> ee7007e9e8507148a8b779c6e20e66df10436149

@@ -14,15 +14,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="Address",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
                 (
                     "country",
                     address.models.CountryField(
@@ -112,10 +104,7 @@ class Migration(migrations.Migration):
                             ("GP", "Guadeloupe"),
                             ("GQ", "Equatorial Guinea"),
                             ("GR", "Greece"),
-                            (
-                                "GS",
-                                "South Georgia and the South Sandwich Islands",
-                            ),
+                            ("GS", "South Georgia and the South Sandwich Islands",),
                             ("GT", "Guatemala"),
                             ("GU", "Guam"),
                             ("GW", "Guinea-Bissau"),
@@ -274,15 +263,9 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("city", models.CharField(max_length=50)),
-                (
-                    "postalcode",
-                    models.CharField(blank=True, max_length=10, null=True),
-                ),
+                ("postalcode", models.CharField(blank=True, max_length=10, null=True),),
                 ("street", models.CharField(max_length=50)),
-                (
-                    "premise",
-                    models.CharField(blank=True, max_length=10, null=True),
-                ),
+                ("premise", models.CharField(blank=True, max_length=10, null=True),),
             ],
         ),
     ]

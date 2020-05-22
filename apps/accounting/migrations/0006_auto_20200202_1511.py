@@ -7,13 +7,15 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounting', '0005_auto_20200130_2052'),
+        ("accounting", "0005_auto_20200130_2052"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='invoice',
-            name='book',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='booking.Book'),
+            model_name="invoice",
+            name="book",
+            field=models.OneToOneField(
+                blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to="booking.Book"
+            ),
         ),
     ]

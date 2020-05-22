@@ -14,15 +14,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="attendance",
             name="attendance_check",
-            field=booking.fields.ArrayField(
-                base_field=models.BooleanField(), size=None
-            ),
+            field=booking.fields.ArrayField(base_field=models.BooleanField(), size=None),
         ),
         migrations.AlterField(
             model_name="attendance",
             name="attendance_date",
-            field=booking.fields.ArrayField(
-                base_field=models.DateField(), size=None
-            ),
+            field=booking.fields.ArrayField(base_field=models.DateField(), size=None),
         ),
     ]

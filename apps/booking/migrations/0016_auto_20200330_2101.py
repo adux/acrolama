@@ -13,36 +13,26 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="quotation",
             name="acrolama_profit",
-            field=models.DecimalField(
-                blank=True, decimal_places=2, max_digits=12, null=True
-            ),
+            field=models.DecimalField(blank=True, decimal_places=2, max_digits=12, null=True),
         ),
         migrations.AlterField(
             model_name="quotation",
             name="direct_revenue",
-            field=models.DecimalField(
-                blank=True, decimal_places=2, max_digits=12, null=True
-            ),
+            field=models.DecimalField(blank=True, decimal_places=2, max_digits=12, null=True),
         ),
         migrations.AlterField(
             model_name="quotation",
             name="fix_profit",
-            field=models.DecimalField(
-                blank=True, decimal_places=2, max_digits=12, null=True
-            ),
+            field=models.DecimalField(blank=True, decimal_places=2, max_digits=12, null=True),
         ),
         migrations.AlterField(
             model_name="quotation",
             name="teachers_profit",
-            field=models.DecimalField(
-                blank=True, decimal_places=2, max_digits=12, null=True
-            ),
+            field=models.DecimalField(blank=True, decimal_places=2, max_digits=12, null=True),
         ),
         migrations.AlterField(
             model_name="quotation",
             name="total_attendees",
-            field=models.DecimalField(
-                blank=True, decimal_places=2, max_digits=12, null=True
-            ),
+            field=models.DecimalField(blank=True, decimal_places=2, max_digits=12, null=True),
         ),
     ]

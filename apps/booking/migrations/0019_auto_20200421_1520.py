@@ -9,73 +9,73 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('booking', '0018_bookaddinfo'),
+        ("booking", "0018_bookaddinfo"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='BookDateInfo',
+            name="BookDateInfo",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('single_date', models.DateField()),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("single_date", models.DateField()),
             ],
         ),
         migrations.CreateModel(
-            name='BookDuoInfo',
+            name="BookDuoInfo",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('first_name', models.CharField(blank=True, max_length=30, verbose_name='first name')),
-                ('last_name', models.CharField(blank=True, max_length=30, verbose_name='last name')),
-                ('phone', models.CharField(blank=True, max_length=50)),
-                ('email', models.EmailField(blank=True, max_length=254, verbose_name='email address')),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("first_name", models.CharField(blank=True, max_length=30, verbose_name="first name")),
+                ("last_name", models.CharField(blank=True, max_length=30, verbose_name="last name")),
+                ("phone", models.CharField(blank=True, max_length=50)),
+                ("email", models.EmailField(blank=True, max_length=254, verbose_name="email address")),
             ],
         ),
-        migrations.DeleteModel(
-            name='BookAddInfo',
+        migrations.DeleteModel(name="BookAddInfo",),
+        migrations.AlterField(
+            model_name="attendance",
+            name="book",
+            field=models.OneToOneField(on_delete=django.db.models.deletion.PROTECT, to="booking.Book"),
         ),
         migrations.AlterField(
-            model_name='attendance',
-            name='book',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.PROTECT, to='booking.Book'),
+            model_name="book",
+            name="event",
+            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to="project.Event"),
         ),
         migrations.AlterField(
-            model_name='book',
-            name='event',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='project.Event'),
+            model_name="book",
+            name="price",
+            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to="project.PriceOption"),
         ),
         migrations.AlterField(
-            model_name='book',
-            name='price',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='project.PriceOption'),
-        ),
-        migrations.AlterField(
-            model_name='book',
-            name='user',
+            model_name="book",
+            name="user",
             field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL),
         ),
         migrations.AlterField(
-            model_name='quotation',
-            name='event',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='project.Event'),
+            model_name="quotation",
+            name="event",
+            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to="project.Event"),
         ),
         migrations.AlterField(
-            model_name='quotation',
-            name='time_location',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='project.TimeLocation'),
+            model_name="quotation",
+            name="time_location",
+            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to="project.TimeLocation"),
         ),
         migrations.AddField(
-            model_name='bookduoinfo',
-            name='book',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='booking.Book'),
+            model_name="bookduoinfo",
+            name="book",
+            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to="booking.Book"),
         ),
         migrations.AddField(
-            model_name='bookduoinfo',
-            name='user',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL),
+            model_name="bookduoinfo",
+            name="user",
+            field=models.ForeignKey(
+                blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL
+            ),
         ),
         migrations.AddField(
-            model_name='bookdateinfo',
-            name='book',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='booking.Book'),
+            model_name="bookdateinfo",
+            name="book",
+            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to="booking.Book"),
         ),
     ]

@@ -18,23 +18,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="AboutTeam",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
                 ("uploaded_at", models.DateTimeField(auto_now_add=True)),
-                (
-                    "team",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to=settings.AUTH_USER_MODEL,
-                    ),
-                ),
+                ("team", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL,),),
             ],
         ),
         migrations.DeleteModel(name="AboutMember",),
@@ -44,27 +30,17 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="portfolio",
             name="image",
-            field=models.ForeignKey(
-                default=1,
-                on_delete=django.db.models.deletion.CASCADE,
-                to="audiovisual.Image",
-            ),
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to="audiovisual.Image",),
             preserve_default=False,
         ),
         migrations.AlterField(
             model_name="aboutimage",
             name="image",
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE,
-                to="audiovisual.Image",
-            ),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="audiovisual.Image",),
         ),
         migrations.AlterField(
             model_name="infoimage",
             name="image",
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE,
-                to="audiovisual.Image",
-            ),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="audiovisual.Image",),
         ),
     ]

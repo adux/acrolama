@@ -14,8 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="attendance",
             name="book",
-            field=models.OneToOneField(
-                on_delete=django.db.models.deletion.CASCADE, to="booking.Book"
-            ),
+            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to="booking.Book"),
         ),
     ]

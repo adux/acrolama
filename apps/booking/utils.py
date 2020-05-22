@@ -50,9 +50,7 @@ def datelistgenerator(startdate, enddate, regularday):
 
 
 def space_out(string, length):
-    return " ".join(
-        string[i : i + length] for i in range(0, len(string), length)
-    )
+    return " ".join(string[i : i + length] for i in range(0, len(string), length))
 
 
 def email_sender(instance, flag):
@@ -70,9 +68,7 @@ def email_sender(instance, flag):
         subject = "Acrolama - Confirmation - " + str(instance.event.title)
         to = [instance.user.email]
 
-        irregularities = Irregularity.objects.filter(
-            event__slug=instance.event.slug
-        )
+        irregularities = Irregularity.objects.filter(event__slug=instance.event.slug)
 
         # TODO: Unnecesary access to DB
         referenznum = space_out(
@@ -96,30 +92,18 @@ def email_sender(instance, flag):
             "irregularities": irregularities,
         }
 
-        msg_plain = render_to_string(
-            settings.BASE_DIR
-            + "/apps/booking/templates/booking/email_informed.txt",
-            p,
-        )
-        msg_html = render_to_string(
-            settings.BASE_DIR
-            + "/apps/booking/templates/booking/email_informed.html",
-            p,
-        )
+        msg_plain = render_to_string(settings.BASE_DIR + "/apps/booking/templates/booking/email_informed.txt", p,)
+        msg_html = render_to_string(settings.BASE_DIR + "/apps/booking/templates/booking/email_informed.html", p,)
 
         msg = EmailMultiAlternatives(subject, msg_plain, sender, to, bcc)
         msg.attach_alternative(msg_html, "text/html")
         msg.send()
 
     elif flag == "Paid":
-        subject = "Acrolama - Payment Confirmation - " + str(
-            instance.book.event.title
-        )
+        subject = "Acrolama - Payment Confirmation - " + str(instance.book.event.title)
         to = [instance.book.user.email]
 
-        irregularities = Irregularity.objects.filter(
-            event__slug=instance.book.event.slug
-        )
+        irregularities = Irregularity.objects.filter(event__slug=instance.book.event.slug)
 
         p = {
             "event": instance.book.event,
@@ -129,16 +113,8 @@ def email_sender(instance, flag):
             "irregularities": irregularities,
         }
 
-        msg_plain = render_to_string(
-            settings.BASE_DIR
-            + "/apps/booking/templates/booking/email_paid.txt",
-            p,
-        )
-        msg_html = render_to_string(
-            settings.BASE_DIR
-            + "/apps/booking/templates/booking/email_paid.html",
-            p,
-        )
+        msg_plain = render_to_string(settings.BASE_DIR + "/apps/booking/templates/booking/email_paid.txt", p,)
+        msg_html = render_to_string(settings.BASE_DIR + "/apps/booking/templates/booking/email_paid.html", p,)
         msg = EmailMultiAlternatives(subject, msg_plain, sender, to, bcc)
         msg.attach_alternative(msg_html, "text/html")
         msg.send()
@@ -153,16 +129,8 @@ def email_sender(instance, flag):
             "user": instance.user,
         }
 
-        msg_plain = render_to_string(
-            settings.BASE_DIR
-            + "/apps/booking/templates/booking/email_registration.txt",
-            p,
-        )
-        msg_html = render_to_string(
-            settings.BASE_DIR
-            + "/apps/booking/templates/booking/email_registration.html",
-            p,
-        )
+        msg_plain = render_to_string(settings.BASE_DIR + "/apps/booking/templates/booking/email_registration.txt", p,)
+        msg_html = render_to_string(settings.BASE_DIR + "/apps/booking/templates/booking/email_registration.html", p,)
 
         msg = EmailMultiAlternatives(subject, msg_plain, sender, to, bcc)
         msg.attach_alternative(msg_html, "text/html")

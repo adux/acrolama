@@ -6,14 +6,12 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('booking', '0017_auto_20200402_1902'),
+        ("booking", "0017_auto_20200402_1902"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='BookAddInfo',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-            ],
+            name="BookAddInfo",
+            fields=[("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),],
         ),
     ]

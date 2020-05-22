@@ -13,9 +13,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="priceoption",
             name="cycles",
-            field=models.IntegerField(
-                default=1, verbose_name="Numbero of Cycles"
-            ),
+            field=models.IntegerField(default=1, verbose_name="Numbero of Cycles"),
             preserve_default=False,
         ),
     ]

@@ -14,54 +14,25 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="Account",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
                 ("name", models.CharField(max_length=30)),
                 (
                     "balance",
                     models.CharField(
-                        choices=[
-                            ("AS", "Assets"),
-                            ("EQ", "Equity"),
-                            ("LI", "Liabilities"),
-                        ],
-                        max_length=11,
+                        choices=[("AS", "Assets"), ("EQ", "Equity"), ("LI", "Liabilities"),], max_length=11,
                     ),
                 ),
-                (
-                    "description",
-                    models.TextField(blank=True, max_length=1000, null=True),
-                ),
+                ("description", models.TextField(blank=True, max_length=1000, null=True),),
             ],
         ),
         migrations.CreateModel(
             name="Invoice",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
                 (
                     "status",
                     models.CharField(
-                        choices=[
-                            ("PE", "Pending"),
-                            ("PY", "Paid"),
-                            ("CA", "Canceled"),
-                            ("ST", "Storno"),
-                        ],
+                        choices=[("PE", "Pending"), ("PY", "Paid"), ("CA", "Canceled"), ("ST", "Storno"),],
                         default="PE",
                         max_length=10,
                     ),
@@ -73,15 +44,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="Payment",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
                 ("amount", models.CharField(max_length=9)),
                 ("pay_date", models.DateField(blank=True, null=True)),
                 (
@@ -107,63 +70,26 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="Transaction",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
                 ("translation_amount", models.CharField(max_length=10)),
                 ("transaction_date", models.DateTimeField(auto_now_add=True)),
-                (
-                    "account",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to="accounting.Account",
-                    ),
-                ),
+                ("account", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="accounting.Account",),),
                 (
                     "invoice",
                     models.ForeignKey(
-                        blank=True,
-                        null=True,
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to="accounting.Invoice",
+                        blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to="accounting.Invoice",
                     ),
                 ),
-                (
-                    "payment",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to="accounting.Payment",
-                    ),
-                ),
+                ("payment", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="accounting.Payment",),),
             ],
         ),
         migrations.CreateModel(
             name="Partner",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
                 ("name", models.CharField(max_length=50)),
-                (
-                    "email",
-                    models.CharField(blank=True, max_length=50, null=True),
-                ),
-                (
-                    "phone",
-                    models.CharField(blank=True, max_length=50, null=True),
-                ),
+                ("email", models.CharField(blank=True, max_length=50, null=True),),
+                ("phone", models.CharField(blank=True, max_length=50, null=True),),
                 (
                     "prefered_pay",
                     models.CharField(
@@ -180,17 +106,8 @@ class Migration(migrations.Migration):
                         null=True,
                     ),
                 ),
-                (
-                    "description_pay",
-                    models.TextField(blank=True, max_length=15, null=True),
-                ),
-                (
-                    "account",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to="accounting.Account",
-                    ),
-                ),
+                ("description_pay", models.TextField(blank=True, max_length=15, null=True),),
+                ("account", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="accounting.Account",),),
             ],
         ),
     ]

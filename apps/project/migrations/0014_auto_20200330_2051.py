@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('project', '0013_priceoption_cycles'),
+        ("project", "0013_priceoption_cycles"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='priceoption',
-            name='price_chf',
+            model_name="priceoption",
+            name="price_chf",
             field=models.DecimalField(blank=True, decimal_places=2, max_digits=12, null=True),
         ),
         migrations.AlterField(
-            model_name='priceoption',
-            name='price_euro',
+            model_name="priceoption",
+            name="price_euro",
             field=models.DecimalField(blank=True, decimal_places=2, max_digits=12, null=True),
         ),
     ]

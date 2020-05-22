@@ -15,34 +15,16 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="Assistance",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
                 (
                     "assistance_date",
-                    django.contrib.postgres.fields.ArrayField(
-                        base_field=models.DateField(), size=None
-                    ),
+                    django.contrib.postgres.fields.ArrayField(base_field=models.DateField(), size=None),
                 ),
                 (
                     "assistance_check",
-                    django.contrib.postgres.fields.ArrayField(
-                        base_field=models.BooleanField(), size=None
-                    ),
+                    django.contrib.postgres.fields.ArrayField(base_field=models.BooleanField(), size=None),
                 ),
-                (
-                    "book",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to="booking.Book",
-                    ),
-                ),
+                ("book", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="booking.Book",),),
             ],
         ),
     ]

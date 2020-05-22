@@ -16,12 +16,7 @@ class MultiFormMixin(ContextMixin):
         return self.form_classes
 
     def get_forms(self, form_classes):
-        return dict(
-            [
-                (key, self._create_form(key, class_name))
-                for key, class_name in form_classes.items()
-            ]
-        )
+        return dict([(key, self._create_form(key, class_name)) for key, class_name in form_classes.items()])
 
     def get_instance(self, form_name):
         instance_method = "get_%s_instance" % form_name
@@ -36,9 +31,7 @@ class MultiFormMixin(ContextMixin):
         kwargs.update({"initial": self.get_initial(form_name)})
         kwargs.update({"prefix": self.get_prefix(form_name)})
         if self.request.method in ("POST", "PUT"):
-            kwargs.update(
-                {"data": self.request.POST, "files": self.request.FILES}
-            )
+            kwargs.update({"data": self.request.POST, "files": self.request.FILES})
         return kwargs
 
     def forms_valid(self, forms, form_name):

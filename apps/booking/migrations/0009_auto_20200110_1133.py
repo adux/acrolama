@@ -14,10 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="assistance",
             name="book",
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE,
-                to="booking.Book",
-                unique=True,
-            ),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="booking.Book", unique=True,),
         ),
     ]

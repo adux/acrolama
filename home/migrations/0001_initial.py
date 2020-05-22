@@ -13,30 +13,14 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="About",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
                 ("description", models.TextField(max_length=1000)),
             ],
         ),
         migrations.CreateModel(
             name="AboutDate",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
                 ("start", models.DateField(blank=True, null=True)),
                 ("end", models.DateField(blank=True, null=True)),
                 ("description", models.CharField(max_length=50)),
@@ -45,15 +29,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="AboutImage",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
                 ("uploaded_at", models.DateTimeField(auto_now_add=True)),
                 ("image", models.ImageField(upload_to="about/general/")),
             ],
@@ -61,15 +37,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="AboutMember",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
                 ("name", models.CharField(max_length=30)),
                 ("position", models.CharField(max_length=30)),
                 ("content", models.TextField(max_length=1000)),
@@ -80,83 +48,33 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="Faq",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                (
-                    "question",
-                    models.CharField(blank=True, max_length=300, null=True),
-                ),
-                (
-                    "answer",
-                    models.TextField(blank=True, max_length=2000, null=True),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
+                ("question", models.CharField(blank=True, max_length=300, null=True),),
+                ("answer", models.TextField(blank=True, max_length=2000, null=True),),
             ],
         ),
         migrations.CreateModel(
             name="FaqValues",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                (
-                    "image",
-                    models.CharField(blank=True, max_length=15, null=True),
-                ),
-                (
-                    "title",
-                    models.CharField(blank=True, max_length=100, null=True),
-                ),
-                (
-                    "content",
-                    models.CharField(blank=True, max_length=120, null=True),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
+                ("image", models.CharField(blank=True, max_length=15, null=True),),
+                ("title", models.CharField(blank=True, max_length=100, null=True),),
+                ("content", models.CharField(blank=True, max_length=120, null=True),),
             ],
         ),
         migrations.CreateModel(
             name="Info",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
                 ("title", models.CharField(max_length=50)),
-                (
-                    "content",
-                    models.TextField(blank=True, max_length=5000, null=True),
-                ),
+                ("content", models.TextField(blank=True, max_length=5000, null=True),),
                 ("slug", models.SlugField(blank=True, null=True, unique=True)),
             ],
         ),
         migrations.CreateModel(
             name="InfoImage",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
                 ("uploaded_at", models.DateTimeField(auto_now_add=True)),
                 ("image", models.ImageField(upload_to="info/")),
             ],
@@ -164,19 +82,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="NewsList",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                (
-                    "email",
-                    models.CharField(blank=True, max_length=100, null=True),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
+                ("email", models.CharField(blank=True, max_length=100, null=True),),
                 ("active", models.BooleanField(default=True)),
                 ("inscribed_at", models.DateField(auto_now_add=True)),
             ],
@@ -184,27 +91,10 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="Portfolio",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                (
-                    "order",
-                    models.CharField(blank=True, max_length=1, null=True),
-                ),
-                (
-                    "text",
-                    models.TextField(blank=True, max_length=30, null=True),
-                ),
-                (
-                    "sec_text",
-                    models.TextField(blank=True, max_length=30, null=True),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
+                ("order", models.CharField(blank=True, max_length=1, null=True),),
+                ("text", models.TextField(blank=True, max_length=30, null=True),),
+                ("sec_text", models.TextField(blank=True, max_length=30, null=True),),
                 ("uploaded_at", models.DateTimeField(auto_now_add=True)),
                 ("upload", models.ImageField(upload_to="portfolio/")),
             ],
@@ -212,15 +102,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="Testimonial",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
                 ("text", models.TextField(max_length=350)),
                 ("author", models.CharField(max_length=30)),
             ],

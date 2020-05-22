@@ -18,20 +18,14 @@ class Migration(migrations.Migration):
             model_name="invoice",
             name="book",
             field=models.ForeignKey(
-                blank=True,
-                null=True,
-                on_delete=django.db.models.deletion.CASCADE,
-                to="booking.Book",
+                blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to="booking.Book",
             ),
         ),
         migrations.AddField(
             model_name="invoice",
             name="partner",
             field=models.ForeignKey(
-                blank=True,
-                null=True,
-                on_delete=django.db.models.deletion.CASCADE,
-                to="accounting.Partner",
+                blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to="accounting.Partner",
             ),
         ),
     ]

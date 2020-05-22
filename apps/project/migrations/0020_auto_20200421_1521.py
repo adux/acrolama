@@ -6,13 +6,9 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('project', '0019_priceoption_ask_date'),
+        ("project", "0019_priceoption_ask_date"),
     ]
 
     operations = [
-        migrations.RenameField(
-            model_name='priceoption',
-            old_name='ask_date',
-            new_name='single_date',
-        ),
+        migrations.RenameField(model_name="priceoption", old_name="ask_date", new_name="single_date",),
     ]

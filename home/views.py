@@ -1,9 +1,6 @@
 from django.contrib import messages
 
-from django.db.models import Q
-
 from django.http import HttpResponseRedirect
-from django.urls import reverse_lazy
 from django.utils import timezone
 from django.shortcuts import render
 
@@ -22,7 +19,7 @@ from home.models import (
     NewsList,
 )
 
-from project.models import Event, TimeOption
+from project.models import Event
 
 
 class HomeFormView(MultiFormsView):
@@ -43,12 +40,12 @@ class HomeFormView(MultiFormsView):
         context["portfolio"] = Portfolio.objects.all()[0:8]
         context["news"] = NewsList.objects.all()
 
-        #Events
+        # Events
         event_main = (
             Event.objects.all()
-            .select_related('level', 'discipline')
-            .prefetch_related('time_locations__time_options')
-            .prefetch_related('time_locations__location')
+            .select_related("level", "discipline")
+            .prefetch_related("time_locations__time_options")
+            .prefetch_related("time_locations__location")
         )
         event = (
             event_main.filter(event_enddate__gte=timezone.now())
@@ -61,17 +58,14 @@ class HomeFormView(MultiFormsView):
 
         # Classes
         classes = (
-            event_main.filter(
-                event_enddate__gte=timezone.now(),
-                category="CY"
-            )
+            event_main.filter(event_enddate__gte=timezone.now(), category="CY")
             .order_by("event_startdate", "level", "title")
             .exclude(published=False)
             .distinct()
         )
 
         context["current"] = classes
-        context["next"] = classes.event_startdate__gte=timezone.now() + timezone.timedelta(days=32),
+        context["next"] = classes.event_startdate__gte = (timezone.now() + timezone.timedelta(days=32),)
 
         # context["intermediate"] = classes.filter(Q(level="2") | Q(level="3"))
         return context
@@ -81,9 +75,7 @@ class HomeFormView(MultiFormsView):
         form_name = form.cleaned_data.get("action")
         email = form.cleaned_data.get("email")
         messages.add_message(
-            self.request,
-            messages.SUCCESS,
-            f"Thanks. Please confirm your email: {email}",
+            self.request, messages.SUCCESS, f"Thanks. Please confirm your email: {email}",
         )
         instance.save()
         return HttpResponseRedirect(self.get_success_url(form_name))

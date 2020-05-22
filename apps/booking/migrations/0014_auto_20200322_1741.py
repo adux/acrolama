@@ -11,13 +11,9 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name="quotation",
-            name="acrolama_profit",
-            field=models.IntegerField(blank=True, null=True),
+            model_name="quotation", name="acrolama_profit", field=models.IntegerField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name="quotation",
-            name="teachers_profit",
-            field=models.IntegerField(blank=True, null=True),
+            model_name="quotation", name="teachers_profit", field=models.IntegerField(blank=True, null=True),
         ),
     ]

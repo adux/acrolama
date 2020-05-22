@@ -6,23 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('project', '0017_auto_20200404_1216'),
+        ("project", "0017_auto_20200404_1216"),
     ]
 
     operations = [
-        migrations.RenameField(
-            model_name='priceoption',
-            old_name='abonament',
-            new_name='duo',
-        ),
-        migrations.RenameField(
-            model_name='priceoption',
-            old_name='reduction',
-            new_name='published',
-        ),
+        migrations.RenameField(model_name="priceoption", old_name="abonament", new_name="duo",),
+        migrations.RenameField(model_name="priceoption", old_name="reduction", new_name="published",),
         migrations.AlterField(
-            model_name='priceoption',
-            name='cycles',
-            field=models.IntegerField(default=0, verbose_name='Numbero of Cycles'),
+            model_name="priceoption",
+            name="cycles",
+            field=models.IntegerField(default=0, verbose_name="Numbero of Cycles"),
         ),
     ]

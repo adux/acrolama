@@ -11,10 +11,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterModelOptions(
-            name="address",
-            options={
-                "verbose_name": "Adress",
-                "verbose_name_plural": "Adresses",
-            },
+            name="address", options={"verbose_name": "Adress", "verbose_name_plural": "Adresses",},
         ),
     ]

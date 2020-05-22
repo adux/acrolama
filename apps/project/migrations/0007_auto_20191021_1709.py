@@ -11,8 +11,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name="event",
-            name="exceptions",
-            field=models.ManyToManyField(blank=True, to="project.Exception"),
+            model_name="event", name="exceptions", field=models.ManyToManyField(blank=True, to="project.Exception"),
         ),
     ]

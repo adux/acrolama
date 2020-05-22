@@ -7,18 +7,17 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('audiovisual', '0005_avatar'),
-        ('users', '0006_auto_20190826_2037'),
+        ("audiovisual", "0005_avatar"),
+        ("users", "0006_auto_20190826_2037"),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='user',
-            name='avatar',
-        ),
+        migrations.RemoveField(model_name="user", name="avatar",),
         migrations.AddField(
-            model_name='user',
-            name='image',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='audiovisual.Avatar'),
+            model_name="user",
+            name="image",
+            field=models.ForeignKey(
+                blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to="audiovisual.Avatar"
+            ),
         ),
     ]

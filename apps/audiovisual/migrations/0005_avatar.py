@@ -6,19 +6,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('audiovisual', '0004_image_thumbnail'),
+        ("audiovisual", "0004_image_thumbnail"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Avatar',
+            name="Avatar",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date_creation', models.DateTimeField(auto_now_add=True)),
-                ('image', models.ImageField(height_field='image_height', upload_to='images/', width_field='image_width')),
-                ('thumbnail', models.ImageField(editable=False, upload_to='images/thumbs/')),
-                ('image_height', models.PositiveIntegerField(blank=True, null=True)),
-                ('image_width', models.PositiveIntegerField(blank=True, null=True)),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("date_creation", models.DateTimeField(auto_now_add=True)),
+                (
+                    "image",
+                    models.ImageField(height_field="image_height", upload_to="images/", width_field="image_width"),
+                ),
+                ("thumbnail", models.ImageField(editable=False, upload_to="images/thumbs/")),
+                ("image_height", models.PositiveIntegerField(blank=True, null=True)),
+                ("image_width", models.PositiveIntegerField(blank=True, null=True)),
             ],
         ),
     ]

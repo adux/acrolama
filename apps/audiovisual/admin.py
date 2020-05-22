@@ -12,6 +12,7 @@ class ImageAdmin(admin.ModelAdmin):
         "image_width",
     ]
 
+
 class AvatarAdmin(admin.ModelAdmin):
     list_display = [
         "formImage",

@@ -20,9 +20,7 @@ class Migration(migrations.Migration):
             model_name="book",
             name="user",
             field=models.ForeignKey(
-                default=1,
-                on_delete=django.db.models.deletion.CASCADE,
-                to=settings.AUTH_USER_MODEL,
+                default=1, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL,
             ),
             preserve_default=False,
         ),

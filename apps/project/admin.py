@@ -39,7 +39,7 @@ class EventAdmin(admin.ModelAdmin):
         "published",
         "registration",
     ]
-    list_select_related = ['project', 'policy', 'level', 'discipline']
+    list_select_related = ["project", "policy", "level", "discipline"]
 
     list_filter = ["category", "level"]
     search_fields = ["title", "event_startdate", "event_enddate"]
@@ -79,6 +79,7 @@ class ProjectAdmin(admin.ModelAdmin):
         "todo",
     ]
     list_filter = ["manager"]
+
 
 class PriceOptionAdmin(admin.ModelAdmin):
     list_display = [

@@ -32,6 +32,7 @@ class FaqAdmin(admin.ModelAdmin):
 #     can_delete = True
 #     show_change_link = True
 
+
 class InfoAdmin(admin.ModelAdmin):
     list_display = ("title", "slug")
     # inlines = [InfoImageInline]

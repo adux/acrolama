@@ -1,9 +1,7 @@
 import datetime
 
 from dal import autocomplete
-from decimal import Decimal, getcontext
-
-from django.conf import settings
+from decimal import Decimal
 
 # from django.contrib.postgres.fields import ArrayField
 
@@ -14,6 +12,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Allows querries with OR statments
 from django.db.models import Sum, Q
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
 from django.utils.translation import gettext as _
 
 
@@ -23,7 +22,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 # Models
 from booking.models import Book, Attendance, Quotation
-from project.models import Event, Irregularity
+from project.models import Event
 
 # Filters
 from booking.filters import (
@@ -48,8 +47,6 @@ from booking.forms import (
 from booking.utils import (
     build_url,
     email_sender,
-    datelistgenerator,
-    teacher_check,
     staff_check,
     herd_check,
 )
@@ -62,7 +59,6 @@ from booking.services import (
     createNextBook,
     createInvoiceFromBook,
     createAttendance,
-    createNextBookAttendance,
     updateSwitchCheckAttendance,
 )
 
@@ -242,7 +238,7 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         pk = self.object.id
         url = build_url(
             "booking_update",
-            get={"user": user, "event": event, "status": status, "start_date": start_date, "end_date": end_date,},
+            get={"user": user, "event": event, "status": status, "start_date": start_date, "end_date": end_date, },
             # TODO im not sure this way of passing the pk is ideal :)
             pk={"pk": pk},
         )
@@ -303,6 +299,7 @@ def attendancelistview(request):
         "page_obj": response,
     }
 
+    # TODO: something to do after getting all the attendance
     if request.method == "POST":
         checked_list = request.POST.getlist("check")
         if "create" in request.POST:
@@ -412,7 +409,7 @@ class AttendanceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         pk = self.object.id
         url = build_url(
             "attendance_update",
-            get={"book__user": user, "book__event": event, "attendance_date": attendance_date,},
+            get={"book__user": user, "book__event": event, "attendance_date": attendance_date, },
             pk={"pk": pk},
         )
         return url

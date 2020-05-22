@@ -12,9 +12,5 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RemoveField(model_name="book", name="time"),
-        migrations.AddField(
-            model_name="book",
-            name="time",
-            field=models.ManyToManyField(to="project.TimeOption"),
-        ),
+        migrations.AddField(model_name="book", name="time", field=models.ManyToManyField(to="project.TimeOption"),),
     ]

@@ -14,24 +14,16 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="book",
             name="event",
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE, to="project.Event"
-            ),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="project.Event"),
         ),
         migrations.AddField(
             model_name="book",
             name="price",
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE,
-                to="project.PriceOption",
-            ),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="project.PriceOption",),
         ),
         migrations.AddField(
             model_name="book",
             name="time",
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE,
-                to="project.TimeOption",
-            ),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="project.TimeOption",),
         ),
     ]

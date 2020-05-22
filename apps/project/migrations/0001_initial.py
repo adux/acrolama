@@ -14,15 +14,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="Day",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
                 (
                     "day",
                     models.CharField(
@@ -43,15 +35,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="Event",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
                 (
                     "category",
                     models.CharField(
@@ -70,26 +54,11 @@ class Migration(migrations.Migration):
                 ("event_startdate", models.DateField(blank=True, null=True)),
                 ("event_enddate", models.DateField(blank=True, null=True)),
                 ("description", models.TextField(max_length=3000)),
-                (
-                    "max_participants",
-                    models.CharField(blank=True, max_length=5, null=True),
-                ),
-                (
-                    "prerequisites",
-                    models.TextField(blank=True, max_length=2000, null=True),
-                ),
-                (
-                    "highlights",
-                    models.TextField(blank=True, max_length=2000, null=True),
-                ),
-                (
-                    "included",
-                    models.TextField(blank=True, max_length=2000, null=True),
-                ),
-                (
-                    "food",
-                    models.TextField(blank=True, max_length=2000, null=True),
-                ),
+                ("max_participants", models.CharField(blank=True, max_length=5, null=True),),
+                ("prerequisites", models.TextField(blank=True, max_length=2000, null=True),),
+                ("highlights", models.TextField(blank=True, max_length=2000, null=True),),
+                ("included", models.TextField(blank=True, max_length=2000, null=True),),
+                ("food", models.TextField(blank=True, max_length=2000, null=True),),
                 ("published", models.BooleanField()),
                 ("registration", models.BooleanField(default=True)),
                 ("slug", models.SlugField(blank=True, null=True, unique=True)),
@@ -98,24 +67,11 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="Exception",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
                 (
                     "category",
                     models.CharField(
-                        choices=[
-                            ("TI", "Time"),
-                            ("LO", "Location"),
-                            ("TL", "TimeLocation"),
-                        ],
-                        max_length=15,
+                        choices=[("TI", "Time"), ("LO", "Location"), ("TL", "TimeLocation"),], max_length=15,
                     ),
                 ),
                 ("description", models.TextField(max_length=2000)),
@@ -124,15 +80,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="Level",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
                 (
                     "name",
                     models.CharField(
@@ -146,51 +94,23 @@ class Migration(migrations.Migration):
                         max_length=20,
                     ),
                 ),
-                (
-                    "description",
-                    models.TextField(blank=True, max_length=1000, null=True),
-                ),
+                ("description", models.TextField(blank=True, max_length=1000, null=True),),
             ],
         ),
         migrations.CreateModel(
             name="Location",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
                 ("name", models.CharField(max_length=120)),
-                (
-                    "max_capacity",
-                    models.CharField(blank=True, max_length=5, null=True),
-                ),
-                (
-                    "description",
-                    models.TextField(blank=True, max_length=2000, null=True),
-                ),
-                (
-                    "indication",
-                    models.TextField(blank=True, max_length=2000, null=True),
-                ),
+                ("max_capacity", models.CharField(blank=True, max_length=5, null=True),),
+                ("description", models.TextField(blank=True, max_length=2000, null=True),),
+                ("indication", models.TextField(blank=True, max_length=2000, null=True),),
             ],
         ),
         migrations.CreateModel(
             name="Policy",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
                 ("name", models.CharField(max_length=120)),
                 ("description", models.TextField(max_length=2000)),
             ],
@@ -198,62 +118,29 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="PriceOption",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
                 ("abonament", models.BooleanField(default=False)),
                 ("name", models.CharField(max_length=30)),
                 ("description", models.TextField(max_length=1000)),
                 ("reduction", models.BooleanField(default=False)),
-                (
-                    "price_chf",
-                    models.CharField(blank=True, max_length=5, null=True),
-                ),
-                (
-                    "price_euro",
-                    models.CharField(blank=True, max_length=5, null=True),
-                ),
+                ("price_chf", models.CharField(blank=True, max_length=5, null=True),),
+                ("price_euro", models.CharField(blank=True, max_length=5, null=True),),
             ],
         ),
         migrations.CreateModel(
             name="Project",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
                 ("name", models.CharField(max_length=120)),
                 ("description", models.TextField(max_length=2000)),
-                (
-                    "todo",
-                    models.CharField(blank=True, max_length=120, null=True),
-                ),
+                ("todo", models.CharField(blank=True, max_length=120, null=True),),
                 ("creationdate", models.DateTimeField(auto_now_add=True)),
             ],
         ),
         migrations.CreateModel(
             name="TimeOption",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
                 ("name", models.CharField(max_length=20)),
                 ("description", models.TextField(max_length=1000)),
                 ("class_starttime", models.TimeField(blank=True, null=True)),
@@ -263,10 +150,7 @@ class Migration(migrations.Migration):
                 (
                     "regular_days",
                     models.ForeignKey(
-                        blank=True,
-                        null=True,
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to="project.Day",
+                        blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to="project.Day",
                     ),
                 ),
             ],
@@ -274,26 +158,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="TimeLocation",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                (
-                    "location",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to="project.Location",
-                    ),
-                ),
-                (
-                    "time_options",
-                    models.ManyToManyField(to="project.TimeOption"),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
+                ("location", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="project.Location",),),
+                ("time_options", models.ManyToManyField(to="project.TimeOption"),),
             ],
         ),
     ]

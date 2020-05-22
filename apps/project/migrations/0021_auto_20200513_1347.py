@@ -6,13 +6,9 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('project', '0020_auto_20200421_1521'),
+        ("project", "0020_auto_20200421_1521"),
     ]
 
     operations = [
-        migrations.AlterField(
-            model_name='policy',
-            name='description',
-            field=models.TextField(max_length=5000),
-        ),
+        migrations.AlterField(model_name="policy", name="description", field=models.TextField(max_length=5000),),
     ]

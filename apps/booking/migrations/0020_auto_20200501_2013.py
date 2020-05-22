@@ -6,18 +6,10 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('booking', '0019_auto_20200421_1520'),
+        ("booking", "0019_auto_20200421_1520"),
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='book',
-            name='accepted_policy',
-            field=models.BooleanField(default=False),
-        ),
-        migrations.AlterField(
-            model_name='bookdateinfo',
-            name='single_date',
-            field=models.DateField(blank=True),
-        ),
+        migrations.AddField(model_name="book", name="accepted_policy", field=models.BooleanField(default=False),),
+        migrations.AlterField(model_name="bookdateinfo", name="single_date", field=models.DateField(blank=True),),
     ]

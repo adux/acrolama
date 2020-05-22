@@ -7,10 +7,10 @@ from home.models import Info
 
 class StaticViewSitemap(Sitemap):
     priority = 0.4
-    changefreq = 'monthly'
+    changefreq = "monthly"
 
     def items(self):
-        return ['faq']
+        return ["faq"]
 
     def location(self, item):
         return reverse(item)
@@ -18,7 +18,7 @@ class StaticViewSitemap(Sitemap):
 
 class InfoViewSite(Sitemap):
     priority = 0.5
-    changefreq = 'monthly'
+    changefreq = "monthly"
 
     def items(self):
         return Info.objects.all()
@@ -26,7 +26,7 @@ class InfoViewSite(Sitemap):
 
 class EventViewSite(Sitemap):
     priority = 0.7
-    changefreq = 'weekly'
+    changefreq = "weekly"
 
     def items(self):
         return Event.objects.all()
@@ -34,12 +34,10 @@ class EventViewSite(Sitemap):
 
 class MainViewSitemap(Sitemap):
     priority = 0.9
-    changefreq = 'weekly'
+    changefreq = "weekly"
 
     def items(self):
-        return ['home', 'events', 'classes']
+        return ["home", "events", "classes"]
 
     def location(self, item):
         return reverse(item)
-
-

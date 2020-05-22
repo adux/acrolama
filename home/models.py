@@ -19,7 +19,6 @@ class AboutImage(models.Model):
         return self.image.title
 
 
-
 class AboutTeam(models.Model):
     team = models.ForeignKey("users.User", on_delete=models.CASCADE)
     uploaded_at = models.DateTimeField(auto_now_add=True)
@@ -29,12 +28,8 @@ class AboutTeam(models.Model):
 
 
 class AboutDate(models.Model):
-    start = models.DateField(
-        auto_now=False, auto_now_add=False, null=True, blank=True
-    )
-    end = models.DateField(
-        auto_now=False, auto_now_add=False, null=True, blank=True
-    )
+    start = models.DateField(auto_now=False, auto_now_add=False, null=True, blank=True)
+    end = models.DateField(auto_now=False, auto_now_add=False, null=True, blank=True)
     description = models.CharField(max_length=50)
 
     def yearstart(self):
@@ -66,7 +61,8 @@ class Info(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('info', args=[str(self.slug)])
+        return reverse("info", args=[str(self.slug)])
+
 
 def info_pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
@@ -91,6 +87,7 @@ class NewsList(models.Model):
     as preferences and sets it every week?
     Cleans, image included, the previous events, so only 3 are used.
     """
+
     event = models.ForeignKey("project.Event", on_delete=models.CASCADE)
     image = models.ImageField(upload_to="news/")
     added_at = models.DateField(auto_now_add=True)

@@ -25,10 +25,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="image",
             name="image",
-            field=models.ImageField(
-                height_field="image_height",
-                upload_to="images/",
-                width_field="image_width",
-            ),
+            field=models.ImageField(height_field="image_height", upload_to="images/", width_field="image_width",),
         ),
     ]

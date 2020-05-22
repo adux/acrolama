@@ -6,14 +6,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('audiovisual', '0003_auto_20191202_0920'),
+        ("audiovisual", "0003_auto_20191202_0920"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='image',
-            name='thumbnail',
-            field=models.ImageField(default=1, editable=False, upload_to='images/thumbs/'),
+            model_name="image",
+            name="thumbnail",
+            field=models.ImageField(default=1, editable=False, upload_to="images/thumbs/"),
             preserve_default=False,
         ),
     ]

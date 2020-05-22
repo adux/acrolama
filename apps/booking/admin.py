@@ -7,12 +7,8 @@ from booking.fields import ArrayField
 
 class AttendanceForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        super(AttendanceForm, self).__init__(
-            *args, **kwargs
-        )  # populate the post
-        self.fields["book"].queryset = Book.objects.select_related(
-            "user", "event", "event__level"
-        )
+        super(AttendanceForm, self).__init__(*args, **kwargs)  # populate the post
+        self.fields["book"].queryset = Book.objects.select_related("user", "event", "event__level")
 
     # class Meta:
     #     exclude = ['book']
@@ -39,11 +35,7 @@ class AttendanceAdmin(admin.ModelAdmin):
     ]
 
     def get_queryset(self, request):
-        return (
-            super(AttendanceAdmin, self)
-            .get_queryset(request)
-            .prefetch_related("book__times")
-        )
+        return super(AttendanceAdmin, self).get_queryset(request).prefetch_related("book__times")
 
 
 class BookAdmin(admin.ModelAdmin):
@@ -73,11 +65,7 @@ class BookAdmin(admin.ModelAdmin):
     ]
 
     def get_queryset(self, request):
-        return (
-            super(BookAdmin, self)
-            .get_queryset(request)
-            .prefetch_related("times")
-        )
+        return super(BookAdmin, self).get_queryset(request).prefetch_related("times")
 
     save_as = True
 
@@ -114,11 +102,7 @@ class QuotationAdmin(admin.ModelAdmin):
     ]
 
     def get_queryset(self, request):
-        return (
-            super(QuotationAdmin, self)
-            .get_queryset(request)
-            .prefetch_related("teachers", "direct_costs")
-        )
+        return super(QuotationAdmin, self).get_queryset(request).prefetch_related("teachers", "direct_costs")
 
 
 admin.site.register(Attendance, AttendanceAdmin)

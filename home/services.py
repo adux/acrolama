@@ -1,9 +1,10 @@
 from home.models import Info
 
+
 def createInfoFromPolicy(instance):
     name = instance.name.replace(" ", "")
     try:
-        info = Info.objects.get(slug = name)
+        info = Info.objects.get(slug=name)
     except Info.DoesNotExist:
         obj = Info()
         obj.title = instance.name
@@ -16,4 +17,3 @@ def createInfoFromPolicy(instance):
         info.content = instance.description
         info.save()
         return info
-

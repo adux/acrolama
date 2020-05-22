@@ -24,54 +24,15 @@ class UserAdmin(UserAdmin):
     ordering = ["email"]
     fieldsets = (
         (None, {"fields": ("email", "password")}),
-        (
-            _("Personal info"),
-            {
-                "fields": (
-                    "pronoun",
-                    "first_name",
-                    "last_name",
-                    "phone",
-                    "address",
-                    "birth_date",
-                )
-            },
-        ),
-        (
-            _("Teacher & Stuff info"),
-            {
-                "fields": (
-                    "avatar",
-                    "title",
-                    "short_description",
-                    "long_description",
-                )
-            },
-        ),
+        (_("Personal info"), {"fields": ("pronoun", "first_name", "last_name", "phone", "address", "birth_date",)},),
+        (_("Teacher & Stuff info"), {"fields": ("avatar", "title", "short_description", "long_description",)},),
         (
             _("Permissions"),
-            {
-                "fields": (
-                    "is_active",
-                    "is_staff",
-                    "is_teacher",
-                    "is_superuser",
-                    "groups",
-                    "user_permissions",
-                ),
-            },
+            {"fields": ("is_active", "is_staff", "is_teacher", "is_superuser", "groups", "user_permissions",),},
         ),
         (_("Important dates"), {"fields": ("last_login", "date_joined")}),
     )
-    add_fieldsets = (
-        (
-            None,
-            {
-                "classes": ("wide",),
-                "fields": ("email", "password1", "password2"),
-            },
-        ),
-    )
+    add_fieldsets = ((None, {"classes": ("wide",), "fields": ("email", "password1", "password2"),},),)
 
 
 admin.site.register(User, UserAdmin)

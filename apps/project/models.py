@@ -121,7 +121,7 @@ class TimeLocation(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
 
     def __str__(self):
-        #TODO: I think i need to remove this name on Foreign Key or cache it
+        # TODO: I think i need to remove this name on Foreign Key or cache it
         return " - ".join(p.name for p in self.time_options.all()) + " | %s" % (self.location)
 
 
@@ -138,12 +138,12 @@ class Irregularity(models.Model):
 
 
 class PriceOption(models.Model):
-    #Options
+    # Options
     duo = models.BooleanField(default=False)
     single_date = models.BooleanField(default=False)
     cycles = models.IntegerField(verbose_name="Numbero of Cycles", default=0)
 
-    #Info
+    # Info
     name = models.CharField(max_length=30)
     description = models.TextField(max_length=1000)
     price_chf = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
@@ -161,7 +161,6 @@ class PriceOption(models.Model):
             raise ValidationError("Can't be 'Duo' and 'Single date'")
         if self.single_date and self.cycles > 0:
             raise ValidationError("Can't use 'Single date' with Cycles Abos")
-
 
 
 # Sport Info
@@ -194,8 +193,10 @@ class Policy(models.Model):
     def get_absolute_url(self):
         return reverse("info", args=[str(self.name.replace(" ", ""))])
 
+
 def policy_pre_save_url(sender, instance, *args, **kwargs):
     createInfoFromPolicy(instance)
+
 
 pre_save.connect(policy_pre_save_url, sender=Policy)
 
@@ -247,11 +248,8 @@ class Event(models.Model):
             return reverse("event", args=[str(self.slug)])
 
     def __str__(self):
-        return "(%s) %s - %s" % (
-            self.event_startdate.strftime("%d %b"),
-            self.get_category_display(),
-            self.title,
-            )
+        return "(%s) %s - %s" % (self.event_startdate.strftime("%d %b"), self.get_category_display(), self.title,)
+
 
 def event_pre_save_slug(sender, instance, *args, **kwargs):
     if not instance.slug:

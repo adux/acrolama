@@ -18,23 +18,16 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="portfolio",
             name="owner",
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE,
-                to=settings.AUTH_USER_MODEL,
-            ),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL,),
         ),
         migrations.AddField(
             model_name="infoimage",
             name="general",
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE, to="home.Info"
-            ),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="home.Info"),
         ),
         migrations.AddField(
             model_name="aboutimage",
             name="general",
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE, to="home.About"
-            ),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="home.About"),
         ),
     ]

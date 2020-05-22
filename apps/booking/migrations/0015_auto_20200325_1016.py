@@ -10,9 +10,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
-            model_name="quotation",
-            name="locked",
-            field=models.BooleanField(default=False),
-        ),
+        migrations.AlterField(model_name="quotation", name="locked", field=models.BooleanField(default=False),),
     ]

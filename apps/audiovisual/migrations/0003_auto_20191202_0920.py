@@ -11,13 +11,9 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name="image",
-            name="image_height",
-            field=models.PositiveIntegerField(blank=True, null=True),
+            model_name="image", name="image_height", field=models.PositiveIntegerField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name="image",
-            name="image_width",
-            field=models.PositiveIntegerField(blank=True, null=True),
+            model_name="image", name="image_width", field=models.PositiveIntegerField(blank=True, null=True),
         ),
     ]

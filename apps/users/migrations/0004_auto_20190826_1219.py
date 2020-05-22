@@ -14,8 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="user",
             name="date_joined",
-            field=models.DateTimeField(
-                default=django.utils.timezone.now, verbose_name="date joined"
-            ),
+            field=models.DateTimeField(default=django.utils.timezone.now, verbose_name="date joined"),
         ),
     ]
