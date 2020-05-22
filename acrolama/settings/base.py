@@ -2,7 +2,6 @@ import os
 import sys
 
 from .allauth import *
-from .todo import *
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -37,7 +36,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
-            "libraries": {"booking_tags": "apps.booking.templatetags.booking_tags",},
+            "libraries": {"booking_tags": "apps.booking.templatetags.booking_tags", },
         },
     },
 ]
