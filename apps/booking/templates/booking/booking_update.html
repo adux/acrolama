@@ -2,9 +2,28 @@
 {% block head_title%}Update{% endblock %}
 {% load widget_tweaks %}
 {% block content %}
-<form method="POST">{% csrf_token %}
+<form id="update" method="POST">{% csrf_token %}
     <div class="card card-body bg-light">
-        <h4>{{object.price.name}} Booking N°{{object.pk}} by {{object.user.get_full_name}} of {{object.booked_at|date:'d-M.'}} {% if object.invoice %}, with <a href="{% url 'accounting_update' object.invoice.pk %}">Invoice N°{{object.invoice.pk}}</a>{% else %}No Invoice{% endif %}{% if object.attendance %} and <a href="{% url 'attendance_update' object.attendance.pk %}">Attendance N°{{object.attendance.pk}}</a> {% endif %}</h4>
+        <h4>{{object.price.name}} N°{{object.pk}} by {{object.user.get_full_name}} - {{object.booked_at|date:'M. dS'}} {% if object.invoice %}, with <a href="{% url 'accounting_update' object.invoice.pk %}">Invoice N°{{object.invoice.pk}}</a>{% else %}No Invoice{% endif %}{% if object.attendance %} and <a href="{% url 'attendance_update' object.attendance.pk %}">Attendance N°{{object.attendance.pk}}</a> {% endif %}</h4>
+        <div class="row">
+            <div class="col">
+                {% if object.informed_at %}
+                <div class="d-inline text-dark">Informed: {{object.informed_at}}</div>
+                {% endif %}
+                <div class="d-inline text-dark"><a id="addnote" class="text-primary" >Show notes.</a></div>
+                <div id="note" >
+                {% render_field form.note class="form-control" rows="2" %}
+                </div>
+                <script>
+                $("#note").hide();
+                $(document).ready(function(){
+                    $("#addnote").click(function(){
+                        $("#note").show();
+                    });
+                  });
+                </script>
+            </div>
+        </div>
         <div class="row">
             <div class="form-group col-sm-4 col-md-5">
               {{ form.user.label_tag }}
@@ -18,35 +37,43 @@
               {{ form.status.label_tag }}
               {% render_field form.status class="form-control" %}
             </div>
-            <div class="form-group col-sm-8 col-md-6">
+            <div class="form-group col-sm-4 col-md-5">
             {{ form.times.label_tag }}
-                <ul style=" list-style-type: none; max-height: 150px; overflow-y: auto;" >
-                    {% for choice in form.times %}
-                    <li>
-                        <label class="checkbox-inline">
-                            {{ choice.tag }} {{ choice.choice_label }}
-                        </label>
-                    </li>
-                {% endfor %}
-                </ul>
+            {% render_field form.times class="form-control" %}
             </div>
         </div>
+        {% if object.comment %}
+        <div class="row">
+            <div class="form-group col-sm-12 col-md-12">
+            {{ form.comment.label_tag }}
+            {% render_field form.comment class="form-control" rows="2" %}
+            </div>
+        </div>
+        {% endif %}
+        {% if object.bookduoinfo %}
         <hr>
-        <p> If update status from <u>Pending</u> to <u>Informed</u>:<br>
-        <li><strong>an automatic email will be sent</strong>.</li>
-        <li><strong>an assistance of book will be created</strong>.</li>
-        </p>
+        <h4>Additional Info</h4>
+        <div class="row">
+            <div class="d-inline p-2 text-dark">First name: {{object.bookduoinfo.first_name}}</div>
+            <div class="d-inline p-2 text-dark">Last name: {{object.bookduoinfo.last_name}}</div>
+            <div class="d-inline p-2 text-dark">Email: {{object.bookduoinfo.email}}</div>
+            <div class="d-inline p-2 text-dark">Phone: {{object.bookduoinfo.phone}}</div>
+        </div>
+        {% endif %}
+        {% if object.bookdateinfo %}
+        <hr>
+        <h4>Additional Info</h4>
+        <div class="row">
+            <div class="d-inline p-2 text-dark">Single date: {{object.bookdateinfo.single_date}}</div>
+        </div>
+        {% endif %}
+        <hr>
+        <p>From <u>Pending</u> or <u>Waiting List</u> to <u>Informed</u>: · Send "Confirmed" email · Assistance book created<p>
         <button type="submit" name="update" class="btn btn-danger">
-            <i class="fas fa-edit"></i> DANGER - Update
-        </button>
-        <hr>
-        <p> If duplicate is a <u>Cycle</u>:
-        <li>Book with <b>next cycle</b>.</li>
-        </p>
-        <button type="submit" name="create" class="btn btn-warning">
-        <i class="fas fa-copy"></i> Dulicate Booking for next Cycle
+            <i class="fas fa-edit"></i> UPDATE
         </button>
     </div>
 </form>
+<hr>
 {% include "booking/snippets/booking_filter.html" %}
 {% endblock %}

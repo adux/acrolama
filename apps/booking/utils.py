@@ -7,9 +7,10 @@ from django.urls import reverse
 
 from django.template.loader import render_to_string
 
-from project.models import Event, PriceOption, TimeOption, Irregularity
+from project.models import Irregularity
 
 # from users.models import User
+
 
 # Tests for the UserPassesTestMixin
 def staff_check(user):
@@ -21,9 +22,10 @@ def teacher_check(user):
 
 
 def herd_check(user):
-    if user.is_teacher or user.is_staff:
-        return True
-    else:
+    try:
+        if user.is_teacher or user.is_staff:
+            return True
+    except AttributeError:
         return False
 
 
@@ -50,7 +52,7 @@ def datelistgenerator(startdate, enddate, regularday):
 
 
 def space_out(string, length):
-    return " ".join(string[i : i + length] for i in range(0, len(string), length))
+    return " ".join(string[i: i + length] for i in range(0, len(string), length))
 
 
 def email_sender(instance, flag):

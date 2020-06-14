@@ -27,8 +27,14 @@ class UpdateBookForm(forms.ModelForm):
 
     class Meta:
         model = Book
-        fields = ["user", "event", "status", "times"]
-        widgets = {"times": forms.CheckboxSelectMultiple}
+        fields = ["user", "event", "status", "times", "comment", "note"]
+        widgets = {"times": M2MSelect(attrs={})}
+
+
+class UpdateBookDuoForm(forms.ModelForm):
+    class Meta:
+        model = BookDuoInfo
+        fields = ["first_name", "last_name", "phone", "email"]
 
 
 class CreateBookForm(forms.ModelForm):
@@ -121,13 +127,13 @@ class BookDuoInfoForm(forms.ModelForm):
 
     def clean_firstname(self):
         first_name = self.cleaned_data["first_name"]
-        if first_name is not "":
+        if first_name != "":
             return first_name[0].upper() + first_name[1:].lower()
         return first_name
 
     def clean_last_name(self):
         last_name = self.cleaned_data["last_name"]
-        if last_name is not "":
+        if last_name != "":
             return last_name[0].upper() + last_name[1:].lower()
         return last_name
 

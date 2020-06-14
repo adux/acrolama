@@ -181,39 +181,43 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
         if "update" in self.request.POST:
             if (book.status == "PE" or book.status == "WL") and (instance.status == "IN"):
-
                 # Invoice
                 try:
                     createInvoiceFromBook(instance)
-                except:
+                except Exception as e:
                     messages.add_message(
-                        self.request, messages.WARNING, _("Error creating Invoice"),
+                        self.request, messages.WARNING, _("Error creating Invoice: " + str(e)),
                     )
                 else:
-                    messages.add_message(self.request, messages.INFO, _("Invoice Created"))
+                    messages.add_message(self.request, messages.SUCCESS, _("Invoice Created"))
 
                 # Attendance
                 try:
                     createAttendance(instance)
-                except:
+                except Exception as e:
                     messages.add_message(
-                        self.request, messages.WARNING, _("Error creating Attendance"),
+                        self.request, messages.WARNING, _("Error creating Attendance: " + str(e)),
                     )
                 else:
-                    messages.add_message(self.request, messages.INFO, _("Attendance created"))
+                    messages.add_message(self.request, messages.SUCCESS, _("Attendance created"))
 
                 # Send Email
-                try:
-                    email_sender(instance, "Informed")
-                except:
-                    messages.add_message(self.request, messages.WARNING, _("Error Email"))
+                if book.informed_at is None:
+                    try:
+                        email_sender(instance, "Informed")
+                    except Exception as e:
+                        messages.add_message(self.request, messages.ERROR, _("Error Email: " + str(e)))
+                    else:
+                        messages.add_message(self.request, messages.SUCCESS, _("Informed email sent."))
+                        instance.informed_at = datetime.datetime.now()
                 else:
-                    messages.add_message(self.request, messages.INFO, _("Informed email sent."))
+                    messages.add_message(self.request, messages.INFO, _("Email sent: " + str(book.informed_at)))
 
             elif (book.status == "IN") and (instance.status == "PA"):
                 messages.add_message(
                     self.request, messages.INFO, _("Please change to participant only if Invoice payed."),
                 )
+
             instance.save()
         elif "create" in self.request.POST:
             try:
@@ -317,7 +321,6 @@ def attendance_daily_view(request):
             check_list = request.POST.getlist("check")
             try:
                 for values in check_list:
-                    # Prepare de data
                     values_split = values.split(" ")
                     attendance_id = values_split[0]
                     check_pos = values_split[1]
@@ -382,7 +385,7 @@ class AttendanceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         )
 
         context["attendance_filter"] = attendance_filter
-        paginator = Paginator(attendance_filter.qs, 20)  # Show 25 contacts per page.
+        paginator = Paginator(attendance_filter.qs, 20)
         page = self.request.GET.get("page")
         try:
             response = paginator.page(page)
@@ -642,6 +645,10 @@ def quotationlockview(request, pk):
 
 class HerdView(UserPassesTestMixin, LoginRequiredMixin, TemplateView):
     template_name = "booking/herd.html"
+    login_url = "/accounts/login/"
 
     def test_func(self):
         return herd_check(self.request.user)
+
+
+

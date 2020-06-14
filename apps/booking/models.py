@@ -33,6 +33,7 @@ class Book(models.Model):
     status = models.CharField(max_length=15, choices=BOOKINGSTATUS, default="PE", null=True, blank=True,)
     note = models.TextField(max_length=1000, null=True, blank=True)
     booked_at = models.DateTimeField(auto_now_add=True)
+    informed_at = models.DateTimeField(null=True, blank=True)
 
     # Gets names from TimeOption
     def get_times(self):

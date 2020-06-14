@@ -25,7 +25,7 @@ class BookFilter(django_filters.FilterSet):
 
     class Meta:
         model = Book
-        fields = {"status", "times"}
+        fields = {"id", "status", "times"}
 
     def filter_by_all_name_fields(self, queryset, name, value):
         return queryset.filter(
