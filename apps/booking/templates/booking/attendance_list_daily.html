@@ -31,6 +31,7 @@
             <th scope="col">Switch</th>
             <th scope="col">Id</th>
             <th scope="col">Event</th>
+            <th scope="col">Status</th>
         </thead>
         <tbody>
             {% for obj in attendance_list %}
@@ -41,6 +42,7 @@
                 <td><input type="checkbox" name="check" value="{{obj.id}} {% get_attendance_num obj 'get_num' filtered_date %}"></td>
                 <td>{{obj.book.id}}</td>
                 <td>{{obj.book.event}}</td>
+                <td>{{obj.book.invoice.get_status_display}}</td>
                 <input type="hidden" name="filtered_event" value="{{obj.book.event.id}}">
             </tr>
             {% endfor%}
