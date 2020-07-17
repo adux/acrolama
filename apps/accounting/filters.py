@@ -1,10 +1,8 @@
 from dal import autocomplete
 
-from django import forms
 from django.db.models import Q
 
 import django_filters
-import datetime
 
 from accounting.models import Invoice, BALANCE
 from project.models import Event
@@ -26,7 +24,7 @@ class AccountFilter(django_filters.FilterSet):
 
     class Meta:
         model = Invoice
-        fields = {"status"}
+        fields = {"id", "status"}
 
     def filter_by_date_smaller_than(self, queryset, name, value):
         return queryset.filter(Q(pay_till__lte=value))

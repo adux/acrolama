@@ -21,6 +21,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 
 # Models
+from users.models import User
 from booking.models import Book, Attendance, Quotation
 from project.models import Event
 
@@ -74,6 +75,22 @@ class EventAutocomplete(autocomplete.Select2QuerySetView):
         if self.q:
             qs = qs.filter(
                 Q(category__icontains=self.q) | Q(level__name__icontains=self.q) | Q(title__icontains=self.q)
+            )
+
+        return qs
+
+
+class UserAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        if not self.request.user.is_staff:
+            return User.objects.none()
+
+        qs = User.objects.all().order_by("last_name")
+
+        if self.q:
+            qs = qs.filter(
+                Q(email__icontains=self.q) | Q(first_name__icontains=self.q) | Q(last_name__icontains=self.q)
             )
 
         return qs
@@ -554,9 +571,8 @@ def quotationcreateview(request):
                     request, messages.WARNING, _("Missing Event or Time Location"),
                 )
         else:
-            messages.add_message(
-                request, messages.WARNING, _("Missing Event or Time Location"),
-            )
+            # TODO: maybe
+            pass
 
     if request.method == "POST":
         form = form(request.POST)
@@ -591,16 +607,15 @@ def quotationcreateview(request):
             direct_costs = form.cleaned_data["direct_costs"]
             dc = []
 
-            for x in direct_costs:
-                x.split(" ")
-                dc.append(x[0])
+            for descriptor in direct_costs:
+                descriptor.split(" ")
+                dc.append(descriptor[0])
 
             obj.direct_costs.add(*dc)
 
-            form.save_m2m()
+            obj.save()
 
     # Context
-
     context = {
         "book_filter": book_filter,
         "filtered_list": book_filter.qs,

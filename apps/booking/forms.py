@@ -1,14 +1,22 @@
 from dal import autocomplete
+
+# Django
 from django import forms
-from django.contrib.postgres.fields import ArrayField
 from django.utils.translation import ugettext_lazy as _
 
 # Models
 from accounting.models import Invoice
 from users.models import User
-from project.models import Event, PriceOption, TimeOption
-from booking.models import BOOKINGSTATUS, Book, BookDuoInfo, BookDateInfo, Attendance, Quotation
+from booking.models import (
+    BOOKINGSTATUS,
+    Book,
+    BookDuoInfo,
+    BookDateInfo,
+    Attendance,
+    Quotation
+)
 
+# Widgets
 from booking.widgets import DynamicArrayWidget, M2MSelect
 
 
@@ -41,7 +49,11 @@ class CreateBookForm(forms.ModelForm):
     class Meta:
         model = Book
         fields = ["user", "event", "times", "price"]
-        widgets = {"times": forms.CheckboxSelectMultiple}
+        widgets = {
+            "times": M2MSelect,
+            "event": autocomplete.ModelSelect2(url="event-autocomplete"),
+            "user": autocomplete.ModelSelect2(url="user-autocomplete")
+        }
 
 
 class CreateQuotationForm(forms.ModelForm):

@@ -6,6 +6,22 @@
     <div class="card card-body bg-light">
         <h4>Invoice N°{{object.pk}} {% if object.book %}of <a href="{% url 'booking_update' object.book.id %}">Booking N°{{object.book.id}}</a>{% endif %} - {% if object.book %}{{object.book.user.get_full_name}}{% else %}{{object.partner.name}}{% endif %} - Pay till: {{object.pay_till|date:'d M.'}} CHF {{object.to_pay}}.-</h4>
         <div class="row">
+            <div class="col">
+                <div class="d-inline text-dark"><a id="addnote" class="text-primary" >Show notes.</a></div>
+                <div id="note" >
+                {% render_field form.notes class="form-control" rows="2" %}
+                </div>
+                <script>
+                $("#note").hide();
+                $(document).ready(function(){
+                    $("#addnote").click(function(){
+                        $("#note").show();
+                    });
+                  });
+                </script>
+            </div>
+        </div>
+        <div class="row">
             <div class="form-group col-sm-2 col-md-2">
               {{ form.paid.label_tag }}
               {% render_field form.paid class="form-control" %}

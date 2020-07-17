@@ -23,7 +23,7 @@ class PortfolioAdmin(admin.ModelAdmin):
 
 
 class FaqAdmin(admin.ModelAdmin):
-    list_display = "question", "answer"
+    list_display = ("question", "answer")
 
 
 # class InfoImageInline(admin.StackedInline):
