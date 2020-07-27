@@ -8,12 +8,6 @@ from accounting.models import Invoice
 from .utils import datelistgenerator
 
 
-def updateSwitchCheckAttendance(id, position):
-    attendance = Attendance.objects.get(pk=id)
-    attendance.attendance_check[position] = not attendance.attendance_check[position]
-    attendance.save()
-
-
 def get_book(book):
     # If its str or int treat it as id
     if isinstance(book, (str, int)):
@@ -25,7 +19,7 @@ def get_book(book):
     if book_pk:
         try:
             book = Book.objects.get(pk=book_pk)
-        except:
+        except Book.DoesNotExist:
             print("Booking doesn't exist")
 
     return book
@@ -42,7 +36,7 @@ def get_event(event):
     if event_pk:
         try:
             event = Event.objects.get(pk=event_pk)
-        except:
+        except Event.DoesNotExist:
             print("Event doesn't exist")
 
     return event
@@ -59,10 +53,16 @@ def get_timelocation(tl):
     if tl_pk:
         try:
             tl = TimeLocation.objects.get(pk=tl_pk)
-        except:
-            print("Event doesn't exist")
+        except TimeLocation.DoesNotExist:
+            print("Time Location doesn't exist")
 
     return tl
+
+
+def updateSwitchCheckAttendance(id, position):
+    attendance = Attendance.objects.get(pk=id)
+    attendance.attendance_check[position] = not attendance.attendance_check[position]
+    attendance.save()
 
 
 def updateBookStatus(book, status):
@@ -70,18 +70,22 @@ def updateBookStatus(book, status):
     if status == "PA" or "Participant":
         book.status = "PA"
         book.save()
+    elif status == "CA" or "Canceled":
+        book.status = "CA"
+        book.save()
 
 
 def createInvoiceFromBook(book):
     book = get_book(book)
 
     obj = Invoice()
-    obj.balance = "CR"
+    obj.balance = "CR"  # Credit
     obj.book = book
     # TODO create a smart referral code
-    obj.status = "PE"
+    # Code created in Email Send ...
+    obj.status = "PE"   # Pending
     obj.to_pay = int(book.price.price_chf)
-    obj.pay_till = datetime.datetime.now().date() + datetime.timedelta(days=10)
+    obj.pay_till = datetime.datetime.now().date() + datetime.timedelta(days=10)  # Give 10 Days to pay
     obj.notes = "\n Automatic created Invoice"
     obj.save()
 

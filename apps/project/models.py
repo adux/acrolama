@@ -94,6 +94,8 @@ class TimeOption(models.Model):
     def get_class_start_times(self):
         if self.class_starttime is not None:
             return "%s - %s" % (self.class_starttime.strftime("%H:%M"), self.class_endtime.strftime("%H:%M"),)
+        else:
+            return None
 
     def get_open_start_times(self):
         return "%s - %s" % (self.open_starttime.strftime("%H:%M"), self.open_endtime.strftime("%H:%M"),)

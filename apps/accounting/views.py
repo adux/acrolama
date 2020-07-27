@@ -51,7 +51,7 @@ def accountinglistview(request):
 
     # TODO: acctions with various invoices
     if request.method == "POST":
-        checked_list = request.POST.getlist("check")
+        #  checked_list = request.POST.getlist("check")
         if "create" in request.POST:
             pass
 
@@ -68,7 +68,7 @@ class InvoiceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         account_filter = AccountFilter(self.request.GET, queryset=(Invoice.objects.all().select_related("book")),)
 
         context["account_filter"] = account_filter
-        paginator = Paginator(account_filter.qs, 20)  # Show 25 contacts per page.
+        paginator = Paginator(account_filter.qs, 24)  # Show 25 contacts per page.
         page = self.request.GET.get("page")
         try:
             response = paginator.page(page)
@@ -85,33 +85,56 @@ class InvoiceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         invoice = get_invoice(instance.id)
 
         if "update" in self.request.POST:
-            if (invoice.status == "PE") and (instance.status == "PY"):
-                if invoice.book:
+            if invoice.book:
+                if (invoice.status == "PE") and (instance.status == "PY"):  # Pending to Payed
                     try:
                         email_sender(instance, "Paid")
-                        # If its an Abo do the necesarry Bookings and Attendances
-                    except:
-                        messages.add_message(self.request, messages.WARNING, _("Error in Email"))
+                    except Exception as e:
+                        messages.add_message(self.request, messages.WARNING, _("Error in Email: " + e))
                     else:
                         messages.add_message(self.request, messages.INFO, _("Paid Email sent"))
+
                     try:
-                        updateBookStatus(instance.book.id, "PA")
-                    except:
+                        updateBookStatus(instance.book.id, "PA")  # Update to Participant
+                    except Exception as e:
                         messages.add_message(
-                            self.request, messages.WARNING, _("Error updating booking N°" + str(instance.book.id))
+                            self.request, messages.WARNING, _(
+                                "Error updating booking N°" + str(instance.book.id + " : " + e)
+                            )
                         )
                     else:
                         messages.add_message(self.request, messages.INFO, _("Updated status Booking"))
+
                     # Multiple Cycles
                     if invoice.book.price.cycles > 1:
                         try:
                             createNextBookAttendance(invoice.book.id)
-                        except:
+                        except Exception as e:
                             messages.add_message(
-                                self.request, messages.WARNING, _("Error creating Next Booking for Abo")
+                                self.request, messages.WARNING, _("Error creating Next Booking for Abo: " + e)
                             )
                         else:
                             messages.add_message(self.request, messages.INFO, _("Booking and Attendance created"))
+
+                elif (invoice.status == "PE" or "PY") and (instance.status == "CA"):
+
+                    # Check if any Attendance True
+                    if invoice.book.attendance.count_attendance < 1:
+
+                        try:
+                            updateBookStatus(instance.book.id, "CA")  # Update to Canceled
+                        except Exception as e:
+                            messages.add_message(
+                                self.request, messages.WARNING, _(
+                                    "Error updating booking N°" + str(instance.book.id + " : " + e)
+                                )
+                            )
+                        else:
+                            messages.add_message(self.request, messages.INFO, _("Updated status Booking"))
+                    else:
+                        messages.add_message(self.request, messages.WARNING, _("Can't Update"))
+
+
             instance.save()
         return super().form_valid(form)
 
