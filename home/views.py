@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib import messages
 
 from django.http import HttpResponseRedirect
@@ -58,14 +60,21 @@ class HomeFormView(MultiFormsView):
 
         # Classes
         classes = (
-            event_main.filter(event_enddate__gte=timezone.now(), category="CY")
+            event_main.filter(
+                event_enddate__gte=timezone.now(),
+                envet_startdate__lt=timezone.zone.now(),
+                category="CY"
+            )
             .order_by("event_startdate", "level", "title")
             .exclude(published=False)
             .distinct()
         )
 
         context["current"] = classes
-        context["next"] = classes.filter(event_startdate__gte=timezone.now())
+        context["next"] = classes.filter(
+            event_startdate__gte=timezone.now(),
+            event_startdate__lt=(timezone.now() + datetime.timedelta(days=45))
+        )
 
         # context["intermediate"] = classes.filter(Q(level="2") | Q(level="3"))
         return context
