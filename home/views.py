@@ -65,7 +65,7 @@ class HomeFormView(MultiFormsView):
         )
 
         context["current"] = classes
-        context["next"] = classes.event_startdate__gte = (timezone.now() + timezone.timedelta(days=32),)
+        context["next"] = classes.filter(event_startdate__gte=timezone.now())
 
         # context["intermediate"] = classes.filter(Q(level="2") | Q(level="3"))
         return context
