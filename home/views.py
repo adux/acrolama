@@ -62,7 +62,7 @@ class HomeFormView(MultiFormsView):
         classes = (
             event_main.filter(
                 event_enddate__gte=timezone.now(),
-                event_startdate__lt=timezone.now(),
+                event_startdate__lte=timezone.now(),
                 category="CY"
             )
             .order_by("event_startdate", "level", "title")
@@ -72,8 +72,8 @@ class HomeFormView(MultiFormsView):
 
         context["current"] = classes
         context["next"] = classes.filter(
-            event_startdate__gte=timezone.now(),
-            event_startdate__lt=(timezone.now() + datetime.timedelta(days=45))
+            event_startdate__gt=timezone.now(),
+            event_startdate__lte=(timezone.now() + datetime.timedelta(days=45))
         )
 
         # context["intermediate"] = classes.filter(Q(level="2") | Q(level="3"))
