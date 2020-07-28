@@ -62,7 +62,7 @@ class HomeFormView(MultiFormsView):
         classes = (
             event_main.filter(
                 event_enddate__gte=timezone.now(),
-                envet_startdate__lt=timezone.zone.now(),
+                envet_startdate__lt=timezone.now(),
                 category="CY"
             )
             .order_by("event_startdate", "level", "title")
