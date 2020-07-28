@@ -60,17 +60,16 @@ class HomeFormView(MultiFormsView):
 
         # Classes
         classes = (
-            event_main.filter(
-                event_enddate__gte=timezone.now(),
-                event_startdate__lte=timezone.now(),
-                category="CY"
-            )
+            event_main.filter(category="CY")
             .order_by("event_startdate", "level", "title")
             .exclude(published=False)
             .distinct()
         )
 
-        context["current"] = classes
+        context["current"] = classes.filter(
+                event_enddate__gte=timezone.now(),
+                event_startdate__lte=timezone.now(),
+        )
         context["next"] = classes.filter(
             event_startdate__gt=timezone.now(),
             event_startdate__lte=(timezone.now() + datetime.timedelta(days=45))
