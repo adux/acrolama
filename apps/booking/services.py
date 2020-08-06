@@ -67,10 +67,10 @@ def updateSwitchCheckAttendance(id, position):
 
 def updateBookStatus(book, status):
     book = get_book(book)
-    if status == "PA" or "Participant":
+    if status in ("PA", "Participant"):
         book.status = "PA"
         book.save()
-    elif status == "CA" or "Canceled":
+    elif status in ("CA", "Canceled"):
         book.status = "CA"
         book.save()
 
