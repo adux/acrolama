@@ -117,7 +117,7 @@ class InvoiceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                         else:
                             messages.add_message(self.request, messages.INFO, _("Booking and Attendance created"))
 
-                elif (invoice.status in ("PE", "PY") and (instance.status == "CA"):
+                elif (invoice.status in ("PE", "PY")) and (instance.status == "CA"):
 
                     # Check if no Attendance True
                     if invoice.book.attendance.count_attendance() < 1:
