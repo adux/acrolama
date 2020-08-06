@@ -87,6 +87,7 @@ class InvoiceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         if "update" in self.request.POST:
             if invoice.book:
                 if (invoice.status == "PE") and (instance.status == "PY"):  # Pending to Payed
+
                     try:
                         email_sender(instance, "Paid")
                     except Exception as e:
@@ -116,9 +117,9 @@ class InvoiceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                         else:
                             messages.add_message(self.request, messages.INFO, _("Booking and Attendance created"))
 
-                elif (invoice.status == "PE" or "PY") and (instance.status == "CA"):
+                elif (invoice.status in ("PE", "PY") and (instance.status == "CA"):
 
-                    # Check if any Attendance True
+                    # Check if no Attendance True
                     if invoice.book.attendance.count_attendance() < 1:
                         try:
                             updateBookStatus(instance.book.id, "CA")  # Update to Canceled
@@ -129,7 +130,7 @@ class InvoiceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                                 )
                             )
                         else:
-                            messages.add_message(self.request, messages.INFO, _("Updated status Booking"))
+                            messages.add_message(self.request, messages.INFO, _("Updated status Booking, Attendance Pending"))
                     else:
                         messages.add_message(self.request, messages.WARNING, _("Can't Update"))
 
