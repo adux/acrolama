@@ -119,8 +119,7 @@ class InvoiceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                 elif (invoice.status == "PE" or "PY") and (instance.status == "CA"):
 
                     # Check if any Attendance True
-                    if invoice.book.attendance.count_attendance < 1:
-
+                    if invoice.book.attendance.count_attendance() < 1:
                         try:
                             updateBookStatus(instance.book.id, "CA")  # Update to Canceled
                         except Exception as e:
@@ -133,7 +132,6 @@ class InvoiceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                             messages.add_message(self.request, messages.INFO, _("Updated status Booking"))
                     else:
                         messages.add_message(self.request, messages.WARNING, _("Can't Update"))
-
 
             instance.save()
         return super().form_valid(form)
