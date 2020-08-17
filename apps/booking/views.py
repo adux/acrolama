@@ -440,6 +440,42 @@ class AttendanceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
 @login_required
 @user_passes_test(staff_check)
+def contactlistview(request):
+    template = "booking/contact_list.html"
+    booking_filter = BookFilter(
+        request.GET,
+        queryset=(
+            Book.objects.all()
+            .select_related("event", "user", "price")
+            .prefetch_related("times__regular_days")
+            .order_by("-booked_at")
+        ),
+    )
+
+    # Pagination
+    paginator = Paginator(booking_filter.qs, 24)  # Show 24 contacts per page.
+    page = request.GET.get("page")
+
+    try:
+        response = paginator.page(page)
+    except PageNotAnInteger:
+        response = paginator.page(1)
+    except EmptyPage:
+        response = paginator.page(paginator.num_pages)
+
+    # End Paginator
+
+    context = {
+        "book_filter": booking_filter,
+        "filter": request.GET,
+        "page_obj": response,
+    }
+
+    return render(request, template, context)
+
+
+@login_required
+@user_passes_test(staff_check)
 def quotationlistview(request):
     template = "booking/quotation_list.html"
     quotation_filter = QuotationFilter(

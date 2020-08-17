@@ -4,7 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 # TODO: Cache
-from django.views.decorators.cache import cache_page
+# from django.views.decorators.cache import cache_page
 
 from home.views import (
     HomeFormView,
@@ -25,6 +25,7 @@ from booking.views import (
     bookinglistview,
     BookUpdateView,
     BookCreateView,
+    contactlistview,
     QuotationUpdateView,
     quotationlistview,
     quotationcreateview,
@@ -85,6 +86,8 @@ urlpatterns = [
     path("herd/quotation/<int:pk>/update/", QuotationUpdateView.as_view(), name="quotation_update",),
     path("herd/quotation/<int:pk>/lock/", quotationlockview, name="quotation_lock",),
     path("herd/quotation/create/", quotationcreateview, name="quotation_create"),
+    # Contact
+    path("herd/contact/", contactlistview, name="contact_list"),
     # Teachers
     path("herd/teacher/attendance", attendance_daily_view, name="teacher_attendance",),
     path("herd/teacher/booking/create/", BookCreateView.as_view(), name="teacher_booking_create",),

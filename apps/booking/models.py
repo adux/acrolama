@@ -2,10 +2,6 @@
 
 from django.db import models
 
-from project.models import Irregularity, TimeOption
-
-from booking.utils import datelistgenerator
-
 # Original would be from postgres.field fields looks for other widgets
 # from django.contrib.postgres.fields import ArrayField
 from booking.fields import ArrayField
