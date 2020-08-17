@@ -7,11 +7,15 @@
             {{ book_filter.form.id.label_tag }}
             {% render_field book_filter.form.id class="form-control" %}
             </div>
-            <div class="form-group col-sm-4 col-md-4">
+            <div class="form-group col-sm-4 col-md-3">
             {{ book_filter.form.user.label_tag }}
             {% render_field book_filter.form.user class="form-control" %}
             </div>
-            <div class="form-group col-sm-4 col-md-6">
+            <div class="form-group col-sm-4 col-md-2">
+            {{ book_filter.form.event__level.label_tag }}
+            {% render_field book_filter.form.event__level class="form-control" %}
+            </div>
+            <div class="form-group col-sm-4 col-md-5">
             {{ book_filter.form.event.label_tag }}
             {% render_field book_filter.form.event class="form-control" %}
             </div>
