@@ -4,7 +4,7 @@
 <meta property="og:url" content="{{request.build_absolute_uri}}" />
 <meta property="og:type" content="website" />
 <meta property="og:title" content="{{object.title}}" />
-<meta property="og:description" content="{{object.description|truncatechars:200}}" />
+<meta property="og:description" content="{{object.description|striptags|truncatechars:200}}" />
 <meta property="og:image" content="{{object.images.first}}" />
 {% endblock meta_og %}
 {% block content %}{% load widget_tweaks %}
