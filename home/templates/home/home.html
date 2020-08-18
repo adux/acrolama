@@ -1,6 +1,17 @@
 {% extends 'base.html' %}
-{% block head_title %}{{block.super}}Acro and Acroyoga Team - Classes, Workshop and Festivals{% endblock%}
-{% block meta_description %}<meta name="description" content="Swiss Acro & Acroyoga team that offers weekly classes, organize Workshops and Training Camps internationally. Hosts of the Winter & Urban Acro Festival Zürich."/>{% endblock %}
+{% block head_title %}
+{{block.super}}Acro and Acroyoga Team - Classes, Workshop and Festivals
+{% endblock%}
+{% block meta_description %}
+<meta name="description" content="Swiss Acro & Acroyoga team that offers weekly classes, organize Workshops and Training Camps internationally. Hosts of the Winter & Urban Acro Festival Zürich."/>
+{% endblock meta_description%}
+{% block meta_og %}
+<meta property="og:url" content="https://www.acrolama.com/" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Acro and Acroyoga Team of lamas, the flying kind." />
+<meta property="og:description" content="This funny acrobats offer weekly classes in Zürich and Bern, Workshops all over the globe and Training Camps. If your up for a new challenge come try it out!" />
+<meta property="og:image" content="https://d1j4p94w54mk15.cloudfront.net/media/images/OG_HOME.jpg" />
+{% endblock meta_og %}
 {% block content %}
 {% include 'snippets/nav.html' %}
 {#{% include 'preload.html' %}#}

@@ -17,9 +17,11 @@
                     {% for obj in event %}
                     <article class="blog-item-holder relative">
                         <div class ="num-inf">
-                            <!-- <div class="num"> -->
-                            <!--     <i class="{{ obj.category|get_icon }}"></i> -->
-                            <!-- </div> -->
+                            {% comment "TODO" %}
+                            <div class="num">
+                                <i class="{{ obj.category|get_icon }}"></i>
+                            </div>
+                            {% endcomment %}
                             <div class="infos">
                                 <div class="author vcard ">
                                     <a href="{{ obj.get_absolute_url}}">
@@ -37,11 +39,6 @@
                                                 {% if obj.event_enddate != obj.event_startdate %}
                                                 - {{ obj.event_enddate|date:"d M Y" }}
                                                 {% endif %}
-                                                {% for to in obj.time_locations.all %}
-                                                {% for rd in to.time_options.all %}
-                                                    {% ifchanged %} | {{ rd.regular_days|default_if_none:"" }}{% endifchanged%}
-                                                {% endfor %}
-                                                {% endfor %}
                                             </a>
                                         </li>
                                     </ul>
