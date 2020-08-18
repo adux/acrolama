@@ -6,7 +6,8 @@
 <meta property="og:title" content="{{object.title}}" />
 <meta property="og:description" content="{{object.description|striptags|truncatechars:197}}" />
 <meta property="og:image" content="{{object.images.first.image.url}}" />
-{% endblock meta_og %}
+<meta property="fb:app_id" content="2581322572097954" />
+{{% endblock meta_og %}
 {% block content %}{% load widget_tweaks %}
 {% load static %}{% load tinycontent_tags %}
 {% include 'snippets/nav.html'%}

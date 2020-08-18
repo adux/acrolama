@@ -1,3 +1,4 @@
+{% load tinycontent_tags %}
 {% extends 'base.html' %}
 {% block head_title %}
 {{block.super}}Acro and Acroyoga Team - Classes, Workshop and Festivals
@@ -10,7 +11,8 @@
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Acro and Acroyoga Team of lamas, the flying kind." />
 <meta property="og:description" content="This funny acrobats offer weekly classes in Zürich and Bern, Workshops all over the globe and Training Camps. If your up for a new challenge come try it out!" />
-<meta property="og:image" content="https://d1j4p94w54mk15.cloudfront.net/media/images/OG_HOME.jpg" />
+<meta property="og:image" content="{% tinycontent_simple 'OG_Home' %}" />
+<meta property="fb:app_id" content="2581322572097954" />
 {% endblock meta_og %}
 {% block content %}
 {% include 'snippets/nav.html' %}
