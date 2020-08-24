@@ -21,7 +21,7 @@ from users.models import User
 class EventForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(EventForm, self).__init__(*args, **kwargs)  # populate the post
-        self.fields["teacher"].queryset = User.objects.filter(is_teacher=True)
+        self.fields["teachers"].queryset = User.objects.filter(is_teacher=True)
         self.fields["team"].queryset = User.objects.filter(is_staff=True)
 
 

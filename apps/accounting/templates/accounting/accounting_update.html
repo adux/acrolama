@@ -1,10 +1,10 @@
 {% extends "booking/base_bs.html" %}
 {% block head_title%}Accounting | Update{% endblock %}
-{% load widget_tweaks %}
+{% load widget_tweaks %}{% load booking_tags %}
 {% block content %}
 <form method="POST">{% csrf_token %}
     <div class="card card-body bg-light">
-        <h4>Invoice N°{{object.pk}} {% if object.book %}of <a href="{% url 'booking_update' object.book.id %}">Booking N°{{object.book.id}}</a>{% endif %} - {% if object.book %}{{object.book.user.get_full_name}}{% else %}{{object.partner.name}}{% endif %} - Pay till: {{object.pay_till|date:'d M.'}} CHF {{object.to_pay}}.-</h4>
+        <h4>Invoice N°{{object.pk}} {% if object.book %}of <a href="{% url 'booking_update' object.book.id %}?{% pass_get_filter %}">Booking N°{{object.book.id}}</a>{% endif %} - {% if object.book %}{{object.book.user.get_full_name}}{% else %}{{object.partner.name}}{% endif %} - Pay till: {{object.pay_till|date:'d M.'}} CHF {{object.to_pay}}.-</h4>
         <div class="row">
             <div class="col">
                 <div class="d-inline text-dark"><a id="addnote" class="text-primary" >Show notes.</a></div>

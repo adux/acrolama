@@ -87,7 +87,7 @@ class AttendanceDailyFilter(django_filters.FilterSet):
         super(AttendanceDailyFilter, self).__init__(data, *args, **kwargs)
 
         self.filters["book__event"].extra["choices"] = [
-            (event.id, event.__str__) for event in Event.objects.filter(teacher=self.user)
+            (event.id, event.__str__) for event in Event.objects.filter(teachers=self.user)
         ]
 
     def filter_by_date_contains(self, queryset, name, value):

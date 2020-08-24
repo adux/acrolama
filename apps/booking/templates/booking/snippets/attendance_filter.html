@@ -1,5 +1,4 @@
-{% load widget_tweaks %}
-{% block content %}
+{% load widget_tweaks %}{% load booking_tags %}
 <form method="get">
     <div class="card card-body bg-light">
         <h4>Filter</h4>
@@ -8,7 +7,9 @@
             {{ attendance_filter.form.book__user.label_tag }}
             {% render_field attendance_filter.form.book__user class="form-control" %}
             </div>
-            <div class="form-group col-sm-4 col-md-4">
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-4 col-md-8">
             {{ attendance_filter.form.book__event.label_tag }}
             {% render_field attendance_filter.form.book__event class="form-control" %}
             </div>
@@ -21,52 +22,28 @@
         <i class="fas fa-search"></i> Search
         </button>
     </div>
-</form>
-    <hr>
-    <table class="table table-hover table-borderless">
-        <thead>
-            <th>#</th>
-            <th>Name</th>
-            <th>Event</th>
-            <th>Time Option</th>
-            <th>Attendance</th>
-            <th>Edit</th>
-        </thead>
-        <tbody>
-            {% for obj in page_obj %}
-            <tr>
-                <td>{{obj.pk}}</td>
-                <td>{{obj.book.user.get_full_name}}</td>
-                <td>{{obj.book.event.title}}</td>
-                {# TODO: Getting times for view should be done somewhere else #}
-                <td>{% for obj in obj.book.times.all %}{{obj.name}}, {% endfor %}</td>
-                <td>{{obj.count_attendance}}</td>
-                <td><a href="{% url 'attendance_update' obj.pk %}?book__event={{request.GET.book__event}}&book__user={{request.GET.book__user}}&attendance_date={{request.GET.attendance_date}}"><i class="fas fa-edit"></i></a>
-            </tr>
-            {% endfor%}
-        </tbody>
-    </table>
-<nav aria-label="Booking List Paginator">
-    <ul class="pagination justify-content-center">
-    {% if page_obj.has_previous %}
-        <li class="page-item">
-            <a class="page-link" href="?page=1">&laquo; first</a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">previous</a>
-        </li>
-    {% endif %}
-        <li class="page-item disabled">
-            <a class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</a>
-        </li>
-    {% if page_obj.has_next %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.next_page_number }}">next</a>
-        </li>
-        <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-        </li>
-    {% endif %}
-    </ul>
-</nav>
-{% endblock %}
+</form
+<hr>
+<table class="table table-hover table-borderless">
+    <thead>
+        <th>#</th>
+        <th>Name</th>
+        <th>Event</th>
+        <th>Time Option</th>
+        <th>Attendance</th>
+        <th>Edit</th>
+    </thead>
+    <tbody>
+        {% for obj in page_obj %}
+        <tr>
+            <td>{{obj.pk}}</td>
+            <td>{{obj.book.user.get_full_name}}</td>
+            <td>{{obj.book.event.title}}</td>
+            {# TODO: Getting times for view should be done somewhere else #}
+            <td>{% for obj in obj.book.times.all %}{{obj.name}}, {% endfor %}</td>
+            <td>{{obj.count_attendance}}</td>
+            <td><a href="{% url 'attendance_update' obj.pk %}?{% pass_get_filter %}"></i></a>
+        </tr>
+        {% endfor%}
+    </tbody>
+</table>

@@ -1,10 +1,10 @@
 {% extends "booking/base_bs.html" %}
 {% block head_title%}Update{% endblock %}
-{% load widget_tweaks %}
+{% load widget_tweaks %}{% load booking_tags %}
 {% block content %}
 <form method="POST">{% csrf_token %}
     <div class="card card-body bg-light">
-        <h4>Attendance List of {{object.book.user.get_full_name}} for {{object.book.event.title}} {% if object.book %}, with <a href="{% url 'booking_update' object.book.pk %}">Booking N°{{object.book.pk}}</a>{% else %}No Booking{% endif %}{% if object.book.invoice %} and <a href="{% url 'accounting_update' object.book.invoice.pk %}">Invoice N°{{object.book.invoice.pk}}</a>{% endif %}</h4>
+        <h4>Attendance List of {{object.book.user.get_full_name}} for {{object.book.event.title}} {% if object.book %}, with <a href="{% url 'booking_update' object.book.pk %}?{% pass_get_filter %}">Booking N°{{object.book.pk}}</a>{% else %}No Booking{% endif %}{% if object.book.invoice %} and <a href="{% url 'accounting_update' object.book.invoice.pk %}?{% pass_get_filter %}">Invoice N°{{object.book.invoice.pk}}</a>{% endif %}</h4>
         <div class="row">
             <div class="form-group col-sm-4 col-md-6">
               {{ form.attendance_date.label_tag }}

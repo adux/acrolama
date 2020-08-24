@@ -222,7 +222,7 @@ class Event(models.Model):
     discipline = models.ForeignKey(Discipline, null=True, blank=True, on_delete=models.CASCADE)
     prerequisites = models.TextField(max_length=2000, null=True, blank=True)
     # TODO: change to teachers
-    teacher = models.ManyToManyField("users.User", related_name="eventteacher")
+    teachers = models.ManyToManyField("users.User", related_name="eventteacher")
     highlights = models.TextField(max_length=2000, null=True, blank=True)
     included = models.TextField(max_length=2000, null=True, blank=True)
     food = models.TextField(max_length=2000, null=True, blank=True)
@@ -250,7 +250,9 @@ class Event(models.Model):
             return reverse("event", args=[str(self.slug)])
 
     def __str__(self):
-        return "(%s) %s - %s" % (self.event_startdate.strftime("%d %b"), self.get_category_display(), self.title,)
+        return "(%s) %s %s - %s" % (
+            self.event_startdate.strftime("%d %b"), self.level, self.get_category_display(), self.title,
+        )
 
 
 def event_pre_save_slug(sender, instance, *args, **kwargs):

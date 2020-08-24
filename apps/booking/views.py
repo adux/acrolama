@@ -70,7 +70,7 @@ class EventAutocomplete(autocomplete.Select2QuerySetView):
         if not self.request.user.is_staff:
             return Event.objects.none()
 
-        qs = Event.objects.all().order_by("-event_startdate")
+        qs = Event.objects.all().order_by("-event_startdate", "level").select_related("level")
 
         if self.q:
             qs = qs.filter(
@@ -183,6 +183,7 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         paginator = Paginator(booking_filter.qs, 24)  # Show 24 contacts per page.
         page = self.request.GET.get("page")
         try:
+
             response = paginator.page(page)
         except PageNotAnInteger:
             response = paginator.page(1)
@@ -364,7 +365,7 @@ def attendance_daily_view(request):
     attendance_filter = AttendanceDailyFilter(
         request.GET,
         queryset=(
-            Attendance.objects.filter(book__event__teacher=request.user)
+            Attendance.objects.filter(book__event__teachers=request.user)
             .select_related("book", "book__user", "book__event", "book__price")
             .prefetch_related("book__times__regular_days")
         ),
@@ -580,7 +581,7 @@ def quotationcreateview(request):
                     # TODO:Should every event have teachers ?
                     # TODO: Should they be preselected
                     try:
-                        teachers = [t.id for t in event.teacher.all()]
+                        teachers = [t.id for t in event.teachers.all()]
                     except AttributeError:
                         teachers = [""]
 

@@ -1,0 +1,24 @@
+{% load booking_tags %}
+<nav aria-label="Booking List Paginator">
+    <ul class="pagination justify-content-center">
+    {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page=1">&laquo; first</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% pass_get_filter %}">previous</a>
+        </li>
+    {% endif %}
+        <li class="page-item disabled">
+            <a class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</a>
+        </li>
+    {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% pass_get_filter %}">next</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% pass_get_filter %}">last &raquo;</a>
+        </li>
+    {% endif %}
+    </ul>
+</nav>
