@@ -43,13 +43,13 @@ class EventDisplay(DetailView):
 
     def get_fromatedtimelocations(self, timelocations):
         formatedtimelocations = []
-        key = ["location", "regular_days", "open_starttime", "open_endtime", "class_starttime", "class_endtime"]
+        key = ["location", "regular_day", "open_starttime", "open_endtime", "class_starttime", "class_endtime"]
         for obj in timelocations:
             location = [obj.location]
             time_options = obj.time_options.all()
             for to in time_options:
                 timelocation = location + [
-                    to.regular_days,
+                    to.regular_day,
                     to.open_starttime,
                     to.open_endtime,
                     to.class_starttime,

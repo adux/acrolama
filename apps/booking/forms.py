@@ -71,8 +71,8 @@ class CreateQuotationForm(forms.ModelForm):
             "total_attendees",
             "direct_revenue",
             "fix_profit",
-            "acrolama_profit",
-            "teachers_profit",
+            "admin_profit",
+            "partner_profit",
         )
 
     def __init__(self, *args, **kwargs):
@@ -98,21 +98,22 @@ class LockQuotationForm(forms.ModelForm):
             "direct_costs",
             "direct_revenue",
             "fix_profit",
-            "acrolama_profit",
-            "teachers_profit",
+            "admin_profit",
+            "partner_profit",
         )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["teachers"].queryset = User.objects.filter(is_teacher=True)
         self.fields["direct_costs"].queryset = Invoice.objects.filter(balance="DB")
+        self.fields["direct_costs"].required = False
 
 
 class BookForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["times"].label_from_instance = lambda obj: "%s %s" % (
-            obj.regular_days if obj.regular_days else obj.name,
+            obj.regular_day if obj.regular_day else obj.name,
             obj.get_class_start_times() if obj.get_class_start_times() is not None else obj.get_open_start_times(),
         )
         self.fields["price"].empty_label = "Select a Pricing Option"

@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save
 from django.utils.functional import cached_property
 from django.urls import reverse
 
@@ -67,7 +67,7 @@ class TimeOption(models.Model):
     name = models.CharField(max_length=30)
     description = models.TextField(max_length=1000)
     # TODO: this should be singular
-    regular_days = models.ForeignKey(Day, null=True, blank=True, on_delete=models.CASCADE)
+    regular_day = models.ForeignKey(Day, null=True, blank=True, on_delete=models.CASCADE)
     class_starttime = models.TimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
     class_endtime = models.TimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
     open_starttime = models.TimeField(auto_now=False, auto_now_add=False)
@@ -76,10 +76,10 @@ class TimeOption(models.Model):
     def __str__(self):
         # return "%s" % (self.name)
         # Classes will have regular days
-        if self.regular_days:
+        if self.regular_day:
             return "%s, %s: %s - %s" % (
                 self.name,
-                self.regular_days,
+                self.regular_day,
                 self.class_starttime.strftime("%H:%M"),
                 self.class_endtime.strftime("%H:%M"),
             )
@@ -93,12 +93,18 @@ class TimeOption(models.Model):
 
     def get_class_start_times(self):
         if self.class_starttime is not None:
-            return "%s - %s" % (self.class_starttime.strftime("%H:%M"), self.class_endtime.strftime("%H:%M"),)
+            return "%s - %s" % (
+                self.class_starttime.strftime("%H:%M"),
+                self.class_endtime.strftime("%H:%M"),
+            )
         else:
             return None
 
     def get_open_start_times(self):
-        return "%s - %s" % (self.open_starttime.strftime("%H:%M"), self.open_endtime.strftime("%H:%M"),)
+        return "%s - %s" % (
+            self.open_starttime.strftime("%H:%M"),
+            self.open_endtime.strftime("%H:%M"),
+        )
 
 
 class Location(models.Model):
@@ -119,12 +125,12 @@ class TimeLocation(models.Model):
     it spears no practical time nor space
     """
 
+    name = models.CharField(max_length=120, null=True, blank=True)
     time_options = models.ManyToManyField(TimeOption)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
 
     def __str__(self):
-        # TODO: I think i need to remove this name on Foreign Key or cache it
-        return " - ".join(p.name for p in self.time_options.all()) + " | %s" % (self.location)
+        return self.name
 
 
 class Irregularity(models.Model):
@@ -154,7 +160,11 @@ class PriceOption(models.Model):
 
     def __str__(self):
         if self.price_euro:
-            return "%s, EUR: %s - CHF: %s" % (self.name, self.price_euro, self.price_chf,)
+            return "%s, EUR: %s - CHF: %s" % (
+                self.name,
+                self.price_euro,
+                self.price_chf,
+            )
         else:
             return "%s, CHF: %s" % (self.name, self.price_chf)
 
@@ -221,7 +231,6 @@ class Event(models.Model):
     level = models.ForeignKey(Level, null=True, blank=True, on_delete=models.CASCADE)
     discipline = models.ForeignKey(Discipline, null=True, blank=True, on_delete=models.CASCADE)
     prerequisites = models.TextField(max_length=2000, null=True, blank=True)
-    # TODO: change to teachers
     teachers = models.ManyToManyField("users.User", related_name="eventteacher")
     highlights = models.TextField(max_length=2000, null=True, blank=True)
     included = models.TextField(max_length=2000, null=True, blank=True)
@@ -251,7 +260,10 @@ class Event(models.Model):
 
     def __str__(self):
         return "(%s) %s %s - %s" % (
-            self.event_startdate.strftime("%d %b"), self.level, self.get_category_display(), self.title,
+            self.event_startdate.strftime("%d %b"),
+            self.level,
+            self.get_category_display(),
+            self.title,
         )
 
 

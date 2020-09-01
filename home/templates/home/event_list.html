@@ -39,7 +39,7 @@
                                                     {{ object.event_startdate }} {% if object.event_enddate != object.event_startdate %}- {{ object.event_enddate }} {% endif %}
                                                     {% for obj in object.time_locations.all %}
                                                     {% for rd in obj.time_options.all %}
-                                                    {% ifchanged %} | {{ rd.regular_days|default_if_none:"" }}{% endifchanged%}
+                                                    {% ifchanged %} | {{ rd.regular_day|default_if_none:"" }}{% endifchanged%}
                                                     {% endfor %}
                                                     {% endfor %}
                                                 </a></li>

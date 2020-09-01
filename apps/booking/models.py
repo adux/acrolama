@@ -105,8 +105,8 @@ class Quotation(models.Model):
 
     # Profit
     fix_profit = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
-    acrolama_profit = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
-    teachers_profit = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    admin_profit = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    partner_profit = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
 
     # Control
     locked = models.BooleanField(default=False)

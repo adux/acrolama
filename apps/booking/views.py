@@ -11,7 +11,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Allows querries with OR statments
 from django.db.models import Sum, Q
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.utils.translation import gettext as _
 
@@ -23,7 +23,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 # Models
 from users.models import User
 from booking.models import Book, Attendance, Quotation
-from project.models import Event
+from project.models import Event, TimeLocation
 
 # Filters
 from booking.filters import (
@@ -105,7 +105,7 @@ def bookinglistview(request):
         queryset=(
             Book.objects.all()
             .select_related("event", "user", "price")
-            .prefetch_related("times__regular_days")
+            .prefetch_related("times__regular_day")
             .order_by("-booked_at")
         ),
     )
@@ -137,11 +137,11 @@ def bookinglistview(request):
                 if book.price.cycles == 1:
                     try:
                         new_book = createNextBook(book, "PE")
-                    except:
+                    except Exception as e:
                         messages.add_message(
                             request,
                             messages.WARNING,
-                            _("Book N°" + str(book.id) + ": Doesn't seem to have a next Event"),
+                            _("Book N°" + str(book.id) + ": Doesn't seem to have a next Event. Error: " + e),
                         )
                     else:
                         messages.add_message(
@@ -175,7 +175,7 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
             queryset=(
                 Book.objects.all()
                 .select_related("event", "user", "price")
-                .prefetch_related("times__regular_days")
+                .prefetch_related("times__regular_day")
                 .order_by("-booked_at")
             ),
         )
@@ -301,7 +301,7 @@ def attendancelistview(request):
         queryset=(
             Attendance.objects.all()
             .select_related("book", "book__event", "book__user", "book__price")
-            .prefetch_related("book__times__regular_days")
+            .prefetch_related("book__times__regular_day")
         ),
     )
 
@@ -323,7 +323,7 @@ def attendancelistview(request):
 
     # TODO: something to do after getting all the attendance
     if request.method == "POST":
-        checked_list = request.POST.getlist("check")
+        # checked_list = request.POST.getlist("check")
         if "create" in request.POST:
             pass
     return render(request, template, context)
@@ -348,9 +348,9 @@ def attendance_daily_view(request):
                     messages.add_message(
                         request, messages.SUCCESS, _("Updated attendance id: " + str(attendance_id)),
                     )
-            except:
+            except Exception as e:
                 messages.add_message(
-                    request, messages.ERROR, _("Make a manual list and report the error please."),
+                    request, messages.ERROR, _("Make a manual list and report the error: " + e),
                 )
             else:
                 success_url = build_url(
@@ -367,7 +367,7 @@ def attendance_daily_view(request):
         queryset=(
             Attendance.objects.filter(book__event__teachers=request.user)
             .select_related("book", "book__user", "book__event", "book__price")
-            .prefetch_related("book__times__regular_days")
+            .prefetch_related("book__times__regular_day")
         ),
         user=request.user,
     )
@@ -393,16 +393,18 @@ class AttendanceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        # Filter
         attendance_filter = AttendanceFilter(
             self.request.GET,
             queryset=(
                 Attendance.objects.all()
                 .select_related("book", "book__user", "book__event", "book__price")
-                .prefetch_related("book__times__regular_days")
+                .prefetch_related("book__times__regular_day")
             ),
         )
 
-        context["attendance_filter"] = attendance_filter
+        # Paginator
         paginator = Paginator(attendance_filter.qs, 20)
         page = self.request.GET.get("page")
         try:
@@ -411,8 +413,10 @@ class AttendanceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
             response = paginator.page(1)
         except EmptyPage:
             response = paginator.page(paginator.num_pages)
+
         context["page_obj"] = response
         context["filter"] = self.request.GET
+        context["attendance_filter"] = attendance_filter
         return context
 
     def form_valid(self, form):
@@ -448,7 +452,7 @@ def contactlistview(request):
         queryset=(
             Book.objects.all()
             .select_related("event", "user", "price")
-            .prefetch_related("times__regular_days")
+            .prefetch_related("times__regular_day")
             .order_by("-booked_at")
         ),
     )
@@ -483,13 +487,13 @@ def quotationlistview(request):
         request.GET,
         queryset=(
             Quotation.objects.all()
-            .select_related("event", "time_location")
-            .prefetch_related("teachers", "direct_costs")
+            .select_related("event", "time_location__location")
+            .prefetch_related("teachers", "direct_costs", "time_location__time_options")
         ),
     )
 
     # Pagination
-    paginator = Paginator(quotation_filter.qs, 20)  # Show 25 contacts per page.
+    paginator = Paginator(quotation_filter.qs, 24)  # Show 25 contacts per page.
     page = request.GET.get("page")
     try:
         response = paginator.page(page)
@@ -497,8 +501,6 @@ def quotationlistview(request):
         response = paginator.page(1)
     except EmptyPage:
         response = paginator.page(paginator.num_pages)
-
-    # End Paginator
 
     context = {
         "quotation_filter": quotation_filter,
@@ -509,12 +511,41 @@ def quotationlistview(request):
 
 class QuotationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Quotation
-    template_name = "booking/quotation_create.html"
+    template_name = "booking/quotation_update.html"
+    form_class = CreateQuotationForm
+
+    def get_checked_bookings(self):
+        tl = TimeLocation.objects.get(id=self.object.time_location.id)
+        to_ids = [to.id for to in tl.time_options.all()]
+        filtered_list = Book.objects.filter(
+            event=self.object.event.id,
+            event__time_locations=self.object.time_location.id,
+            times__in=to_ids
+        ).select_related("user", "price", "attendance")
+        return filtered_list
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['filtered_list'] = self.get_checked_bookings()
+        return context
+
+    def get_initial(self):
+        # Revenue
+        filtered_list = self.get_checked_bookings().filter(status='PA')
+        booksparticipants = filtered_list
+
+        if not booksparticipants:
+            direct_revenue = Decimal(0)
+        else:
+            direct_revenue = booksparticipants.aggregate(Sum("price__price_chf"))
+            direct_revenue = direct_revenue["price__price_chf__sum"]
+
+        return {"direct_revenue": direct_revenue}
 
     def get_success_url(self, **kwargs):
         success_url = build_url("quotation_list")
         messages.add_message(
-            self.request, messages.SUCCESS, _("Quotation update, we'll be in touch!"),
+            self.request, messages.SUCCESS, _("Quotation update"),
         )
         return success_url
 
@@ -529,7 +560,6 @@ def quotationcreateview(request):
     form = CreateQuotationForm
 
     # Filters
-
     book_filter = QuotationBookFilter(
         request.GET,
         queryset=(
@@ -538,6 +568,7 @@ def quotationcreateview(request):
     )
 
     if request.method == "GET":
+        # Want to catch the different errors so split
         if "event" and "event__time_locations" in request.GET:
             if request.GET.get("event") != "" and request.GET.get("event__time_locations") != "":
                 eventid = str(request.GET.get("event"))
@@ -545,15 +576,14 @@ def quotationcreateview(request):
                 event = get_event(eventid)
                 tls = event.time_locations.all()
                 tl = get_timelocation(timelocationid)
+                # If the filtered TL is in the TLS of the Event
                 if tl in tls:
                     # Get other template
                     template = "booking/quotation_create.html"
 
-                    # Constants
-                    # TODO: Change names to more generic
                     FIX_PROFIT = Decimal(100.00)
-                    ACROLAMA_RATE = Decimal(0.25)
-                    TEACHERS_RATE = Decimal(0.75)
+                    ADMIN_RATE = Decimal(0.25)
+                    PARTNER_RATE = Decimal(0.75)
 
                     # Variables
 
@@ -572,8 +602,8 @@ def quotationcreateview(request):
 
                     # Calc
                     profit = direct_revenue - related_rent - FIX_PROFIT
-                    acrolama_profit = round(profit * ACROLAMA_RATE, 2)
-                    teachers_profit = round(profit * TEACHERS_RATE, 2)
+                    admin_profit = round(profit * ADMIN_RATE, 2)
+                    partner_profit = round(profit * PARTNER_RATE, 2)
 
                     # Select Initial
 
@@ -594,8 +624,8 @@ def quotationcreateview(request):
                             "direct_revenue": direct_revenue,
                             "related_rent": related_rent,
                             "fix_profit": FIX_PROFIT,
-                            "acrolama_profit": acrolama_profit,
-                            "teachers_profit": teachers_profit,
+                            "admin_profit": admin_profit,
+                            "partner_profit": partner_profit,
                         },
                         auto_id=False,
                     )
@@ -628,8 +658,8 @@ def quotationcreateview(request):
 
             # Profit
             obj.fix_profit = form.cleaned_data["fix_profit"]
-            obj.acrolama_profit = form.cleaned_data["acrolama_profit"]
-            obj.teachers_profit = form.cleaned_data["teachers_profit"]
+            obj.admin_profit = form.cleaned_data["admin_profit"]
+            obj.partner_profit = form.cleaned_data["partner_profit"]
 
             obj.save()
 
@@ -666,28 +696,16 @@ def quotationcreateview(request):
 @user_passes_test(staff_check)
 def quotationlockview(request, pk):
     template = "booking/quotation_lock.html"
-
     quotation = Quotation.objects.get(pk=pk)
-    books = Book.objects.filter(event=quotation.event, event__time_locations__id__exact=quotation.time_location.id)
-
-    form = LockQuotationForm(
-        instance=quotation,
-        initial={
-            #     "event": quotation.event,
-            #     "time_location": quotation.time_location,
-            #     "teachers": quotation.teachers.all(),
-            #     "related_rent": quotation.related_rent,
-            #     "direct_revenue": quotation.direct_revenue,
-            "direct_costs": quotation.direct_costs.all(),
-            #     "related_rent": quotation.related_rent,
-            #     "fix_profit": quotation.fix_profit,
-            #     "acrolama_profit": quotation.acrolama_profit,
-            #     "teachers_profit": quotation.teachers_profit,
-        },
-    )
+    form = LockQuotationForm(request.POST or None, instance=quotation)
 
     if request.method == "POST":
-        pass
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.locked = True
+            obj.locked_at = datetime.datetime.now()
+            obj.save()
+            return redirect('quotation_list')
 
     context = {
         "form": form,
@@ -701,6 +719,3 @@ class HerdView(UserPassesTestMixin, LoginRequiredMixin, TemplateView):
 
     def test_func(self):
         return herd_check(self.request.user)
-
-
-

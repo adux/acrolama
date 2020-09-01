@@ -1,3 +1,7 @@
+import dj_database_url
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
 from urllib.parse import urlparse
 
 from .base import *
@@ -12,7 +16,6 @@ ADMINS = (("Adrian Garate", "adrian@acrolama.com"),)
 MANAGERS = ADMINS
 
 # SECURITY WARNING: keep the secret key used in production secret!
-
 SECRET_KEY = os.environ.get("SECRET_KEY", 's9+nemt@ka=)v2dsqwdQWDQWDQEQWRGQERVQWEFcu^##"w2#abu)v85)zh#ej2f2dqqwdq')
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -27,14 +30,11 @@ ALLOWED_HOSTS = [
 
 # Collecting
 # ------------------------------------------------------------------------------
-
 INSTALLED_APPS = ["collectfast"] + INSTALLED_APPS
 COLLECTFAST_STRATEGY = "collectfast.strategies.boto3.Boto3Strategy"
 
 # Sentry SDK
 # ------------------------------------------------------------------------------
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
 
 sentry_sdk.init(dsn="https://449183d07de2455ba0ecf384ca29a77f@sentry.io/1310482", integrations=[DjangoIntegration()])
 
@@ -54,7 +54,6 @@ ANYMAIL = {
 
 # Database for heroku
 # ------------------------------------------------------------------------------
-import dj_database_url
 
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES["default"].update(db_from_env)
@@ -68,7 +67,6 @@ KEEP_COMMENTS_ON_MINIFYING = True
 
 # CACHES
 # ------------------------------------------------------------------------------
-
 redis_url = urlparse(os.environ.get("REDISCLOUD_URL"))
 CACHES = {
     "default": {

@@ -3,42 +3,8 @@
 {% load widget_tweaks %}
 {% block content %}
 
-    <div class="card card-body bg-light">
-        <h4>Step 0 - Preparation</h4>
-        <div class="row">
-            <div class="col-md-12">
-                · Do and check for additional Costs Invoices
-            </div>
-        </div>
-    </div>
-
-    <hr>
-
-    <form method="GET">
-        <div class="card card-body bg-light">
-            <h4>Step 1 - Select Event and its Time Location</h4>
-            <div class="row">
-                <div class="form-group col-sm-4 col-md-6">
-                {{ book_filter.form.event.label_tag }}
-                {% render_field book_filter.form.event class="form-control" %}
-                </div>
-                <div class="form-group col-sm-4 col-md-6">
-                {{ book_filter.form.event__time_locations.label_tag }}
-                {% render_field book_filter.form.event__time_locations class="form-control" %}
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary">
-            <i class="fas fa-search"></i> Search
-            </button>
-        </div>
-    </form>
-
-    <hr>
-
     <form method="POST">{% csrf_token %}
         <div class="card card-body bg-light">
-            <h4>Step 2 - Select Teachers</h4>
-            <hr>
             <h4> General Info </h3>
             <div class="row">
                 <div class="form-group col-sm-4 col-md-4">
@@ -59,7 +25,7 @@
         <hr>
 
         <div class="card card-body bg-light">
-            <h4>Step 3 - Check and if errors correct <b>and refresh</b></h4>
+            <h4>Booking List</b></h4>
             <hr>
             <table class="table table-hover table-borderless">
                 <thead>
@@ -92,8 +58,6 @@
         <hr>
 
         <div class="card card-body bg-light">
-            <h4>Step 4 - Rent adjust in Location. Only select <b>direct related</b> costs</h4>
-            <hr>
             <h4>Costs</h4>
             <div class="row">
                 <div class="form-group col-sm-4 col-md-3">
@@ -110,7 +74,7 @@
         <hr>
 
         <div class="card card-body bg-light">
-            <h4>Step 5 - Only <b>real revenue</b> should be set, no "expected" one.</h4>
+            <h4>Only <b>real revenue</b> should be set, no "expected" one.</h4>
             <hr>
             <h4>Revenue</h4>
             <div class="row">
@@ -196,7 +160,7 @@
                 </div>
             </div>
             <button type="submit" class="btn btn-danger">
-            <i class="fas fa-edit"></i> Create
+            <i class="fas fa-edit"></i> Update
            </button>
         </div>
     </form>

@@ -38,6 +38,6 @@ class DynamicArrayWidget(forms.TextInput):
 
 class M2MSelect(forms.Select):
     def value_from_datadict(self, data, files, name):
-        # if isinstance(data, (MultiValueDict, DictWrapper)):
-        return data.getlist(name)
-        # return data.get(name, None)
+        if isinstance(data, (MultiValueDict)):
+            return data.getlist(name)
+        return data.get(name, None)

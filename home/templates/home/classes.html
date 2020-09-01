@@ -63,8 +63,8 @@
                                                 {% for to in obj.time_locations.all %}
                                                     {% for rd in to.time_options.all %}
                                                         {% ifchanged %}
-                                                            {% if rd.regular_days != Null %}
-                                                            {{ rd.regular_days|default_if_none:"" }}'S {%if rd.regular_days.count == 1 %}·{% endif %}
+                                                            {% if rd.regular_day != Null %}
+                                                            {{ rd.regular_day|default_if_none:"" }}'S {%if rd.regular_day.count == 1 %}·{% endif %}
                                                             {% endif %}
                                                         {% endifchanged%}
                                                     {% endfor %}
@@ -132,8 +132,8 @@
                                                 {% for to in obj.time_locations.all %}
                                                     {% for rd in to.time_options.all %}
                                                         {% ifchanged %}
-                                                            {% if rd.regular_days != Null %}
-                                                            {{ rd.regular_days|default_if_none:"" }}'S {%if rd.regular_days.count == 1 %}·{% endif %}
+                                                            {% if rd.regular_day != Null %}
+                                                            {{ rd.regular_day|default_if_none:"" }}'S {%if rd.regular_day.count == 1 %}·{% endif %}
                                                             {% endif %}
                                                         {% endifchanged%}
                                                     {% endfor %}

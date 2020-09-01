@@ -32,7 +32,7 @@
         <th>Event</th>
         <th>Teachers</th>
         <th>Time Location</th>
-        <th>Edit</th>
+        <th>Update</th>
         <th>Lock</th>
     </thead>
     <tbody>
@@ -40,10 +40,9 @@
         <tr>
             <td>{{obj.pk}}</td>
             <td>{{obj.event.title}}</td>
-            {# TODO: Getting times for view should be done somewhere else #}
             <td>{{obj.get_teachers}}</td>
             <td>{{obj.time_location}}</td>
-            <td><a href="{% url 'quotation_update' obj.pk %}?{% pass_get_filter %}"><i class="fas fa-edit"></i></a></td>
+            <td><a href="{% url 'quotation_update' obj.pk %}?{% pass_get_filter %}"><i class="fas fa-sync-alt"></i></a></td>
             <td><a href="{% url 'quotation_lock' obj.pk %}?{% pass_get_filter %}">{% if obj.locked == True %}<span class="text-success">{% else %}<span class="text-danger">{% endif %}<i class="fa fa-lock"></i></span></a></td>
         </tr>
         {% endfor%}

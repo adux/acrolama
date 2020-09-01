@@ -59,7 +59,6 @@ EXTERNAL_APPS = [
     "storages",
     "widget_tweaks",
     "tinycontent",
-    "todo",
     "allauth",
     "allauth.account",
 ]
@@ -69,8 +68,8 @@ LOCAL_APPS = ["home", "project", "address", "audiovisual", "accounting", "bookin
 INSTALLED_APPS = DJANGO_APPS + EXTERNAL_APPS + LOCAL_APPS
 
 # Crispy Forms for todo
-INSTALLED_APPS += ["crispy_forms"]
-CRISPY_TEMPLATE_PACK = "bootstrap3"
+# INSTALLED_APPS += ["crispy_forms"]
+# CRISPY_TEMPLATE_PACK = "bootstrap3"
 
 # Analytica
 INSTALLED_APPS += ["analytical"]

@@ -6,6 +6,8 @@ from django.db.models import Q
 import django_filters
 import datetime
 
+from booking.widgets import M2MSelect
+
 from booking.models import Book, Attendance, Quotation
 from project.models import Event, TimeOption, TimeLocation
 from users.models import User
@@ -98,15 +100,13 @@ class QuotationFilter(django_filters.FilterSet):
     event = django_filters.ModelChoiceFilter(
         queryset=Event.objects.all(), widget=autocomplete.ModelSelect2(url="event-autocomplete")
     )
+    teachers = django_filters.ModelMultipleChoiceFilter(
+        queryset=User.objects.filter(is_teacher=True), widget=M2MSelect()
+    )
 
     class Meta:
         model = Quotation
         fields = {"event", "time_location", "teachers"}
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # Filled
-        self.filters["teachers"].queryset = User.objects.filter(is_teacher=True)
 
 
 class QuotationBookFilter(django_filters.FilterSet):
@@ -124,8 +124,12 @@ class QuotationBookFilter(django_filters.FilterSet):
     @property
     def qs(self):
         parent = super().qs
+        # Get the TL id entered
         pk = self.data.get("event__time_locations", None)
         if pk:
-            tl = TimeLocation.objects.filter(id=pk)
-            to_ids = tl.values_list("time_options__id", flat=True)
-            return parent.filter(times__in=list(to_ids))
+            # If the id not None get the object
+            tl = TimeLocation.objects.get(id=pk)
+            # Get all the TO of the TL
+            to_ids = [to.id for to in tl.time_options.all()]
+            # And filter bookings with only to of event
+            return parent.filter(times__in=to_ids)
