@@ -113,8 +113,8 @@ class QuotationBookFilter(django_filters.FilterSet):
     event = django_filters.ModelChoiceFilter(
         queryset=Event.objects.all(), required=True, widget=autocomplete.ModelSelect2(url="event-autocomplete")
     )
-    event__time_locations = django_filters.ChoiceFilter(
-        choices=[[o.pk, o.__str__] for o in TimeLocation.objects.all()], required=True,
+    event__time_locations = django_filters.ModelChoiceFilter(
+        queryset=TimeLocation.objects.all(), required=True, widget=M2MSelect()
     )
 
     class Meta:
