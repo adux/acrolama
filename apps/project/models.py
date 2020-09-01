@@ -130,7 +130,17 @@ class TimeLocation(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        if self.name is None:
+            return str(self.location)
+        else:
+            return self.name
+
+
+def timelocation_post_save(sender, instance, *args, **kwargs):
+    instance.name = " - ".join(p.name for p in instance.time_options.all()) + " | %s" % (instance.location)
+
+
+pre_save.connect(timelocation_post_save, sender=TimeLocation)
 
 
 class Irregularity(models.Model):
