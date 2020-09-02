@@ -17,6 +17,7 @@ METHODE = [
     ("CS", "Cash"),
     ("CR", "Credit Card"),
     ("UN", "Unclasified"),
+    ("RC", "Recovery Card"),
 ]
 
 
