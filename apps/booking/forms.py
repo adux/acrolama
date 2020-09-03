@@ -108,6 +108,17 @@ class LockQuotationForm(forms.ModelForm):
         self.fields["direct_costs"].queryset = Invoice.objects.filter(balance="DB")
         self.fields["direct_costs"].required = False
 
+        if self.instance and self.instance.locked:
+            self.fields['event'].disabled = True
+            self.fields['time_location'].disabled = True
+            self.fields['teachers'].disabled = True
+            self.fields['related_rent'].disabled = True
+            self.fields['direct_costs'].disabled = True
+            self.fields['direct_revenue'].disabled = True
+            self.fields['fix_profit'].disabled = True
+            self.fields['admin_profit'].disabled = True
+            self.fields['partner_profit'].disabled = True
+
 
 class BookForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):

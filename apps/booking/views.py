@@ -514,6 +514,18 @@ class QuotationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     template_name = "booking/quotation_update.html"
     form_class = CreateQuotationForm
 
+    def dispatch(self, request, *args, **kwargs):
+        # TODO: Not sure if this makes two queries
+        self.object = self.get_object()
+
+        if self.object.locked:
+            messages.add_message(
+                self.request, messages.WARNING, _("Quotation is Locked"),
+            )
+            return redirect('quotation_list')
+
+        return super(QuotationUpdateView, self).dispatch(request, *args, **kwargs)
+
     def get_checked_bookings(self):
         tl = TimeLocation.objects.get(id=self.object.time_location.id)
         to_ids = [to.id for to in tl.time_options.all()]
@@ -696,8 +708,8 @@ def quotationcreateview(request):
 @user_passes_test(staff_check)
 def quotationlockview(request, pk):
     template = "booking/quotation_lock.html"
-    quotation = Quotation.objects.get(pk=pk)
-    form = LockQuotationForm(request.POST or None, instance=quotation)
+    queryset = Quotation.objects.get(pk=pk)
+    form = LockQuotationForm(request.POST or None, instance=queryset)
 
     if request.method == "POST":
         if form.is_valid():
