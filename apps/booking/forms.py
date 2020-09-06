@@ -170,3 +170,7 @@ class BookDateInfoForm(forms.ModelForm):
     class Meta:
         model = BookDateInfo
         exclude = ["book"]
+
+
+class InvitationForm(forms.Form):
+    email = forms.EmailField()

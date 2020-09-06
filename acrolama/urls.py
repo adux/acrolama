@@ -30,6 +30,7 @@ from booking.views import (
     quotationlistview,
     quotationcreateview,
     quotationlockview,
+    invitationsendview,
     HerdView,
 )
 
@@ -91,6 +92,8 @@ urlpatterns = [
     # Teachers
     path("herd/teacher/attendance/", attendance_daily_view, name="teacher_attendance",),
     path("herd/teacher/booking/create/", BookCreateView.as_view(), name="teacher_booking_create",),
+    path("herd/teacher/booking/invite/", invitationsendview, name="invitation",),
+    path("invitations/", include('invitations.urls', namespace='invitations')),
     re_path(r"^event-autocomplete/$", EventAutocomplete.as_view(), name="event-autocomplete",),
     re_path(r"^user-autocomplete/$", UserAutocomplete.as_view(), name="user-autocomplete",),
 ]

@@ -2,6 +2,7 @@ import datetime
 
 from dal import autocomplete
 from decimal import Decimal
+from invitations.utils import get_invitation_model
 
 # from django.contrib.postgres.fields import ArrayField
 
@@ -42,6 +43,7 @@ from booking.forms import (
     UpdateAttendanceForm,
     CreateQuotationForm,
     LockQuotationForm,
+    InvitationForm,
 )
 
 # Utils
@@ -284,7 +286,7 @@ class BookCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
             },
         )
         messages.add_message(
-            self.request, messages.SUCCESS, _("Book created, we'll be in touch!"),
+            self.request, messages.SUCCESS, _("Book created, we'll get back to you soon!"),
         )
         return success_url
 
@@ -718,6 +720,34 @@ def quotationlockview(request, pk):
             obj.locked_at = datetime.datetime.now()
             obj.save()
             return redirect('quotation_list')
+
+    context = {
+        "form": form,
+    }
+    return render(request, template, context)
+
+
+@login_required
+@user_passes_test(herd_check)
+def invitationsendview(request):
+    template = "booking/invitation_create.html"
+    form = InvitationForm(request.POST or None)
+
+    if request.method == "POST":
+        if form.is_valid():
+            Invitation = get_invitation_model()
+            email = form.cleaned_data['email']
+            invite = Invitation.create(email, inviter=request.user)
+            try:
+                invite.send_invitation(request)
+            except Exception as e:
+                messages.add_message(request, messages.INFO,
+                                     _("Error: " + e))
+            else:
+                messages.add_message(request, messages.INFO,
+                                     _("Email sent to: " + email + " . We'll be in touch!")
+                                     )
+            return redirect('teacher_attendance')
 
     context = {
         "form": form,

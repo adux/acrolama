@@ -12,7 +12,7 @@
               {% render_field form.user class="form-control" %}
             </div>
         </div>
-            <a class="btn btn-warning" href={% url "teacher_booking_create" %}?book__event={{request.GET.book__event}}&attendance_date={{request.GET.attendance_date}}><i class="fas fa-plus"></i> Unregistered User  </a>
+        <a class="btn btn-info align-self-start mb-2" href={% url "invitation" %}><i class="fas fa-plus"></i> Invite User  </a>
         <div class="row">
             <div class="form-group col-sm-4 col-md-4">
               {{ form.event.label_tag }}

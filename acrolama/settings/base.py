@@ -61,6 +61,7 @@ EXTERNAL_APPS = [
     "tinycontent",
     "allauth",
     "allauth.account",
+    "invitations",
 ]
 
 LOCAL_APPS = ["home", "project", "address", "audiovisual", "accounting", "booking", "users"]

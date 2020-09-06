@@ -24,6 +24,8 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_FORMS = {
     "signup": "users.forms.CustomSignupForm",
 }
+# Add to settings.py
+ACCOUNT_ADAPTER = 'invitations.models.InvitationsAdapter'
 
 LOGIN_URL = "/accounts/login"
 LOGIN_REDIRECT_URL = "home"

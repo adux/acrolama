@@ -1,0 +1,15 @@
+{% load i18n %}
+{% autoescape off %}
+{% blocktrans %}
+
+Hola,
+
+You have been invited to join {{ site_name }}
+
+Please go to {{ invite_url }} to finish your registration.
+
+See you soon!
+The Lamas
+
+{% endblocktrans %}
+{% endautoescape %}
