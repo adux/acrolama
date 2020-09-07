@@ -26,6 +26,8 @@ ACCOUNT_FORMS = {
 }
 # Add to settings.py
 ACCOUNT_ADAPTER = 'invitations.models.InvitationsAdapter'
+INVITATIONS_ACCEPT_INVITE_AFTER_SIGNUP = True
+INVITATIONS_GONE_ON_ACCEPT_ERROR = False
 
 LOGIN_URL = "/accounts/login"
 LOGIN_REDIRECT_URL = "home"
