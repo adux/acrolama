@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import pre_save, post_save, m2m_changed
 from django.utils.functional import cached_property
 from django.urls import reverse
 
@@ -43,6 +43,7 @@ DAYS = [
     ("5", "Saturday"),
     ("6", "Sunday"),
 ]
+
 
 # TODO:not why i didn't use the days as a simple list.
 class Day(models.Model):
@@ -136,11 +137,18 @@ class TimeLocation(models.Model):
             return self.name
 
 
-def timelocation_post_save(sender, instance, *args, **kwargs):
-    instance.name = " - ".join(p.name for p in instance.time_options.all()) + " | %s" % (instance.location)
+def timelocation_m2m_change(sender, instance, *args, **kwargs):
+    # TODO: feels a bit hacki.
+    pk_set = kwargs.pop('pk_set', None)
+    b = []
+    for pk in pk_set:
+        b.append(TimeOption.objects.get(pk=pk))
+
+    instance.name = " - ".join(str(p) for p in b) + " | %s" % (instance.location)
+    instance.save()
 
 
-pre_save.connect(timelocation_post_save, sender=TimeLocation)
+m2m_changed.connect(timelocation_m2m_change, sender=TimeLocation.time_options.through)
 
 
 class Irregularity(models.Model):
