@@ -82,6 +82,22 @@ class EventAutocomplete(autocomplete.Select2QuerySetView):
         return qs
 
 
+class EventTeacherAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        if not herd_check(self.request.user):
+            return Event.objects.none()
+
+        qs = Event.objects.all().order_by("-event_startdate").select_related("level").filter(teachers=self.request.user)
+
+        if self.q:
+            qs = qs.filter(
+                Q(category__icontains=self.q) | Q(level__name__icontains=self.q) | Q(title__icontains=self.q)
+            )
+
+        return qs
+
+
 class UserAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         # Don't forget to filter out results depending on the visitor !

@@ -18,6 +18,7 @@ from project.views import EventDetail
 
 from booking.views import (
     EventAutocomplete,
+    EventTeacherAutocomplete,
     UserAutocomplete,
     attendance_daily_view,
     attendancelistview,
@@ -95,6 +96,7 @@ urlpatterns = [
     path("herd/teacher/booking/invite/", invitationsendview, name="invitation",),
     path("invitations/", include('invitations.urls', namespace='invitations')),
     re_path(r"^event-autocomplete/$", EventAutocomplete.as_view(), name="event-autocomplete",),
+    re_path(r"^eventteacher-autocomplete/$", EventTeacherAutocomplete.as_view(), name="eventteacher-autocomplete",),
     re_path(r"^user-autocomplete/$", UserAutocomplete.as_view(), name="user-autocomplete",),
 ]
 
