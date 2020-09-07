@@ -69,7 +69,7 @@ from booking.services import (
 class EventAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         # Don't forget to filter out results depending on the visitor !
-        if not self.request.user.is_staff:
+        if not herd_check(self.request.user):
             return Event.objects.none()
 
         qs = Event.objects.all().order_by("-event_startdate", "level").select_related("level")
@@ -85,7 +85,7 @@ class EventAutocomplete(autocomplete.Select2QuerySetView):
 class UserAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         # Don't forget to filter out results depending on the visitor !
-        if not self.request.user.is_staff:
+        if not herd_check(self.request.user):
             return User.objects.none()
 
         qs = User.objects.all().order_by("last_name")
