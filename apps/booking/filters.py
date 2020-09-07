@@ -61,7 +61,9 @@ class AttendanceFilter(django_filters.FilterSet):
 
 class AttendanceDailyFilter(django_filters.FilterSet):
     # Gets the Event the User is teacher on.
-    book__event = django_filters.ChoiceFilter(label="Your Events", field_name="book__event",)
+    book__event = django_filters.ChoiceFilter(
+        label="Your Events", field_name="book__event", widget=autocomplete.ModelSelect2(url="event-autocomplete")
+    )
 
     attendance_date = django_filters.DateFilter(
         field_name="attendance_date", method="filter_by_date_contains", initial=datetime.datetime.now().date(),
