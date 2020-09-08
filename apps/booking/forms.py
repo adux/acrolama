@@ -124,7 +124,7 @@ class BookForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["times"].label_from_instance = lambda obj: "%s %s" % (
-            obj.get_regular_day_display if obj.regular_day else obj.name,
+            obj.get_regular_day_display() if obj.regular_day else obj.name,
             obj.get_class_start_times() if obj.get_class_start_times() is not None else obj.get_open_start_times(),
         )
         self.fields["price"].empty_label = "Select a Pricing Option"
