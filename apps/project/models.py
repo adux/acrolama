@@ -67,8 +67,7 @@ class Project(models.Model):
 class TimeOption(models.Model):
     name = models.CharField(max_length=30)
     description = models.TextField(max_length=1000)
-    # TODO: this should be singular
-    regular_day = models.ForeignKey(Day, null=True, blank=True, on_delete=models.CASCADE)
+    regular_day = models.CharField(max_length=10, choices=DAYS, blank=True, null=True)
     class_starttime = models.TimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
     class_endtime = models.TimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
     open_starttime = models.TimeField(auto_now=False, auto_now_add=False)
@@ -80,7 +79,7 @@ class TimeOption(models.Model):
         if self.regular_day:
             return "%s, %s: %s - %s" % (
                 self.name,
-                self.regular_day,
+                self.get_regular_day_display(),
                 self.class_starttime.strftime("%H:%M"),
                 self.class_endtime.strftime("%H:%M"),
             )

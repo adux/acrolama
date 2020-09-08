@@ -113,7 +113,7 @@ def createAttendance(book):
                 obj.attendance_date.append(book.event.event_startdate)
                 obj.attendance_check.append("False")
             else:
-                num = to.regular_day.day
+                num = to.regular_day
                 li = datelistgenerator(start, end, int(num))
                 obj.attendance_date.extend(li)
                 for time in li:

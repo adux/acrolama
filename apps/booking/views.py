@@ -123,7 +123,7 @@ def bookinglistview(request):
         queryset=(
             Book.objects.all()
             .select_related("event", "user", "price")
-            .prefetch_related("times__regular_day")
+            .prefetch_related("times")
             .order_by("-booked_at")
         ),
     )
@@ -193,7 +193,7 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
             queryset=(
                 Book.objects.all()
                 .select_related("event", "user", "price")
-                .prefetch_related("times__regular_day")
+                .prefetch_related("times")
                 .order_by("-booked_at")
             ),
         )
@@ -319,7 +319,7 @@ def attendancelistview(request):
         queryset=(
             Attendance.objects.all()
             .select_related("book", "book__event", "book__user", "book__price")
-            .prefetch_related("book__times__regular_day")
+            .prefetch_related("book__times")
         ),
     )
 
@@ -385,7 +385,7 @@ def attendance_daily_view(request):
         queryset=(
             Attendance.objects.filter(book__event__teachers=request.user)
             .select_related("book", "book__user", "book__event", "book__price")
-            .prefetch_related("book__times__regular_day")
+            .prefetch_related("book__times")
         ),
         user=request.user,
     )
@@ -418,7 +418,7 @@ class AttendanceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
             queryset=(
                 Attendance.objects.all()
                 .select_related("book", "book__user", "book__event", "book__price")
-                .prefetch_related("book__times__regular_day")
+                .prefetch_related("book__times")
             ),
         )
 
@@ -470,7 +470,7 @@ def contactlistview(request):
         queryset=(
             Book.objects.all()
             .select_related("event", "user", "price")
-            .prefetch_related("times__regular_day")
+            .prefetch_related("times")
             .order_by("-booked_at")
         ),
     )

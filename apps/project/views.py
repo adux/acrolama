@@ -49,7 +49,7 @@ class EventDisplay(DetailView):
             time_options = obj.time_options.all()
             for to in time_options:
                 timelocation = location + [
-                    to.regular_day,
+                    to.get_regular_day_display,
                     to.open_starttime,
                     to.open_endtime,
                     to.class_starttime,

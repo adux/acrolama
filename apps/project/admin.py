@@ -72,6 +72,7 @@ class TimeLocationAdmin(admin.ModelAdmin):
         "location",
         "name"
     ]
+    list_select_related = ["location"]
 
 
 admin.site.register(Event, EventAdmin)
