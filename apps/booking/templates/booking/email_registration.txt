@@ -1,20 +1,21 @@
 Hoi {{user.first_name}}
 {% load tinycontent_tags %}
-Thanks for registering for: {{event}}
+Thanks for registering for: {{event.title}}
 
-An entire operation has begun. A herd of lamas is inspecting carefully your registration.
+Your registration is "In Process", a herd of lamas is inspecting it carefully.
 No worries, you're in good hands.
 
-We'll get back to you as soon as possible.
+We'll inform you soon if there are any changes.
 
-Tip: If you are nervous about the results and can't sleep: count lamas, it helps.
+Tip: If you are nervous and can't sleep: count lamas, it helps.
 
-Last but not least, get the latest news in our Whatsapp Group:
+To get the latest news of the Class in our Whatsapp Group:
 {% tinycontent_simple 'email_whatsapp' %}
 Or visit the FAQ if you have questions: https://acrolama.com/faq its working now.
 
-Hope to see you soon!
+See you soon!
 Big Hug
+Adrian + Danica
 The Lamas
 
 

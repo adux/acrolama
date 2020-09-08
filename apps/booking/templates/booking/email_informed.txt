@@ -1,6 +1,6 @@
 Hola {{user.first_name}}
 {% load tinycontent_tags %}
-The herd of lama informed us you are confirmed for the following event:
+The herd of lama informed us you are "Confirmed" for the following event:
 {{event.title}}  {{event.event_startdate|date:'d M.'}}{% if event.event_startdate != event.event_enddate %}- {{ event.event_enddate|date:'d M. y'}}{% endif %}
 {% if event.category == 'CY' %}Event details: https://www.acrolama.com/classes/{{event.slug}}/{% else %}Details: https://www.acrolama.com/events/{{event.slug}}/{% endif %}
 
