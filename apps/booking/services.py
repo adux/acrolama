@@ -130,8 +130,6 @@ def createNextBook(book, status):
     Gets and Workshop Booking and creates the next based on cycle
     """
     book = get_book(book)
-    print("in function book")
-    print(type(book))
 
     obj = Book()
     obj.pk = None
@@ -145,34 +143,35 @@ def createNextBook(book, status):
     # Resolve Status
     try:
         obj.status = status
-    except:
+    except Exception as e:
+        print(e)
         obj.status = "PE"
 
     # Resolve Event
     old_event = book.event
 
     # Reset cycle num if needed
+    if (old_event.cycle + 1) > 12:
+        cycle = 1
+    else:
+        cycle = old_event.cycle + 1
+
     try:
         new_event = Event.objects.filter(
             project=old_event.project,
             level=old_event.level,
             category=old_event.category,
             event_startdate__gt=old_event.event_enddate,
-        ).get(cycle=old_event.cycle + 1)
+        ).get(cycle=cycle)
     except (ObjectDoesNotExist) as e:
-        new_event = Event.objects.filter(
-            project=old_event.project,
-            level=old_event.level,
-            category=old_event.category,
-            event_startdate__gt=old_event.event_enddate,
-        ).get(cycle=1)
+        print(e)
+        return 0
     except (MultipleObjectsReturned) as e:
-        print("MultipleObjectes")
-    except:
-        print("Error with new_event. Doesn't have a next event?")
-
-    else:
-        print("New Event success")
+        print(e)
+        return 0
+    except Exception as e:
+        print(e)
+        return 0
 
     obj.event = new_event
 
@@ -185,8 +184,8 @@ def createNextBook(book, status):
     try:
         for x in times_pk:
             obj.times.add(x)
-    except:
-        print("Times adding error")
+    except Exception as e:
+        print("Times adding error: " + e)
 
     return obj
 
@@ -200,5 +199,11 @@ def createNextBookAttendance(book):
 
     # For Abos > 1
     for x in range(1, book.price.cycles):
-        book = createNextBook(book, "PA")
-        createAttendance(book)
+        try:
+            book = createNextBook(book, "PA")
+            print(book)
+        except Exception as e:
+            print(e)
+        if book:
+            createAttendance(book)
+            book.note += "\n\n"

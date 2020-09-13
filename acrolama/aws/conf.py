@@ -4,7 +4,7 @@ from acrolama.settings.base import BASE_DIR
 
 
 # Expiration Calc
-two_months = datetime.timedelta(days=61)
+two_months = datetime.timedelta(days=365)
 date_two_months_later = datetime.date.today() + two_months
 expires = date_two_months_later.strftime("%A, %d %B %Y 20:00:00 GMT")
 
@@ -44,8 +44,8 @@ DEFAULT_FILE_STORAGE = "acrolama.aws.utils.MediaRootS3BotoStorage"
 
 ADMIN_MEDIA_PREFI = STATIC_URL + "admin/"
 
-### Compress
-COMPRESS_ENABLED = False
+# Compress
+COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = True
 COMPRESS_CSS_HASHTAG_METHOD = "content"
 COMPRESS_CSS_FILTERS = ["compressor.filters.css_default.CssAbsoluteFilter", "compressor.filters.cssmin.CSSMinFilter"]

@@ -85,7 +85,7 @@
                                 <li><a class="button popup-trigger" style="width:252px;"><b>Book</b></a></li>
                                 {% else %}
                                 <li><a class="button" href="{% url "account_signup" %}"><b>Register</b></a></li>
-                                <li>Allready have an account? <a href="{% url "account_login" %}">Sign in</a></li>
+                                <li>Already have an account? <a href="{% url "account_login" %}">Sign in</a></li>
                                 {% endif %}
                             {% endif %}
                         </ul>
@@ -95,7 +95,7 @@
                         <ul>
                         {%if option.regular_day %}
                             <li>
-                                <h5>{{ option.get_regular_day_display }} Class</h5>
+                                <h5>{{ option.regular_day }} Class</h5>
                             </li>
                         {% endif %}
                         <li>

@@ -593,7 +593,9 @@ def quotationcreateview(request):
     book_filter = QuotationBookFilter(
         request.GET,
         queryset=(
-            Book.objects.all().select_related("event__level", "user", "price").prefetch_related("invoice", "attendance")
+            Book.objects.all()
+            .select_related("event__level", "user", "price")
+            .prefetch_related("invoice", "attendance")
         ),
     )
 
@@ -618,13 +620,20 @@ def quotationcreateview(request):
                     # Variables
 
                     # Revenue
-                    booksparticipants = book_filter.qs.filter(status="PA")
+                    booksparticipants = book_filter.qs.filter(status="PA").select_related("event__level")
+                    summe = Decimal(0)
+                    for b in booksparticipants:
+                        if b.price.cycles <= 1:
+                            summe += b.price.price_chf
+                        elif b.price.cycles > 1:
+                            summe += (b.price.price_chf/b.price.cycles)
 
                     if not booksparticipants:
                         direct_revenue = Decimal(0)
                     else:
-                        direct_revenue = booksparticipants.aggregate(Sum("price__price_chf"))
-                        direct_revenue = direct_revenue["price__price_chf__sum"]
+                        # direct_revenue = booksparticipants.aggregate(Sum("price__price_chf"))
+                        # direct_revenue = direct_revenue["price__price_chf__sum"]
+                        direct_revenue = summe
 
                     # Rent
                     # TODO: Get rent based on place

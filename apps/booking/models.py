@@ -31,6 +31,7 @@ class Book(models.Model):
     booked_at = models.DateTimeField(auto_now_add=True)
     informed_at = models.DateTimeField(null=True, blank=True)
 
+
     # Gets names from TimeOption
     def get_times(self):
         return ",\n".join([p.name for p in self.times.all()])

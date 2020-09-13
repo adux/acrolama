@@ -36,10 +36,10 @@ class HomeFormView(MultiFormsView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["about_content"] = AboutTeam.objects.all()
-        context["about_image"] = AboutImage.objects.all()
+        context["about_image"] = AboutImage.objects.all().select_related("image")
         context["about_date"] = AboutDate.objects.all()
         context["testimonial"] = Testimonial.objects.all()
-        context["portfolio"] = Portfolio.objects.all()[0:8]
+        context["portfolio"] = Portfolio.objects.all()[0:8].select_related("image")
         context["news"] = NewsList.objects.all()
 
         # Events

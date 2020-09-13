@@ -40,6 +40,7 @@ class AttendanceAdmin(admin.ModelAdmin):
 
 class BookAdmin(admin.ModelAdmin):
     list_display = [
+        "id",
         "event",
         "user",
         "price",

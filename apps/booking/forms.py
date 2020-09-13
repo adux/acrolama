@@ -31,7 +31,7 @@ class UpdateAttendanceForm(forms.ModelForm):
 
 
 class UpdateBookForm(forms.ModelForm):
-    status = forms.ChoiceField(choices=[(k, v) for k, v in BOOKINGSTATUS if k not in "PA"])
+    status = forms.ChoiceField(choices=[(k, v) for k, v in BOOKINGSTATUS])
 
     class Meta:
         model = Book
