@@ -10,10 +10,7 @@ from django.template.loader import render_to_string
 
 from project.models import Irregularity
 
-from booking.services import (
-    getLocationFromTimeOption,
-    getAboCounterCount,
-)
+import booking.services
 
 
 # Tests for the UserPassesTestMixin
@@ -76,7 +73,7 @@ def email_sender(instance, flag):
 
         irregularities = Irregularity.objects.filter(event__slug=instance.event.slug)
         times = instance.times.all()
-        location = getLocationFromTimeOption(times, instance.event)
+        location = booking.services.getLocationFromTimeOption(times, instance.event)
 
         referenznum = space_out(
             str(instance.user.pk)
@@ -151,9 +148,9 @@ def email_sender(instance, flag):
 
         irregularities = Irregularity.objects.filter(event__slug=instance.event.slug)
         times = instance.times.all()
-        location = getLocationFromTimeOption(times, instance.event)
+        location = booking.services.getLocationFromTimeOption(times, instance.event)
         try:
-            abocount = getAboCounterCount(instance.id)
+            abocount = booking.services.getAboCounterCount(instance.id)
         except ObjectDoesNotExist:
             abocount = False
 
