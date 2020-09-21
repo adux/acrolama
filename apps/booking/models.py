@@ -1,8 +1,9 @@
 # import datetime
-
 from django.db import models
+from django.contrib.postgres.fields import JSONField
+from django.db.models.signals import post_save
 
-# Original would be from postgres.field fields looks for other widgets
+# Original would be from postgres.field, booking.fields looks for other widgets
 # from django.contrib.postgres.fields import ArrayField
 from booking.fields import ArrayField
 
@@ -31,7 +32,6 @@ class Book(models.Model):
     booked_at = models.DateTimeField(auto_now_add=True)
     informed_at = models.DateTimeField(null=True, blank=True)
 
-
     # Gets names from TimeOption
     def get_times(self):
         return ",\n".join([p.name for p in self.times.all()])
@@ -50,10 +50,6 @@ class BookDuoInfo(models.Model):
 
 
 class BookDateInfo(models.Model):
-    """
-    TODO: Could contain also the range for Festivals
-    """
-
     book = models.OneToOneField("booking.Book", on_delete=models.CASCADE)
     single_date = models.DateField(auto_now_add=False, auto_now=False, blank=True)
 
@@ -63,9 +59,7 @@ class Attendance(models.Model):
     Contains the dates a Person should participate depending on the booking they did
     TODO: This could be done with JSON.
     Not to much to use those, nor see the practical advantage now.
-    TODO: num should be position
     """
-
     book = models.OneToOneField("booking.Book", on_delete=models.PROTECT)
     attendance_date = ArrayField(models.DateField())
     attendance_check = ArrayField(models.BooleanField())
@@ -86,7 +80,7 @@ class Attendance(models.Model):
     def count_attendance(self):
         count = 0
         for position, check in enumerate(self.attendance_check):
-            if check == True:
+            if check:
                 count += 1
         return count
 
@@ -119,3 +113,23 @@ class Quotation(models.Model):
 
     def get_teachers(self):
         return ",\n".join([p.first_name for p in self.teachers.all()])
+
+
+class AboCounter(models.Model):
+    """
+    Json should have the form
+    data={
+        'first_book': '123', #number of the first booking
+        'last_book': '123',
+        'count': 0,
+    }
+    """
+    data = JSONField()
+
+
+def aboutcounter_post_save(sender, instance, *args, **kwargs):
+    if instance.data['count'] < 1:
+        instance.delete()
+
+
+post_save.connect(aboutcounter_post_save, sender=AboCounter)

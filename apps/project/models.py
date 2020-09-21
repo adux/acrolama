@@ -1,7 +1,9 @@
 from django.db import models
 from django.db.models.signals import pre_save, post_save, m2m_changed
-from django.utils.functional import cached_property
+from django.utils.translation import ugettext as _
 from django.urls import reverse
+
+from django.core.exceptions import ValidationError
 
 from home.utils import unique_slug_generator
 from home.services import createInfoFromPolicy
@@ -45,7 +47,7 @@ DAYS = [
 ]
 
 
-# TODO:not why i didn't use the days as a simple list.
+# FIXME: To be deleted.
 class Day(models.Model):
     day = models.CharField(max_length=10, choices=DAYS)
 
@@ -57,7 +59,7 @@ class Project(models.Model):
     name = models.CharField(max_length=120)
     description = models.TextField(max_length=2000)
     manager = models.ManyToManyField("users.User")
-    todo = models.CharField(max_length=120, null=True, blank=True)
+    public_chat_link = models.CharField(max_length=120, null=True, blank=True)
     creationdate = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -129,6 +131,9 @@ class TimeLocation(models.Model):
     time_options = models.ManyToManyField(TimeOption)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
 
+    def get_times(self):
+        return ",\n".join([p.name for p in self.time_options.all()])
+
     def __str__(self):
         if self.name is None:
             return str(self.location)
@@ -136,15 +141,40 @@ class TimeLocation(models.Model):
             return self.name
 
 
-def timelocation_m2m_change(sender, instance, *args, **kwargs):
-    # TODO: feels a bit hacki.
-    pk_set = kwargs.pop('pk_set', None)
-    b = []
-    for pk in pk_set:
-        b.append(TimeOption.objects.get(pk=pk))
+def timelocation_post_save(sender, instance, *args, **kwargs):
+    """
+    Solution for recursion to tho the save.
+    """
+    if not instance:
+        return
 
-    instance.name = " - ".join(str(p) for p in b) + " | %s" % (instance.location)
-    instance.save()
+    if hasattr(instance, '_dirty'):
+        return
+
+    instance.name = " - ".join(str(p) for p in instance.time_options.all()) + " | %s" % (instance.location)
+
+    try:
+        instance._dirty = True
+        print("post_save")
+        instance.save()
+    finally:
+        print("post_dirty")
+        del instance._dirty
+
+
+post_save.connect(timelocation_post_save, sender=TimeLocation)
+
+
+def timelocation_m2m_change(sender, instance, *args, **kwargs):
+    """
+    Will call two times the post_save since its saving
+    """
+    if kwargs.get('action') in {'post_add', 'post_remove'}:
+        print(kwargs.get('action'))
+        pk_set = kwargs.pop('pk_set', None)
+        b = [TimeOption.objects.get(pk=pk) for pk in pk_set]
+        instance.name = " - ".join(str(p) for p in b) + " | %s" % (instance.location)
+        instance.save()
 
 
 m2m_changed.connect(timelocation_m2m_change, sender=TimeLocation.time_options.through)
@@ -173,6 +203,7 @@ class PriceOption(models.Model):
     description = models.TextField(max_length=1000)
     price_chf = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
     price_euro = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
+    days_till_pay = models.IntegerField(verbose_name="Days to Pay", default=10)
     published = models.BooleanField(default=False)
 
     def __str__(self):
@@ -187,9 +218,15 @@ class PriceOption(models.Model):
 
     def clean(self):
         if self.duo and self.single_date:
-            raise ValidationError("Can't be 'Duo' and 'Single date'")
+            raise ValidationError(
+                _("Can't be 'Duo' and 'Single Date'"),
+                code='invalid',
+            )
         if self.single_date and self.cycles > 0:
-            raise ValidationError("Can't use 'Single date' with Cycles Abos")
+            raise ValidationError(
+                _("Can't usr 'Single date' with Cycle Abos"),
+                code='invalid',
+            )
 
 
 # Sport Info

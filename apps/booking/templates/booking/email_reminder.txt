@@ -1,6 +1,6 @@
 Hola {{user.first_name}}
 {% load tinycontent_tags %}
-We are happy to inform you that the herd of lamas confirmed your booking for:
+We want to remind you that you are registerd for:
 {{event.title}} {{event.event_startdate|date:'d M.'}}{% if event.event_startdate != event.event_enddate %}- {{ event.event_enddate|date:'d M. y'}}{% endif %}
 {% if event.category == 'CY' %}Class details: https://www.acrolama.com/classes/{{event.slug}}/{% else %} Event details: https://www.acrolama.com/events/{{event.slug}}/{% endif %}
 
@@ -9,24 +9,9 @@ Please let us know if there are any changes regarding your participation.
 Booking details:
 {% if event.category == 'CY' %}Regular{% if times %}{% with count=times.count %} day{{ count|pluralize }}:{% endwith %}{% for d in times.all %} · {{d}}{% endfor %}{% endif %}{% endif %}
 {% if location %}Address: {{location.name}} - {{location.address}}. {{location.description}}{% endif %}
-Price: {{price}}
-Reference number: {{referenznum}}
 {% if irregularities %}{% with count=irregularities.count %}Please note the event has the following exception{{ count|pluralize }}:{% endwith %}{% for obj in irregularities %} ·{{obj.description}}{% endfor %}\n\r{% endif %}
-Is there are a day you can not come to class?
-Find a answear to this in our FAQ https://acrolama.ch/faq/
 
-Payment details:
-Pay till : {{pay_till}}
-Bank Transfer:
-Acrolama KLG
-Tramstrasse 65, 8050 Zürich
-IBAN: CH29 0022 5225 1202 6601 B
-BIC: UBSWCHZH80A
-Use reference number: {{ referenznum }}
-
-Find our payment methods and abos at: https://acrolama.ch/info/prices/
-
-Last but not least, get the latest news in our Whatsapp Group:
+Get the latest news in our Whatsapp Group:
 {% tinycontent_simple 'email_whatsapp' %}
 
 See you soon!

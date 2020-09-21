@@ -13,7 +13,7 @@ from booking.utils import (
     staff_check,
 )
 
-from booking.services import updateBookStatus, createNextBookAttendance
+from booking.services import updateBookStatus
 
 from accounting.models import Invoice
 from accounting.filters import AccountFilter
@@ -105,17 +105,6 @@ class InvoiceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                         )
                     else:
                         messages.add_message(self.request, messages.INFO, _("Updated status Booking"))
-
-                    # Multiple Cycles
-                    if invoice.book.price.cycles > 1:
-                        try:
-                            createNextBookAttendance(invoice.book.id)
-                        except Exception as e:
-                            messages.add_message(
-                                self.request, messages.WARNING, _("Error creating Next Booking for Abo: " + e)
-                            )
-                        else:
-                            messages.add_message(self.request, messages.INFO, _("Booking and Attendance created"))
 
                 elif (invoice.status in ("PE", "PY")) and (instance.status == "CA"):
 

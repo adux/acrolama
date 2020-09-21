@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Acrolama - Confirmation</title>
+<title>Acrolama - Reminder</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <body style="margin: 0; padding: 0;">
@@ -21,16 +21,15 @@
               <table border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
                   <td style="color: #153643; font-family: Arial, sans-serif; font-size: 24px;">
-                    <b>Confirmation - {{event.title}}</b>
+                    <b>Reminder - {{event.title}}</b>
                   </td>
                 </tr>
                 <tr>
                   <td style="padding: 20px 0 30px 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;">
                     <p>Hola {{user.first_name}}</p>
-                    <p>We are happy to inform you that the herd of lamas confirmed your booking for:
+                    <p>We wanted to remind you that you are registered for:
                         {{event.title}} {{event.event_startdate|date:'d M.'}}{% if event.event_startdate != event.event_enddate %} - {{ event.event_enddate|date:'d M. y'}}{% endif %} {% if event.category == 'CY' %}<a href="https://www.acrolama.com/classes/{{event.slug}}/" target="_blank">Class details</a>{% else %}<a href="https://www.acrolama.com/events/{{event.slug}}/" target="_blank">Event details</a>{% endif %}</p>
                     <h4>Please let us know if there are changes regarding your participation.</h4>
-                    <p>For questions check <a href="https://acrolama.com/faq/" target="_blank">FAQ</a></p>
                   </td>
                 </tr>
                 <tr>
@@ -41,7 +40,7 @@
                           <table border="0" cellpadding="0" cellspacing="0" width="100%">
                             <tr>
                               <td>
-                                <img src="https://acrolama.s3.eu-central-1.amazonaws.com/static/home/images/email_details.gif" alt="Acrolama email for details of booking" width="100%" height="140" style="display: block;" />
+                                <img src="https://acrolama.s3.eu-central-1.amazonaws.com/static/home/images/email_details.gif" alt="Acrolama email for details of booking" width="50%" height="140" style="display: block;margin-left: auto; margin-right: auto;" />
                               </td>
                             </tr>
                             <tr>
@@ -53,37 +52,13 @@
                                 {% if location %}
                                 <p>Address: {{location.name}} - {{location.address}}. {{location.description}}</p>
                                 {% endif %}
-                                <p><b>Price</b>:<br/> {{ price }}</p>
-                                <p><b>Reference number</b>: {{ referenznum }}</p>
                                 {% if irregularities %}{% with count=irregularities.count %}
                                 <p><b>Please note the following exception{{ count|pluralize }}</b>:{% endwith %}{% for obj in irregularities %}<br/> ·{{obj.description}}{% endfor %}</p>
                                 {% endif %}
-                              </td>
-                            </tr>
-                          </table>
-                        </td>
-                        <td style="font-size: 0; line-height: 0;" width="20">
-                          &nbsp;
-                        </td>
-                        <td width="260" valign="top">
-                          <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                            <tr>
-                              <td>
-                                <img src="https://acrolama.s3.eu-central-1.amazonaws.com/static/home/images/email_paymethod.gif" alt="Acrolama Email detail logo for payment methode" width="100%" height="140" style="display: block;" />
-                              </td>
-                            </tr>
-                            <tr>
-                              <td style="padding: 25px 0 0 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;">
-                                <h4>Payment details: </h4>
-                                <p><b>Pay till</b>: {{pay_till}} </p>
-                                <p><b>Bank Transfer</b>:<br/>
-                                  Acrolama KLG<br/>
-                                  Tramstrasse 65, 8050 Zürich<br/>
-                                  IBAN: CH29 0022 5225 1202 6601 B<br/>
-                                  BIC: UBSWCHZH80A<br/><br/><br/>
-                                  <b>Use reference number</b>: {{referenznum}}
-                                </p>
-                                <p>Find out more about our abos <a href="https://acrolama.com/info/prices/" target="_blank">www.acrolama/info/prices/</a></p>
+                                {% if abocount %}
+                                <p>You still got: {{ abocount }} cycles left.</p>
+                                {% else %}
+                                <p><b>It's your last cycle from this abo.</b> You'll be automatically booked with a new Abo, let us know if you want to cancel it.</p>
                               </td>
                             </tr>
                           </table>
@@ -102,7 +77,7 @@
                         The Lamas ;)
                     </p>
                     <p style="color: #808080; font-size: 12px;">
-                        PS: For Videos and Latest Infos:</br>
+                        For Videos and Latest News:</br>
                         <a href="https://www.instagram.com/acrolama" target="_blank">Instagram</a>
                         <a href="https://www.facebook.com/acrolama" target="_blank">Facebook</a>
                         <a href="{% tinycontent_simple 'email_whatsapp'%}">Whatsapp Group</a>

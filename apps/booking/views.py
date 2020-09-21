@@ -59,6 +59,7 @@ from booking.services import (
     get_book,
     get_event,
     get_timelocation,
+    newInformedBook,
     createNextBook,
     createInvoiceFromBook,
     createAttendance,
@@ -201,7 +202,6 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         paginator = Paginator(booking_filter.qs, 24)  # Show 24 contacts per page.
         page = self.request.GET.get("page")
         try:
-
             response = paginator.page(page)
         except PageNotAnInteger:
             response = paginator.page(1)
@@ -217,39 +217,9 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
         if "update" in self.request.POST:
             if (book.status == "PE" or book.status == "WL") and (instance.status == "IN"):
-                # Invoice
-                try:
-                    createInvoiceFromBook(instance)
-                except Exception as e:
-                    messages.add_message(
-                        self.request, messages.WARNING, _("Error creating Invoice: " + str(e)),
-                    )
-                else:
-                    messages.add_message(self.request, messages.SUCCESS, _("Invoice Created"))
-
-                # Attendance
-                try:
-                    createAttendance(instance)
-                except Exception as e:
-                    messages.add_message(
-                        self.request, messages.WARNING, _("Error creating Attendance: " + str(e)),
-                    )
-                else:
-                    messages.add_message(self.request, messages.SUCCESS, _("Attendance created"))
-
-                # Send Email
-                if book.informed_at is None:
-                    try:
-                        email_sender(instance, "Informed")
-                    except Exception as e:
-                        messages.add_message(self.request, messages.ERROR, _("Error Email: " + str(e)))
-                    else:
-                        messages.add_message(self.request, messages.SUCCESS, _("Informed email sent."))
-                        instance.informed_at = datetime.datetime.now()
-                else:
-                    messages.add_message(self.request, messages.INFO, _("Email sent: " + str(book.informed_at)))
-
+                newInformedBook(self.request, instance, book)
             elif (book.status == "IN") and (instance.status == "PA"):
+                # TODO: this should be possible here.
                 messages.add_message(
                     self.request, messages.INFO, _("Please change to participant only if Invoice payed."),
                 )

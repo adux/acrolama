@@ -1,11 +1,13 @@
 import datetime
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
+from django.contrib import messages
+from django.utils.translation import gettext as _
 
-from booking.models import Book, Attendance
+from booking.models import Book, Attendance, AboCounter
 from project.models import Event, TimeLocation
 from accounting.models import Invoice
 
-from .utils import datelistgenerator
+import booking.utils
 
 
 def get_book(book):
@@ -20,6 +22,7 @@ def get_book(book):
         try:
             book = Book.objects.get(pk=book_pk)
         except Book.DoesNotExist:
+            # TODO: Raise Error to log or to Sentry somehow ?
             print("Booking doesn't exist")
 
     return book
@@ -37,6 +40,7 @@ def get_event(event):
         try:
             event = Event.objects.get(pk=event_pk)
         except Event.DoesNotExist:
+            # TODO: Raise Error to log or to Sentry somehow ?
             print("Event doesn't exist")
 
     return event
@@ -54,9 +58,27 @@ def get_timelocation(tl):
         try:
             tl = TimeLocation.objects.get(pk=tl_pk)
         except TimeLocation.DoesNotExist:
+            # TODO: Raise Error to log or to Sentry somehow ?
             print("Time Location doesn't exist")
 
     return tl
+
+
+def getLocationFromTimeOption(timeoptions, event):
+    if timeoptions.count() > 1:
+        return False
+    else:
+        event = get_event(event)
+        timelocations_qs = event.time_locations.all()
+        filteredTimeLocation_qs = timelocations_qs.filter(time_options__in=timeoptions)
+        if filteredTimeLocation_qs.count() > 1:
+            return False
+        else:
+            location = filteredTimeLocation_qs.last().location
+            if location is not None:
+                return location
+            else:
+                return False
 
 
 def updateSwitchCheckAttendance(id, position):
@@ -85,7 +107,8 @@ def createInvoiceFromBook(book):
     # Code created in Email Send ...
     obj.status = "PE"   # Pending
     obj.to_pay = int(book.price.price_chf)
-    obj.pay_till = datetime.datetime.now().date() + datetime.timedelta(days=10)  # Give 10 Days to pay
+    # Default 10 days to pay
+    obj.pay_till = datetime.datetime.now().date() + datetime.timedelta(days=book.price.days_till_pay)
     obj.notes = "\n Automatic created Invoice"
     obj.save()
 
@@ -114,7 +137,7 @@ def createAttendance(book):
                 obj.attendance_check.append("False")
             else:
                 num = to.regular_day
-                li = datelistgenerator(start, end, int(num))
+                li = booking.utils.datelistgenerator(start, end, int(num))
                 obj.attendance_date.extend(li)
                 for time in li:
                     obj.attendance_check.append("False")
@@ -123,6 +146,109 @@ def createAttendance(book):
         obj.attendance_check.append("False")
 
     obj.save()
+
+
+def checkAboCounter(bookid):
+    return AboCounter.objects.filter(data__last_book=str(bookid)).exists()
+
+
+def reduceAboCounter(bookid):
+    obj = AboCounter.objects.get(data__last_book=str(bookid))
+    obj.data['count'] -= 1
+    obj.save()
+
+
+def createAboCounter(book):
+    AboCounter.objects.create(data={'first_book': str(book.id), 'last_book': str(book.id), 'count': book.price.cycles})
+
+
+def updateAboCounter(bookid, newbookid):
+    obj = AboCounter.objects.get(data__last_book=str(bookid))
+    obj.data['last_book'] = str(newbookid)
+    obj.save()
+
+
+def getAboCounterCount(bookid):
+    return AboCounter.objects.get(data__last_book=str(bookid)).data['count']
+
+
+def newInformedBook(request, instance, book):
+    # If Abo Create Counter
+
+    if book.price.cycles < 2:
+        # Invoice
+        try:
+            createInvoiceFromBook(instance)
+        except Exception as e:
+            messages.add_message(
+                request, messages.WARNING, _("Error creating Invoice: " + str(e)),
+            )
+        else:
+            messages.add_message(request, messages.SUCCESS, _("Invoice Created"))
+
+        # Send New Book Email
+        if book.informed_at is None:
+            try:
+                booking.utils.email_sender(instance, "Informed")
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, _("Error Email: " + str(e)))
+            else:
+                messages.add_message(request, messages.SUCCESS, _("Informed email sent."))
+                instance.informed_at = datetime.datetime.now()
+        else:
+            messages.add_message(request, messages.INFO, _("Email sent: " + str(book.informed_at)))
+
+    else:
+
+        if not checkAboCounter(book.id):
+            # Create the Counter for Abos
+            createAboCounter(book)
+            reduceAboCounter(book.id)
+
+            # Invoice
+            try:
+                createInvoiceFromBook(instance)
+            except Exception as e:
+                messages.add_message(
+                    request, messages.WARNING, _("Error creating Invoice: " + str(e)),
+                )
+            else:
+                messages.add_message(request, messages.SUCCESS, _("Invoice Created"))
+
+            # Send New Book Email
+            if book.informed_at is None:
+                try:
+                    booking.utils.email_sender(instance, "Informed")
+                except Exception as e:
+                    messages.add_message(request, messages.ERROR, _("Error Email: " + str(e)))
+                else:
+                    messages.add_message(request, messages.SUCCESS, _("Informed email sent."))
+                    instance.informed_at = datetime.datetime.now()
+            else:
+                messages.add_message(request, messages.INFO, _("Email sent: " + str(book.informed_at)))
+
+        else:
+
+            # Send New Book Email
+            if book.informed_at is None:
+                try:
+                    booking.utils.email_sender(instance, "Informed")
+                except Exception as e:
+                    messages.add_message(request, messages.ERROR, _("Error Email: " + str(e)))
+                else:
+                    messages.add_message(request, messages.SUCCESS, _("Informed email sent."))
+                    instance.informed_at = datetime.datetime.now()
+            else:
+                messages.add_message(request, messages.INFO, _("Email sent: " + str(book.informed_at)))
+
+    try:
+        createAttendance(instance)
+    except Exception as e:
+        messages.add_message(
+            request, messages.WARNING, _("Error creating Attendance: " + str(e)),
+        )
+    else:
+        messages.add_message(request, messages.SUCCESS, _("Attendance created"))
 
 
 def createNextBook(book, status):
@@ -143,8 +269,7 @@ def createNextBook(book, status):
     # Resolve Status
     try:
         obj.status = status
-    except Exception as e:
-        print(e)
+    except Exception:
         obj.status = "PE"
 
     # Resolve Event
@@ -188,22 +313,3 @@ def createNextBook(book, status):
         print("Times adding error: " + e)
 
     return obj
-
-
-def createNextBookAttendance(book):
-    """
-    This function should be called only to create
-    future Books and Attendance at the same time
-    """
-    book = get_book(book)
-
-    # For Abos > 1
-    for x in range(1, book.price.cycles):
-        try:
-            book = createNextBook(book, "PA")
-            print(book)
-        except Exception as e:
-            print(e)
-        if book:
-            createAttendance(book)
-            book.note += "\n\n"

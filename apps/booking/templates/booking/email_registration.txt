@@ -1,13 +1,13 @@
-Hoi {{user.first_name}}
+Hola {{user.first_name}}
 {% load tinycontent_tags %}
 Thanks for registering for: {{event.title}}
 
-Your registration is "In Process", a herd of lamas is inspecting it carefully.
-No worries, you're in good hands.
+Your registration has been recived, a herd of lamas is inspecting it carefully.
+No worries, you are in good hands.
 
-We'll inform you soon if there are any changes.
+We aim to get back to you in 48 hours.
 
-Tip: If you are nervous and can't sleep: count lamas, it helps.
+Tip: If you are nervous about the status of your registration, and can't sleep: count lamas, it helps.
 
 To get the latest news of the Class in our Whatsapp Group:
 {% tinycontent_simple 'email_whatsapp' %}

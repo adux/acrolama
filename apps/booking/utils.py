@@ -2,6 +2,7 @@ import datetime
 
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils.http import urlencode
 from django.urls import reverse
 
@@ -9,7 +10,10 @@ from django.template.loader import render_to_string
 
 from project.models import Irregularity
 
-# from users.models import User
+from booking.services import (
+    getLocationFromTimeOption,
+    getAboCounterCount,
+)
 
 
 # Tests for the UserPassesTestMixin
@@ -71,15 +75,16 @@ def email_sender(instance, flag):
         to = [instance.user.email]
 
         irregularities = Irregularity.objects.filter(event__slug=instance.event.slug)
+        times = instance.times.all()
+        location = getLocationFromTimeOption(times, instance.event)
 
-        # TODO: Unnecesary access to DB
         referenznum = space_out(
             str(instance.user.pk)
-            + "00"
+            + "0"
             + str(instance.event.pk)
-            + "00"
+            + "0"
             + str(instance.pk)
-            + "00"
+            + "0"
             + str(instance.invoice.pk),
             4,
         )
@@ -90,7 +95,8 @@ def email_sender(instance, flag):
             "price": instance.price,
             "referenznum": referenznum,
             "pay_till": instance.invoice.pay_till,
-            "times": instance.times.all,
+            "times": times,
+            "location": location,
             "irregularities": irregularities,
         }
 
@@ -102,7 +108,7 @@ def email_sender(instance, flag):
         msg.send()
 
     elif flag == "Paid":
-        subject = "Acrolama - Payment Confirmation - " + str(instance.book.event.title)
+        subject = "Acrolama - Payment Confirmation -  " + str(instance.book.event.title)
         to = [instance.book.user.email]
 
         irregularities = Irregularity.objects.filter(event__slug=instance.book.event.slug)
@@ -122,13 +128,42 @@ def email_sender(instance, flag):
         msg.send()
 
     elif flag == "Registered":
-        subject = "Acrolama - Registration - " + str(instance.event.title)
+        subject = "Acrolama - Booking received - " + str(instance.event.title)
         sender = "notmonkeys@acrolama.com"
         to = [instance.user.email]
 
         p = {
             "event": instance.event,
             "user": instance.user,
+        }
+
+        msg_plain = render_to_string(settings.BASE_DIR + "/apps/booking/templates/booking/email_registration.txt", p,)
+        msg_html = render_to_string(settings.BASE_DIR + "/apps/booking/templates/booking/email_registration.html", p,)
+
+        msg = EmailMultiAlternatives(subject, msg_plain, sender, to, bcc)
+        msg.attach_alternative(msg_html, "text/html")
+        msg.send()
+
+    elif flag == "Reminder":
+        subject = "Acrolama - Reminder - " + str(instance.event.title)
+        sender = "notmonkeys@acrolama.com"
+        to = [instance.user.email]
+
+        irregularities = Irregularity.objects.filter(event__slug=instance.event.slug)
+        times = instance.times.all()
+        location = getLocationFromTimeOption(times, instance.event)
+        try:
+            abocount = getAboCounterCount(instance.id)
+        except ObjectDoesNotExist:
+            abocount = False
+
+        p = {
+            "event": instance.event,
+            "user": instance.user,
+            "times": times,
+            "location": location,
+            "abocount": abocount,
+            "irregularities": irregularities,
         }
 
         msg_plain = render_to_string(settings.BASE_DIR + "/apps/booking/templates/booking/email_registration.txt", p,)

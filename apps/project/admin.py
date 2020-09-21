@@ -49,7 +49,7 @@ class ProjectAdmin(admin.ModelAdmin):
     list_display = [
         "name",
         "description",
-        "todo",
+        "public_chat_link",
     ]
     list_filter = ["manager"]
 
@@ -69,8 +69,9 @@ class PriceOptionAdmin(admin.ModelAdmin):
 
 class TimeLocationAdmin(admin.ModelAdmin):
     list_display = [
+        "name",
         "location",
-        "name"
+        "get_times",
     ]
     list_select_related = ["location"]
 
