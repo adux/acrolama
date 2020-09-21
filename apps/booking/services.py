@@ -294,13 +294,10 @@ def createNextBook(book, status):
         ).get(cycle=cycle)
     except (ObjectDoesNotExist) as e:
         print(e)
-        return 0
     except (MultipleObjectsReturned) as e:
         print(e)
-        return 0
     except Exception as e:
         print(e)
-        return 0
 
     obj.event = new_event
 
