@@ -133,15 +133,18 @@ def createAttendance(book):
         times = book.times.all()
         for to in times:
             if to.regular_day is None:
+                # If its not a Cycle put first day of Event as Attendance
                 obj.attendance_date.append(book.event.event_startdate)
                 obj.attendance_check.append("False")
             else:
+                # If it's a Cycle get all the dates from start to end and add
                 num = to.regular_day
                 li = booking.utils.datelistgenerator(start, end, int(num))
                 obj.attendance_date.extend(li)
                 for time in li:
                     obj.attendance_check.append("False")
     else:
+        # If a Single Date is selected build the Attendance with it.
         obj.attendance_date.append(book.bookdateinfo.single_date)
         obj.attendance_check.append("False")
 
@@ -228,11 +231,12 @@ def newInformedBook(request, instance, book):
                 messages.add_message(request, messages.INFO, _("Email sent: " + str(book.informed_at)))
 
         else:
+            reduceAboCounter(book.id)
 
             # Send New Book Email
             if book.informed_at is None:
                 try:
-                    booking.utils.email_sender(instance, "Informed")
+                    booking.utils.email_sender(instance, "Reminder")
                 except Exception as e:
                     messages.add_message(request, messages.ERROR, _("Error Email: " + str(e)))
                 else:

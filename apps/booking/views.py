@@ -49,7 +49,6 @@ from booking.forms import (
 # Utils
 from booking.utils import (
     build_url,
-    email_sender,
     staff_check,
     herd_check,
 )
@@ -60,9 +59,9 @@ from booking.services import (
     get_event,
     get_timelocation,
     newInformedBook,
+    checkAboCounter,
+    updateAboCounter,
     createNextBook,
-    createInvoiceFromBook,
-    createAttendance,
     updateSwitchCheckAttendance,
 )
 
@@ -153,31 +152,25 @@ def bookinglistview(request):
         if "create" in request.POST:
             for pk in checked_list:
                 book = get_book(pk)
-                if book.price.cycles == 1:
-                    try:
-                        new_book = createNextBook(book, "PE")
-                    except Exception as e:
-                        messages.add_message(
-                            request,
-                            messages.WARNING,
-                            _("Book N°" + str(book.id) + ": Doesn't seem to have a next Event. Error: " + e),
-                        )
-                    else:
-                        messages.add_message(
-                            request, messages.SUCCESS, _("Book N°" + str(new_book.id) + ": Book Created"),
-                        )
-                elif book.price.cycles > 1:
-                    messages.add_message(
-                        request,
-                        messages.INFO,
-                        _("Book N°" + str(book.id) + ": Abo for more then 1 Cycle. Next are created after payment"),
-                    )
-                else:
+
+                # Create the next book
+                try:
+                    new_book = createNextBook(book, "PE")
+                except Exception as e:
                     messages.add_message(
                         request,
                         messages.WARNING,
-                        _("Book N°" + str(book.id) + ": Not a Abo, not posible to determine next Event."),
+                        _("Book N°" + str(book.id) + ": Doesn't seem to have a next Event. Error: " + e),
                     )
+                else:
+                    messages.add_message(
+                        request, messages.SUCCESS, _("Book N°" + str(new_book.id) + ": Book Created"),
+                    )
+
+                # If it has an abo update the next book to the Counter
+                if book.price.cycles > 1:
+                    if checkAboCounter(book):
+                        updateAboCounter(book, new_book)
 
     return render(request, template, context)
 
@@ -327,6 +320,8 @@ def attendance_daily_view(request):
             check_list = request.POST.getlist("check")
             try:
                 for values in check_list:
+                    #  FIXME: need to implement a backend validation
+                    # values are get in temp
                     values_split = values.split(" ")
                     attendance_id = values_split[0]
                     check_pos = values_split[1]
