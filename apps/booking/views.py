@@ -170,7 +170,7 @@ def bookinglistview(request):
                 # If it has an abo update the next book to the Counter
                 if book.price.cycles > 1:
                     if checkAboCounter(book):
-                        updateAboCounter(book, new_book)
+                        updateAboCounter(book.id, new_book.id)
 
     return render(request, template, context)
 
