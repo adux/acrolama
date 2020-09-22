@@ -35,7 +35,9 @@
             <th scope="col">Status</th>
         </thead>
         <tbody>
-            {% for obj in attendance_list %}
+            {% for obj in attendance_list %}{% if obj.invoice.status == "CA" %}
+            <tr style="text-decoration: line-through;">{% else %}
+            <tr>{% endif %}
             <tr>
                 <th scope="row">{{obj.book.user.get_full_name}}</td>
                 <td>{% get_attendance_check obj 'get_check' filtered_date as check %} {% if check == False %}<i class="fas fa-times" style="color: red;"></i>{% else %}<i class="fas fa-check" style="color: green;"></i>{% endif %}</td>

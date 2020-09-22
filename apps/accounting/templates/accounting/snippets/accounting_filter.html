@@ -22,10 +22,6 @@
             {% render_field account_filter.form.book__event class="form-control" %}
             </div>
             <div class="form-group col-sm-4 col-md-2">
-            {{ account_filter.form.balance.label_tag }}
-            {% render_field account_filter.form.balance class="form-control" %}
-            </div>
-            <div class="form-group col-sm-4 col-md-2">
             {{ account_filter.form.pay_till.label_tag }}
             {% render_field account_filter.form.pay_till class="datepicker form-control" %}
             </div>
@@ -50,7 +46,6 @@
 <hr>
 <table class="table table-hover table-borderless">
     <thead>
-        <th>Account</th>
         <th>#</th>
         <th>Name</th>
         <th>Event</th>
@@ -58,20 +53,18 @@
         <th>Paid date</th>
         <th>To Pay</th>
         <th>Status</th>
-        <th>Edit</th>
     </thead>
     <tbody>
         {% for obj in page_obj %}
         <tr>
-            <td>{{obj.get_balance_display}}</td>
-                <td>{{obj.pk}}</td>
-                <td>{% if obj.partner %}{{ obj.partner.name}}{% else %}{{obj.book.user.get_full_name}}{% endif %}</td>
-                <td>{% if obj.book %}{{obj.book.event.title}}{% else %}-{% endif %}</td>
-                <td>{{obj.pay_till}}</td>
-                <td>{{obj.pay_date}}</td>
-                <td>{{obj.to_pay}}</td>
-                <td>{{obj.get_status_display}}</td>
-                <td><a href="{% url 'accounting_update' obj.pk %}?{% pass_get_filter %}"><i class="fas fa-edit"></i></a>
+            <td><a href="{% url 'accounting_update' obj.pk %}?{% pass_get_filter %}">{{ obj.pk }}</a></td>
+            <td>{% if obj.partner %}{{ obj.partner.name}}{% else %}{{obj.book.user.get_full_name}}{% endif %}</td>
+            <td>{% if obj.book %}{{obj.book.event.title}}{% else %}-{% endif %}</td>
+            <td>{% now "Ymd" as today %}{% if obj.pay_till|date:"Ymd" < today %}<span style="color: red;">{{obj.pay_till|date:"d.m"}}</span>{% else %}{{obj.pay_till|date:"d.m"}} {% endif %}</td>
+            <td>{{obj.pay_date|date:"d.m"}}</td>
+            <td>{{obj.to_pay}}</td>
+            <td>{{obj.get_status_display}}</td>
+            <td></a>
         </tr>
         {% endfor%}
     </tbody>

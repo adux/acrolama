@@ -16,37 +16,35 @@
 <div class="row">
     {% if user.is_staff %}
     <div class="col-md-6">
-        <h2>Booking Control Center</h2>
-        <p>Confirm Bookings</p>
-        <p>Access only for Admin</p>
+        <h2>Booking List</h2>
+        <p>General booking list.</p>
         <p><a class="btn btn-primary" href="{% url 'booking_list' %}" role="button">View &raquo;</a></p>
     </div>
     <div class="col-md-6">
-        <h2>Payment Control Center</h2>
-        <p>Confirm Payment and Filters</p>
-        <p>Access only for Admin</p>
+        <h2>Invoices List</h2>
+        <p>Booking Invoices.</p>
         <p><a class="btn btn-primary" href="{% url 'accounting_list' %}" role="button">View &raquo;</a></p>
     </div>
     <div class="col-md-6">
-        <h2>Attendance Control</h2>
-        <p>Check Attendances</p>
-        <p>Teachers only see their Class</p>
+        <h2>Attendance List</h2>
+        <p>General Attendance list for Bookings.</p>
         <p><a class="btn btn-primary" href="{% url 'attendance_list' %}" role="button">View &raquo;</a></p>
     </div>
     <div class="col-md-6">
         <h2>Quotations Control</h2>
-        <p>UNDER DEVELOPMENT</p>
+        <p>Event Quotations.</p>
         <p><a class="btn btn-primary" href="{% url 'quotation_list' %}" role="button">View &raquo;</a></p>
     </div>
     <div class="col-md-6">
         <h2>Contact List</h2>
+        <p>Contact list with all bookings.</p>
         <p><a class="btn btn-primary" href="{% url 'contact_list' %}" role="button">View &raquo;</a></p>
     </div>
     {% endif %}
 
     <div class="col-md-6">
-        <h2>Daily Attendance Check</h2>
-        <p>Check list for each class in a list of Attendies</p>
+        <h2>Daily Attendance List</h2>
+        <p>Daily attendies list</p>
         <p><a class="btn btn-info" href="{% url 'teacher_attendance' %}" role="button">View &raquo;</a></p>
     </div>
 

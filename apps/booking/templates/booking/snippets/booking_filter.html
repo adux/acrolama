@@ -70,28 +70,26 @@
             <tr>
                 <th><input type="checkbox" onClick="toggle(this);"></th>
                 <th>#</th>
-                <th>Booked</th>
+                <th>Date</th>
                 <th>Event</th>
                 <th>Time</th>
                 <th>Price</th>
                 <th>Status</th>
                 <th>User</th>
-                <th>Acction</th>
             </tr>
         </thead>
         <tbody>
-            {% for obj in page_obj %}
-            <tr>
+            {% for obj in page_obj %}{% if obj.status == "CA" %}
+            <tr style="text-decoration: line-through;">{% else %}
+            <tr>{% endif %}
                 <td><input type="checkbox" name="check" value="{{obj.id}}"></td>
-                <td>{{obj.pk}}</td>
-                <td>{{obj.booked_at|date:'d b'}}</td>
-                <td>{{obj.event.title}}</td>
-                {# TODO: Getting times for view should be done somewhere else #}
-                <td>{% for obj in obj.times.all %}{{obj}}, {% endfor %}</td>
+                <td><a href="{% url 'booking_update' obj.pk %}?{% pass_get_filter %}">{{obj.pk}}</a></td>
+                <td>{{obj.booked_at|date:'d.m'}}</td>
+                <td>{% if event.category == 'CY' %}<a href="{% url 'class' obj.event.slug %}">{{obj.event.title}}</a>{% else %}<a href="{% url 'event' obj.event.slug %}">{{obj.event.title}}</a>{% endif %}</td>
+                <td>{% for obj in obj.times.all %}{{obj.name}}, {% endfor %}</td>
                 <td>{{obj.price.name}}</td>
-                <td>{{obj.get_status_display}}</td>
-                <td>{{obj.user.get_full_name}}</td>
-                <td><a href="{% url 'booking_update' obj.pk %}?{% pass_get_filter %}"><i class="fas fa-edit"></i></a></td>
+                <td>{% if obj.status == "PE" %}<span style="color: red;">{{obj.get_status_display}}</span>{% elif obj.status == "PA" %}<span style="color: green;">{{obj.get_status_display}}</span>{% else %}<span style="color: orange;">{{obj.get_status_display}}</span>{% endif %}</td>
+                <td><a href="{% url 'contact_list' %}?user={{obj.user.id}}">{{obj.user.get_full_name}}</a></td>
             </tr>
             {% endfor%}
         </tbody>

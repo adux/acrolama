@@ -10,7 +10,9 @@ Booking details:
 {% if event.category == 'CY' %}Regular{% if times %}{% with count=times.count %} day{{ count|pluralize }}:{% endwith %}{% for d in times.all %} · {{d}}{% endfor %}{% endif %}{% endif %}
 {% if location %}Address: {{location.name}} - {{location.address}}. {{location.description}}{% endif %}
 {% if irregularities %}{% with count=irregularities.count %}Please note the event has the following exception{{ count|pluralize }}:{% endwith %}{% for obj in irregularities %} ·{{obj.description}}{% endfor %}\n\r{% endif %}
-
+{% if abocount %}You still got: {{ abocount }} cycles left.{% else %}
+It's your last cycle from this abo. You'll be automatically booked with a new Abo, let us know if you want to change this.
+{% endif %}
 Get the latest news in our Whatsapp Group:
 {% tinycontent_simple 'email_whatsapp' %}
 

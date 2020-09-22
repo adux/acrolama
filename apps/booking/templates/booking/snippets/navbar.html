@@ -10,23 +10,23 @@
       </li>
       {% if user.is_staff %}
       <li class="nav-item ">
-        <a class="nav-link" href="{% url 'booking_list' %}">Booking</a>
+        <a class="nav-link" href="{% url 'booking_list' %}">Bookings</a>
       </li>
       <li class="nav-item ">
-        <a class="nav-link" href="{% url 'booking_list' %}">Contact</a>
+        <a class="nav-link" href="{% url 'contact_list' %}">Contact</a>
       </li>
       <li class="nav-item ">
-        <a class="nav-link" href="{% url 'accounting_list' %}">Accounting</a>
+        <a class="nav-link" href="{% url 'accounting_list' %}">Invoices</a>
       </li>
       <li class="nav-item ">
-        <a class="nav-link" href="{% url 'attendance_list' %}">Attendance</a>
+        <a class="nav-link" href="{% url 'attendance_list' %}">Attendances</a>
       </li>
       <li class="nav-item ">
         <a class="nav-link" href="https://acrolama.duckdns.org/" target="_blank" >Nextcloud</a>
       </li>
       {% endif %}
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'teacher_attendance' %}">Daily Attendance</a>
+        <a class="nav-link" href="{% url 'teacher_attendance' %}">Attendance List</a>
       </li>
     </ul>
   </div>

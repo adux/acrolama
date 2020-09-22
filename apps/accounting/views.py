@@ -28,7 +28,7 @@ from accounting.services import get_invoice
 def accountinglistview(request):
     template = "accounting/accounting_list.html"
     accounting_filter = AccountFilter(
-        request.GET, queryset=(Invoice.objects.all().select_related("book").order_by("-id")),
+        request.GET, queryset=(Invoice.objects.filter(balance="CR").select_related("book").order_by("-id")),
     )
 
     # Pagination
@@ -48,12 +48,6 @@ def accountinglistview(request):
         "filter": request.GET,
         "page_obj": response,
     }
-
-    # TODO: acctions with various invoices
-    if request.method == "POST":
-        #  checked_list = request.POST.getlist("check")
-        if "create" in request.POST:
-            pass
 
     return render(request, template, context)
 
@@ -119,7 +113,10 @@ class InvoiceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                                 )
                             )
                         else:
-                            messages.add_message(self.request, messages.INFO, _("Updated status Booking, Attendance Pending"))
+                            messages.add_message(
+                                self.request, messages.INFO,
+                                _("Updated status Booking, Attendance Pending")
+                            )
                     else:
                         messages.add_message(self.request, messages.WARNING, _("Can't Update"))
 

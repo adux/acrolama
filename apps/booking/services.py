@@ -1,9 +1,8 @@
 import datetime
-from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.contrib import messages
 from django.utils.translation import gettext as _
 
-from booking.models import Book, Attendance, AboCounter
+from booking.models import Book, Attendance, AboCounter, BOOKINGSTATUS
 from project.models import Event, TimeLocation
 from accounting.models import Invoice
 
@@ -240,7 +239,7 @@ def newInformedBook(request, instance, book):
                 except Exception as e:
                     messages.add_message(request, messages.ERROR, _("Error Email: " + str(e)))
                 else:
-                    messages.add_message(request, messages.SUCCESS, _("Informed email sent."))
+                    messages.add_message(request, messages.SUCCESS, _("Reminder email sent."))
                     instance.informed_at = datetime.datetime.now()
             else:
                 messages.add_message(request, messages.INFO, _("Email sent: " + str(book.informed_at)))
@@ -259,8 +258,6 @@ def createNextBook(book, status):
     """
     Gets and Workshop Booking and creates the next based on cycle
     """
-    book = get_book(book)
-
     obj = Book()
     obj.pk = None
     obj.id = None
@@ -271,33 +268,28 @@ def createNextBook(book, status):
     obj.note = "\nAutomatic created booking, please report if error."
 
     # Resolve Status
-    try:
+    if status in BOOKINGSTATUS:
         obj.status = status
-    except Exception:
+    else:
         obj.status = "PE"
 
-    # Resolve Event
-    old_event = book.event
-
     # Reset cycle num if needed
-    if (old_event.cycle + 1) > 12:
+    if (book.event.cycle + 1) > 12:
         cycle = 1
     else:
-        cycle = old_event.cycle + 1
+        cycle = book.event.cycle + 1
 
-    try:
-        new_event = Event.objects.filter(
-            project=old_event.project,
-            level=old_event.level,
-            category=old_event.category,
-            event_startdate__gt=old_event.event_enddate,
-        ).get(cycle=cycle)
-    except (ObjectDoesNotExist) as e:
-        print(e)
-    except (MultipleObjectsReturned) as e:
-        print(e)
-    except Exception as e:
-        print(e)
+    # Resolve Event
+    # Exceptions like Multile or Not exist can raise
+    # Hope i understood this right:
+    # https://docs.python.org/3/glossary.html#term-eafp
+    old_event = book.event
+    new_event = Event.objects.filter(
+        project=old_event.project,
+        level=old_event.level,
+        category=old_event.category,
+        event_startdate__gt=old_event.event_enddate,
+    ).get(cycle=cycle)
 
     obj.event = new_event
 
@@ -306,11 +298,10 @@ def createNextBook(book, status):
     for to in book.times.all():
         times_pk.append(to.pk)
 
+    # Need to Save before adding the m2m times
     obj.save()
-    try:
-        for x in times_pk:
-            obj.times.add(x)
-    except Exception as e:
-        print("Times adding error: " + e)
+
+    for x in times_pk:
+        obj.times.add(x)
 
     return obj

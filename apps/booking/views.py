@@ -154,23 +154,39 @@ def bookinglistview(request):
                 book = get_book(pk)
 
                 # Create the next book
-                try:
-                    new_book = createNextBook(book, "PE")
-                except Exception as e:
+                if book.status == "PA":
+                    try:
+                        new_book = createNextBook(book, "PE")
+                        if book.price.cycles > 1:
+                            try:
+                                exists = checkAboCounter(book.id)
+                            except Exception as e:
+                                messages.add_message(
+                                    request,
+                                    messages.WARNING,
+                                    _("Error on Abo Counter. Please report: " + str(e)),
+                                )
+
+                            if exists:
+                                updateAboCounter(book.id, new_book.id)
+                    except Exception as e:
+                        messages.add_message(
+                            request,
+                            messages.WARNING,
+                            _("Book N°" + str(book.id) + ": Doesn't seem to have a next Event. Error: " + str(e)),
+                        )
+                    else:
+                        messages.add_message(
+                            request, messages.SUCCESS, _("Book N°" + str(new_book.id) + ": Book Created"),
+                        )
+
+                    # If it has an abo update the next book to the Counter
+                else:
                     messages.add_message(
                         request,
                         messages.WARNING,
-                        _("Book N°" + str(book.id) + ": Doesn't seem to have a next Event. Error: " + e),
+                        _("Book N°: " + str(book.id) + " is not 'Participant'"),
                     )
-                else:
-                    messages.add_message(
-                        request, messages.SUCCESS, _("Book N°" + str(new_book.id) + ": Book Created"),
-                    )
-
-                # If it has an abo update the next book to the Counter
-                if book.price.cycles > 1:
-                    if checkAboCounter(book):
-                        updateAboCounter(book.id, new_book.id)
 
     return render(request, template, context)
 
@@ -212,23 +228,12 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
             if (book.status == "PE" or book.status == "WL") and (instance.status == "IN"):
                 newInformedBook(self.request, instance, book)
             elif (book.status == "IN") and (instance.status == "PA"):
-                # TODO: this should be possible here.
+                # TODO: this should not be possible here.
                 messages.add_message(
                     self.request, messages.INFO, _("Please change to participant only if Invoice payed."),
                 )
 
             instance.save()
-        elif "create" in self.request.POST:
-            try:
-                book = createNextBook(instance, "PE")
-            except UnboundLocalError:
-                messages.add_message(
-                    self.request, messages.WARNING, _("Book N°" + str(book.id) + ": Doesn't seem to have a next Event"),
-                )
-            else:
-                messages.add_message(
-                    self.request, messages.SUCCESS, _("Book N°" + str(book.id) + ": Book Created"),
-                )
         return super().form_valid(form)
 
     # TODO: There is probably a way to get all the GETs and process them?

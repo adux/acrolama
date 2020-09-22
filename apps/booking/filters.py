@@ -21,8 +21,16 @@ class BookFilter(django_filters.FilterSet):
     times = django_filters.ModelMultipleChoiceFilter(
         queryset=TimeOption.objects.all(), widget=forms.CheckboxSelectMultiple
     )
-    start_date = django_filters.DateFilter(field_name="booked_at", lookup_expr="gt", label="Start date",)
-    end_date = django_filters.DateFilter(field_name="booked_at", lookup_expr="lt", label="End date",)
+    start_date = django_filters.DateFilter(
+        field_name="booked_at",
+        lookup_expr="gt",
+        label="Start date",
+    )
+    end_date = django_filters.DateFilter(
+        field_name="booked_at",
+        lookup_expr="lt",
+        label="End date",
+    )
     date_range = django_filters.DateRangeFilter(field_name="booked_at", label="Range")
 
     class Meta:
@@ -31,7 +39,10 @@ class BookFilter(django_filters.FilterSet):
 
     def filter_by_all_name_fields(self, queryset, name, value):
         return queryset.filter(
-            Q(user__first_name__icontains=value) | Q(user__last_name__icontains=value) | Q(user__email__icontains=value)
+            Q(user__first_name__icontains=value)
+            | Q(user__last_name__icontains=value)
+            | Q(user__email__icontains=value)
+            | Q(user__id__icontains=value)
         )
 
 
@@ -40,7 +51,10 @@ class AttendanceFilter(django_filters.FilterSet):
     book__event = django_filters.ModelChoiceFilter(
         queryset=Event.objects.all(), widget=autocomplete.ModelSelect2(url="event-autocomplete")
     )
-    attendance_date = django_filters.DateFilter(field_name="attendance_date", method="filter_by_date_contains",)
+    attendance_date = django_filters.DateFilter(
+        field_name="attendance_date",
+        method="filter_by_date_contains",
+    )
 
     class Meta:
         model = Attendance
@@ -66,7 +80,9 @@ class AttendanceDailyFilter(django_filters.FilterSet):
     )
 
     attendance_date = django_filters.DateFilter(
-        field_name="attendance_date", method="filter_by_date_contains", initial=datetime.datetime.now().date(),
+        field_name="attendance_date",
+        method="filter_by_date_contains",
+        initial=datetime.datetime.now().date(),
     )
 
     class Meta:

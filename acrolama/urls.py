@@ -75,8 +75,8 @@ urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
     path("herd/", HerdView.as_view(), name="herd"),
     # Accounting
-    path("herd/accounting/", accountinglistview, name="accounting_list"),
-    path("herd/accounting/<int:pk>/update/", InvoiceUpdateView.as_view(), name="accounting_update",),
+    path("herd/invoices/", accountinglistview, name="accounting_list"),
+    path("herd/invoice/<int:pk>/update/", InvoiceUpdateView.as_view(), name="accounting_update",),
     # Attendance
     path("herd/attendance/", attendancelistview, name="attendance_list"),
     path("herd/attendance/<int:pk>/update/", AttendanceUpdateView.as_view(), name="attendance_update",),

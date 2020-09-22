@@ -163,8 +163,8 @@ def email_sender(instance, flag):
             "irregularities": irregularities,
         }
 
-        msg_plain = render_to_string(settings.BASE_DIR + "/apps/booking/templates/booking/email_registration.txt", p,)
-        msg_html = render_to_string(settings.BASE_DIR + "/apps/booking/templates/booking/email_registration.html", p,)
+        msg_plain = render_to_string(settings.BASE_DIR + "/apps/booking/templates/booking/email_reminder.txt", p,)
+        msg_html = render_to_string(settings.BASE_DIR + "/apps/booking/templates/booking/email_reminder.html", p,)
 
         msg = EmailMultiAlternatives(subject, msg_plain, sender, to, bcc)
         msg.attach_alternative(msg_html, "text/html")
