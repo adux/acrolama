@@ -30,7 +30,7 @@ django-widget-tweaks==1.4.8
 django-tinycontent
 django-autoslug
 django-filter==2.2.0
-django-compressor==2.3
+django-compressor==2.4
 django-htmlmin==0.11.0
 django-analytical==2.6.0
 
