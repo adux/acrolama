@@ -111,35 +111,37 @@ class NewsList(models.Model):
         super(NewsList, self).save(*args, **kwargs)
 
     def compressImage(self, image):
-        imageTemproary = PIL.Image.open(image)
+        imageTemproary = PIL.Image.open(image).convert("RGB")
         outputIoStream = BytesIO()
         imageTemproary.thumbnail((900, 300), PIL.Image.ANTIALIAS)
         imageTemproary.save(
-            outputIoStream, format="JPEG", quality=75, subsampling=0, optimize=True,
+            outputIoStream, format="WEBP", quality=75, subsampling=0, optimize=True,
         )
         outputIoStream.seek(0)
         image = InMemoryUploadedFile(
             outputIoStream,
             "ImageField",
-            "%s.jpg" % image.name.split(".")[0],
-            "image/jpeg",
+            "%s.webp" % image.name.split(".")[0],
+            "image/webp",
             sys.getsizeof(outputIoStream),
             None,
         )
         return image
 
     def make_thumbnail(self):
-        image = PIL.Image.open(self.image)
+        image = PIL.Image.open(self.image).convert("RGB")
         image.thumbnail((600, 200), PIL.Image.ANTIALIAS)
         thumb_name, thumb_extension = os.path.splitext(self.image.name)
         thumb_extension = thumb_extension.lower()
         thumb_filename = thumb_name + "_thumb" + thumb_extension
         if thumb_extension in [".jpg", ".jpeg"]:
-            FTYPE = "JPEG"
+            FTYPE = "webp"
         elif thumb_extension == ".gif":
-            FTYPE = "GIF"
+            FTYPE = "webp"
         elif thumb_extension == ".png":
-            FTYPE = "PNG"
+            FTYPE = "webp"
+        elif thumb_extension == ".webp":
+            FTYPE = "webp"
         else:
             return False  # Unrecognized file type
 
