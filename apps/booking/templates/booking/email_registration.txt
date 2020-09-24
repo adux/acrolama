@@ -9,7 +9,7 @@ We aim to get back to you in 48 hours.
 
 Tip: If you are nervous about the status of your registration, and can't sleep: count lamas, it helps.
 
-To get the latest news of the Class in our Whatsapp Group:
+To get the latest news of the Class join our Whatsapp Group:
 {% tinycontent_simple 'email_whatsapp' %}
 Or visit the FAQ if you have questions: https://acrolama.com/faq its working now.
 
