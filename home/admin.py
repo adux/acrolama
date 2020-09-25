@@ -5,7 +5,6 @@ from .models import (
     AboutDate,
     Faq,
     Info,
-    InfoImage,
     NewsList,
     Portfolio,
     Testimonial,
@@ -26,20 +25,13 @@ class FaqAdmin(admin.ModelAdmin):
     list_display = ("question", "answer")
 
 
-# class InfoImageInline(admin.StackedInline):
-#     model = InfoImage
-#     extra = 1
-#     can_delete = True
-#     show_change_link = True
-
-
 class InfoAdmin(admin.ModelAdmin):
     list_display = ("title", "slug")
     # inlines = [InfoImageInline]
 
 
 class NewsAdmin(admin.ModelAdmin):
-    list_display = ("event", "image")
+    list_display = ("event", "image", "thumbnail")
 
 
 admin.site.register(AboutImage, AboutImageAdmin)

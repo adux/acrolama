@@ -8,6 +8,7 @@ class ImageAdmin(admin.ModelAdmin):
         "formImage",
         "image",
         "thumbnail",
+        "mob",
         "image_height",
         "image_width",
     ]

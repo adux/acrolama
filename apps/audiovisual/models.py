@@ -102,6 +102,7 @@ class Image(models.Model):
     description = models.TextField(max_length=230, null=True, blank=True)
     image = models.ImageField(upload_to="images/", height_field="image_height", width_field="image_width",)
     thumbnail = models.ImageField(upload_to="images/thumbs/", editable=False)
+    mob = models.ImageField(upload_to="images/mob/", editable=False)
     image_height = models.PositiveIntegerField(null=True, blank=True)
     image_width = models.PositiveIntegerField(null=True, blank=True)
 
@@ -114,18 +115,18 @@ class Image(models.Model):
         super(Image, self).save(*args, **kwargs)
 
     def compressImage(self, image):
-        imageTemproary = PIL.Image.open(image)
+        imageTemproary = PIL.Image.open(image).convert("RGB")
         outputIoStream = BytesIO()
-        imageTemproaryResized = imageTemproary.thumbnail(settings.IMAGE_SIZE[0], PIL.Image.ANTIALIAS)
+        imageTemproary.thumbnail(settings.IMAGE_SIZE[0], PIL.Image.ANTIALIAS)
         imageTemproary.save(
-            outputIoStream, format="JPEG", quality=75, subsampling=0, optimize=True,
+            outputIoStream, format="WEBP", quality=75, subsampling=0, optimize=True,
         )
         outputIoStream.seek(0)
         image = InMemoryUploadedFile(
             outputIoStream,
             "ImageField",
-            "%s.jpg" % image.name.split(".")[0],
-            "image/jpeg",
+            "%s.webp" % image.name.split(".")[0],
+            "image/webp",
             sys.getsizeof(outputIoStream),
             None,
         )
@@ -148,7 +149,10 @@ class Image(models.Model):
         return form
 
     def make_thumbnail(self):
-        image = PIL.Image.open(self.image)
+        image = PIL.Image.open(self.image).convert("RGB")
+        mob = image
+
+        # Thumb
         image.thumbnail(settings.THUMB_SIZE[0], PIL.Image.ANTIALIAS)
         thumb_name, thumb_extension = os.path.splitext(self.image.name)
         thumb_extension = thumb_extension.lower()
@@ -159,8 +163,23 @@ class Image(models.Model):
             FTYPE = "GIF"
         elif thumb_extension == ".png":
             FTYPE = "PNG"
+        elif thumb_extension == ".webp":
+            FTYPE = "WEBP"
         else:
             return False  # Unrecognized file type
+
+        # Mob
+        mob.thumbnail(settings.MOB_SIZE[0], PIL.Image.ANTIALIAS)
+        mob_name, mob_extension = os.path.splitext(self.image.name)
+        mob_filename = mob_name + "_mob.jpg"
+
+        # Save thumbnail to in-memory file as StringIO
+        temp_mob = BytesIO()
+        mob.save(temp_mob, "JPEG")
+        temp_mob.seek(0)
+
+        # set save=False, otherwise it will run in an infinite loop
+        self.mob.save(mob_filename, ContentFile(temp_mob.read()), save=False)
 
         # Save thumbnail to in-memory file as StringIO
         temp_thumb = BytesIO()

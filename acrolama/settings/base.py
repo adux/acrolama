@@ -99,6 +99,7 @@ STATICFILES_FINDERS = (
 # Audiovisual
 IMAGE_SIZE = (os.environ.get("IMAGE_SIZE", default=(1170, 2240)),)
 THUMB_SIZE = (os.environ.get("THUMB_SIZE", default=(800, 800)),)
+MOB_SIZE = (os.environ.get("MOB_SIZE", default=(420, 420)),)
 
 
 # Internationalization

@@ -16,7 +16,15 @@
                 {% for obj in portfolio %}
                 <div class="grid-item {% if obj.image.formImage == 'landscape' %} grid-item--width2{% endif %}">
                     <a data-lightbox="portfolio" href="{{obj.image.image.url}}">
-                        <img src="{{obj.image.thumbnail.url}}" alt="{{obj.sec_text}}">
+                        <picture>
+                            <source srcset="
+                                {{ obj.image.mob.url }} 1x,
+                                {{ obj.image.image.url }} 2x" type="image/webp">
+                            <source srcset="
+                                {{ obj.image.thumbnail.url }} 1x,
+                                {{ obj.image.thumbnail.url }} 2x" type="image/jpeg">
+                                <img src="{{ obj.image.thumbnail.url }}" alt="{{ obj.image.description }}">
+                        </picture>
                         <div class="portfolio-text-holder">
                             <div class="portfolio-text-wrapper">
                                 <p class="portfolio-type">

@@ -120,7 +120,7 @@ class NewsList(models.Model):
         outputIoStream.seek(0)
         image = InMemoryUploadedFile(
             outputIoStream,
-            "ImageField",
+            "image",
             "%s.webp" % image.name.split(".")[0],
             "image/webp",
             sys.getsizeof(outputIoStream),
@@ -130,24 +130,13 @@ class NewsList(models.Model):
 
     def make_thumbnail(self):
         image = PIL.Image.open(self.image).convert("RGB")
-        image.thumbnail((600, 200), PIL.Image.ANTIALIAS)
+        image.thumbnail((450, 150), PIL.Image.ANTIALIAS)
         thumb_name, thumb_extension = os.path.splitext(self.image.name)
-        thumb_extension = thumb_extension.lower()
-        thumb_filename = thumb_name + "_thumb" + thumb_extension
-        if thumb_extension in [".jpg", ".jpeg"]:
-            FTYPE = "webp"
-        elif thumb_extension == ".gif":
-            FTYPE = "webp"
-        elif thumb_extension == ".png":
-            FTYPE = "webp"
-        elif thumb_extension == ".webp":
-            FTYPE = "webp"
-        else:
-            return False  # Unrecognized file type
+        thumb_filename = thumb_name + "_thumb.jpg"
 
         # Save thumbnail to in-memory file as StringIO
         temp_thumb = BytesIO()
-        image.save(temp_thumb, FTYPE)
+        image.save(temp_thumb, "JPEG")
         temp_thumb.seek(0)
 
         # set save=False, otherwise it will run in an infinite loop
