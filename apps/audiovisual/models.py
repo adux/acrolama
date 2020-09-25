@@ -149,10 +149,8 @@ class Image(models.Model):
         return form
 
     def make_thumbnail(self):
-        image = PIL.Image.open(self.image).convert("RGB")
-        mob = image
-
         # Thumb
+        image = PIL.Image.open(self.image).convert("RGB")
         image.thumbnail(settings.THUMB_SIZE[0], PIL.Image.ANTIALIAS)
         thumb_name, thumb_extension = os.path.splitext(self.image.name)
         thumb_extension = thumb_extension.lower()
@@ -168,7 +166,16 @@ class Image(models.Model):
         else:
             return False  # Unrecognized file type
 
+        # Save thumbnail to in-memory file as StringIO
+        temp_thumb = BytesIO()
+        image.save(temp_thumb, FTYPE)
+        temp_thumb.seek(0)
+
+        # set save=False, otherwise it will run in an infinite loop
+        self.thumbnail.save(thumb_filename, ContentFile(temp_thumb.read()), save=False)
+
         # Mob
+        mob = PIL.Image.open(self.image).convert("RGB")
         mob.thumbnail(settings.MOB_SIZE[0], PIL.Image.ANTIALIAS)
         mob_name, mob_extension = os.path.splitext(self.image.name)
         mob_filename = mob_name + "_mob.jpg"
@@ -181,15 +188,8 @@ class Image(models.Model):
         # set save=False, otherwise it will run in an infinite loop
         self.mob.save(mob_filename, ContentFile(temp_mob.read()), save=False)
 
-        # Save thumbnail to in-memory file as StringIO
-        temp_thumb = BytesIO()
-        image.save(temp_thumb, FTYPE)
-        temp_thumb.seek(0)
-
-        # set save=False, otherwise it will run in an infinite loop
-        self.thumbnail.save(thumb_filename, ContentFile(temp_thumb.read()), save=False)
-
         temp_thumb.close()
+        temp_mob.close()
 
         return True
 
