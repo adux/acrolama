@@ -56,10 +56,12 @@ DJANGO_APPS = [
 
 EXTERNAL_APPS = [
     "django_filters",
+    "crispy_forms",
     "storages",
     "widget_tweaks",
     "tinycontent",
     "allauth",
+    "allauth.socialaccount",
     "allauth.account",
     "invitations",
 ]

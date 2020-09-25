@@ -45,8 +45,8 @@ DEFAULT_FILE_STORAGE = "acrolama.aws.utils.MediaRootS3BotoStorage"
 ADMIN_MEDIA_PREFI = STATIC_URL + "admin/"
 
 # Compress
-COMPRESS_ENABLED = False
-COMPRESS_OFFLINE = False
+COMPRESS_ENABLED = True
+COMPRESS_OFFLINE = True
 COMPRESS_CSS_HASHTAG_METHOD = "content"
 COMPRESS_CSS_FILTERS = ["compressor.filters.css_default.CssAbsoluteFilter", "compressor.filters.cssmin.CSSMinFilter"]
 COMPRESS_JS_FILTERS = ["compressor.filters.jsmin.JSMinFilter"]
