@@ -2,7 +2,6 @@ import datetime
 import os
 from acrolama.settings.base import BASE_DIR
 
-
 # Expiration Calc
 two_months = datetime.timedelta(days=365)
 date_two_months_later = datetime.date.today() + two_months
