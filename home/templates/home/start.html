@@ -22,13 +22,9 @@
                             <li class="fw-slide">
                                 <a href="{{ obj.event.get_absolute_url }}">
                                     <picture>
-                                        <source srcset="
-                                            {{obj.thumbnail.url}} 1x,
-                                            {{obj.image.url}} 2x" type="image/webp">
-                                        <source srcset="
-                                            {{obj.thumbnail.url}} 1x,
-                                            {{obj.thumbnail.url}} 2x" type="image/jpeg">
-                                            <img src="{{obj.image.url}}">
+                                        <source media="max-width: 450px)" srcset="{{ obj.mob.url }}">
+                                        <source media="max-width: 800px)" srcset="{{ obj.thumbnail.url }}">
+                                        <img src="{{ obj.image.url }}" alt="{{ obj.image.description }}">
                                     </picture>
                                     <span class="fw-slide-text">{{obj.event.event_startdate|date:"j N" }} -{% if obj.event.discipline %} {{ obj.event.discipline.name }} {% endif %}{% if obj.event.level %} {{ obj.event.level }} {% endif %}{% if obj.event.category %} {{ obj.event.get_category_display }} {% endif %}</span>
                                 </a>

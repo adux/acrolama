@@ -34,16 +34,16 @@ class Avatar(models.Model):
     def compressImage(self, image):
         imageTemproary = PIL.Image.open(image)
         outputIoStream = BytesIO()
-        imageTemproaryResized = imageTemproary.thumbnail((920, 920), PIL.Image.ANTIALIAS)
+        imageTemproary.thumbnail((650, 650), PIL.Image.ANTIALIAS)
         imageTemproary.save(
-            outputIoStream, format="JPEG", quality=75, subsampling=0, optimize=True,
+            outputIoStream, format="WEBP", quality=75, subsampling=0, optimize=True,
         )
         outputIoStream.seek(0)
         image = InMemoryUploadedFile(
             outputIoStream,
             "ImageField",
-            "%s.jpg" % image.name.split(".")[0],
-            "image/jpeg",
+            "%s.webp" % image.name.split(".")[0],
+            "image/webp",
             sys.getsizeof(outputIoStream),
             None,
         )
@@ -66,23 +66,14 @@ class Avatar(models.Model):
         return form
 
     def make_thumbnail(self):
-        image = PIL.Image.open(self.image)
-        image.thumbnail((320, 320), PIL.Image.ANTIALIAS)
+        image = PIL.Image.open(self.image).convert("RGB")
+        image.thumbnail((350, 350), PIL.Image.ANTIALIAS)
         thumb_name, thumb_extension = os.path.splitext(self.image.name)
-        thumb_extension = thumb_extension.lower()
-        thumb_filename = thumb_name + "_thumb" + thumb_extension
-        if thumb_extension in [".jpg", ".jpeg"]:
-            FTYPE = "JPEG"
-        elif thumb_extension == ".gif":
-            FTYPE = "GIF"
-        elif thumb_extension == ".png":
-            FTYPE = "PNG"
-        else:
-            return False  # Unrecognized file type
+        thumb_filename = thumb_name + "_thumb.jpg"
 
         # Save thumbnail to in-memory file as StringIO
         temp_thumb = BytesIO()
-        image.save(temp_thumb, FTYPE)
+        image.save(temp_thumb, "JPEG")
         temp_thumb.seek(0)
 
         # set save=False, otherwise it will run in an infinite loop
@@ -119,7 +110,7 @@ class Image(models.Model):
         outputIoStream = BytesIO()
         imageTemproary.thumbnail(settings.IMAGE_SIZE[0], PIL.Image.ANTIALIAS)
         imageTemproary.save(
-            outputIoStream, format="WEBP", quality=75, subsampling=0, optimize=True,
+            outputIoStream, format="WEBP", quality=90, subsampling=0, optimize=True,
         )
         outputIoStream.seek(0)
         image = InMemoryUploadedFile(
@@ -215,7 +206,7 @@ class Video(models.Model):
     def compressImage(self, image):
         imageTemproary = PIL.Image.open(image)
         outputIoStream = BytesIO()
-        imageTemproaryResized = imageTemproary.thumbnail((1170, 1170), PIL.Image.ANTIALIAS)
+        imageTemproary.thumbnail((1170, 1170), PIL.Image.ANTIALIAS)
         width, height = imageTemproary.size  # Get dimensions
 
         left = (width - 600) / 2

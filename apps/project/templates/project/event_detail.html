@@ -28,13 +28,9 @@
                             <ul id="aboutImage" class="image-slider slides">{% for obj in object.images.all %}
                                 <li>
                                     <picture>
-                                        <source srcset="
-                                            {{ obj.mob.url }} 1x,
-                                            {{ obj.image.url }} 2x" type="image/webp">
-                                        <source srcset="
-                                            {{ obj.thumbnail.url }} 1x,
-                                            {{ obj.thumbnail.url }} 2x" type="image/jpeg">
-                                            <img src="{{ obj.image.url }}" alt="{{ obj.image.description }}">
+                                        <source media="max-width: 450px)" srcset="{{ obj.mob.url }}">
+                                        <source media="max-width: 800px)" srcset="{{ obj.thumbnail.url }}">
+                                        <img src="{{ obj.image.url }}" alt="{{ obj.image.description }}">
                                     </picture>
                                 </li>{%endfor%}
                             </ul>

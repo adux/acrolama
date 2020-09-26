@@ -75,7 +75,14 @@
                                         <div class="member-content">{{ obj.team.long_description|safe }}<br></div>
                                     </div>
                                     <div class="member-image-holder">
-                                        <img src="{{ obj.team.avatar.image.url }}" alt="{{ obj.team.short_description }}">
+                                        <picture>
+                                            <source media="max-width: 375px)" srcset="{{ obj.team.avatar.thumbnail.url }}">
+                                            <source media="max-width: 650px)" srcset="{{ obj.team.avatar.image.url }}">
+                                            <source media="max-width: 740px)" srcset="{{ obj.team.avatar.thumbnail.url }}">
+                                            <source media="min-width: 740px)" srcset="{{ obj.team.avatar.image.url }}">
+                                            <source media="min-width: 1020px)" srcset="{{ obj.team.avatar.thumbnail.url }}">
+                                            <img src="{{ obj.team.avatar.image.url }}" alt="{{ obj.team.short_description }}">
+                                        </picture>
                                     </div>
                                     <div class="clear"></div>
                                 </li>
