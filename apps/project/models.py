@@ -111,8 +111,8 @@ class TimeOption(models.Model):
 
 class Location(models.Model):
     name = models.CharField(max_length=120)
-    address = models.ForeignKey("address.Address", on_delete=models.CASCADE)
-    image = models.ForeignKey("audiovisual.Image", on_delete=models.CASCADE)
+    address = models.ForeignKey("address.Address", on_delete=models.PROTECT)
+    image = models.ForeignKey("audiovisual.Image", on_delete=models.PROTECT)
     max_capacity = models.PositiveIntegerField(default=2, null=True, blank=True)
     description = models.TextField(max_length=2000, null=True, blank=True)
     indication = models.TextField(max_length=2000, null=True, blank=True)
@@ -268,7 +268,7 @@ pre_save.connect(policy_pre_save_url, sender=Policy)
 
 
 class Event(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.PROTECT)
     category = models.CharField(max_length=50, choices=EVENTCATEGORY)
     cycle = models.IntegerField(default=0, choices=CYCLE, blank=True, null=True)
     title = models.CharField(max_length=100)
@@ -278,12 +278,12 @@ class Event(models.Model):
     time_locations = models.ManyToManyField(TimeLocation)
     irregularities = models.ManyToManyField(Irregularity, blank=True)
     price_options = models.ManyToManyField(PriceOption)
-    policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
+    policy = models.ForeignKey(Policy, on_delete=models.PROTECT)
     max_participants = models.PositiveIntegerField(default=2, null=True, blank=True)
     images = models.ManyToManyField("audiovisual.Image")
     videos = models.ManyToManyField("audiovisual.Video", blank=True)
-    level = models.ForeignKey(Level, null=True, blank=True, on_delete=models.CASCADE)
-    discipline = models.ForeignKey(Discipline, null=True, blank=True, on_delete=models.CASCADE)
+    level = models.ForeignKey(Level, null=True, blank=True, on_delete=models.PROTECT)
+    discipline = models.ForeignKey(Discipline, null=True, blank=True, on_delete=models.PROTECT)
     prerequisites = models.TextField(max_length=2000, null=True, blank=True)
     teachers = models.ManyToManyField("users.User", related_name="eventteacher")
     highlights = models.TextField(max_length=2000, null=True, blank=True)
