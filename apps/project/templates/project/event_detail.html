@@ -1,5 +1,12 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}{% load static %}{% load tinycontent_tags %}
 {% block head_title %}{{block.super}}{{ object.get_discipline_display }}{{ object.level }}{{ object.get_category_display }}: {{object.title}}{% endblock%}
+{% block css %}
+        <link rel="stylesheet" type="text/css" href="{% static "booking/bootstrap-datepicker3.standalone.min.css" %}?v=15" media="screen" />
+{% endblock %}
+{% block js %}
+        <script type="text/javascript" src="{% static "booking/bootstrap-datepicker.min.js" %}?v=15"></script>
+{% endblock %}
 {% block meta_og %}
 <meta property="og:url" content="{{request.build_absolute_uri}}" />
 <meta property="og:type" content="website" />
@@ -8,8 +15,7 @@
 <meta property="og:image" content="{{object.images.first.thumbnail.url}}" />
 <meta property="fb:app_id" content="2581322572097954" />
 {% endblock meta_og %}
-{% block content %}{% load widget_tweaks %}
-{% load static %}{% load tinycontent_tags %}
+{% block content %}
 {% include 'snippets/nav.html'%}
 <div class="single-portfolio">
     <article id="portfolio-2" class=" section portfolio">

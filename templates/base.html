@@ -11,6 +11,7 @@
         {% block meta_og %}{% endblock %}
         <link rel="shortcut icon" href="{% static "favicon.ico" %}" />
         {% include "snippets/css.html" %}
+        {% block css %}{% endblock %}
         {% analytical_head_bottom %}
     </head>
     <body>
@@ -22,5 +23,6 @@
         {% analytical_body_top %}
         {% block content %}{% endblock %}
         {% include "snippets/js.html" %}{% analytical_body_bottom %}
+        {% block js %}{% endblock %}
     </body>
 </html>
