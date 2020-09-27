@@ -70,6 +70,8 @@ urlpatterns = [
     path("faq/", faqview, name="faq"),
     # Sitemaps
     path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="django.contrib.sitemaps.views.sitemap",),
+    # Profile
+    # profile
     # Admin stuff
     # TODO: Add herd to Admin url
     path(settings.ADMIN_URL, admin.site.urls),
