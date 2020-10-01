@@ -77,7 +77,7 @@ class HomeFormView(MultiFormsView):
             event_startdate__lte=(timezone.now() + datetime.timedelta(days=60))
         )
 
-        d = defaultdict(list)
+        d = defaultdict(list, {k: [] for k in ('Monday', 'Tuesday', 'Wednesday', 'Friday', 'Sunday')})
         for class_ in classes:
             days = class_.get_regular_days_list
             for day in days:

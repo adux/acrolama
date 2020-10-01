@@ -34,6 +34,7 @@
                 <div class="blog-holder block center-relative">
                     <!-- KEY -->
             {% for key, objs in current.items %}
+                {% if objs %}
                     <h4>{{ key }}</h4>
                         {% for obj in objs %}
                     <article class="blog-item-holder relative">
@@ -67,6 +68,7 @@
                         <div class="clear"></div>
                     </article>
                     {% endfor %}
+                {% endif %}
             {% endfor %}
                     <div class="clear"></div>
                 </div>
