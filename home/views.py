@@ -68,8 +68,8 @@ class HomeFormView(MultiFormsView):
         )
 
         classes = classes.filter(
-            # event_startdate__lte=timezone.now(),
-            # event_enddate__gte=timezone.now(),
+            event_startdate__lte=timezone.now(),
+            event_enddate__gte=timezone.now(),
         )
 
         context["next"] = classes.filter(
