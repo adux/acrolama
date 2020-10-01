@@ -20,14 +20,14 @@ from booking.forms import BookForm, BookDuoInfoForm, BookDateInfoForm
 
 # EvenDetail for Explain
 class EventDisplay(DetailView):
-    """"
-        Handels how the Form is going to look like in the First paint
-        main_tl_list
-        # Creates a list of lists:
-        # (('location','regular_day','open_time...),('regu..)..)
+    """ "
+    Handels how the Form is going to look like in the First paint
+    main_tl_list
+    # Creates a list of lists:
+    # (('location','regular_day','open_time...),('regu..)..)
 
-        gets template from DetailView model_detail.html
-        you could repain
+    gets template from DetailView model_detail.html
+    you could repain
     """
 
     model = Event

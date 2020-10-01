@@ -32,7 +32,10 @@
             </div>
             <div class="content-wrapper">
                 <div class="blog-holder block center-relative">
-                    {% for obj in current %}
+                    <!-- KEY -->
+            {% for key, objs in current.items %}
+                    <h4>{{ key }}</h4>
+                        {% for obj in objs %}
                     <article class="blog-item-holder relative">
                         <div class ="num-inf">
                             <div class="infos">
@@ -56,23 +59,6 @@
                                         </li>
                                     </ul>
                                 </div>
-                                <div class="cat-links green">
-                                    <ul>
-                                        <li>
-                                            <a href="{{ obj.get_absolute_url }}">
-                                                {% for to in obj.time_locations.all %}
-                                                    {% for rd in to.time_options.all %}
-                                                        {% ifchanged %}
-                                                            {% if rd.regular_day != Null %}
-                                                            {{ rd.get_regular_day_display|default_if_none:"" }}'S {%if rd.regular_day.count == 1 %}·{% endif %}
-                                                            {% endif %}
-                                                        {% endifchanged%}
-                                                    {% endfor %}
-                                                {% endfor %}
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
                             </div>
                         </div>
                         <h3 class="entry-title">
@@ -81,6 +67,7 @@
                         <div class="clear"></div>
                     </article>
                     {% endfor %}
+            {% endfor %}
                     <div class="clear"></div>
                 </div>
             </div>

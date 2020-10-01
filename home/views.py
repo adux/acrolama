@@ -1,4 +1,5 @@
 import datetime
+from collections import defaultdict
 
 from django.contrib import messages
 
@@ -66,14 +67,23 @@ class HomeFormView(MultiFormsView):
             .distinct()
         )
 
-        context["current"] = classes.filter(
-                event_enddate__gte=timezone.now(),
-                event_startdate__lte=timezone.now(),
+        classes = classes.filter(
+            # event_startdate__lte=timezone.now(),
+            # event_enddate__gte=timezone.now(),
         )
+
         context["next"] = classes.filter(
-            event_startdate__gt=timezone.now(),
-            event_startdate__lte=(timezone.now() + datetime.timedelta(days=45))
+            event_startdate__gte=(timezone.now()),
+            event_startdate__lte=(timezone.now() + datetime.timedelta(days=60))
         )
+
+        d = defaultdict(list)
+        for class_ in classes:
+            days = class_.get_regular_days_list
+            for day in days:
+                d[day].append(class_)
+
+        context["current"] = dict(d)
 
         # context["intermediate"] = classes.filter(Q(level="2") | Q(level="3"))
         return context
@@ -83,7 +93,9 @@ class HomeFormView(MultiFormsView):
         form_name = form.cleaned_data.get("action")
         email = form.cleaned_data.get("email")
         messages.add_message(
-            self.request, messages.SUCCESS, f"Thanks. Please confirm your email: {email}",
+            self.request,
+            messages.SUCCESS,
+            f"Thanks. Please confirm your email: {email}",
         )
         instance.save()
         return HttpResponseRedirect(self.get_success_url(form_name))

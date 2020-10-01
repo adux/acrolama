@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.signals import pre_save, post_save, m2m_changed
 from django.utils.translation import ugettext as _
+from django.utils.functional import cached_property
 from django.urls import reverse
 
 from django.core.exceptions import ValidationError
@@ -148,7 +149,7 @@ def timelocation_post_save(sender, instance, *args, **kwargs):
     if not instance:
         return
 
-    if hasattr(instance, '_dirty'):
+    if hasattr(instance, "_dirty"):
         return
 
     instance.name = " - ".join(str(p) for p in instance.time_options.all()) + " | %s" % (instance.location)
@@ -169,9 +170,9 @@ def timelocation_m2m_change(sender, instance, *args, **kwargs):
     """
     Will call two times the post_save since its saving
     """
-    if kwargs.get('action') in {'post_add', 'post_remove'}:
-        print(kwargs.get('action'))
-        pk_set = kwargs.pop('pk_set', None)
+    if kwargs.get("action") in {"post_add", "post_remove"}:
+        print(kwargs.get("action"))
+        pk_set = kwargs.pop("pk_set", None)
         b = [TimeOption.objects.get(pk=pk) for pk in pk_set]
         instance.name = " - ".join(str(p) for p in b) + " | %s" % (instance.location)
         instance.save()
@@ -220,12 +221,12 @@ class PriceOption(models.Model):
         if self.duo and self.single_date:
             raise ValidationError(
                 _("Can't be 'Duo' and 'Single Date'"),
-                code='invalid',
+                code="invalid",
             )
         if self.single_date and self.cycles > 0:
             raise ValidationError(
                 _("Can't usr 'Single date' with Cycle Abos"),
-                code='invalid',
+                code="invalid",
             )
 
 
@@ -297,6 +298,7 @@ class Event(models.Model):
     # class Meta:
     #     ordering = [""]
 
+    @cached_property
     def fulltitle(self):
         if self.category == "CY" and self.cycle:
             if self.level.name == "2":
@@ -306,11 +308,27 @@ class Event(models.Model):
             else:
                 return self.title
 
+    @cached_property
     def get_absolute_url(self):
         if self.category == "CY":
             return reverse("class", args=[str(self.slug)])
         else:
             return reverse("event", args=[str(self.slug)])
+
+    @cached_property
+    def get_regular_days_list(self):
+        regular_days = []
+        tls = self.time_locations.all()
+        for tl in tls:
+            tos = tl.time_options.all()
+            for to in tos:
+                if to.regular_day:
+                    regular_days.append(
+                        to.get_regular_day_display()
+                    ) if to.get_regular_day_display() not in regular_days else regular_days
+                else:
+                    return None
+        return regular_days
 
     def __str__(self):
         return "(%s) %s %s - %s" % (
