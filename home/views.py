@@ -67,18 +67,18 @@ class HomeFormView(MultiFormsView):
             .distinct()
         )
 
-        classes = classes.filter(
-            event_startdate__lte=timezone.now(),
-            event_enddate__gte=timezone.now(),
-        )
-
         context["next"] = classes.filter(
             event_startdate__gte=(timezone.now()),
             event_startdate__lte=(timezone.now() + datetime.timedelta(days=60))
         )
 
+        current = classes.filter(
+            event_startdate__lte=timezone.now(),
+            event_enddate__gte=timezone.now(),
+        )
+
         d = defaultdict(list, {k: [] for k in ('Monday', 'Tuesday', 'Wednesday', 'Friday', 'Sunday')})
-        for class_ in classes:
+        for class_ in current:
             days = class_.get_regular_days_list
             for day in days:
                 d[day].append(class_)
