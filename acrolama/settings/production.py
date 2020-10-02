@@ -60,10 +60,10 @@ DATABASES["default"].update(db_from_env)
 
 # HTML MINIFY
 # ------------------------------------------------------------------------------
-MIDDLEWARE += ["htmlmin.middleware.HtmlMinifyMiddleware", "htmlmin.middleware.MarkRequestMiddleware"]
+# MIDDLEWARE += ["htmlmin.middleware.HtmlMinifyMiddleware", "htmlmin.middleware.MarkRequestMiddleware"]
 
-HTML_MINIFY = True
-KEEP_COMMENTS_ON_MINIFYING = True
+# HTML_MINIFY = True
+# KEEP_COMMENTS_ON_MINIFYING = True
 
 # CACHES
 # ------------------------------------------------------------------------------
