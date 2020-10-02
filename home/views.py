@@ -1,14 +1,13 @@
 import datetime
 from collections import defaultdict
 
-from django.contrib import messages
-
-from django.http import HttpResponseRedirect
+# from django.http import HttpResponseRedirect
 from django.utils import timezone
+from django.utils.decorators import classonlymethod
 from django.shortcuts import render
 
 from django.views.generic import DetailView, ListView
-
+from django.views.decorators import gzip
 
 from home.multiforms import MultiFormsView
 from home.models import (
@@ -27,6 +26,7 @@ from project.models import Event
 
 class HomeFormView(MultiFormsView):
     template_name = "home/home.html"
+    gzip_page = True
     form_classes = {
         # "news": NewsForm,
     }
@@ -88,17 +88,27 @@ class HomeFormView(MultiFormsView):
         # context["intermediate"] = classes.filter(Q(level="2") | Q(level="3"))
         return context
 
-    def news_form_valid(self, form):
-        instance = form.save(commit=False)
-        form_name = form.cleaned_data.get("action")
-        email = form.cleaned_data.get("email")
-        messages.add_message(
-            self.request,
-            messages.SUCCESS,
-            f"Thanks. Please confirm your email: {email}",
-        )
-        instance.save()
-        return HttpResponseRedirect(self.get_success_url(form_name))
+    @classonlymethod
+    def as_view(cls, **kwargs):
+        """
+        Optionally decorates the base view with
+        django.views.decorators.gzip.gzip_page().
+        """
+        view = super(HomeFormView, cls).as_view(**kwargs)
+        return gzip.gzip_page(view) if cls.gzip_page else view
+
+    # def news_form_valid(self, form):
+    #     instance = form.save(commit=False)
+    #     form_name = form.cleaned_data.get("action")
+    #     email = form.cleaned_data.get("email")
+    #     messages.add_message(
+    #         self.request,
+    #         messages.SUCCESS,
+    #         f"Thanks. Please confirm your email: {email}",
+    #     )
+    #     instance.save()
+
+        # return HttpResponseRedirect(self.get_success_url(form_name))
 
 
 def faqview(request):
