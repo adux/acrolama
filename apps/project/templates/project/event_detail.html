@@ -5,18 +5,18 @@
         <link rel="stylesheet" type="text/css" href="{% static "booking/bootstrap-datepicker3.standalone.min.css" %}?v=15" media="screen" />
 {% endblock %}
 {% block js %}
-    {% compress js file event %}
-        <script type="text/javascript" src="{% static "booking/bootstrap-datepicker.min.js" %}?v=15"></script>
-        <script type="text/javascript" src="{% static "home/js/jquery.conditional.js" %}?v=15"></script>
-    {% endcompress %}
+        {% compress js file event %}
+            <script type="text/javascript" src="{% static "booking/bootstrap-datepicker.min.js" %}?v=15"></script>
+            <script type="text/javascript" src="{% static "home/js/jquery.conditional.js" %}?v=15"></script>
+        {% endcompress %}
 {% endblock %}
 {% block meta_og %}
-<meta property="og:url" content="{{request.build_absolute_uri}}" />
-<meta property="og:type" content="website" />
-<meta property="og:title" content="{{object.title}}" />
-<meta property="og:description" content="{{object.description|striptags|truncatechars:197}}" />
-<meta property="og:image" content="{{object.images.first.thumbnail.url}}" />
-<meta property="fb:app_id" content="2581322572097954" />
+            <meta property="og:url" content="{{request.build_absolute_uri}}" />
+            <meta property="og:type" content="website" />
+            <meta property="og:title" content="{{object.title}}" />
+            <meta property="og:description" content="{{object.description|striptags|truncatechars:197}}" />
+            <meta property="og:image" content="{{object.images.first.thumbnail.url}}" />
+            <meta property="fb:app_id" content="2581322572097954" />
 {% endblock meta_og %}
 {% block content %}
 {% include 'snippets/nav.html'%}
@@ -25,30 +25,23 @@
         <div class="center-relative content-1170">
             <div class="entry-content">
                 <div class="content-wrap relative">
-<!-- Image Start -->
-                    <script>
-                            var aboutImage_speed = "1000";
-                            var aboutImage_auto = "true";
-                            var aboutImage_hover = "true";
-                    </script>
-                    <div class="image-slider-wrapper relative img aboutImage">
-                        <a id="aboutImage_next" class="image_slider_next" href="#"></a>
-                        <div class="caroufredsel_wrapper">
-                            <ul id="aboutImage" class="image-slider slides">{% for obj in object.images.all %}
-                                <li>
-                                    <picture>
-                                        <source media="max-width: 450px)" srcset="{{ obj.mob.url }}">
-                                        <source media="max-width: 800px)" srcset="{{ obj.thumbnail.url }}">
-                                        <img src="{{ obj.image.url }}" alt="{{ obj.image.description }}">
-                                    </picture>
-                                </li>{%endfor%}
-                            </ul>
+                    <!-- Image Start -->
+                    <div class="relative">
+                        <div class="header-slider">
+                            {% for obj in object.images.all %}
+                            <div>
+                                <picture>
+                                    <source media="(max-width: 450px)" data-srcset="{{ obj.mob.url }}">
+                                    <source media="(max-width: 800px)" data-srcset="{{ obj.thumbnail.url }}">
+                                    <source media="(min-width: 800px)" data-srcset="{{ obj.image.url }}">
+                                    <img class="lazyload" data-src="{{ obj.image.url }}" alt="{{ obj.image.description }}">
+                                </picture>
+                            </div>
+                            {%endfor%}
                         </div>
-                        <div class="clear"></div>
                     </div>
                     <div class="clear"></div>
-<!-- Image End -->
-<!-- General Info Start -->
+                    <!-- General Info Start -->
                     <div class="one top-50">
                         <div><h2><b>{{ object.title }}</b>{% if object.discipline %} - {{ object.discipline.name }} {% endif %}{% if object.level %} {{ object.level }} {% endif %}{% if object.category %} {{ object.get_category_display }} {% endif %}</h2></div>
                     </div>
@@ -162,30 +155,31 @@
                         {% endfor %}
                     </div>
                     <div class="full-width">
-                        <script>
-                            var aboutmember_speed = "2000";
-                            var aboutmember_auto = "true";
-                            var aboutmember_hover = "false";
-                        </script>
                         <div class="image-slider-wrapper relative team team1">
                             <!-- Next Arrow -->
-                            <a id="aboutmember_next" class="image_slider_next" href="#"></a>
                             <div class="caroufredsel_wrapper">
-                                <ul id="aboutmember" class="image-slider slides">
+                                <div class="team-slider">
                                     {% for teacher in teachers %}
-                                    <li>
+                                    <div>
                                         <div class="member-content-holder">
                                             <h4 class="member-name">{{ teacher.first_name }}</h4>
                                             <p class="member-position">{{ teacher.title }}</p>
                                             <div class="member-content">{{ teacher.long_description|safe }}<br></div>
                                         </div>
                                         <div class="member-image-holder">
-                                            <img src="{{ teacher.avatar.image.url }}" alt="{{ teacher.short_description }}">
+                                            <picture>
+                                                <source media="(max-width: 375px)" data-srcset="{{ teacher.avatar.thumbnail.url }}">
+                                                <source media="(max-width: 650px)" data-srcset="{{ teacher.avatar.image.url }}">
+                                                <source media="(max-width: 740px)" data-srcset="{{ teacher.avatar.thumbnail.url }}">
+                                                <source media="(min-width: 740px)" data-srcset="{{ teacher.avatar.image.url }}">
+                                                <source media="(min-width: 1020px)" data-srcset="{{ teacher.avatar.thumbnail.url }}">
+                                                <img data-expand="auto" class="lazyload" data-src="{{ teacher.avatar.image.url }}" alt="{{ teacher.short_description }}">
+                                            </picture>
                                         </div>
                                         <div class="clear"></div>
-                                    </li>
+                                    </div>
                                     {% endfor %}
-                                </ul>
+                                </div>
                             </div>
                             <div class="clear"></div>
                         </div>

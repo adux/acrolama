@@ -1,98 +1,80 @@
 {% load static %}{% load tinycontent_tags %}
 <!-- About -->
-    <div id="about" class="section">
-        <div class="block content-1170 center-relative">
-            <div class="section-title-holder left green">
-                <div class="section-num green">
-                    <span>
-                            <i class="fas fa-flask"></i>
-                    </span>
-                </div>
-                <h2 class="entry-title">ABOUT US</h2>
+<div id="about" class="section">
+    <div class="block content-1170 center-relative">
+        <div class="section-title-holder left green">
+            <div class="section-num green">
+                <span>
+                    <i class="fas fa-flask"></i>
+                </span>
             </div>
-            <div class="section-content-holder right">
-                <div class="content-wrapper">
-                    <div class="content-title-holder">
-                        <p class="content-title">LAMAS</p>
-                    </div>
-                    <div class="one_half ">
-                        {% tinycontent_simple 'about_description' %}
-                    </div>
-                    <div class="one_half last ">
-                        {% for obj in about_date %}
-                        <span style="color: #e54b76;">
-                            <strong>
-                                {{obj.yearstart}}
-                                {% if obj.end %}
-                                - {{obj.yearend}}
-                                {% endif %}
-                            </strong>
-                        </span>
-                        <span style="color:#727190;">
-                            <em>{{obj.description}}</em>
-                        </span>
-                        <br>
-                        {% endfor %}
-                    </div><div class="clear"></div>
-                    <br>
-                    <br>
-                </div>
-                <div class="full-width">
-                    <script>
-                        var aboutImage_speed = "500";
-                        var aboutImage_auto = "false";
-                        var aboutImage_hover = "true";
-                    </script>
-                    <div class="image-slider-wrapper relative img aboutImage">
-                        <a id="aboutImage_next" class="image_slider_next" href="#"></a>
-                        <div class="caroufredsel_wrapper">
-                                <ul id="aboutImage" class="image-slider slides">
-                                    {% for obj in about_image %}
-                                    <li>
-                                        <img data-src="{{obj.image.thumbnail.url}}" alt="{{obj.image.description}}">
-                                    </li>
-                                    {% endfor%}
-                                </ul>
-                        </div>
-                        <div class="clear"></div>
-                    </div>
-                    <!-- About Member -->
-                    <script>
-                        var aboutmember_speed = "2000";
-                        var aboutmember_auto = "true";
-                        var aboutmember_hover = "false";
-                    </script>
-                    <div class="image-slider-wrapper relative team team1">
-                        <!-- Next Arrow -->
-                        <a id="aboutmember_next" class="image_slider_next" href="#"></a>
-                        <div class="caroufredsel_wrapper">
-                            <ul id="aboutmember" class="image-slider slides">
-                                {% for obj in about_content %}
-                                <li>
-                                    <div class="member-content-holder">
-                                        <h4 class="member-name">{{ obj.team.first_name }}</h4>
-                                        <p class="member-position">{{ obj.team.title}}</p>
-                                        <div class="member-content">{{ obj.team.long_description|safe }}<br></div>
-                                    </div>
-                                    <div class="member-image-holder">
-                                        <picture>
-                                            <source media="(max-width: 375px)" srcset="{{ obj.team.avatar.thumbnail.url }}">
-                                            <source media="(max-width: 650px)" srcset="{{ obj.team.avatar.image.url }}">
-                                            <source media="(max-width: 740px)" srcset="{{ obj.team.avatar.thumbnail.url }}">
-                                            <source media="(min-width: 740px)" srcset="{{ obj.team.avatar.image.url }}">
-                                            <source media="(min-width: 1020px)"srcset="{{ obj.team.avatar.thumbnail.url }}">
-                                            <img src="{{ obj.team.avatar.image.url }}" alt="{{ obj.team.short_description }}">
-                                        </picture>
-                                    </div>
-                                    <div class="clear"></div>
-                                </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                        <div class="clear"></div>
-                    </div>
-                </div>   <!-- end full-width div -->
-            </div>
-            <div class="clear"></div>
+            <h2 class="entry-title">ABOUT US</h2>
         </div>
+        <div class="section-content-holder right">
+            <div class="content-wrapper">
+                <div class="content-title-holder">
+                    <p class="content-title">LAMAS</p>
+                </div>
+                <div class="one_half ">
+                    {% tinycontent_simple 'about_description' %}
+                </div>
+                <div class="one_half last ">
+                    {% for obj in about_date %}
+                    <span style="color: #e54b76;">
+                        <strong>
+                            {{obj.yearstart}}
+                            {% if obj.end %}
+                            - {{obj.yearend}}
+                            {% endif %}
+                        </strong>
+                    </span>
+                    <span style="color:#727190;">
+                        <em>{{obj.description}}</em>
+                    </span>
+                    <br>
+                    {% endfor %}
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="full-width">
+                <div class="relative">
+                    <div class="about-slider">
+                        {% for obj in about_image %}
+                        <div>
+                            <img class="lazyload" data-src="{{obj.image.thumbnail.url}}" alt="{{obj.image.description}}">
+                        </div>
+                        {% endfor%}
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <!-- About Member -->
+                <div class="relative">
+                    <div class="team-slider">
+                        {% for obj in about_content %}
+                        <div>
+                            <div class="member-content-holder">
+                                <h4 class="member-name">{{ obj.team.first_name }}</h4>
+                                <p class="member-position">{{ obj.team.title}}</p>
+                                <div class="member-content">{{ obj.team.long_description|safe }}<br></div>
+                            </div>
+                            <div class="member-image-holder">
+                                <picture>
+                                    <source media="(max-width: 375px)" data-srcset="{{ obj.team.avatar.thumbnail.url }}">
+                                    <source media="(max-width: 650px)" data-srcset="{{ obj.team.avatar.image.url }}">
+                                    <source media="(max-width: 740px)" data-srcset="{{ obj.team.avatar.thumbnail.url }}">
+                                    <source media="(min-width: 740px)" data-srcset="{{ obj.team.avatar.image.url }}">
+                                    <source media="(min-width: 1020px)" data-srcset="{{ obj.team.avatar.thumbnail.url }}">
+                                    <img data-expand="auto" class="lazyload" data-src="{{ obj.team.avatar.image.url }}" alt="{{ obj.team.short_description }}">
+                                </picture>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>   <!-- end full-width div -->
+        </div>
+        <div class="clear"></div>
     </div>
+</div>

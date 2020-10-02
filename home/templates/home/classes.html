@@ -33,45 +33,45 @@
             <div class="content-wrapper">
                 <div class="blog-holder block center-relative">
                     <!-- KEY -->
-            {% for key, objs in current.items %}
-                {% if objs %}
-                    <h4>{{ key }}</h4>
-                        {% for obj in objs %}
-                    <article class="blog-item-holder relative">
-                        <div class ="num-inf">
-                            <div class="infos">
-                                <div class="author vcard ">
-                                    <a href="{{ obj.get_absolute_url }}">
-                                        {{ obj.discipline.name }} {{ obj.level.get_name_display|upper }}
-                                        {% for ad in obj.time_locations.all %}
-                                            {% ifchanged %} - {{ad.location.address.city }} {% endifchanged %}
-                                        {% endfor %}
-                                    </a>
-                                </div>
-                                <div class="cat-links green">
-                                    <ul>
-                                        <li>
+                    {% for key, objs in current.items %}
+                        {% if objs %}
+                            <h4>{{ key }}</h4>
+                                {% for obj in objs %}
+                            <article class="blog-item-holder relative">
+                                <div class ="num-inf">
+                                    <div class="infos">
+                                        <div class="author vcard ">
                                             <a href="{{ obj.get_absolute_url }}">
-                                                {{ obj.event_startdate|date:"d M" }}
-                                                {% if obj.event_enddate != obj.event_startdate %}
-                                                - {{ obj.event_enddate|date:"d M Y" }}
-                                                {% endif %}
+                                                {{ obj.discipline.name }} {{ obj.level.get_name_display|upper }}
+                                                {% for ad in obj.time_locations.all %}
+                                                    {% ifchanged %} - {{ad.location.address.city }} {% endifchanged %}
+                                                {% endfor %}
                                             </a>
-                                        </li>
-                                    </ul>
+                                        </div>
+                                        <div class="cat-links green">
+                                            <ul>
+                                                <li>
+                                                    <a href="{{ obj.get_absolute_url }}">
+                                                        {{ obj.event_startdate|date:"d M" }}
+                                                        {% if obj.event_enddate != obj.event_startdate %}
+                                                        - {{ obj.event_enddate|date:"d M Y" }}
+                                                        {% endif %}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <h3 class="entry-title">
-                            <a href="{{ obj.get_absolute_url }}">{{ obj.fulltitle}}</a>
-                        </h3>
-                        <div class="clear"></div>
-                    </article>
+                                <h3 class="entry-title">
+                                    <a href="{{ obj.get_absolute_url }}">{{ obj.fulltitle}}</a>
+                                </h3>
+                                <div class="clear"></div>
+                            </article>
+                            {% endfor %}
+                        {% endif %}
                     {% endfor %}
-                {% endif %}
-            {% endfor %}
-                    <div class="clear"></div>
                 </div>
+                <div class="clear"></div>
             </div>
         </div>
         <div class="clear"></div>
@@ -147,33 +147,23 @@
     </div>
     <!-- CAROUSEL -->
     <div class="block content-1170 center-relative">
-        <div class="extra-content-left">
-            <script>
-                var text1_speed = "1000";
-                var text1_auto = "true";
-                var text1_hover = "true";
-            </script>
-            <div class="text1 testimonial-slider-holder slider-holder">
-                <div class="caroufredsel_wrapper">
-                    <ul id="text1" class="slides testimonial">
-                        {% for obj in testimonial %}
-                        <li style='height: 200px;'>
-                            <div class="testimonial-content">
-                                <p class="testimonial-text">
-                                <span>{{obj.text}}</span>
-                                </p>
-                                <p class="testimonial-author">
-                                <span>{{obj.author}}</span>
-                                </p>
-                            </div>
-                            <div class="clear"></div>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                <a id="text1_next" class="carousel_text_next right" style="" href="#"></a>
-                <!--<div class="clear"></div>-->
+        <div class="extra-half-content-left">
+            <div class="news-slider">
+                {% for obj in testimonial %}
+                    <div class="testimonial-content">
+                        <p class="testimonial-text">
+                        <span>{{obj.text}}</span>
+                        </p>
+                        <p class="testimonial-author">
+                        <span>{{obj.author}}</span>
+                        </p>
+                    </div>
+                {% endfor %}
             </div>
+            <div class="clear"></div>
+            <a id="text1_next" class="carousel_text_next right" style="" href="#"></a>
         </div>
+        <div class="clear"></div>
     </div>
+    <div class="clear"></div>
 </div>
