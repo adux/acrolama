@@ -3,9 +3,11 @@
         <div id="home" class="section intro-page">
             <div class="block content-1170 center-relative center-text">
                 <picture>
+                    <!--[if IE 9]><video style="display: none"><![endif]-->
                     <source data-scrset="{% static "home/images/acrolama_logo.png" %}">
                     <source data-scrset="{% static "home/images/acrolama_logo.svg" %}">
-                    <img class="top-logo lazyload" data-sizes="auto" data-src="{% static "home/images/acrolama_logo.webp" %}" alt="Acrolama logo disigned by Guillia Martinelli" />
+                    <!--[if IE 9]></video><![endif]-->
+                    <img class="top-logo lazyload" data-src="{% static "home/images/acrolama_logo.webp" %}" alt="Acrolama logo disigned by Guillia Martinelli" />
                 </picture>
                 <h1 class="big-title"><span>Be the monkey you want to be...<br>but we are lamas.</span></h1>
                 <p class="title-desc">Flying lamas.</p>
@@ -26,9 +28,11 @@
                             <li class="fw-slide">
                                 <a href="{{ obj.event.get_absolute_url }}">
                                     <picture>
-                                        <source media="max-width: 450px" data-srcset="{{ obj.mob.url }}">
-                                        <source media="max-width: 800px" data-srcset="{{ obj.thumbnail.url }}">
-                                        <img data-sizes="auto" data-src="{{ obj.image.url }}" alt="{{ obj.image.description }}" class="lazyload">
+                                        <!--[if IE 9]><video style="display: none"><![endif]-->
+                                        <source media="(max-width: 450px)" srcset="{{ obj.mob.url }}" />
+                                        <source media="(max-width: 800px" srcset="{{ obj.thumbnail.url }}" />
+                                        <!--[if IE 9]></video><![endif]-->
+                                        <img src="{{ obj.image.url }}" alt="{{ obj.image.description }}" >
                                     </picture>
                                     <span class="fw-slide-text">{{obj.event.event_startdate|date:"j N" }} -{% if obj.event.discipline %} {{ obj.event.discipline.name }} {% endif %}{% if obj.event.level %} {{ obj.event.level }} {% endif %}{% if obj.event.category %} {{ obj.event.get_category_display }} {% endif %}</span>
                                 </a>
