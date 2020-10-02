@@ -67,21 +67,21 @@ KEEP_COMMENTS_ON_MINIFYING = True
 
 # CACHES
 # ------------------------------------------------------------------------------
-# redis_url = urlparse(os.environ.get("REDISCLOUD_URL"))
-# CACHES = {
-#     "default": {
-#         "BACKEND": "django_redis.cache.RedisCache",
-#         "LOCATION": "redis://%s:%s" % (redis_url.hostname, redis_url.port),
-#         "OPTIONS": {
-#             "PASSWORD": redis_url.password,
-#             "DB": 0,
-#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-#             # Mimicing memcache behavior.
-#             # http://niwinz.github.io/django-redis/latest/#_memcached_exceptions_behavior
-#             "IGNORE_EXCEPTIONS": True,
-#         },
-#     }
-# }
+redis_url = urlparse(os.environ.get("REDISCLOUD_URL"))
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://%s:%s" % (redis_url.hostname, redis_url.port),
+        "OPTIONS": {
+            "PASSWORD": redis_url.password,
+            "DB": 0,
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            # Mimicing memcache behavior.
+            # http://niwinz.github.io/django-redis/latest/#_memcached_exceptions_behavior
+            "IGNORE_EXCEPTIONS": True,
+        },
+    }
+}
 
 # HTTPS
 # ------------------------------------------------------------------------------
