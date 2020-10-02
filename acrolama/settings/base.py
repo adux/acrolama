@@ -70,10 +70,6 @@ LOCAL_APPS = ["home", "project", "address", "audiovisual", "accounting", "bookin
 
 INSTALLED_APPS = DJANGO_APPS + EXTERNAL_APPS + LOCAL_APPS
 
-# Crispy Forms for todo
-# INSTALLED_APPS += ["crispy_forms"]
-# CRISPY_TEMPLATE_PACK = "bootstrap3"
-
 # Analytica
 INSTALLED_APPS += ["analytical"]
 GOOGLE_ANALYTICS_PROPERTY_ID = "UA-118797477-1"

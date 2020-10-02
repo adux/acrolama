@@ -35,7 +35,6 @@ COLLECTFAST_STRATEGY = "collectfast.strategies.boto3.Boto3Strategy"
 
 # Sentry SDK
 # ------------------------------------------------------------------------------
-
 sentry_sdk.init(dsn="https://449183d07de2455ba0ecf384ca29a77f@sentry.io/1310482", integrations=[DjangoIntegration()])
 
 # Anymail (Mailgun)
@@ -54,16 +53,15 @@ ANYMAIL = {
 
 # Database for heroku
 # ------------------------------------------------------------------------------
-
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES["default"].update(db_from_env)
 
 # HTML MINIFY
 # ------------------------------------------------------------------------------
-# MIDDLEWARE += ["htmlmin.middleware.HtmlMinifyMiddleware", "htmlmin.middleware.MarkRequestMiddleware"]
+MIDDLEWARE += ["htmlmin.middleware.HtmlMinifyMiddleware", "htmlmin.middleware.MarkRequestMiddleware"]
 
-# HTML_MINIFY = True
-# KEEP_COMMENTS_ON_MINIFYING = True
+HTML_MINIFY = False
+KEEP_COMMENTS_ON_MINIFYING = True
 
 # CACHES
 # ------------------------------------------------------------------------------
