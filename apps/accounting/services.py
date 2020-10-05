@@ -11,7 +11,7 @@ def get_invoice(invoice):
     if invoice_pk:
         try:
             book = Invoice.objects.get(pk=invoice_pk)
-        except:
+        except Exception:
             return
 
     return book
