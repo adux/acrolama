@@ -10,6 +10,8 @@ from django.views.generic import DetailView, ListView
 from django.views.decorators import gzip
 
 from home.multiforms import MultiFormsView
+from home.cacheview import CacheMixin
+
 from home.models import (
     AboutTeam,
     AboutImage,
@@ -24,7 +26,7 @@ from home.models import (
 from project.models import Event
 
 
-class HomeFormView(MultiFormsView):
+class HomeFormView(CacheMixin, MultiFormsView):
     template_name = "home/home.html"
     gzip_page = True
     form_classes = {
@@ -96,19 +98,6 @@ class HomeFormView(MultiFormsView):
         """
         view = super(HomeFormView, cls).as_view(**kwargs)
         return gzip.gzip_page(view) if cls.gzip_page else view
-
-    # def news_form_valid(self, form):
-    #     instance = form.save(commit=False)
-    #     form_name = form.cleaned_data.get("action")
-    #     email = form.cleaned_data.get("email")
-    #     messages.add_message(
-    #         self.request,
-    #         messages.SUCCESS,
-    #         f"Thanks. Please confirm your email: {email}",
-    #     )
-    #     instance.save()
-
-        # return HttpResponseRedirect(self.get_success_url(form_name))
 
 
 def faqview(request):
