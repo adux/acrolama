@@ -1,0 +1,59 @@
+{% load widget_tweaks %}{% load booking_tags %}
+<form method="get">
+    <div class="card card-body bg-light">
+        <h4>Filter</h4>
+        <div class="row">
+            <div class="form-group col-sm-4 col-md-4">
+            {{ event_filter.form.project.label_tag }}
+            {% render_field event_filter.form.project class="form-control" %}
+            </div>
+            <div class="form-group col-sm-4 col-md-8">
+            {{ event_filter.form.time_locations.label_tag }}
+            {% render_field event_filter.form.time_locations class="form-control" %}
+            </div>
+            <div class="form-group col-sm-4 col-md-2">
+            {{ event_filter.form.level.label_tag }}
+            {% render_field event_filter.form.level class="form-control" %}
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">
+        <i class="fas fa-search"></i> Search
+        </button>
+    </div>
+</form>
+
+<hr>
+
+<script language="Javascript">
+    function toggle(source) {
+        var checkboxes = document.querySelectorAll('input[name="check"]');
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i] != source)
+                checkboxes[i].checked = source.checked;
+        }
+    }
+</script>
+
+<form action="{% url 'event_list' %}" method="POST">{% csrf_token %}
+    <table class="table table-hover table-borderless">
+        <thead>
+            <tr>
+                <th><input type="checkbox" onClick="toggle(this);"></th>
+                <th>#</th>
+                <th>Start Date</th>
+                <th>Title</th>
+                <th>Level</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for obj in page_obj %}
+                <td><input type="checkbox" name="check" value="{{obj.id}}"></td>
+                <td>{{obj.pk}}</td>
+                <td>{{obj.event_startdate|date:'d M. y.'}}</td>
+                <td>{{obj.title}}</td>
+                <td>{{obj.level.get_name_display}}</td>
+            </tr>
+            {% endfor%}
+        </tbody>
+    </table>
+</form>

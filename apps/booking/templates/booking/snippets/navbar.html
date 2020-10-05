@@ -10,13 +10,19 @@
       </li>
       {% if user.is_staff %}
       <li class="nav-item ">
-        <a class="nav-link" href="{% url 'booking_list' %}">Bookings</a>
+        <a class="nav-link" href="{% url 'event_list' %}">Events</a>
+      </li>
+      <li class="nav-item ">
+        <a class="nav-link" href="{% url 'booking_list' %}">Books</a>
       </li>
       <li class="nav-item ">
         <a class="nav-link" href="{% url 'contact_list' %}">Contact</a>
       </li>
       <li class="nav-item ">
         <a class="nav-link" href="{% url 'accounting_list' %}">Invoices</a>
+      </li>
+      <li class="nav-item ">
+        <a class="nav-link" href="{% url 'quotation_list' %}">Quotations</a>
       </li>
       <li class="nav-item ">
         <a class="nav-link" href="{% url 'attendance_list' %}">Attendances</a>

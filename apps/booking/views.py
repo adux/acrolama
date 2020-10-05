@@ -31,6 +31,7 @@ from booking.filters import (
     AttendanceFilter,
     AttendanceDailyFilter,
     BookFilter,
+    EventFilter,
     QuotationFilter,
     QuotationBookFilter,
 )
@@ -108,6 +109,22 @@ class UserAutocomplete(autocomplete.Select2QuerySetView):
         if self.q:
             qs = qs.filter(
                 Q(email__icontains=self.q) | Q(first_name__icontains=self.q) | Q(last_name__icontains=self.q)
+            )
+
+        return qs
+
+
+class TimeLocationAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        if not herd_check(self.request.user):
+            return TimeLocation.objects.none()
+
+        qs = TimeLocation.objects.all().order_by("name", "location").select_related("location")
+
+        if self.q:
+            qs = qs.filter(
+                Q(location__icontains=self.q) | Q(time_options__icontains=self.q) | Q(name__icontains=self.q)
             )
 
         return qs
@@ -459,6 +476,42 @@ def contactlistview(request):
 
     context = {
         "book_filter": booking_filter,
+        "filter": request.GET,
+        "page_obj": response,
+    }
+
+    return render(request, template, context)
+
+
+@login_required
+@user_passes_test(staff_check)
+def eventlistview(request):
+    template = "booking/event_list.html"
+    event_filter = EventFilter(
+        request.GET,
+        queryset=(
+            Event.objects.all()
+            .select_related("project", "policy", "discipline", "level")
+            .prefetch_related("time_locations__time_options")
+            .order_by("-event_startdate")
+        ),
+    )
+
+    # Pagination
+    paginator = Paginator(event_filter.qs, 24)  # Show 24 contacts per page.
+    page = request.GET.get("page")
+
+    try:
+        response = paginator.page(page)
+    except PageNotAnInteger:
+        response = paginator.page(1)
+    except EmptyPage:
+        response = paginator.page(paginator.num_pages)
+
+    # End Paginator
+
+    context = {
+        "event_filter": event_filter,
         "filter": request.GET,
         "page_obj": response,
     }

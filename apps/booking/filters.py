@@ -13,39 +13,6 @@ from project.models import Event, TimeOption, TimeLocation
 from users.models import User
 
 
-class BookFilter(django_filters.FilterSet):
-    user = django_filters.CharFilter(method="filter_by_all_name_fields")
-    event = django_filters.ModelChoiceFilter(
-        queryset=Event.objects.all(), widget=autocomplete.ModelSelect2(url="event-autocomplete")
-    )
-    times = django_filters.ModelMultipleChoiceFilter(
-        queryset=TimeOption.objects.all(), widget=forms.CheckboxSelectMultiple
-    )
-    start_date = django_filters.DateFilter(
-        field_name="booked_at",
-        lookup_expr="gt",
-        label="Start date",
-    )
-    end_date = django_filters.DateFilter(
-        field_name="booked_at",
-        lookup_expr="lt",
-        label="End date",
-    )
-    date_range = django_filters.DateRangeFilter(field_name="booked_at", label="Range")
-
-    class Meta:
-        model = Book
-        fields = {"id", "status", "times", "event__level"}
-
-    def filter_by_all_name_fields(self, queryset, name, value):
-        return queryset.filter(
-            Q(user__first_name__icontains=value)
-            | Q(user__last_name__icontains=value)
-            | Q(user__email__icontains=value)
-            | Q(user__id__icontains=value)
-        )
-
-
 class AttendanceFilter(django_filters.FilterSet):
     book__user = django_filters.CharFilter(method="filter_by_all_name_fields")
     book__event = django_filters.ModelChoiceFilter(
@@ -112,6 +79,49 @@ class AttendanceDailyFilter(django_filters.FilterSet):
 
     def filter_by_date_contains(self, queryset, name, value):
         return queryset.filter(Q(attendance_date__icontains=value))
+
+
+class BookFilter(django_filters.FilterSet):
+    user = django_filters.CharFilter(method="filter_by_all_name_fields")
+    event = django_filters.ModelChoiceFilter(
+        queryset=Event.objects.all(), widget=autocomplete.ModelSelect2(url="event-autocomplete")
+    )
+    times = django_filters.ModelMultipleChoiceFilter(
+        queryset=TimeOption.objects.all(), widget=forms.CheckboxSelectMultiple
+    )
+    start_date = django_filters.DateFilter(
+        field_name="booked_at",
+        lookup_expr="gt",
+        label="Start date",
+    )
+    end_date = django_filters.DateFilter(
+        field_name="booked_at",
+        lookup_expr="lt",
+        label="End date",
+    )
+    date_range = django_filters.DateRangeFilter(field_name="booked_at", label="Range")
+
+    class Meta:
+        model = Book
+        fields = {"id", "status", "times", "event__level"}
+
+    def filter_by_all_name_fields(self, queryset, name, value):
+        return queryset.filter(
+            Q(user__first_name__icontains=value)
+            | Q(user__last_name__icontains=value)
+            | Q(user__email__icontains=value)
+            | Q(user__id__icontains=value)
+        )
+
+
+class EventFilter(django_filters.FilterSet):
+    time_locations = django_filters.ModelChoiceFilter(
+        queryset=TimeLocation.objects.all(), widget=autocomplete.ModelSelect2(url="tl-autocomplete")
+    )
+
+    class Meta:
+        model = Event
+        fields = {"project", "time_locations", "level"}
 
 
 class QuotationFilter(django_filters.FilterSet):

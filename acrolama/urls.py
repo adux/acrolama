@@ -27,12 +27,14 @@ from booking.views import (
     BookUpdateView,
     BookCreateView,
     contactlistview,
+    eventlistview,
+    HerdView,
+    invitationsendview,
     QuotationUpdateView,
     quotationlistview,
     quotationcreateview,
     quotationlockview,
-    invitationsendview,
-    HerdView,
+    TimeLocationAutocomplete,
 )
 
 from accounting.views import (
@@ -71,7 +73,6 @@ urlpatterns = [
     # Sitemaps
     path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="django.contrib.sitemaps.views.sitemap",),
     # Profile
-    # profile
     # Admin stuff
     # TODO: Add herd to Admin url
     path(settings.ADMIN_URL, admin.site.urls),
@@ -85,6 +86,8 @@ urlpatterns = [
     # Booking
     path("herd/booking/", bookinglistview, name="booking_list"),
     path("herd/booking/<int:pk>/update/", BookUpdateView.as_view(), name="booking_update"),
+    # Booking
+    path("herd/event/", eventlistview, name="event_list"),
     # Quotation
     path("herd/quotation/", quotationlistview, name="quotation_list"),
     path("herd/quotation/<int:pk>/update/", QuotationUpdateView.as_view(), name="quotation_update",),
@@ -100,6 +103,7 @@ urlpatterns = [
     re_path(r"^event-autocomplete/$", EventAutocomplete.as_view(), name="event-autocomplete",),
     re_path(r"^eventteacher-autocomplete/$", EventTeacherAutocomplete.as_view(), name="eventteacher-autocomplete",),
     re_path(r"^user-autocomplete/$", UserAutocomplete.as_view(), name="user-autocomplete",),
+    re_path(r"^tl-autocomplete/$", TimeLocationAutocomplete.as_view(), name="tl-autocomplete",),
 ]
 
 if settings.DEBUG:
