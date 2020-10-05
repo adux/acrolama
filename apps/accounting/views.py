@@ -13,11 +13,11 @@ from booking.utils import (
     staff_check,
 )
 
-from booking.services import updateBookStatus
+from booking.services import update_book_status
 
 from accounting.models import Invoice
 from accounting.filters import AccountFilter
-from accounting.forms import UpdateInvoiceForm
+from accounting.forms import InvoiceUpdateForm
 from accounting.services import get_invoice
 
 # Create your views here.
@@ -55,7 +55,7 @@ def accountinglistview(request):
 class InvoiceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Invoice
     template_name = "accounting/accounting_update.html"
-    form_class = UpdateInvoiceForm
+    form_class = InvoiceUpdateForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -90,7 +90,7 @@ class InvoiceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                         messages.add_message(self.request, messages.INFO, _("Paid Email sent"))
 
                     try:
-                        updateBookStatus(instance.book.id, "PA")  # Update to Participant
+                        update_book_status(instance.book.id, "PA")  # Update to Participant
                     except Exception as e:
                         messages.add_message(
                             self.request, messages.WARNING, _(
@@ -105,7 +105,7 @@ class InvoiceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                     # Check if no Attendance True
                     if invoice.book.attendance.count_attendance() < 1:
                         try:
-                            updateBookStatus(instance.book.id, "CA")  # Update to Canceled
+                            update_book_status(instance.book.id, "CA")  # Update to Canceled
                         except Exception as e:
                             messages.add_message(
                                 self.request, messages.WARNING, _(

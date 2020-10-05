@@ -20,7 +20,7 @@ from booking.models import (
 from booking.widgets import DynamicArrayWidget, M2MSelect
 
 
-class UpdateAttendanceForm(forms.ModelForm):
+class AttendanceUpdateForm(forms.ModelForm):
     class Meta:
         model = Attendance
         fields = ["attendance_date", "attendance_check"]
@@ -30,7 +30,7 @@ class UpdateAttendanceForm(forms.ModelForm):
         }
 
 
-class UpdateBookForm(forms.ModelForm):
+class BookUpdateForm(forms.ModelForm):
     status = forms.ChoiceField(choices=[(k, v) for k, v in BOOKINGSTATUS])
 
     class Meta:
@@ -39,13 +39,13 @@ class UpdateBookForm(forms.ModelForm):
         widgets = {"times": M2MSelect(attrs={})}
 
 
-class UpdateBookDuoForm(forms.ModelForm):
+class BookDuoUpdateForm(forms.ModelForm):
     class Meta:
         model = BookDuoInfo
         fields = ["first_name", "last_name", "phone", "email"]
 
 
-class CreateBookForm(forms.ModelForm):
+class BookCreateForm(forms.ModelForm):
     class Meta:
         model = Book
         fields = ["user", "event", "times", "price"]
@@ -56,7 +56,7 @@ class CreateBookForm(forms.ModelForm):
         }
 
 
-class CreateQuotationForm(forms.ModelForm):
+class QuotationCreateForm(forms.ModelForm):
     direct_costs = forms.MultipleChoiceField(
         choices=[("%s %s" % (o.id, o.to_pay), o.__str__) for o in Invoice.objects.filter(balance="DB")]
     )
@@ -87,7 +87,7 @@ class CreateQuotationForm(forms.ModelForm):
         self.fields["direct_revenue"].widget.attrs["readonly"] = True
 
 
-class LockQuotationForm(forms.ModelForm):
+class QuotationLockForm(forms.ModelForm):
     class Meta:
         model = Quotation
         fields = (

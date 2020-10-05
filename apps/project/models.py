@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.core.exceptions import ValidationError
 
 from home.utils import unique_slug_generator
-from home.services import createInfoFromPolicy
+from home.services import create_info_from_policy
 
 # Reference Data
 
@@ -262,7 +262,7 @@ class Policy(models.Model):
 
 
 def policy_pre_save_url(sender, instance, *args, **kwargs):
-    createInfoFromPolicy(instance)
+    create_info_from_policy(instance)
 
 
 pre_save.connect(policy_pre_save_url, sender=Policy)

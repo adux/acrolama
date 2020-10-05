@@ -63,7 +63,7 @@ def get_timelocation(tl):
     return tl
 
 
-def getLocationFromTimeOption(timeoptions, event):
+def get_location_from_timeoption(timeoptions, event):
     if timeoptions.count() > 1:
         return False
     else:
@@ -80,13 +80,14 @@ def getLocationFromTimeOption(timeoptions, event):
                 return False
 
 
-def updateSwitchCheckAttendance(id, position):
+def switch_check_attendance(id, position):
     attendance = Attendance.objects.get(pk=id)
     attendance.attendance_check[position] = not attendance.attendance_check[position]
     attendance.save()
 
 
-def updateBookStatus(book, status):
+# TODO: Into model
+def update_book_status(book, status):
     book = get_book(book)
     if status in ("PA", "Participant"):
         book.status = "PA"
@@ -96,7 +97,7 @@ def updateBookStatus(book, status):
         book.save()
 
 
-def createInvoiceFromBook(book):
+def create_invoice_from_book(book):
     book = get_book(book)
 
     obj = Invoice()
@@ -112,7 +113,7 @@ def createInvoiceFromBook(book):
     obj.save()
 
 
-def createAttendance(book):
+def create_attendance_from_book(book):
     """
     Creates an Attendance to a particular booking
     """
@@ -138,7 +139,7 @@ def createAttendance(book):
             else:
                 # If it's a Cycle get all the dates from start to end and add
                 num = to.regular_day
-                li = booking.utils.datelistgenerator(start, end, int(num))
+                li = booking.utils.make_regularday_dates_list(start, end, int(num))
                 obj.attendance_date.extend(li)
                 for time in li:
                     obj.attendance_check.append("False")
@@ -150,37 +151,38 @@ def createAttendance(book):
     obj.save()
 
 
-def checkAboCounter(bookid):
+def check_abocounter(bookid):
     return AboCounter.objects.filter(data__last_book=str(bookid)).exists()
 
 
-def reduceAboCounter(bookid):
+def reduce_abocounter(bookid):
     obj = AboCounter.objects.get(data__last_book=str(bookid))
     obj.data['count'] -= 1
     obj.save()
 
 
-def createAboCounter(book):
+def create_abocounter_from_book(book):
     AboCounter.objects.create(data={'first_book': str(book.id), 'last_book': str(book.id), 'count': book.price.cycles})
 
 
-def updateAboCounter(bookid, newbookid):
+# TODO: Into model
+def update_lastbook_abocounter(bookid, newbookid):
     obj = AboCounter.objects.get(data__last_book=str(bookid))
     obj.data['last_book'] = str(newbookid)
     obj.save()
 
 
-def getAboCounterCount(bookid):
+def get_count_abocounter_of_book(bookid):
     return AboCounter.objects.get(data__last_book=str(bookid)).data['count']
 
 
-def newInformedBook(request, instance, book):
+def inform_book(request, instance, book):
     # If Abo Create Counter
 
     if book.price.cycles < 2:
         # Invoice
         try:
-            createInvoiceFromBook(instance)
+            create_invoice_from_book(instance)
         except Exception as e:
             messages.add_message(
                 request, messages.WARNING, _("Error creating Invoice: " + str(e)),
@@ -202,14 +204,14 @@ def newInformedBook(request, instance, book):
 
     else:
 
-        if not checkAboCounter(book.id):
+        if not check_abocounter(book.id):
             # Create the Counter for Abos
-            createAboCounter(book)
-            reduceAboCounter(book.id)
+            create_abocounter_from_book(book)
+            reduce_abocounter(book.id)
 
             # Invoice
             try:
-                createInvoiceFromBook(instance)
+                create_invoice_from_book(instance)
             except Exception as e:
                 messages.add_message(
                     request, messages.WARNING, _("Error creating Invoice: " + str(e)),
@@ -230,7 +232,7 @@ def newInformedBook(request, instance, book):
                 messages.add_message(request, messages.INFO, _("Email sent: " + str(book.informed_at)))
 
         else:
-            reduceAboCounter(book.id)
+            reduce_abocounter(book.id)
 
             # Send New Book Email
             if book.informed_at is None:
@@ -245,7 +247,7 @@ def newInformedBook(request, instance, book):
                 messages.add_message(request, messages.INFO, _("Email sent: " + str(book.informed_at)))
 
     try:
-        createAttendance(instance)
+        create_attendance_from_book(instance)
     except Exception as e:
         messages.add_message(
             request, messages.WARNING, _("Error creating Attendance: " + str(e)),
@@ -254,7 +256,7 @@ def newInformedBook(request, instance, book):
         messages.add_message(request, messages.SUCCESS, _("Attendance created"))
 
 
-def createNextBook(book, status):
+def create_next_book(book, status):
     """
     Gets and Workshop Booking and creates the next based on cycle
     """
@@ -281,7 +283,6 @@ def createNextBook(book, status):
 
     # Resolve Event
     # Exceptions like Multile or Not exist can raise
-    # Hope i understood this right:
     # https://docs.python.org/3/glossary.html#term-eafp
     old_event = book.event
     new_event = Event.objects.filter(

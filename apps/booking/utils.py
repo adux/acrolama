@@ -40,7 +40,7 @@ def build_url(*args, **kwargs):
     return url
 
 
-def datelistgenerator(startdate, enddate, regularday):
+def make_regularday_dates_list(startdate, enddate, regularday):
     dateList = []
     delta = enddate - startdate + datetime.timedelta(days=1)
 
@@ -73,7 +73,7 @@ def email_sender(instance, flag):
 
         irregularities = Irregularity.objects.filter(event__slug=instance.event.slug)
         times = instance.times.all()
-        location = booking.services.getLocationFromTimeOption(times, instance.event)
+        location = booking.services.get_location_from_timeoption(times, instance.event)
 
         referenznum = space_out(
             str(instance.user.pk)
@@ -148,9 +148,9 @@ def email_sender(instance, flag):
 
         irregularities = Irregularity.objects.filter(event__slug=instance.event.slug)
         times = instance.times.all()
-        location = booking.services.getLocationFromTimeOption(times, instance.event)
+        location = booking.services.get_location_from_timeoption(times, instance.event)
         try:
-            abocount = booking.services.getAboCounterCount(instance.id)
+            abocount = booking.services.get_count_abocounter_of_book(instance.id)
         except ObjectDoesNotExist:
             abocount = False
 

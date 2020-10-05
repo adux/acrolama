@@ -1,7 +1,7 @@
 from home.models import Info
 
 
-def createInfoFromPolicy(instance):
+def create_info_from_policy(instance):
     name = instance.name.replace(" ", "")
     try:
         info = Info.objects.get(slug=name)

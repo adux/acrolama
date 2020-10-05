@@ -36,13 +36,12 @@ from booking.filters import (
 )
 
 # Forms
-# TODO: Rename with Model First
 from booking.forms import (
-    UpdateBookForm,
-    CreateBookForm,
-    UpdateAttendanceForm,
-    CreateQuotationForm,
-    LockQuotationForm,
+    BookUpdateForm,
+    BookCreateForm,
+    AttendanceUpdateForm,
+    QuotationCreateForm,
+    QuotationLockForm,
     InvitationForm,
 )
 
@@ -55,14 +54,14 @@ from booking.utils import (
 
 # Services
 from booking.services import (
+    check_abocounter,
+    create_next_book,
     get_book,
     get_event,
     get_timelocation,
-    newInformedBook,
-    checkAboCounter,
-    updateAboCounter,
-    createNextBook,
-    updateSwitchCheckAttendance,
+    inform_book,
+    update_lastbook_abocounter,
+    switch_check_attendance,
 )
 
 
@@ -156,10 +155,10 @@ def bookinglistview(request):
                 # Create the next book
                 if book.status == "PA":
                     try:
-                        new_book = createNextBook(book, "PE")
+                        new_book = create_next_book(book, "PE")
                         if book.price.cycles > 1:
                             try:
-                                exists = checkAboCounter(book.id)
+                                exists = check_abocounter(book.id)
                             except Exception as e:
                                 messages.add_message(
                                     request,
@@ -168,7 +167,7 @@ def bookinglistview(request):
                                 )
 
                             if exists:
-                                updateAboCounter(book.id, new_book.id)
+                                update_lastbook_abocounter(book.id, new_book.id)
                     except Exception as e:
                         messages.add_message(
                             request,
@@ -194,7 +193,7 @@ def bookinglistview(request):
 class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Book
     template_name = "booking/booking_update.html"
-    form_class = UpdateBookForm
+    form_class = BookUpdateForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -226,7 +225,7 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
         if "update" in self.request.POST:
             if (book.status == "PE" or book.status == "WL") and (instance.status == "IN"):
-                newInformedBook(self.request, instance, book)
+                inform_book(self.request, instance, book)
             elif (book.status == "IN") and (instance.status == "PA"):
                 # TODO: this should not be possible here.
                 messages.add_message(
@@ -259,7 +258,7 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 class BookCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
     model = Book
     template_name = "booking/booking_create.html"
-    form_class = CreateBookForm
+    form_class = BookCreateForm
 
     def get_success_url(self, **kwargs):
         success_url = build_url(
@@ -331,7 +330,7 @@ def attendance_daily_view(request):
                     attendance_id = values_split[0]
                     check_pos = values_split[1]
                     # Make the actual Switch
-                    updateSwitchCheckAttendance(attendance_id, int(check_pos))
+                    switch_check_attendance(attendance_id, int(check_pos))
                     # Send a message
                     messages.add_message(
                         request, messages.SUCCESS, _("Updated attendance id: " + str(attendance_id)),
@@ -377,7 +376,7 @@ def attendance_daily_view(request):
 class AttendanceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Attendance
     template_name = "booking/attendance_update.html"
-    form_class = UpdateAttendanceForm
+    form_class = AttendanceUpdateForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -500,7 +499,7 @@ def quotationlistview(request):
 class QuotationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Quotation
     template_name = "booking/quotation_update.html"
-    form_class = CreateQuotationForm
+    form_class = QuotationCreateForm
 
     def dispatch(self, request, *args, **kwargs):
         # TODO: Not sure if this makes two queries
@@ -557,7 +556,7 @@ class QuotationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 @user_passes_test(staff_check)
 def quotationcreateview(request):
     template = "booking/quotation_filter.html"
-    form = CreateQuotationForm
+    form = QuotationCreateForm
 
     # Filters
     book_filter = QuotationBookFilter(
@@ -706,7 +705,7 @@ def quotationcreateview(request):
 def quotationlockview(request, pk):
     template = "booking/quotation_lock.html"
     queryset = Quotation.objects.get(pk=pk)
-    form = LockQuotationForm(request.POST or None, instance=queryset)
+    form = QuotationLockForm(request.POST or None, instance=queryset)
 
     if request.method == "POST":
         if form.is_valid():
