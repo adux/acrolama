@@ -36,7 +36,7 @@ class Avatar(models.Model):
         outputIoStream = BytesIO()
         imageTemproary.thumbnail((650, 650), PIL.Image.ANTIALIAS)
         imageTemproary.save(
-            outputIoStream, format="WEBP", quality=75, subsampling=0, optimize=True,
+            outputIoStream, format="WEBP", quality=90, subsampling=0, optimize=True,
         )
         outputIoStream.seek(0)
         image = InMemoryUploadedFile(
