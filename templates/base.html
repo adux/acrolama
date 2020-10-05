@@ -10,8 +10,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         {% block meta_og %}{% endblock %}
         <link rel="shortcut icon" href="{% static "favicon.ico" %}" />
-        {% include "snippets/css.html" %}
         {% block css %}{% endblock %}
+        {% include "snippets/css.html" %}
         {% analytical_head_bottom %}
     </head>
     <body>

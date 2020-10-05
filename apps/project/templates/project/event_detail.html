@@ -2,7 +2,12 @@
 {% load widget_tweaks %}{% load static compress %}{% load tinycontent_tags %}
 {% block head_title %}{{block.super}}{{ object.get_discipline_display }}{{ object.level }}{{ object.get_category_display }}: {{object.title}}{% endblock%}
 {% block css %}
-        <link rel="stylesheet" type="text/css" href="{% static "booking/bootstrap-datepicker3.standalone.min.css" %}?v=15" media="screen" />
+        {% compress css file event %}
+            <link rel="stylesheet" type="text/css" href="{% static "booking/bootstrap-datepicker3.standalone.min.css" %}?v=15" media="screen" />
+            <link rel="stylesheet" type="text/css" href="{% static "home/css/popform.css" %}?v=15" media="screen" />
+            <link rel="stylesheet" type="text/css" href="{% static "home/css/event.css" %}?v=15" media="screen" />
+            <link rel="stylesheet" type="text/css" href="{% static "home/css/forms.css" %}?v=15" media="screen" />
+        {% endcompress %}
 {% endblock %}
 {% block js %}
         {% compress js file event %}
@@ -21,7 +26,7 @@
 {% block content %}
 {% include 'snippets/nav.html'%}
 <div class="single-portfolio">
-    <article id="portfolio-2" class=" section portfolio">
+    <article id="portfolio-2" class="section portfolio">
         <div class="center-relative content-1170">
             <div class="entry-content">
                 <div class="content-wrap relative">

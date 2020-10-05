@@ -1,4 +1,10 @@
 {% extends 'base.html' %}
+{% load static compress %}
+{% block css %}
+        {% compress css file info %}
+            <link rel="stylesheet" type="text/css" href="{% static "home/css/info.css" %}?v=15" media="screen" />
+        {% endcompress %}
+{% endblock %}
 {% block content %}
 {% include 'snippets/nav.html' %}
 <div id="infos" class="infos">

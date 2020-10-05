@@ -1,6 +1,12 @@
-{% extends 'base.html' %}i
+{% extends 'base.html' %}
+{% load static compress %}
+{% block css %}
+        {% compress css file faq %}
+            <link rel="stylesheet" type="text/css" href="{% static "home/css/faq.css" %}?v=15" media="screen" />
+        {% endcompress %}
+{% endblock %}
 {% block head_title %}{{block.super}}FAQ{% endblock%}
-{% load static %}{% block content %}{% include 'snippets/nav.html' %}
+{% block content %}{% include 'snippets/nav.html' %}
 <!-- Service -->
 <div id="faq" class="section faq">
     <div class="block content-1170 center-relative">
