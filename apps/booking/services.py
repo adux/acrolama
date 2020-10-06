@@ -308,7 +308,7 @@ def create_next_book(book, status):
     return obj
 
 
-def create_quotation(form, qs):
+def create_quotation(form, count):
 
     obj = Quotation()  # gets new object
     obj.event = form.cleaned_data["event"]
@@ -318,7 +318,7 @@ def create_quotation(form, qs):
     obj.related_rent = form.cleaned_data["related_rent"]
 
     # Revenue
-    obj.total_attendees = qs.filter(status="PA").count()
+    obj.total_attendees = count
     obj.direct_revenue = form.cleaned_data["direct_revenue"]
 
     # Profit

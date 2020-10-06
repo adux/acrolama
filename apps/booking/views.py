@@ -60,7 +60,6 @@ from booking.services import (
     get_timelocation,
     inform_book,
     update_lastbook_abocounter,
-    update_book_status,
     switch_check_attendance,
 )
 
@@ -639,8 +638,6 @@ def quotationcreateview(request):
                     if not booksparticipants:
                         direct_revenue = Decimal(0)
                     else:
-                        # direct_revenue = booksparticipants.aggregate(Sum("price__price_chf"))
-                        # direct_revenue = direct_revenue["price__price_chf__sum"]
                         direct_revenue = summe
 
                     # Rent
@@ -691,7 +688,8 @@ def quotationcreateview(request):
     if request.method == "POST":
         form = form(request.POST)
         if form.is_valid():
-            create_quotation(form, book_filter)
+            participants = book_filter.qs.filter(status="PA").count()
+            create_quotation(form, count=participants)
 
     # Context
     context = {
