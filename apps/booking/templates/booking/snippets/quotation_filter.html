@@ -29,6 +29,7 @@
 <table class="table table-hover table-borderless">
     <thead>
         <th>#</th>
+        <th>Date</th>
         <th>Event</th>
         <th>Teachers</th>
         <th>Time Location</th>
@@ -42,6 +43,7 @@
         {% for obj in page_obj %}
         <tr>
             <td>{{obj.pk}}</td>
+            <td>{{obj.event.event_startdate|date:'d.m.y'}}</td>
             <td>{{obj.event.title}}</td>
             <td>{{obj.get_teachers}}</td>
             <td>{{obj.time_location}}</td>
