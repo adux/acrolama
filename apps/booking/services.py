@@ -2,7 +2,7 @@ import datetime
 from django.contrib import messages
 from django.utils.translation import gettext as _
 
-from booking.models import Book, Attendance, AboCounter, BOOKINGSTATUS
+from booking.models import Book, Attendance, AboCounter, BOOKINGSTATUS, Quotation
 from project.models import Event, TimeLocation
 from accounting.models import Invoice
 
@@ -306,3 +306,43 @@ def create_next_book(book, status):
         obj.times.add(x)
 
     return obj
+
+
+def create_quotation(form, qs):
+
+    obj = Quotation()  # gets new object
+    obj.event = form.cleaned_data["event"]
+    obj.time_location = form.cleaned_data["time_location"]
+
+    # Costs
+    obj.related_rent = form.cleaned_data["related_rent"]
+
+    # Revenue
+    obj.total_attendees = qs.filter(status="PA").count()
+    obj.direct_revenue = form.cleaned_data["direct_revenue"]
+
+    # Profit
+    obj.fix_profit = form.cleaned_data["fix_profit"]
+    obj.admin_profit = form.cleaned_data["admin_profit"]
+    obj.partner_profit = form.cleaned_data["partner_profit"]
+
+    obj.save()
+
+    # teachers = form.cleaned_data["teachers"]
+    # for x in teachers:
+    #     teachersList = []
+    #     teachersList.append(str(x.id))
+    # # NOTE: I've done this with if one by one, turns out add can accept
+    # # any number of arguemnts. to get a list use the *
+    # obj.teachers.add(*teachers)
+
+    direct_costs = form.cleaned_data["direct_costs"]
+    dc = []
+
+    for descriptor in direct_costs:
+        descriptor.split(" ")
+        dc.append(descriptor[0])
+
+    obj.direct_costs.add(*dc)
+
+    obj.save()

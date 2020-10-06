@@ -33,7 +33,8 @@ def herd_check(user):
 def build_url(*args, **kwargs):
     get = kwargs.pop("get", {})
     pk = kwargs.pop("pk", {})
-    # TODO: Go over this
+    # args has the url name for reverse
+    # pk has to be an mapping
     url = reverse(*args, kwargs=pk)
     if get:
         url += "?" + urlencode(get)

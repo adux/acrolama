@@ -31,12 +31,21 @@ class AttendanceUpdateForm(forms.ModelForm):
 
 
 class BookUpdateForm(forms.ModelForm):
-    status = forms.ChoiceField(choices=[(k, v) for k, v in BOOKINGSTATUS])
 
     class Meta:
         model = Book
         fields = ["user", "event", "status", "times", "comment", "note"]
         widgets = {"times": M2MSelect(attrs={})}
+
+    def clean(self):
+        cleaned_data = super(BookUpdateForm, self).clean()
+        new_status = cleaned_data.get('status')
+
+        if (self.instance.status == "IN") and (new_status == "PA"):
+            # self.add_error('status', 'You cannot change Informed to Patricipant')
+            raise forms.ValidationError("Error: Cannot update Informed to Participant")
+
+        return cleaned_data
 
 
 class BookDuoUpdateForm(forms.ModelForm):
