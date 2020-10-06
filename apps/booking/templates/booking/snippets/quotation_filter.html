@@ -34,6 +34,9 @@
         <th>Time Location</th>
         <th>Update</th>
         <th>Lock</th>
+        <th>Fix</th>
+        <th>Var</th>
+        <th>Teacher</th>
     </thead>
     <tbody>
         {% for obj in page_obj %}
@@ -44,6 +47,9 @@
             <td>{{obj.time_location}}</td>
             <td><a href="{% url 'quotation_update' obj.pk %}?{% pass_get_filter %}"><i class="fas fa-sync-alt"></i></a></td>
             <td><a href="{% url 'quotation_lock' obj.pk %}?{% pass_get_filter %}">{% if obj.locked == True %}<span class="text-success">{% else %}<span class="text-danger">{% endif %}<i class="fa fa-lock"></i></span></a></td>
+            <td>{{obj.fix_profit}}</td>
+            <td>{{obj.admin_profit}}</td>
+            <td>{{obj.partner_profit}}</td>
         </tr>
         {% endfor%}
     </tbody>

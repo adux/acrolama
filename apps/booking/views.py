@@ -514,6 +514,7 @@ def quotationlistview(request):
             Quotation.objects.all()
             .select_related("event", "time_location__location")
             .prefetch_related("teachers", "direct_costs", "time_location__time_options")
+            .order_by("-id")
         ),
     )
 
@@ -652,8 +653,6 @@ def quotationcreateview(request):
                     # Select Initial
 
                     # Teachers
-                    # TODO:Should every event have teachers ?
-                    # TODO: Should they be preselected
                     try:
                         teachers = [t.id for t in event.teachers.all()]
                     except AttributeError:

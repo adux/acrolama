@@ -308,7 +308,7 @@ def create_next_book(book, status):
     return obj
 
 
-def create_quotation(form, count):
+def create_quotation(form, count, teachers):
 
     obj = Quotation()  # gets new object
     obj.event = form.cleaned_data["event"]
@@ -328,13 +328,8 @@ def create_quotation(form, count):
 
     obj.save()
 
-    # teachers = form.cleaned_data["teachers"]
-    # for x in teachers:
-    #     teachersList = []
-    #     teachersList.append(str(x.id))
-    # # NOTE: I've done this with if one by one, turns out add can accept
-    # # any number of arguemnts. to get a list use the *
-    # obj.teachers.add(*teachers)
+    teachers = form.cleaned_data["teachers"]
+    obj.teachers.add(*teachers)
 
     direct_costs = form.cleaned_data["direct_costs"]
     dc = []
