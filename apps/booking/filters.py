@@ -131,6 +131,9 @@ class QuotationFilter(django_filters.FilterSet):
     teachers = django_filters.ModelMultipleChoiceFilter(
         queryset=User.objects.filter(is_teacher=True), widget=M2MSelect()
     )
+    time_location = django_filters.ModelChoiceFilter(
+        queryset=TimeLocation.objects.all(), required=True, widget=autocomplete.ModelSelect2(url="tl-autocomplete")
+    )
 
     class Meta:
         model = Quotation

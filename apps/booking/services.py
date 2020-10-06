@@ -308,7 +308,7 @@ def create_next_book(book, status):
     return obj
 
 
-def create_quotation(form, count, teachers):
+def create_quotation(form, count):
 
     obj = Quotation()  # gets new object
     obj.event = form.cleaned_data["event"]

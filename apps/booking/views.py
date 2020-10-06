@@ -689,6 +689,7 @@ def quotationcreateview(request):
         if form.is_valid():
             participants = book_filter.qs.filter(status="PA").count()
             create_quotation(form, count=participants)
+            return redirect('quotation_list')
 
     # Context
     context = {
