@@ -43,7 +43,7 @@
         {% for obj in page_obj %}
         <tr>
             <td>{{obj.pk}}</td>
-            <td>{{obj.event.event_startdate|date:'d.m.y'}}</td>
+            <td>{{obj.event.event_startdate|date:'M.d.y'}}</td>
             <td>{{obj.event.title}}</td>
             <td>{{obj.get_teachers}}</td>
             <td>{{obj.time_location}}</td>
