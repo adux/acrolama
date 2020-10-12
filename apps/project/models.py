@@ -308,7 +308,6 @@ class Event(models.Model):
             else:
                 return self.title
 
-    @cached_property
     def get_absolute_url(self):
         if self.category == "CY":
             return reverse("class", args=[str(self.slug)])
