@@ -33,6 +33,7 @@ django-filter==2.4.0
 django-compressor==2.4
 django-htmlmin==0.11.0
 django-analytical==2.6.0
+mailchimp3==3.0.14
 
 -- AWZ
 boto3==1.14.2
