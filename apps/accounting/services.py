@@ -15,3 +15,10 @@ def get_invoice(invoice):
             return
 
     return book
+
+
+def check_is_book_payed(bookid):
+    if Invoice.objects.get(book=bookid).status == "PY":
+        return True
+    else:
+        return False

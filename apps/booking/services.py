@@ -176,11 +176,16 @@ def get_count_abocounter_of_book(bookid):
     return AboCounter.objects.get(data__last_book=str(bookid)).data['count']
 
 
-def inform_book(request, instance, book):
-    # If Abo Create Counter
+def get_first_book_abocounter(bookid):
+    counter = AboCounter.objects.get(data__last_book=str(bookid))
+    return counter.data['first_book']
 
+
+def inform_book(request, instance, book):
+
+    # If the Price Option is an Single Cycle Abo
     if book.price.cycles < 2:
-        # Invoice
+        # Create the Invoice
         try:
             create_invoice_from_book(instance)
         except Exception as e:
@@ -190,7 +195,7 @@ def inform_book(request, instance, book):
         else:
             messages.add_message(request, messages.SUCCESS, _("Invoice Created"))
 
-        # Send New Book Email
+        # Send the Informed Email
         if book.informed_at is None:
             try:
                 booking.utils.email_sender(instance, "Informed")
@@ -202,14 +207,26 @@ def inform_book(request, instance, book):
         else:
             messages.add_message(request, messages.INFO, _("Email sent: " + str(book.informed_at)))
 
+        # Create the attendance list
+        try:
+            create_attendance_from_book(instance)
+        except Exception as e:
+            messages.add_message(
+                request, messages.WARNING, _("Error creating Attendance: " + str(e)),
+            )
+        else:
+            messages.add_message(request, messages.SUCCESS, _("Attendance created"))
+
+    # If its a Multi Cycle Abo
     else:
 
+        # Check if it has doesn't have a counter
         if not check_abocounter(book.id):
             # Create the Counter for Abos
             create_abocounter_from_book(book)
             reduce_abocounter(book.id)
 
-            # Invoice
+            # Create the Invoice
             try:
                 create_invoice_from_book(instance)
             except Exception as e:
@@ -231,10 +248,13 @@ def inform_book(request, instance, book):
             else:
                 messages.add_message(request, messages.INFO, _("Email sent: " + str(book.informed_at)))
 
+        # If it has a counter
         else:
+
+            # Reduce the Counter
             reduce_abocounter(book.id)
 
-            # Send New Book Email
+            # Send a Reminder
             if book.informed_at is None:
                 try:
                     booking.utils.email_sender(instance, "Reminder")
@@ -246,14 +266,26 @@ def inform_book(request, instance, book):
             else:
                 messages.add_message(request, messages.INFO, _("Email sent: " + str(book.informed_at)))
 
-    try:
-        create_attendance_from_book(instance)
-    except Exception as e:
-        messages.add_message(
-            request, messages.WARNING, _("Error creating Attendance: " + str(e)),
-        )
-    else:
-        messages.add_message(request, messages.SUCCESS, _("Attendance created"))
+            # Create the attendance list
+            try:
+                create_attendance_from_book(instance)
+            except Exception as e:
+                messages.add_message(
+                    request, messages.WARNING, _("Error creating Attendance: " + str(e)),
+                )
+            else:
+                messages.add_message(request, messages.SUCCESS, _("Attendance created"))
+
+            # If the Invoice of the First Book is payed then set as Participant
+
+            first_book_id = get_first_book_abocounter(book.id)
+            invoice_first_book = Invoice.objects.get(book=first_book_id)
+            if invoice_first_book.status == "PY":
+                update_book_status(book.id, "PA")
+            else:
+                messages.add_message(
+                    request, messages.WARNING, _("First Booking not payed")
+                )
 
 
 def create_next_book(book, status):

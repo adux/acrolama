@@ -254,8 +254,6 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         if "update" in self.request.POST:
             if (book.status in ("PE", "WL")) and (instance.status == "IN"):
                 inform_book(self.request, instance, book)
-                if book.price.cycles > 1:
-                    instance.status = "PA"
 
         return super().form_valid(form)
 

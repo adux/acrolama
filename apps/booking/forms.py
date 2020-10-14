@@ -16,6 +16,10 @@ from booking.models import (
     Quotation
 )
 
+#Services
+
+import accounting.services
+
 # Widgets
 from booking.widgets import DynamicArrayWidget, M2MSelect
 
@@ -41,10 +45,10 @@ class BookUpdateForm(forms.ModelForm):
         cleaned_data = super(BookUpdateForm, self).clean()
         new_status = cleaned_data.get('status')
 
-        if (self.instance.status == "IN") and (new_status == "PA"):
-            # self.add_error('status', 'You cannot change Informed to Patricipant')
-            raise forms.ValidationError("Error: Cannot update Informed to Participant")
-
+        if (self.instance.status in ("IN", "PE", "WL", "CA", "SW")) and (new_status == "PA"):
+            # If invoice is not payed raise Error
+            if not accounting.services.check_is_book_payed(self.instance.id):
+                raise forms.ValidationError("Error: Cannot update to Participant. Invoice not payed.")
         return cleaned_data
 
 
