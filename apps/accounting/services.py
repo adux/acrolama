@@ -1,5 +1,7 @@
 from accounting.models import Invoice
 
+import booking.services
+
 
 def get_invoice(invoice):
     # If its str or int treat it as Invoice Obj
@@ -18,7 +20,13 @@ def get_invoice(invoice):
 
 
 def check_is_book_payed(bookid):
-    if Invoice.objects.get(book=bookid).status == "PY":
-        return True
+    try:
+        if Invoice.objects.get(book=bookid).status == "PY":
+            return True
+    except Invoice.DoesNotExist:
+        # Asume it has an Abocounter
+        first_book_id = booking.services.get_first_book_abocounter(bookid)
+        if Invoice.objects.get(book=first_book_id).status == "PY":
+            return True
     else:
         return False

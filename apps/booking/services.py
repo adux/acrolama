@@ -250,7 +250,6 @@ def inform_book(request, instance, book):
 
         # If it has a counter
         else:
-
             # Reduce the Counter
             reduce_abocounter(book.id)
 
