@@ -30,17 +30,17 @@ class EventAdmin(admin.ModelAdmin):
     list_display = [
         "title",
         "event_startdate",
-        "event_enddate",
-        "cycle",
+        "project",
         "category",
+        "cycle",
         "level",
-        "slug",
         "published",
         "registration",
+        "slug",
     ]
     list_select_related = ["project", "policy", "level", "discipline"]
 
-    list_filter = ["category", "level"]
+    list_filter = ["project", "category", "level"]
     search_fields = ["title", "event_startdate", "event_enddate"]
     save_as = True
 
