@@ -35,24 +35,28 @@ def get_hash_email(email):
 
 def get_all_mc_email_set():
     mc_members = client.lists.members.all(ACROLAMA_LIST, get_all=True, fields="members.email_address")['members']
-    return set(e['email_address'] for e in mc_members)
+    return set(dic['email_address'] for dic in mc_members)
 
 
-def get_mc_email_tag(email):
-    tags = client.lists.members.tags.all(list_id=ACROLAMA_LIST, subscriber_hash=get_hash_email(email))
-    return tags
+def get_mc_email_tag_set(email):
+    tags = client.lists.members.tags.all(list_id=ACROLAMA_LIST, subscriber_hash=get_hash_email(email))['tags']
+    return set(dic['name'] for dic in tags)
 
 
 def tags_from_email_set(email):
     bookings_user = Book.objects.filter(user__email=email)
     tags = set()
     for book in bookings_user:
-        if book.event.category in ("CY", "WS", "CA"):
-            tags.add(book.event.level.get_name_display())
+        if book.event.category in ("CY", "CA", "WS"):
+            tags.add(book.event.get_category_display() + ' ' + book.event.level.get_name_display())
         elif book.event.category == "FT":
             tags.add(book.event.title)
 
     return tags
+
+
+# def update_missing_tag(email):
+#     get_mc_email_tag
 
 
 def check_email_in_mc(user):

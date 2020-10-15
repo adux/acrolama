@@ -10,6 +10,7 @@ from django.template.loader import render_to_string
 
 from project.models import Irregularity
 
+import accounting.utils
 import booking.services
 
 
@@ -53,10 +54,6 @@ def make_regularday_dates_list(startdate, enddate, regularday):
     return dateList
 
 
-def space_out(string, length):
-    return " ".join(string[i: i + length] for i in range(0, len(string), length))
-
-
 def email_sender(instance, flag):
     """
     Signals could give Error cause you can call them from wherever.
@@ -76,22 +73,16 @@ def email_sender(instance, flag):
         times = instance.times.all()
         location = booking.services.get_location_from_timeoption(times, instance.event)
 
-        referenznum = space_out(
-            str(instance.user.pk)
-            + "0"
-            + str(instance.event.pk)
-            + "0"
-            + str(instance.pk)
-            + "0"
-            + str(instance.invoice.pk),
-            4,
-        )
+        # Referenz code
+        referenzstr = '{}00{}'.format(instance.user.pk, instance.invoice.pk)
+
+        referenzstr = accounting.utils.finalize_referenz(referenzstr)
 
         p = {
             "event": instance.event,
             "user": instance.user,
             "price": instance.price,
-            "referenznum": referenznum,
+            "referenznum": referenzstr,
             "pay_till": instance.invoice.pay_till,
             "times": times,
             "location": location,

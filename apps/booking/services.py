@@ -195,18 +195,6 @@ def inform_book(request, instance, book):
         else:
             messages.add_message(request, messages.SUCCESS, _("Invoice Created"))
 
-        # Send the Informed Email
-        if book.informed_at is None:
-            try:
-                booking.utils.email_sender(instance, "Informed")
-            except Exception as e:
-                messages.add_message(request, messages.ERROR, _("Error Email: " + str(e)))
-            else:
-                messages.add_message(request, messages.SUCCESS, _("Informed email sent."))
-                instance.informed_at = datetime.datetime.now()
-        else:
-            messages.add_message(request, messages.INFO, _("Email sent: " + str(book.informed_at)))
-
         # Create the attendance list
         try:
             create_attendance_from_book(instance)
@@ -216,6 +204,20 @@ def inform_book(request, instance, book):
             )
         else:
             messages.add_message(request, messages.SUCCESS, _("Attendance created"))
+
+        # Send the Informed Email
+        if book.informed_at is None:
+            try:
+                booking.utils.email_sender(instance, "Informed")
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, _("Error Email: " + str(e)))
+            else:
+                messages.add_message(request, messages.SUCCESS, _("Informed email sent."))
+                instance.informed_at = datetime.datetime.now()
+
+        # If the email was already sent
+        else:
+            messages.add_message(request, messages.INFO, _("Email sent: " + str(book.informed_at)))
 
     # If its a Multi Cycle Abo
     else:
@@ -235,6 +237,16 @@ def inform_book(request, instance, book):
                 )
             else:
                 messages.add_message(request, messages.SUCCESS, _("Invoice Created"))
+
+            # Create the attendance list
+            try:
+                create_attendance_from_book(instance)
+            except Exception as e:
+                messages.add_message(
+                    request, messages.WARNING, _("Error creating Attendance: " + str(e)),
+                )
+            else:
+                messages.add_message(request, messages.SUCCESS, _("Attendance created"))
 
             # Send New Book Email
             if book.informed_at is None:
