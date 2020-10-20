@@ -29,9 +29,8 @@
             <hr>
             <table class="table table-hover table-borderless">
                 <thead>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Option</th>
+                    <th>Name, #</th>
+                    <th>Option, Chf</th>
                     <th>Book</th>
                     <th>Invoice</th>
                     <th>Pay Till</th>
@@ -41,9 +40,8 @@
                 <tbody>
                     {% for obj in filtered_list %}
                     <tr>
-                        <td>{{obj.user.id}}</td>
-                        <td>{{obj.user.get_full_name}}</td>
-                        <td>{{obj.price.name}}</td>
+                        <td>{{obj.user.get_full_name}}, {{obj.user.id}}</td>
+                        <td>{{obj.price.name}}, {{obj.price.price_chf}}</td>
                         <td>{{obj.get_status_display}}</td>
                         <td>{{obj.invoice.get_status_display}}</td>
                         <td>{{obj.invoice.pay_till|date:'d.m'}}</td>
@@ -74,7 +72,7 @@
         <hr>
 
         <div class="card card-body bg-light">
-            <h4>Only <b>real revenue</b> should be set, no "expected" one.</h4>
+            <h4><b>Only real revenue</b> should be set, <b>no "expected revenue"</b>.</h4>
             <hr>
             <h4>Revenue</h4>
             <div class="row">
@@ -96,12 +94,12 @@
 <script type="text/javascript">
     window.onload = function () {
 
-        var dc = document.getElementsByName('direct_costs')[0];
-        var old_dc = readSel(dc);
+        var direct_costs = document.getElementsByName('direct_costs')[0];
+        var old_direct_costs = readSel(direct_costs);
 
-        function readSel(dc) {
+        function readSel(direct_costs) {
             var result = [];
-            var options = dc && dc.options;
+            var options = direct_costs && direct_costs.options;
             var opt;
 
             for (var i=0, iLen=options.length; i<iLen; i++) {
@@ -111,16 +109,16 @@
                 }
             }
 
-            var sum = 0;
+            var direct_costs_sum = 0;
 
             for (var i=0, rLen=result.length; i < rLen; i++) {
                 opt = result[i];
                 opt = opt.split(' ');
                 opt = parseInt(opt[1]);
-                sum += opt;
+                direct_costs_sum += opt;
             }
 
-            return sum
+            return direct_costs_sum
         }
 
         document.getElementsByName("related_rent")[0].addEventListener('change', doCorrect, false);
@@ -129,29 +127,29 @@
 
         function doCorrect() {
             //Old Values
-            var ap = parseFloat(document.getElementsByName('admin_profit')[0].defaultValue);
-            var tp = parseFloat(document.getElementsByName('partner_profit')[0].defaultValue);
-            var rent = parseFloat(document.getElementsByName('related_rent')[0].defaultValue);
-            var fix = parseFloat(document.getElementsByName('fix_profit')[0].defaultValue);
-            var dc = old_dc;
+            var admin_profit = parseFloat(document.getElementsByName("admin_profit")[0].defaultValue);
+            var partner_profit = parseFloat(document.getElementsByName("partner_profit")[0].defaultValue);
+            var rent = parseFloat(document.getElementsByName("related_rent")[0].defaultValue);
+            var fix = parseFloat(document.getElementsByName("fix_profit")[0].defaultValue);
+            var direct_costs = old_direct_costs;
 
             // New Values
-            var new_rent = parseFloat(document.getElementsByName('related_rent')[0].value);
-            var new_fix = parseFloat(document.getElementsByName('fix_profit')[0].value);
-            var new_dc = readSel(document.getElementsByName('direct_costs')[0]);
+            var new_rent = parseFloat(document.getElementsByName("related_rent")[0].value);
+            var new_fix = parseFloat(document.getElementsByName("fix_profit")[0].value);
+            var new_direct_costs = readSel(document.getElementsByName("direct_costs")[0]);
 
             // Differences
             var diff_rent = new_rent - rent;
             var diff_fix = new_fix - fix;
-            var diff_dc = new_dc - dc;
-            var abs_diff = diff_fix + diff_rent + diff_dc;
+            var diff_direct_costs = new_direct_costs - direct_costs;
+            var total_diff = diff_fix + diff_rent + diff_direct_costs;
 
             // Proportional
-            var new_ap = ap - parseFloat(0.25 * abs_diff.toFixed(2));
-            var new_tp = tp - parseFloat(0.75 * abs_diff.toFixed(2));
+            var new_admin_profit = admin_profit - parseFloat(0.25 * total_diff.toFixed(2));
+            var new_partner_profit = partner_profit - parseFloat(0.75 * total_diff.toFixed(2));
 
-            document.getElementsByName('admin_profit')[0].value = new_ap.toFixed(2);
-            document.getElementsByName('partner_profit')[0].value = new_tp.toFixed(2);
+            document.getElementsByName('admin_profit')[0].value = new_admin_profit.toFixed(2);
+            document.getElementsByName('partner_profit')[0].value = new_partner_profit.toFixed(2);
 
         }
     }

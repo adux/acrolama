@@ -1,4 +1,16 @@
 def finalize_referenz(referenzstr):
+    """
+    Calculates the checksum according to Luhn Algorithm but recursiv
+
+    Also know as the modulo 10 rekursiv algorithm.
+    It is used by swiss postfinance for cacluating checksums for example in ESR
+
+
+    @see https://www.postfinance.ch/content/dam/pfch/doc/cust/download/efin_recdescr_man_de.pdf
+    @see https://en.wikipedia.org/wiki/Luhn_algorithm
+    @see http://www.hosang.ch/modulo10.aspx
+    """
+
     check_sum = 0
 
     check_offset = len(referenzstr) % 2

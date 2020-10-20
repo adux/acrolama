@@ -550,31 +550,44 @@ class QuotationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
         return super(QuotationUpdateView, self).dispatch(request, *args, **kwargs)
 
-    def get_checked_bookings(self):
-        tl = TimeLocation.objects.get(id=self.object.time_location.id)
-        to_ids = [to.id for to in tl.time_options.all()]
+    def get_quotation_bookings(self):
+        """
+        Gets all the booings with same Event, Location and Time Option
+        """
+        time_location_of_quotation = TimeLocation.objects.get(id=self.object.time_location.id)
+        time_options_id_list = [to.id for to in time_location_of_quotation.time_options.all()]
         filtered_list = Book.objects.filter(
             event=self.object.event.id,
             event__time_locations=self.object.time_location.id,
-            times__in=to_ids
+            times__in=time_options_id_list
         ).select_related("user", "price", "attendance")
         return filtered_list
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['filtered_list'] = self.get_checked_bookings()
+        context['filtered_list'] = self.get_quotation_bookings()
         return context
 
     def get_initial(self):
         # Revenue
-        filtered_list = self.get_checked_bookings().filter(status='PA')
-        booksparticipants = filtered_list
+        books_participants = self.get_quotation_bookings().filter(status="PA")
 
-        if not booksparticipants:
+        summe = Decimal(0)
+
+        # TODO: Apply condition in DataBase and aggregate the sum there
+        #     direct_revenue = books_participants.aggregate(Sum("price__price_chf"))
+        #     direct_revenue = direct_revenue["price__price_chf__sum"]
+
+        for book in books_participants:
+            if book.price.cycles < 2:
+                summe += book.price.price_chf
+            elif book.price.cycles > 1:
+                summe += (book.price.price_chf/book.price.cycles)
+
+        if not books_participants:
             direct_revenue = Decimal(0)
         else:
-            direct_revenue = booksparticipants.aggregate(Sum("price__price_chf"))
-            direct_revenue = direct_revenue["price__price_chf__sum"]
+            direct_revenue = summe
 
         return {"direct_revenue": direct_revenue}
 
@@ -609,13 +622,16 @@ def quotationcreateview(request):
         # Want to catch the different errors so split
         if "event" and "event__time_locations" in request.GET:
             if request.GET.get("event") != "" and request.GET.get("event__time_locations") != "":
-                eventid = str(request.GET.get("event"))
-                timelocationid = str(request.GET.get("event__time_locations"))
-                event = get_event(eventid)
-                tls = event.time_locations.all()
-                tl = get_timelocation(timelocationid)
+
+                event_id = str(request.GET.get("event"))
+                filter_time_location_id = str(request.GET.get("event__time_locations"))
+
+                event = get_event(event_id)
+                event_time_locations = event.time_locations.all()
+                filter_time_location = get_timelocation(filter_time_location_id)
+
                 # If the filtered TL is in the TLS of the Event
-                if tl in tls:
+                if filter_time_location in event_time_locations:
                     # Get other template
                     template = "booking/quotation_create.html"
 
@@ -626,15 +642,16 @@ def quotationcreateview(request):
                     # Variables
 
                     # Revenue
-                    booksparticipants = book_filter.qs.filter(status="PA").select_related("event__level")
+                    books_participants = book_filter.qs.filter(status="PA").select_related("event__level")
                     summe = Decimal(0)
-                    for b in booksparticipants:
-                        if b.price.cycles <= 1:
-                            summe += b.price.price_chf
-                        elif b.price.cycles > 1:
-                            summe += (b.price.price_chf/b.price.cycles)
 
-                    if not booksparticipants:
+                    for book in books_participants:
+                        if book.price.cycles < 2:
+                            summe += book.price.price_chf
+                        elif book.price.cycles > 1:
+                            summe += (book.price.price_chf/book.price.cycles)
+
+                    if not books_participants:
                         direct_revenue = Decimal(0)
                     else:
                         direct_revenue = summe
@@ -658,8 +675,8 @@ def quotationcreateview(request):
 
                     form = form(
                         initial={
-                            "event": eventid,
-                            "time_location": timelocationid,
+                            "event": event_id,
+                            "time_location": filter_time_location_id,
                             "teachers": teachers,
                             "related_rent": related_rent,
                             "direct_revenue": direct_revenue,
@@ -672,7 +689,9 @@ def quotationcreateview(request):
                     )
                 else:
                     messages.add_message(
-                        request, messages.WARNING, _("Event " + str(event) + " doesn't have Time Location " + str(tl)),
+                        request, messages.WARNING, _(
+                            "Event " + str(event) + " doesn't have Time Location " + str(filter_time_location_id)
+                        ),
                     )
             else:
                 messages.add_message(
