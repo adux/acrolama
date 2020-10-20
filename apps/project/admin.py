@@ -76,6 +76,17 @@ class TimeLocationAdmin(admin.ModelAdmin):
     list_select_related = ["location"]
 
 
+class TimeOptionadmin(admin.ModelAdmin):
+    list_display = [
+        "name",
+        "regular_day",
+        "open_starttime",
+        "class_starttime",
+        "class_endtime",
+        "open_endtime",
+    ]
+
+
 admin.site.register(Event, EventAdmin)
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(PriceOption, PriceOptionAdmin)
@@ -85,4 +96,4 @@ admin.site.register(Irregularity)
 admin.site.register(Level)
 admin.site.register(Location)
 admin.site.register(Policy)
-admin.site.register(TimeOption)
+admin.site.register(TimeOption, TimeOptionadmin)
