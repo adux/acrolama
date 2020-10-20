@@ -569,9 +569,12 @@ class QuotationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         return context
 
     def get_initial(self):
+        """
+        Respect the Previous Fix and Rent but update initial Profits
+        Manual change of profit should just happen in the Lock view
+        """
         # Revenue
         books_participants = self.get_quotation_bookings().filter(status="PA")
-
         summe = Decimal(0)
 
         # TODO: Apply condition in DataBase and aggregate the sum there
@@ -589,7 +592,22 @@ class QuotationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         else:
             direct_revenue = summe
 
-        return {"direct_revenue": direct_revenue}
+        # Recalculate Profits
+        ADMIN_RATE = Decimal(0.25)
+        PARTNER_RATE = Decimal(0.75)
+
+        # Calculate Profits
+        profit = direct_revenue - self.object.related_rent - self.object.fix_profit
+        admin_profit = round(profit * ADMIN_RATE, 2)
+        partner_profit = round(profit * PARTNER_RATE, 2)
+
+        initial = {
+            "direct_revenue": direct_revenue,
+            "admin_profit": admin_profit,
+            "partner_profit": partner_profit
+        }
+
+        return initial
 
     def get_success_url(self, **kwargs):
         success_url = build_url("quotation_list")
@@ -660,7 +678,7 @@ def quotationcreateview(request):
                     # TODO: Get rent based on place
                     related_rent = Decimal(240.00)
 
-                    # Calc
+                    # Calculate Profits
                     profit = direct_revenue - related_rent - FIX_PROFIT
                     admin_profit = round(profit * ADMIN_RATE, 2)
                     partner_profit = round(profit * PARTNER_RATE, 2)
