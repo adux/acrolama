@@ -364,6 +364,10 @@ def attendance_daily_view(request):
         request.GET,
         queryset=(
             Attendance.objects.filter(book__event__teachers=request.user)
+            .exclude(book__status="CA")
+            .exclude(book__status="SW")
+            .exclude(book__invoice__status="CA")
+            .exclude(book__invoice__status="ST")
             .select_related("book", "book__user", "book__event", "book__price")
             .prefetch_related("book__times")
         ),
