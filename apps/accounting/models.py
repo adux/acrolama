@@ -1,4 +1,6 @@
+import accounting.utils
 from django.db import models
+from django.db.models.signals import pre_save
 
 
 INVOICESTATUS = [
@@ -54,3 +56,12 @@ class Invoice(models.Model):
             return "%s - %s" % (self.id, self.book)
         else:
             return "%s - %s" % (self.id, self.partner)
+
+
+def invoice_pre_save_referenz(sender, instance, *args, **kwargs):
+    if not instance.pk:
+        referenzstr = '{}00{}'.format(instance.book.user.pk, instance.book.pk)
+        instance.referral_code = accounting.utils.finalize_referenz(referenzstr)
+
+
+pre_save.connect(invoice_pre_save_referenz, sender=Invoice)

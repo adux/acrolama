@@ -103,8 +103,6 @@ def create_invoice_from_book(book):
     obj = Invoice()
     obj.balance = "CR"  # Credit
     obj.book = book
-    # TODO create a smart referral code
-    # Code created in Email Send ...
     obj.status = "PE"   # Pending
     obj.to_pay = int(book.price.price_chf)
     # Default 10 days to pay

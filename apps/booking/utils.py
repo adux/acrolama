@@ -1,4 +1,5 @@
 import datetime
+import booking.services
 
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
@@ -9,9 +10,6 @@ from django.urls import reverse
 from django.template.loader import render_to_string
 
 from project.models import Irregularity
-
-import accounting.utils
-import booking.services
 
 
 # Tests for the UserPassesTestMixin
@@ -73,16 +71,11 @@ def email_sender(instance, flag):
         times = instance.times.all()
         location = booking.services.get_location_from_timeoption(times, instance.event)
 
-        # Referenz code
-        referenzstr = '{}00{}'.format(instance.user.pk, instance.invoice.pk)
-
-        referenzstr = accounting.utils.finalize_referenz(referenzstr)
-
         p = {
             "event": instance.event,
             "user": instance.user,
             "price": instance.price,
-            "referenznum": referenzstr,
+            "referenznum": instance.invoice.referral_code,
             "pay_till": instance.invoice.pay_till,
             "times": times,
             "location": location,
@@ -141,6 +134,7 @@ def email_sender(instance, flag):
         irregularities = Irregularity.objects.filter(event__slug=instance.event.slug)
         times = instance.times.all()
         location = booking.services.get_location_from_timeoption(times, instance.event)
+
         try:
             abocount = booking.services.get_count_abocounter_of_book(instance.id)
         except ObjectDoesNotExist:

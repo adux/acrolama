@@ -9,7 +9,7 @@ from invitations.utils import get_invitation_model
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db.models import Sum, Q  # Queries with OR
+from django.db.models import Q  # Queries with OR
 from django.http import HttpResponseRedirect
 from django.utils.translation import gettext as _
 from django.shortcuts import render, redirect
