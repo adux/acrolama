@@ -727,7 +727,11 @@ def quotationcreateview(request):
         form = form(request.POST)
         if form.is_valid():
             participants = book_filter.qs.filter(status="PA").count()
-            create_quotation(form, count=participants)
+            try:
+                create_quotation(form, count=participants)
+            except Exception as e:
+                messages.add_message(request, messages.WARNING, _("Error: " + str(e)))
+
             return redirect('quotation_list')
 
     # Context

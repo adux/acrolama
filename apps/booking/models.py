@@ -111,8 +111,19 @@ class Quotation(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.check_duplicate()
+        super(Quotation, self).save(*args, **kwargs)
+
     def get_teachers(self):
         return ",\n".join([p.first_name for p in self.teachers.all()])
+
+    def check_duplicate(self):
+        if Quotation.objects.filter(
+                event=self.event, time_location=self.time_location
+        ).exists():
+            raise Exception(_("Quotation with this Event and Time Location allready exists"))
 
 
 class AboCounter(models.Model):
