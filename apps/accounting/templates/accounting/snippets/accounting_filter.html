@@ -65,11 +65,11 @@
             <td><a href="{% url 'accounting_update' obj.pk %}?{% pass_get_filter %}">{{ obj.pk }}</a></td>
             <td>{% if obj.partner %}{{ obj.partner.name}}{% else %}{{obj.book.user.get_full_name}}{% endif %}</td>
             <td>{% if obj.book %}{{obj.book.event.title}}{% else %}-{% endif %}</td>
-            <td>{% now "Ymd" as today %}{% if obj.pay_till|date:"Ymd" < today %}<span style="color: red;">{{obj.pay_till|date:"d.m"}}</span>{% else %}{{obj.pay_till|date:"d.m"}} {% endif %}</td>
+            <td>{% now "Ymd" as today %}{% if obj.pay_till|date:"Ymd" < today %}{% if obj.status != "PY" %}<span style="color: red;">{{obj.pay_till|date:"d.m"}}</span>{% else %}{{obj.pay_till|date:"d.m"}} {% endif %}{% endif %}</td>
             <td>{{obj.pay_date|date:"d.m"}}</td>
             <td>{{obj.to_pay}}</td>
-            <td>{{obj.get_status_display}}</td>
-            <td>{{obj.methode}}</td>
+            <td>{% now "Ymd" as today %}{% if obj.pay_till|date:"Ymd" < today %}{% if obj.status != "PY" %}<span style="color: red;">{{obj.get_status_display}}</span>{% elif obj.status == "PY" %}<span style="color: green">{{obj.get_status_display}}</span>{% else %} {{obj.get_status_display}} {% endif %}{% endif %}</td>
+            <td>{{obj.get_methode_display}}</td>
             <td></a>
         </tr>
         {% endfor%}

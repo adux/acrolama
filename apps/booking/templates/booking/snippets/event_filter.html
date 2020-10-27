@@ -41,8 +41,11 @@
                 <th><input type="checkbox" onClick="toggle(this);"></th>
                 <th>#</th>
                 <th>Start Date</th>
+                <th>Cycle</th>
                 <th>Title</th>
                 <th>Level</th>
+                <th>Pub.</th>
+                <th>Reg.</th>
             </tr>
         </thead>
         <tbody>
@@ -50,8 +53,11 @@
                 <td><input type="checkbox" name="check" value="{{obj.id}}"></td>
                 <td>{{obj.pk}}</td>
                 <td>{{obj.event_startdate|date:'d M. y.'}}</td>
+                <td>{{obj.cycle|default_if_none:"--"}}</td>
                 <td>{{obj.title}}</td>
                 <td>{{obj.level.get_name_display}}</td>
+                <td>{% if obj.published == False %}<i class="fas fa-times" style="color: red;"></i>{% else %}<i class="fas fa-check" style="color: green;"></i>{% endif %}</td>
+                <td>{% if obj.register == False %}<i class="fas fa-times" style="color: red;"></i>{% else %}<i class="fas fa-check" style="color: green;"></i>{% endif %}</td>
             </tr>
             {% endfor%}
         </tbody>
