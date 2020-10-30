@@ -65,7 +65,16 @@ class BookCreateForm(forms.ModelForm):
         widgets = {
             "times": M2MSelect,
             "event": autocomplete.ModelSelect2(url="event-autocomplete"),
-            "user": autocomplete.ModelSelect2(url="user-autocomplete")
+            "user": autocomplete.ModelSelect2(url="user-autocomplete"),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(BookCreateForm, self).__init__(*args, **kwargs)
+        self.fields['event'].widget.attrs = {
+            'data-theme': 'bootstrap4',
+        }
+        self.fields['user'].widget.attrs = {
+            'data-theme': 'bootstrap4',
         }
 
 

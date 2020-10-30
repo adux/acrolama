@@ -64,7 +64,7 @@ class Project(models.Model):
     creationdate = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return "%s | " % (self.name) + " - ".join(str(p.first_name) for p in self.manager.all())
+        return "%s" % (self.name)
 
 
 class TimeOption(models.Model):

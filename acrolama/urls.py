@@ -14,7 +14,11 @@ from home.views import (
     EventListView,
 )
 
-from project.views import EventDetail
+from project.views import (
+    EventUpdateView,
+    EventDetail,
+    eventlistview,
+)
 
 from booking.views import (
     EventAutocomplete,
@@ -27,14 +31,16 @@ from booking.views import (
     BookUpdateView,
     BookCreateView,
     contactlistview,
-    eventlistview,
     HerdView,
     invitationsendview,
+    IrregularityAutocomplete,
     QuotationUpdateView,
     quotationlistview,
     quotationcreateview,
     quotationlockview,
     TimeLocationAutocomplete,
+    TeachersAutocomplete,
+    PriceOptionAutocomplete,
 )
 
 from accounting.views import (
@@ -71,39 +77,43 @@ urlpatterns = [
     path("info/<slug:slug>/", InfoDetailView.as_view(), name="info"),
     path("faq/", faqview, name="faq"),
     # Sitemaps
-    path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="django.contrib.sitemaps.views.sitemap",),
+    path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="django.contrib.sitemaps.views.sitemap"),
     # Profile
     # Admin stuff
-    # TODO: Add herd to Admin url
     path(settings.ADMIN_URL, admin.site.urls),
+    path('tinymce/', include('tinymce.urls')),
     path("herd/", HerdView.as_view(), name="herd"),
     # Accounting
     path("herd/invoices/", accountinglistview, name="accounting_list"),
-    path("herd/invoice/<int:pk>/update/", InvoiceUpdateView.as_view(), name="accounting_update",),
+    path("herd/invoice/<int:pk>/update/", InvoiceUpdateView.as_view(), name="accounting_update"),
     # Attendance
     path("herd/attendance/", attendancelistview, name="attendance_list"),
-    path("herd/attendance/<int:pk>/update/", AttendanceUpdateView.as_view(), name="attendance_update",),
+    path("herd/attendance/<int:pk>/update/", AttendanceUpdateView.as_view(), name="attendance_update"),
     # Booking
     path("herd/booking/", bookinglistview, name="booking_list"),
     path("herd/booking/<int:pk>/update/", BookUpdateView.as_view(), name="booking_update"),
-    # Booking
+    # Event
     path("herd/event/", eventlistview, name="event_list"),
+    path("herd/event/<int:pk>/update/", EventUpdateView.as_view(), name="event_update"),
     # Quotation
     path("herd/quotation/", quotationlistview, name="quotation_list"),
-    path("herd/quotation/<int:pk>/update/", QuotationUpdateView.as_view(), name="quotation_update",),
-    path("herd/quotation/<int:pk>/lock/", quotationlockview, name="quotation_lock",),
+    path("herd/quotation/<int:pk>/update/", QuotationUpdateView.as_view(), name="quotation_update"),
+    path("herd/quotation/<int:pk>/lock/", quotationlockview, name="quotation_lock"),
     path("herd/quotation/create/", quotationcreateview, name="quotation_create"),
     # Contact
     path("herd/contact/", contactlistview, name="contact_list"),
     # Teachers
-    path("herd/teacher/attendance/", attendance_daily_view, name="teacher_attendance",),
-    path("herd/teacher/booking/create/", BookCreateView.as_view(), name="teacher_booking_create",),
-    path("herd/teacher/booking/invite/", invitationsendview, name="invitation",),
-    path("invitations/", include('invitations.urls', namespace='invitations')),
-    re_path(r"^event-autocomplete/$", EventAutocomplete.as_view(), name="event-autocomplete",),
-    re_path(r"^eventteacher-autocomplete/$", EventTeacherAutocomplete.as_view(), name="eventteacher-autocomplete",),
-    re_path(r"^user-autocomplete/$", UserAutocomplete.as_view(), name="user-autocomplete",),
-    re_path(r"^tl-autocomplete/$", TimeLocationAutocomplete.as_view(), name="tl-autocomplete",),
+    path("herd/teacher/attendance/", attendance_daily_view, name="teacher_attendance"),
+    path("herd/teacher/booking/create/", BookCreateView.as_view(), name="teacher_booking_create"),
+    path("herd/teacher/booking/invite/", invitationsendview, name="invitation"),
+    path("invitations/", include('invitations.urls', namespace="invitations")),
+    re_path(r"^event-autocomplete/$", EventAutocomplete.as_view(), name="event-autocomplete"),
+    re_path(r"^eventteacher-autocomplete/$", EventTeacherAutocomplete.as_view(), name="eventteacher-autocomplete"),
+    re_path(r"^user-autocomplete/$", UserAutocomplete.as_view(), name="user-autocomplete"),
+    re_path(r"^teachers-autocomplete/$", TeachersAutocomplete.as_view(), name="teachers-autocomplete"),
+    re_path(r"^tl-autocomplete/$", TimeLocationAutocomplete.as_view(), name="tl-autocomplete"),
+    re_path(r"^po-autocomplete/$", PriceOptionAutocomplete.as_view(), name="po-autocomplete"),
+    re_path(r"^irregularities-autocomplete/$", IrregularityAutocomplete.as_view(), name="irregularities-autocomplete"),
 ]
 
 if settings.DEBUG:
@@ -112,5 +122,4 @@ if settings.DEBUG:
 
 if "debug_toolbar" in settings.INSTALLED_APPS:
     import debug_toolbar
-
     urlpatterns = [path("__debug__/", include(debug_toolbar.urls))] + urlpatterns

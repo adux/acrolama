@@ -1,0 +1,146 @@
+{% extends "booking/base_bs.html" %}
+{% block head_title%}Update Event{% endblock %}
+{% load widget_tweaks %}
+{% block content %}
+<form id="update" method="POST">{% csrf_token %}
+    <div class="card card-body bg-light">
+        <div class="row">
+            <div class="form-group col-sm-4 col-md-5">
+              {{ form.project.label_tag }}
+              {% render_field form.project class="form-control" %}
+              {% for a in object.project.manager.all %}
+                Manager: {{a.get_full_name }}
+              {% endfor %}
+            </div>
+            <div class="form-group col-sm-4 col-md-7">
+              {{ form.title.label_tag }}
+              {% render_field form.title class="form-control" %}
+              View Event: <a href="{{object.get_absolute_url}}">{{object.slug}}</a>
+            </div>
+            <div class="form-group col-sm-4 col-md-2">
+              {{ form.event_startdate.label_tag }}
+              {% render_field form.event_startdate class="form-control datepicker" %}
+            </div>
+            <div class="form-group col-sm-4 col-md-2">
+            {{ form.event_enddate.label_tag }}
+            {% render_field form.event_enddate class="form-control datepicker" %}
+            </div>
+            <div class="form-group col-sm-4 col-md-2">
+            {{ form.policy.label_tag }}
+            {% render_field form.policy class="form-control" %}
+            </div>
+            <div class="form-group col-sm-4 col-md-2">
+            {{ form.max_participants.label_tag }}
+            {% render_field form.max_participants class="form-control" %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-4 col-md-2 form-check">
+            {{ form.published.label_tag }}
+            {% render_field form.published %}
+            </div>
+            <div class="form-group col-sm-4 col-md-2 form-check">
+            {{ form.registration.label_tag }}
+            {% render_field form.registration %}
+            </div>
+        </div>
+        <button type="submit" name="update" class="btn btn-danger">
+            <i class="fas fa-edit"></i> UPDATE
+        </button>
+    </div>
+    <hr>
+    <div class="card card-body bg-light">
+        <div class="row">
+            <div class="form-group col-sm-12 col-md-12">
+              {{ form.images.label_tag }}
+              {% render_field form.images %}
+            </div>
+            <div class="form-group col-sm-12 col-md-12">
+              {{ form.videos.label_tag }}
+              {% render_field form.videos %}
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="card card-body bg-light">
+        <div class="row">
+            <div class="form-group col-sm-12 col-md-12">
+              {{ form.teachers.label_tag }}
+              {% render_field form.teachers %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-12 col-md-12">
+              {{ form.time_locations.label_tag }}
+              {% render_field form.time_locations %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-12 col-md-12">
+              {{ form.irregularities.label_tag }}
+              {% render_field form.irregularities %}
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="card card-body bg-light">
+        <div class="row">
+            <div class="form-group col-sm-4 col-md-3">
+              {{ form.discipline.label_tag }}
+              {% render_field form.discipline class="form-control" %}
+            </div>
+            <div class="form-group col-sm-4 col-md-3">
+              {{ form.level.label_tag }}
+              {% render_field form.level class="form-control" %}
+            </div>
+            <div class="form-group col-sm-4 col-md-3">
+              {{ form.category.label_tag }}
+              {% render_field form.category class="form-control" %}
+            </div>
+            <div class="form-group col-sm-4 col-md-3">
+              {{ form.cycle.label_tag }}
+              {% render_field form.cycle class="form-control" %}
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="card card-body bg-light">
+        <div class="row">
+            <div class="form-group col-sm-12 col-md-12">
+              {{ form.price_options.label_tag }}
+              {% render_field form.price_options %}
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="card card-body bg-light">
+        <div class="row">
+            <div class="form-group col-sm-12 col-md-12">
+              {{ form.description.label_tag }}
+              {% render_field form.description %}
+            </div>
+            <div class="form-group col-sm-12 col-md-12">
+              {{ form.prerequisites.label_tag }}
+              {% render_field form.prerequisites %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-12 col-md-4">
+              {{ form.highlights.label_tag }}
+              {% render_field form.highlights %}
+            </div>
+            <div class="form-group col-sm-12 col-md-4">
+              {{ form.included.label_tag }}
+              {% render_field form.included %}
+            </div>
+            <div class="form-group col-sm-12 col-md-4">
+              {{ form.food.label_tag }}
+              {% render_field form.food %}
+            </div>
+        </div>
+    </div>
+
+</form>
+<hr>
+{% include "project/snippets/event_filter.html" %}
+{% endblock %}

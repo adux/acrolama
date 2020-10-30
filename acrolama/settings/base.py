@@ -56,6 +56,7 @@ DJANGO_APPS = [
 
 EXTERNAL_APPS = [
     "django_filters",
+    "tinymce",
     "crispy_forms",
     "storages",
     "widget_tweaks",
@@ -98,6 +99,30 @@ STATICFILES_FINDERS = (
 IMAGE_SIZE = (os.environ.get("IMAGE_SIZE", default=(1170, 2240)),)
 THUMB_SIZE = (os.environ.get("THUMB_SIZE", default=(800, 800)),)
 MOB_SIZE = (os.environ.get("MOB_SIZE", default=(420, 420)),)
+
+# TinyMCE
+TINYMCE_COMPRESSOR = False
+TINYMCE_INCLUDE_JQUERY = False
+TINYMCE_DEFAULT_CONFIG = {
+    'gecko_spellcheck': "true",
+    'browser_spellcheck': "true",
+    'height': "300",
+    'selector': "textarea",
+    'resize': "false",
+    'autosave_ask_before_unload': "false",
+    'powerpaste_allow_local_images': "true",
+    'plugins': [
+        'fullscreen autolink help image imagetools ',
+        'link noneditable preview',
+        'searchreplace'
+    ],
+    'toolbar':
+        "insertfile undo redo | cut copy paste | formatselect bold italic | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist | link image | fullscreen preview searchreplace",
+    'toolbar_mode': "sliding",
+    'contextmenu': "false",
+    'menubar': "false",
+    'language': "de",
+}
 
 
 # Internationalization

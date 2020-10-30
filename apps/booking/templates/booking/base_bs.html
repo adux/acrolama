@@ -10,16 +10,15 @@
     <!-- Bootstrap 4.3.1 -->
     <link rel="stylesheet" href="{% static 'booking/bootstrap.min.css' %}" type="text/css" media="screen" >
     <link rel="stylesheet" href="{% static 'booking/bootstrap-datepicker3.standalone.min.css' %}" type="text/css" media="screen" >
-    <!-- Autocomplete -->
-    <link rel="stylesheet" href="{% static 'vendor/select2/dist/css/select2.css' %}" type="text/css" media="screen">
-    <link rel="stylesheet" href="{% static 'admin/css/autocomplete.css' %}" type="text/css" media="screen">
-    <link rel="stylesheet" href="{% static 'autocomplete_light/select2.css' %}" type="text/css" media="screen">
     <!-- Project -->
     <link rel="stylesheet" href="{% static 'booking/project.css' %}?ran=135018i" type="text/css" media="screen" >
 
     <!-- Bootstrap 4.3.1 -->
     <script src="{% static 'booking/jquery-3.4.1.min.js' %}"></script>
 
+    <!-- Autocomplete -->
+    {{ form.media }}
+    <link rel="stylesheet" href="{% static 'booking/select2-bootstrap.css' %}" type="text/css" media="screen" >
     </head>
 <body>
     {% if messages %}
@@ -71,14 +70,6 @@
             todayHighlight: true
         });
     </script>
-    <!-- Auto -->
-    <script type="text/javascript" src="{% static 'autocomplete_light/jquery.init.js' %}"></script>
-    <script type="text/javascript" src="{% static 'vendor/select2/dist/js/select2.full.js' %}"></script>
-    <script type="text/javascript" src="{% static 'vendor/select2/dist/js/i18n/en.js' %}"></script>
-    <script type="text/javascript" src="{% static 'autocomplete_light/autocomplete.init.js' %}"></script>
-    <script type="text/javascript" src="{% static 'autocomplete_light/forward.js' %}"></script>
-    <script type="text/javascript" src="{% static 'autocomplete_light/select2.js' %}"></script>
-    <script type="text/javascript" src="{% static 'autocomplete_light/jquery.post-setup.js' %}"></script>
     <script>
     (function($) {
         $('#add-form').click(function() {

@@ -4,7 +4,7 @@ webencodings==0.5.1
 bleach==3.2.0
 Pillow==7.1.2
 pycparser==2.18
-cryptography==2.7
+cryptography==3.2.1
 asn1crypto==1.2.0
 chardet==3.0.4
 Unidecode==1.0.22
@@ -17,7 +17,7 @@ urllib3==1.25.10
 -- Django --
 django==2.2.16
 django-crispy-forms==1.9.1
-django-autocomplete-light==3.5.1
+django-autocomplete-light==3.8.1
 django-allauth==0.41.0
 django-invitations==1.9.3
 oauthlib==3.0.1
@@ -28,6 +28,7 @@ psycopg2==2.8.4
 django-annoying==0.10.6
 django-widget-tweaks==1.4.8
 django-tinycontent
+django-tinymce==3.1.0
 django-autoslug
 django-filter==2.4.0
 django-compressor==2.4

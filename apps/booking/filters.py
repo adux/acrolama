@@ -114,16 +114,6 @@ class BookFilter(django_filters.FilterSet):
         )
 
 
-class EventFilter(django_filters.FilterSet):
-    time_locations = django_filters.ModelChoiceFilter(
-        queryset=TimeLocation.objects.all(), widget=autocomplete.ModelSelect2(url="tl-autocomplete")
-    )
-
-    class Meta:
-        model = Event
-        fields = {"project", "time_locations", "level"}
-
-
 class QuotationFilter(django_filters.FilterSet):
     event = django_filters.ModelChoiceFilter(
         queryset=Event.objects.all(), widget=autocomplete.ModelSelect2(url="event-autocomplete")

@@ -19,16 +19,16 @@ from django.views.generic import TemplateView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 # Models
+# from audiovisual.models import Image, Video
 from users.models import User
 from booking.models import Book, Attendance, Quotation
-from project.models import Event, TimeLocation
+from project.models import Event, TimeLocation, PriceOption, Irregularity
 
 # Filters
 from booking.filters import (
     AttendanceFilter,
     AttendanceDailyFilter,
     BookFilter,
-    EventFilter,
     QuotationFilter,
     QuotationBookFilter,
 )
@@ -112,6 +112,22 @@ class UserAutocomplete(autocomplete.Select2QuerySetView):
         return qs
 
 
+class TeachersAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        if not herd_check(self.request.user):
+            return User.objects.none()
+
+        qs = User.objects.all().order_by("last_name").filter(is_teacher=True)
+
+        if self.q:
+            qs = qs.filter(
+                Q(email__icontains=self.q) | Q(first_name__icontains=self.q) | Q(last_name__icontains=self.q)
+            )
+
+        return qs
+
+
 class TimeLocationAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         # Don't forget to filter out results depending on the visitor !
@@ -122,8 +138,41 @@ class TimeLocationAutocomplete(autocomplete.Select2QuerySetView):
 
         if self.q:
             qs = qs.filter(
-                Q(location__icontains=self.q) | Q(time_options__icontains=self.q) | Q(name__icontains=self.q)
+                Q(location__name__icontains=self.q)
+                | Q(time_options__name__icontains=self.q)
+                | Q(name__icontains=self.q)
             )
+
+        return qs
+
+
+class IrregularityAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        if not herd_check(self.request.user):
+            return Irregularity.objects.none()
+
+        qs = Irregularity.objects.all().order_by("-id").prefetch_related("time_location")
+
+        if self.q:
+            qs = qs.filter(
+                Q(time_location__name__icontains=self.q)
+                | Q(description__icontains=self.q)
+            )
+
+        return qs
+
+
+class PriceOptionAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        if not staff_check(self.request.user):
+            return PriceOption.objects.none()
+
+        qs = PriceOption.objects.all().order_by("name")
+
+        if self.q:
+            qs = qs.filter(Q(name__icontains=self.q) | Q(price_chf__icontains=self.q) | Q(name__icontains=self.q))
 
         return qs
 
@@ -135,10 +184,7 @@ def bookinglistview(request):
     booking_filter = BookFilter(
         request.GET,
         queryset=(
-            Book.objects.all()
-            .select_related("event", "user", "price")
-            .prefetch_related("times")
-            .order_by("-booked_at")
+            Book.objects.all().select_related("event", "user", "price").prefetch_related("times").order_by("-booked_at")
         ),
     )
 
@@ -197,7 +243,9 @@ def bookinglistview(request):
                         )
                     else:
                         messages.add_message(
-                            request, messages.SUCCESS, _("Book N°" + str(new_book.id) + ": Book Created"),
+                            request,
+                            messages.SUCCESS,
+                            _("Book N°" + str(new_book.id) + ": Book Created"),
                         )
 
                 else:
@@ -285,7 +333,9 @@ class BookCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
             },
         )
         messages.add_message(
-            self.request, messages.SUCCESS, _("Book created, we'll get back to you soon!"),
+            self.request,
+            messages.SUCCESS,
+            _("Book created, we'll get back to you soon!"),
         )
         return success_url
 
@@ -344,11 +394,15 @@ def attendance_daily_view(request):
                     switch_check_attendance(attendance_id, int(check_pos))
                     # Send a message
                     messages.add_message(
-                        request, messages.SUCCESS, _("Updated attendance id: " + str(attendance_id)),
+                        request,
+                        messages.SUCCESS,
+                        _("Updated attendance id: " + str(attendance_id)),
                     )
             except Exception as e:
                 messages.add_message(
-                    request, messages.ERROR, _("Make a manual list and report the error: " + e),
+                    request,
+                    messages.ERROR,
+                    _("Make a manual list and report the error: " + e),
                 )
             else:
                 success_url = build_url(
@@ -441,10 +495,7 @@ def contactlistview(request):
     booking_filter = BookFilter(
         request.GET,
         queryset=(
-            Book.objects.all()
-            .select_related("event", "user", "price")
-            .prefetch_related("times")
-            .order_by("-booked_at")
+            Book.objects.all().select_related("event", "user", "price").prefetch_related("times").order_by("-booked_at")
         ),
     )
 
@@ -463,42 +514,6 @@ def contactlistview(request):
 
     context = {
         "book_filter": booking_filter,
-        "filter": request.GET,
-        "page_obj": response,
-    }
-
-    return render(request, template, context)
-
-
-@login_required
-@user_passes_test(staff_check)
-def eventlistview(request):
-    template = "booking/event_list.html"
-    event_filter = EventFilter(
-        request.GET,
-        queryset=(
-            Event.objects.all()
-            .select_related("project", "policy", "discipline", "level")
-            .prefetch_related("time_locations__time_options")
-            .order_by("-event_startdate")
-        ),
-    )
-
-    # Pagination
-    paginator = Paginator(event_filter.qs, 24)  # Show 24 contacts per page.
-    page = request.GET.get("page")
-
-    try:
-        response = paginator.page(page)
-    except PageNotAnInteger:
-        response = paginator.page(1)
-    except EmptyPage:
-        response = paginator.page(paginator.num_pages)
-
-    # End Paginator
-
-    context = {
-        "event_filter": event_filter,
         "filter": request.GET,
         "page_obj": response,
     }
@@ -548,9 +563,11 @@ class QuotationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
         if self.object.locked:
             messages.add_message(
-                self.request, messages.WARNING, _("Quotation is Locked"),
+                self.request,
+                messages.WARNING,
+                _("Quotation is Locked"),
             )
-            return redirect('quotation_list')
+            return redirect("quotation_list")
 
         return super(QuotationUpdateView, self).dispatch(request, *args, **kwargs)
 
@@ -563,13 +580,13 @@ class QuotationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         filtered_list = Book.objects.filter(
             event=self.object.event.id,
             event__time_locations=self.object.time_location.id,
-            times__in=time_options_id_list
+            times__in=time_options_id_list,
         ).select_related("user", "price", "attendance")
         return filtered_list
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['filtered_list'] = self.get_quotation_bookings()
+        context["filtered_list"] = self.get_quotation_bookings()
         return context
 
     def get_initial(self):
@@ -589,7 +606,7 @@ class QuotationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
             if book.price.cycles < 2:
                 summe += book.price.price_chf
             elif book.price.cycles > 1:
-                summe += (book.price.price_chf/book.price.cycles)
+                summe += book.price.price_chf / book.price.cycles
 
         if not books_participants:
             direct_revenue = Decimal(0)
@@ -605,18 +622,16 @@ class QuotationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         admin_profit = round(profit * ADMIN_RATE, 2)
         partner_profit = round(profit * PARTNER_RATE, 2)
 
-        initial = {
-            "direct_revenue": direct_revenue,
-            "admin_profit": admin_profit,
-            "partner_profit": partner_profit
-        }
+        initial = {"direct_revenue": direct_revenue, "admin_profit": admin_profit, "partner_profit": partner_profit}
 
         return initial
 
     def get_success_url(self, **kwargs):
         success_url = build_url("quotation_list")
         messages.add_message(
-            self.request, messages.SUCCESS, _("Quotation update"),
+            self.request,
+            messages.SUCCESS,
+            _("Quotation update"),
         )
         return success_url
 
@@ -634,9 +649,7 @@ def quotationcreateview(request):
     book_filter = QuotationBookFilter(
         request.GET,
         queryset=(
-            Book.objects.all()
-            .select_related("event__level", "user", "price")
-            .prefetch_related("invoice", "attendance")
+            Book.objects.all().select_related("event__level", "user", "price").prefetch_related("invoice", "attendance")
         ),
     )
 
@@ -671,7 +684,7 @@ def quotationcreateview(request):
                         if book.price.cycles < 2:
                             summe += book.price.price_chf
                         elif book.price.cycles > 1:
-                            summe += (book.price.price_chf/book.price.cycles)
+                            summe += book.price.price_chf / book.price.cycles
 
                     if not books_participants:
                         direct_revenue = Decimal(0)
@@ -711,13 +724,15 @@ def quotationcreateview(request):
                     )
                 else:
                     messages.add_message(
-                        request, messages.WARNING, _(
-                            "Event " + str(event) + " doesn't have Time Location " + str(filter_time_location_id)
-                        ),
+                        request,
+                        messages.WARNING,
+                        _("Event " + str(event) + " doesn't have Time Location " + str(filter_time_location_id)),
                     )
             else:
                 messages.add_message(
-                    request, messages.WARNING, _("Missing Event or Time Location"),
+                    request,
+                    messages.WARNING,
+                    _("Missing Event or Time Location"),
                 )
         else:
             # TODO: maybe
@@ -732,7 +747,7 @@ def quotationcreateview(request):
             except Exception as e:
                 messages.add_message(request, messages.WARNING, _("Error: " + str(e)))
 
-            return redirect('quotation_list')
+            return redirect("quotation_list")
 
     # Context
     context = {
@@ -757,7 +772,7 @@ def quotationlockview(request, pk):
             obj.locked = True
             obj.locked_at = datetime.datetime.now()
             obj.save()
-            return redirect('quotation_list')
+            return redirect("quotation_list")
 
     context = {
         "form": form,
@@ -774,18 +789,15 @@ def invitationsendview(request):
     if request.method == "POST":
         if form.is_valid():
             Invitation = get_invitation_model()
-            email = form.cleaned_data['email']
+            email = form.cleaned_data["email"]
             invite = Invitation.create(email, inviter=request.user)
             try:
                 invite.send_invitation(request)
             except Exception as e:
-                messages.add_message(request, messages.INFO,
-                                     _("Error: " + e))
+                messages.add_message(request, messages.INFO, _("Error: " + e))
             else:
-                messages.add_message(request, messages.INFO,
-                                     _("Email sent to: " + email + " . We'll be in touch!")
-                                     )
-            return redirect('teacher_attendance')
+                messages.add_message(request, messages.INFO, _("Email sent to: " + email + " . We'll be in touch!"))
+            return redirect("teacher_attendance")
 
     context = {
         "form": form,

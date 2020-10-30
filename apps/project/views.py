@@ -2,20 +2,38 @@ from collections import defaultdict
 
 from django.http import HttpResponseRedirect
 from django.views import View
-from django.views.generic import DetailView, FormView
+from django.views.generic import DetailView, FormView, UpdateView
 from django.views.generic.detail import SingleObjectMixin
 
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.decorators import login_required, user_passes_test
+
 from django.contrib import messages
+from django.shortcuts import render
+
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Utils
-from booking.utils import email_sender
+from booking.utils import (
+    email_sender,
+    build_url,
+    staff_check,
+)
+
+# from booking.services import (
+#     inform_book,
+# )
 
 # Models
 from project.models import Event, TimeOption, PriceOption, Irregularity, TimeLocation
 from users.models import User
 
 # Forms
+from project.forms import EventUpdateForm
 from booking.forms import BookForm, BookDuoInfoForm, BookDateInfoForm
+
+# Filters
+from project.filters import EventFilter
 
 
 # EvenDetail for Explain
@@ -164,3 +182,93 @@ class EventDetail(View):
     def post(self, request, *args, **kwargs):
         view = EventInterest.as_view()
         return view(request, *args, **kwargs)
+
+
+@login_required
+@user_passes_test(staff_check)
+def eventlistview(request):
+    template = "project/event_list.html"
+    event_filter = EventFilter(
+        request.GET,
+        queryset=(
+            Event.objects.all()
+            .select_related("project", "policy", "level", "discipline")
+            .prefetch_related(
+                "time_locations", "irregularities", "price_options", "images", "videos", "teachers", "team"
+            )
+            .order_by("-event_startdate")
+        ),
+    )
+
+    # Pagination
+    paginator = Paginator(event_filter.qs, 24)  # Show 24 contacts per page.
+    page = request.GET.get("page")
+
+    try:
+        response = paginator.page(page)
+    except PageNotAnInteger:
+        response = paginator.page(1)
+    except EmptyPage:
+        response = paginator.page(paginator.num_pages)
+
+    # End Paginator
+
+    context = {
+        "event_filter": event_filter,
+        "filter": request.GET,
+        "page_obj": response,
+    }
+
+    return render(request, template, context)
+
+
+class EventUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
+    model = Event
+    template_name = "project/event_update.html"
+    form_class = EventUpdateForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        event_filter = EventFilter(
+            self.request.GET,
+            queryset=(
+                Event.objects.all()
+                .select_related("level")
+            )
+        )
+
+        # Paginator
+        paginator = Paginator(event_filter.qs, 24)  # Show 24 contacts per page.
+        page = self.request.GET.get("page")
+        try:
+            response = paginator.page(page)
+        except PageNotAnInteger:
+            response = paginator.page(1)
+        except EmptyPage:
+            response = paginator.page(paginator.num_pages)
+
+        # Context
+        context["page_obj"] = response
+        context["filter"] = self.request.GET
+        context["event_filter"] = event_filter
+
+        return context
+
+    # def form_valid(self, form):
+    #     instance = form.save(commit=False)
+
+    #     # Get the book before save
+    #     # book = get_book(instance.id)
+
+    #     return super().form_valid(form)
+
+    def get_success_url(self, **kwargs):
+        url = build_url(
+            "event_list",
+            get=self.request.GET.items(),
+        )
+        return url
+
+    def test_func(self):
+        return staff_check(self.request.user)
