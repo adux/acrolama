@@ -59,10 +59,10 @@ class InvoiceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        account_filter = AccountFilter(self.request.GET, queryset=(Invoice.objects.all().select_related("book")),)
+        accounting_filter = AccountFilter(self.request.GET, queryset=(Invoice.objects.all().select_related("book")),)
 
-        context["account_filter"] = account_filter
-        paginator = Paginator(account_filter.qs, 24)  # Show 25 contacts per page.
+        context["account_filter"] = accounting_filter
+        paginator = Paginator(accounting_filter.qs, 24)  # Show 25 contacts per page.
         page = self.request.GET.get("page")
         try:
             response = paginator.page(page)

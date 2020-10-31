@@ -8,7 +8,6 @@ from django.utils.translation import ugettext_lazy as _
 from accounting.models import Invoice
 from users.models import User
 from booking.models import (
-    BOOKINGSTATUS,
     Book,
     BookDuoInfo,
     BookDateInfo,
@@ -16,7 +15,7 @@ from booking.models import (
     Quotation
 )
 
-#Services
+# Services
 
 import accounting.services
 
@@ -64,17 +63,14 @@ class BookCreateForm(forms.ModelForm):
         fields = ["user", "event", "times", "price"]
         widgets = {
             "times": M2MSelect,
-            "event": autocomplete.ModelSelect2(url="event-autocomplete"),
-            "user": autocomplete.ModelSelect2(url="user-autocomplete"),
-        }
-
-    def __init__(self, *args, **kwargs):
-        super(BookCreateForm, self).__init__(*args, **kwargs)
-        self.fields['event'].widget.attrs = {
-            'data-theme': 'bootstrap4',
-        }
-        self.fields['user'].widget.attrs = {
-            'data-theme': 'bootstrap4',
+            "event": autocomplete.ModelSelect2(
+                url="event-autocomplete",
+                attrs={'data-theme': 'bootstrap4', 'data-width': 'style'}
+            ),
+            "user": autocomplete.ModelSelect2(
+                url="user-autocomplete",
+                attrs={'data-theme': 'bootstrap4', 'data-width': 'style'}
+            ),
         }
 
 

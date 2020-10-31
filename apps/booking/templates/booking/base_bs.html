@@ -17,8 +17,9 @@
     <script src="{% static 'booking/jquery-3.4.1.min.js' %}"></script>
 
     <!-- Autocomplete -->
-    {{ form.media }}
+    {{ form.media }}{{ event_filter.form.media }}{{ book_filter.form.media }}{{ attendance_filter.form.media }}{{ quotation_filter.form.media }}{{ account_filter.form.media }}
     <link rel="stylesheet" href="{% static 'booking/select2-bootstrap.css' %}" type="text/css" media="screen" >
+
     </head>
 <body>
     {% if messages %}

@@ -16,7 +16,10 @@ from users.models import User
 class AttendanceFilter(django_filters.FilterSet):
     book__user = django_filters.CharFilter(method="filter_by_all_name_fields")
     book__event = django_filters.ModelChoiceFilter(
-        queryset=Event.objects.all(), widget=autocomplete.ModelSelect2(url="event-autocomplete")
+        queryset=Event.objects.all(), widget=autocomplete.ModelSelect2(
+            url="event-autocomplete",
+            attrs={'data-theme': 'bootstrap4', 'data-width': 'style'}
+        )
     )
     attendance_date = django_filters.DateFilter(
         field_name="attendance_date",
@@ -43,7 +46,10 @@ class AttendanceFilter(django_filters.FilterSet):
 class AttendanceDailyFilter(django_filters.FilterSet):
     # Gets the Event the User is teacher on.
     book__event = django_filters.ChoiceFilter(
-        label="Your Events", field_name="book__event", widget=autocomplete.ListSelect2(url="eventteacher-autocomplete")
+        label="Your Events", field_name="book__event", widget=autocomplete.ListSelect2(
+            url="eventteacher-autocomplete",
+            attrs={'data-theme': 'bootstrap4', 'data-width': 'style'}
+        )
     )
 
     attendance_date = django_filters.DateFilter(
@@ -84,7 +90,10 @@ class AttendanceDailyFilter(django_filters.FilterSet):
 class BookFilter(django_filters.FilterSet):
     user = django_filters.CharFilter(method="filter_by_all_name_fields")
     event = django_filters.ModelChoiceFilter(
-        queryset=Event.objects.all(), widget=autocomplete.ModelSelect2(url="event-autocomplete")
+        queryset=Event.objects.all(), widget=autocomplete.ModelSelect2(
+            url="event-autocomplete",
+            attrs={'data-theme': 'bootstrap4', 'data-width': 'style'}
+        )
     )
     times = django_filters.ModelMultipleChoiceFilter(
         queryset=TimeOption.objects.all(), widget=forms.CheckboxSelectMultiple
@@ -116,13 +125,19 @@ class BookFilter(django_filters.FilterSet):
 
 class QuotationFilter(django_filters.FilterSet):
     event = django_filters.ModelChoiceFilter(
-        queryset=Event.objects.all(), widget=autocomplete.ModelSelect2(url="event-autocomplete")
+        queryset=Event.objects.all(), widget=autocomplete.ModelSelect2(
+            url="event-autocomplete",
+            attrs={'data-theme': 'bootstrap4', 'data-width': 'style'}
+        )
     )
     teachers = django_filters.ModelMultipleChoiceFilter(
         queryset=User.objects.filter(is_teacher=True), widget=M2MSelect()
     )
     time_location = django_filters.ModelChoiceFilter(
-        queryset=TimeLocation.objects.all(), required=True, widget=autocomplete.ModelSelect2(url="tl-autocomplete")
+        queryset=TimeLocation.objects.all(), required=True, widget=autocomplete.ModelSelect2(
+            url="tl-autocomplete",
+            attrs={'data-theme': 'bootstrap4', 'data-width': 'style'}
+        )
     )
 
     class Meta:
@@ -132,10 +147,16 @@ class QuotationFilter(django_filters.FilterSet):
 
 class QuotationBookFilter(django_filters.FilterSet):
     event = django_filters.ModelChoiceFilter(
-        queryset=Event.objects.all(), required=True, widget=autocomplete.ModelSelect2(url="event-autocomplete")
+        queryset=Event.objects.all(), required=True, widget=autocomplete.ModelSelect2(
+            url="event-autocomplete",
+            attrs={'data-theme': 'bootstrap4', 'data-width': 'style'}
+        )
     )
     event__time_locations = django_filters.ModelChoiceFilter(
-        queryset=TimeLocation.objects.all(), required=True, widget=autocomplete.ModelSelect2(url="tl-autocomplete")
+        queryset=TimeLocation.objects.all(), required=True, widget=autocomplete.ModelSelect2(
+            url="tl-autocomplete",
+            attrs={'data-theme': 'bootstrap4', 'data-width': 'style'}
+        )
     )
 
     class Meta:
