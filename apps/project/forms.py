@@ -1,9 +1,11 @@
-from dal import autocomplete
 from tinymce.widgets import TinyMCE
 
 from django import forms
 
 from project.models import Event
+
+# Widgets
+from booking.widgets import BootstrapedSelect2Multiple
 
 
 class EventUpdateForm(forms.ModelForm):
@@ -12,22 +14,10 @@ class EventUpdateForm(forms.ModelForm):
         model = Event
         fields = '__all__'
         widgets = {
-            "price_options": autocomplete.ModelSelect2Multiple(
-                url="po-autocomplete",
-                attrs={'data-theme': 'bootstrap4', 'data-width': 'style'}
-            ),
-            "time_locations": autocomplete.ModelSelect2Multiple(
-                url="tl-autocomplete",
-                attrs={'data-theme': 'bootstrap4', 'data-width': 'style'}
-            ),
-            "irregularities": autocomplete.ModelSelect2Multiple(
-                url="irregularities-autocomplete",
-                attrs={'data-theme': 'bootstrap4', 'data-width': 'style'}
-            ),
-            "teachers": autocomplete.ModelSelect2Multiple(
-                url="teachers-autocomplete",
-                attrs={'data-theme': 'bootstrap4', 'data-width': 'style'}
-            ),
+            "price_options": BootstrapedSelect2Multiple(url="po-autocomplete",),
+            "time_locations": BootstrapedSelect2Multiple(url="tl-autocomplete",),
+            "irregularities": BootstrapedSelect2Multiple(url="irregularities-autocomplete",),
+            "teachers": BootstrapedSelect2Multiple(url="teachers-autocomplete",),
             "description": TinyMCE(attrs={'cols': 40, 'rows': 20}),
             "prerequisites": TinyMCE(attrs={'cols': 40, 'rows': 20}),
             "highlights": TinyMCE(attrs={'cols': 80, 'rows': 10}),

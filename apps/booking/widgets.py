@@ -1,5 +1,6 @@
+from dal.autocomplete import ModelSelect2, ModelSelect2Multiple
 from django import forms
-from django.utils.datastructures import MultiValueDict, DictWrapper
+from django.utils.datastructures import MultiValueDict
 
 
 class DynamicArrayWidget(forms.TextInput):
@@ -34,6 +35,24 @@ class DynamicArrayWidget(forms.TextInput):
 
     def format_value(self, value):
         return value or []
+
+
+class BootstrapedSelect2(ModelSelect2):
+    def build_attrs(self, *args, **kwargs):
+        """Set Bootraped default"""
+        attrs = super(BootstrapedSelect2, self).build_attrs(*args, **kwargs)
+        attrs['data-theme'] = 'bootstrap4'
+        attrs['data-width'] = 'style'
+        return attrs
+
+
+class BootstrapedSelect2Multiple(ModelSelect2Multiple):
+    def build_attrs(self, *args, **kwargs):
+        """Set Bootraped default"""
+        attrs = super(BootstrapedSelect2Multiple, self).build_attrs(*args, **kwargs)
+        attrs['data-theme'] = 'bootstrap4'
+        attrs['data-width'] = 'style'
+        return attrs
 
 
 class M2MSelect(forms.Select):

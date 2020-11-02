@@ -1,8 +1,8 @@
-from dal import autocomplete
-
 from django.db.models import Q
 
 import django_filters
+
+from booking.widgets import BootstrapedSelect2
 
 from accounting.models import Invoice, BALANCE
 from project.models import Event
@@ -11,10 +11,7 @@ from project.models import Event
 class AccountFilter(django_filters.FilterSet):
     book__user = django_filters.CharFilter(method="filter_by_all_name_fields", label="User (by Name or Email)")
     book__event = django_filters.ModelChoiceFilter(
-        queryset=Event.objects.all(), widget=autocomplete.ModelSelect2(
-            url="event-autocomplete",
-            attrs={'data-theme': 'bootstrap4', 'data-width': 'style'}
-        )
+        queryset=Event.objects.all(), widget=BootstrapedSelect2(url="event-autocomplete",)
     )
     pay_till = django_filters.DateFilter(field_name="pay_till", method="filter_by_date_smaller_than", label="Pay till")
     balance = django_filters.ChoiceFilter(field_name="balance", choices=BALANCE, label="Account")

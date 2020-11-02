@@ -1,5 +1,3 @@
-from dal import autocomplete
-
 # Django
 from django import forms
 from django.utils.translation import ugettext_lazy as _
@@ -20,7 +18,7 @@ from booking.models import (
 import accounting.services
 
 # Widgets
-from booking.widgets import DynamicArrayWidget, M2MSelect
+from booking.widgets import DynamicArrayWidget, M2MSelect, BootstrapedSelect2
 
 
 class AttendanceUpdateForm(forms.ModelForm):
@@ -63,14 +61,8 @@ class BookCreateForm(forms.ModelForm):
         fields = ["user", "event", "times", "price"]
         widgets = {
             "times": M2MSelect,
-            "event": autocomplete.ModelSelect2(
-                url="event-autocomplete",
-                attrs={'data-theme': 'bootstrap4', 'data-width': 'style'}
-            ),
-            "user": autocomplete.ModelSelect2(
-                url="user-autocomplete",
-                attrs={'data-theme': 'bootstrap4', 'data-width': 'style'}
-            ),
+            "event": BootstrapedSelect2(url="event-autocomplete"),
+            "user": BootstrapedSelect2(url="user-autocomplete",),
         }
 
 
