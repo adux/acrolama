@@ -76,7 +76,7 @@ class EventAutocomplete(autocomplete.Select2QuerySetView):
         if not herd_check(self.request.user):
             return Event.objects.none()
 
-        qs = Event.objects.all().order_by("-event_startdate", "level").select_related("level")
+        qs = Event.objects.all().order_by("-event_startdate", "level").select_related("project", "level")
 
         if self.q:
             qs = qs.filter(
@@ -92,7 +92,7 @@ class EventTeacherAutocomplete(autocomplete.Select2QuerySetView):
         if not herd_check(self.request.user):
             return Event.objects.none()
 
-        qs = Event.objects.all().order_by("-event_startdate").select_related("level").filter(teachers=self.request.user)
+        qs = Event.objects.all().order_by("-event_startdate").select_related("project", "level").filter(teachers=self.request.user)
 
         if self.q:
             qs = qs.filter(
