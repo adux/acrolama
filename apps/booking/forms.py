@@ -171,6 +171,12 @@ class BookDuoInfoForm(forms.ModelForm):
     class Meta:
         model = BookDuoInfo
         fields = ["first_name", "last_name", "phone", "email"]
+        labels = {
+            'first_name': "Partner First Name",
+            'last_name': "Partner First Name",
+            'phone': "Partner Phone ",
+            'email': "Partner Email",
+        }
 
     def clean_firstname(self):
         first_name = self.cleaned_data["first_name"]
