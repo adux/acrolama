@@ -10,3 +10,6 @@ django-redis==4.12.1
 
 -- Mail --
 django-anymail==6.1.0
+
+-- Stats --
+newrelic==5.22.1.152
