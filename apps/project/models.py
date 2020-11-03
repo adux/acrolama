@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.db.models.signals import pre_save, post_save, m2m_changed
 from django.utils.translation import ugettext as _
@@ -271,8 +273,8 @@ class Event(models.Model):
     category = models.CharField(max_length=50, choices=EVENTCATEGORY)
     cycle = models.IntegerField(default=0, choices=CYCLE, blank=True, null=True)
     title = models.CharField(max_length=100)
-    event_startdate = models.DateField(auto_now_add=True, auto_now=False)
-    event_enddate = models.DateField(auto_now_add=True, auto_now=False)
+    event_startdate = models.DateField(auto_now=False, default=datetime.date.today)
+    event_enddate = models.DateField(auto_now=False, default=datetime.date.today)
     description = models.TextField(max_length=3000)
     time_locations = models.ManyToManyField(TimeLocation)
     irregularities = models.ManyToManyField(Irregularity, blank=True)

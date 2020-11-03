@@ -12,8 +12,6 @@ class EventUpdateForm(forms.ModelForm):
     """
     TODO: Add clean to check conditions like right cycle number,
     """
-    title = forms.CharField(max_length=100, initial="Add Title")
-
     class Meta:
         model = Event
         fields = '__all__'
