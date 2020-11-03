@@ -229,7 +229,7 @@ def bookinglistview(request):
     context = {
         "book_filter": booking_filter,
         "filter": request.GET,
-        "form": form,
+        "bookingcreate_form": form,
         "page_obj": response,
     }
 
@@ -300,7 +300,7 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        booking_filter = BookFilter(
+        book_filter = BookFilter(
             self.request.GET,
             queryset=(
                 Book.objects.all()
@@ -310,8 +310,10 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
             ),
         )
 
+        bookingcreate_form = BookCreateForm()
+
         # Paginator
-        paginator = Paginator(booking_filter.qs, 24)  # Show 24 contacts per page.
+        paginator = Paginator(book_filter.qs, 24)  # Show 24 contacts per page.
         page = self.request.GET.get("page")
         try:
             response = paginator.page(page)
@@ -323,7 +325,8 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         # Context
         context["page_obj"] = response
         context["filter"] = self.request.GET
-        context["book_filter"] = booking_filter
+        context["book_filter"] = book_filter
+        context["bookingcreate_form"] = bookingcreate_form
 
         return context
 

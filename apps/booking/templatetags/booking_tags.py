@@ -30,4 +30,6 @@ def pass_get_filter(context):
 
 @register.filter(name='addclass')
 def addclass(value, arg):
+    if value == "":
+        return
     return value.as_widget(attrs={'class': arg})
