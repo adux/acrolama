@@ -3,16 +3,16 @@
 {% block head_title %}{{block.super}}{{ object.get_discipline_display }}{{ object.level }}{{ object.get_category_display }}: {{object.title}}{% endblock%}
 {% block css %}
         {% compress css file event %}
-            <link rel="stylesheet" type="text/css" href="{% static "booking/bootstrap-datepicker3.standalone.min.css" %}?v=15" media="screen" />
-            <link rel="stylesheet" type="text/css" href="{% static "home/css/popform.css" %}?v=15" media="screen" />
-            <link rel="stylesheet" type="text/css" href="{% static "home/css/event.css" %}?v=15" media="screen" />
-            <link rel="stylesheet" type="text/css" href="{% static "home/css/forms.css" %}?v=15" media="screen" />
+            <link rel="stylesheet" type="text/css" href="{% static "booking/bootstrap-datepicker3.standalone.min.css" %}?v=18" media="screen" />
+            <link rel="stylesheet" type="text/css" href="{% static "home/css/popform.css" %}?v=18" media="screen" />
+            <link rel="stylesheet" type="text/css" href="{% static "home/css/event.css" %}?v=18" media="screen" />
+            <link rel="stylesheet" type="text/css" href="{% static "home/css/forms.css" %}?v=18" media="screen" />
         {% endcompress %}
 {% endblock %}
 {% block js %}
         {% compress js file event %}
-            <script type="text/javascript" src="{% static "booking/bootstrap-datepicker.min.js" %}?v=15"></script>
-            <script type="text/javascript" src="{% static "home/js/jquery.conditional.js" %}?v=15"></script>
+            <script type="text/javascript" src="{% static "booking/bootstrap-datepicker.min.js" %}?v=18"></script>
+            <script type="text/javascript" src="{% static "home/js/jquery.conditional.js" %}?v=18"></script>
         {% endcompress %}
             <script type="text/javascript">
                 window.onload = function() {
