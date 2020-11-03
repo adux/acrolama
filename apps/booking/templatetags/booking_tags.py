@@ -26,3 +26,8 @@ def pass_get_filter(context):
             url_filter_string += '&' + str(key) + '=' + str(value)
 
     return escape(url_filter_string)
+
+
+@register.filter(name='addclass')
+def addclass(value, arg):
+    return value.as_widget(attrs={'class': arg})

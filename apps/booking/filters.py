@@ -1,13 +1,14 @@
-from dal import autocomplete
-
-from django import forms
-from django.db.models import Q
-
 import django_filters
 import datetime
 
-from booking.widgets import M2MSelect, BootstrapedSelect2
+from dal import autocomplete
 
+from django.db.models import Q
+
+# Widgets
+from booking.widgets import M2MSelect, BootstrapedSelect2, BootstrapedSelect2Multiple
+
+# Models
 from booking.models import Book, Attendance, Quotation
 from project.models import Event, TimeOption, TimeLocation
 from users.models import User
@@ -44,7 +45,7 @@ class AttendanceDailyFilter(django_filters.FilterSet):
     # Gets the Event the User is teacher on.
     book__event = django_filters.ChoiceFilter(
         label="Your Events", field_name="book__event", widget=autocomplete.ListSelect2(
-            url="eventteacher-autocomplete",
+            url="event-teacher-autocomplete",
             attrs={'data-theme': 'bootstrap4', 'data-width': 'style'}
         )
     )
@@ -90,7 +91,7 @@ class BookFilter(django_filters.FilterSet):
         queryset=Event.objects.all(), widget=BootstrapedSelect2(url="event-autocomplete",)
     )
     times = django_filters.ModelMultipleChoiceFilter(
-        queryset=TimeOption.objects.all(), widget=forms.CheckboxSelectMultiple
+        queryset=TimeOption.objects.all(), widget=BootstrapedSelect2Multiple(url="to-autocomplete",)
     )
     start_date = django_filters.DateFilter(
         field_name="booked_at",

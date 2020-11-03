@@ -9,7 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required, user_passes_test
 
 from django.contrib import messages
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -29,7 +29,7 @@ from project.models import Event, TimeOption, PriceOption, Irregularity, TimeLoc
 from users.models import User
 
 # Forms
-from project.forms import EventUpdateForm
+from project.forms import EventUpdateForm, EventMinimalCreateForm
 from booking.forms import BookForm, BookDuoInfoForm, BookDateInfoForm
 
 # Filters
@@ -188,6 +188,7 @@ class EventDetail(View):
 @user_passes_test(staff_check)
 def eventlistview(request):
     template = "project/event_list.html"
+
     event_filter = EventFilter(
         request.GET,
         queryset=(
@@ -199,6 +200,15 @@ def eventlistview(request):
             .order_by("-event_startdate")
         ),
     )
+
+    if request.method == "POST":
+        if "newevent" in request.POST:
+            form = EventMinimalCreateForm(request.POST)
+            if form.is_valid():
+                event = form.save()
+                return redirect("event_update", event.pk)
+    else:
+        form = EventMinimalCreateForm()
 
     # Pagination
     paginator = Paginator(event_filter.qs, 24)  # Show 24 contacts per page.
@@ -216,6 +226,7 @@ def eventlistview(request):
     context = {
         "event_filter": event_filter,
         "filter": request.GET,
+        "form": form,
         "page_obj": response,
     }
 

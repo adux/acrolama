@@ -1,26 +1,101 @@
 {% load widget_tweaks %}{% load booking_tags %}
-<form method="get">
     <div class="card card-body bg-light">
-        <h4>Filter</h4>
-        <div class="row">
-            <div class="form-group col-sm-4 col-md-4">
-            {{ event_filter.form.project.label_tag }}
-            {% render_field event_filter.form.project class="form-control" %}
+        <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" id="filter-tab" data-toggle="tab" href="#filter" role="tab" aria-controls="filter" aria-selected="true">Filter</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#create" role="tab" aria-controls="create" aria-selected="false">Create New</a>
+              </li>
+            </ul>
+        </div>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="filter" role="tabpanel" aria-labelledby="filter-tab">
+                <div class="card-body">
+                    <form method="GET">
+                        <div class="row">
+                            <div class="form-group col-sm-4 col-md-4">
+                            {{ event_filter.form.project.label_tag }}
+                            {{ event_filter.form.project|addclass:"form-control" }}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-8">
+                            {{ event_filter.form.time_locations.label_tag }}
+                            {{ event_filter.form.time_locations }}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-2">
+                            {{ event_filter.form.level.label_tag }}
+                            {{ event_filter.form.level|addclass:"form-control" }}
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Search
+                        </button>
+                    </form>
+                </div>
             </div>
-            <div class="form-group col-sm-4 col-md-8">
-            {{ event_filter.form.time_locations.label_tag }}
-            {% render_field event_filter.form.time_locations class="form-control" %}
-            </div>
-            <div class="form-group col-sm-4 col-md-2">
-            {{ event_filter.form.level.label_tag }}
-            {% render_field event_filter.form.level class="form-control" %}
+            <div class="tab-pane fade" id="create" role="tabpanel" aria-labelledby="create-tab">
+                <div class="card-body">
+                    <form action="{% url "event_list" %}" method="POST">{% csrf_token %}
+                        <div class="row">
+                            <div class="form-group col-sm-4 col-md-5">
+                            {{ form.title.label_tag }}
+                            {{ form.title|addclass:"form-control" }}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-5">
+                            {{ form.project.label_tag }}
+                            {{ form.project|addclass:"form-control" }}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-2">
+                            {{ form.policy.label_tag }}
+                            {{ form.policy|addclass:"form-control" }}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="form-group col-sm-4 col-md-3">
+                              {{ form.discipline.label_tag }}
+                              {{ form.discipline|addclass:"form-control" }}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-3">
+                              {{ form.level.label_tag }}
+                              {{ form.level|addclass:"form-control" }}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-3">
+                              {{ form.category.label_tag }}
+                              {{ form.category|addclass:"form-control" }}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="form-group col-sm-12 col-md-12">
+                              {{ form.teachers.label_tag }}
+                              {{ form.teachers }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-12 col-md-12">
+                              {{ form.time_locations.label_tag }}
+                              {{ form.time_locations }}
+                              <a class="btn btn-info btn-sm mt-2" href="{% url "admin:project_timelocation_add" %}"><i class="fas fa-plus"></i> ADD </a>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="form-group col-sm-12 col-md-12">
+                              {{ form.price_options.label_tag }}
+                              {{ form.price_options }}
+                              <a class="btn btn-info btn-sm mt-2" href="{% url "admin:project_priceoption_add" %}"><i class="fas fa-plus"></i> ADD </a>
+                            </div>
+                        </div>
+                        <button type="submit" name="newevent" class="btn btn-warning">
+                        <i class="fas fa-save"></i> Save Event
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">
-        <i class="fas fa-search"></i> Search
-        </button>
     </div>
-</form>
 
 <hr>
 

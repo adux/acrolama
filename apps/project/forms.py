@@ -9,6 +9,10 @@ from booking.widgets import BootstrapedSelect2Multiple
 
 
 class EventUpdateForm(forms.ModelForm):
+    """
+    TODO: Add clean to check conditions like right cycle number,
+    """
+    title = forms.CharField(max_length=100, initial="Add Title")
 
     class Meta:
         model = Event
@@ -25,12 +29,16 @@ class EventUpdateForm(forms.ModelForm):
             "food": TinyMCE(attrs={'cols': 80, 'rows': 10}),
         }
 
-    # def clean(self):
-    #     cleaned_data = super(EventUpdateForm, self).clean()
-    #     new_status = cleaned_data.get('status')
 
-    #     if (self.instance.status in ("IN", "PE", "WL", "CA", "SW")) and (new_status == "PA"):
-    #         # If invoice is not payed raise Error
-    #         if not check_is_book_payed(self.instance.id):
-    #             raise forms.ValidationError("Error: Cannot update to Participant. Invoice not payed.")
-    #     return cleaned_data
+class EventMinimalCreateForm(forms.ModelForm):
+    """
+    TODO: Add clean to check conditions like right cycle number,
+    """
+    class Meta:
+        model = Event
+        exclude = ["description", ]
+        widgets = {
+            "price_options": BootstrapedSelect2Multiple(url="po-autocomplete"),
+            "time_locations": BootstrapedSelect2Multiple(url="tl-autocomplete",),
+            "teachers": BootstrapedSelect2Multiple(url="teachers-autocomplete",),
+        }

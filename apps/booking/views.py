@@ -22,7 +22,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 # from audiovisual.models import Image, Video
 from users.models import User
 from booking.models import Book, Attendance, Quotation
-from project.models import Event, TimeLocation, PriceOption, Irregularity
+from project.models import (
+    Event,
+    TimeOption,
+    TimeLocation,
+    PriceOption,
+    Irregularity,
+)
 
 # Filters
 from booking.filters import (
@@ -128,6 +134,23 @@ class TeachersAutocomplete(autocomplete.Select2QuerySetView):
         return qs
 
 
+class TimeOptionAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        if not herd_check(self.request.user):
+            return TimeOption.objects.none()
+
+        qs = TimeOption.objects.all().order_by("name")
+
+        if self.q:
+            qs = qs.filter(
+                Q(name__icontains=self.q)
+                | Q(regular_day__icontains=self.q)
+            )
+
+        return qs
+
+
 class TimeLocationAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         # Don't forget to filter out results depending on the visitor !
@@ -188,6 +211,8 @@ def bookinglistview(request):
         ),
     )
 
+    form = BookCreateForm()
+
     # Pagination
     paginator = Paginator(booking_filter.qs, 24)  # Show 24 contacts per page.
     page = request.GET.get("page")
@@ -204,13 +229,22 @@ def bookinglistview(request):
     context = {
         "book_filter": booking_filter,
         "filter": request.GET,
+        "form": form,
         "page_obj": response,
     }
 
     # Logic
 
     if request.method == "POST":
+        if "newbooking" in request.POST:
+            form = BookCreateForm(request.POST or None)
+            if form.is_valid():
+                form.save()
+
         checked_list = request.POST.getlist("check")
+        if checked_list is None:
+            return
+
         if "create" in request.POST:
             for pk in checked_list:
                 book = get_book(pk)

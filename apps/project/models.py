@@ -156,10 +156,8 @@ def timelocation_post_save(sender, instance, *args, **kwargs):
 
     try:
         instance._dirty = True
-        print("post_save")
         instance.save()
     finally:
-        print("post_dirty")
         del instance._dirty
 
 
@@ -273,15 +271,15 @@ class Event(models.Model):
     category = models.CharField(max_length=50, choices=EVENTCATEGORY)
     cycle = models.IntegerField(default=0, choices=CYCLE, blank=True, null=True)
     title = models.CharField(max_length=100)
-    event_startdate = models.DateField(auto_now_add=False, auto_now=False, blank=True, null=True)
-    event_enddate = models.DateField(auto_now_add=False, auto_now=False, blank=True, null=True)
+    event_startdate = models.DateField(auto_now_add=True, auto_now=False)
+    event_enddate = models.DateField(auto_now_add=True, auto_now=False)
     description = models.TextField(max_length=3000)
     time_locations = models.ManyToManyField(TimeLocation)
     irregularities = models.ManyToManyField(Irregularity, blank=True)
     price_options = models.ManyToManyField(PriceOption)
     policy = models.ForeignKey(Policy, on_delete=models.PROTECT)
     max_participants = models.PositiveIntegerField(default=2, null=True, blank=True)
-    images = models.ManyToManyField("audiovisual.Image")
+    images = models.ManyToManyField("audiovisual.Image", blank=True)
     videos = models.ManyToManyField("audiovisual.Video", blank=True)
     level = models.ForeignKey(Level, null=True, blank=True, on_delete=models.PROTECT)
     discipline = models.ForeignKey(Discipline, null=True, blank=True, on_delete=models.PROTECT)
@@ -291,7 +289,7 @@ class Event(models.Model):
     included = models.TextField(max_length=2000, null=True, blank=True)
     food = models.TextField(max_length=2000, null=True, blank=True)
     team = models.ManyToManyField("users.User", related_name="eventteam", blank=True)
-    published = models.BooleanField()
+    published = models.BooleanField(default=False)
     registration = models.BooleanField(default=True)
     slug = models.SlugField(unique=True, null=True, blank=True)
 

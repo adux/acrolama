@@ -1,56 +1,99 @@
 {% load widget_tweaks %}{% load booking_tags %}
-<form method="get">
     <div class="card card-body bg-light">
-        <h4>Filter</h4>
-        <div class="row">
-            <div class="form-group col-sm-4 col-md-2">
-            {{ book_filter.form.id.label_tag }}
-            {% render_field book_filter.form.id class="form-control" %}
+        <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" id="filter-tab" data-toggle="tab" href="#filter" role="tab" aria-controls="filter" aria-selected="true">Filter</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#create" role="tab" aria-controls="create" aria-selected="false">Create New</a>
+              </li>
+            </ul>
+        </div>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="filter" role="tabpanel" aria-labelledby="filter-tab">
+                <div class="card-body">
+                    <form method="GET">
+                        <div class="row">
+                            <div class="form-group col-sm-4 col-md-2">
+                            {{ book_filter.form.id.label_tag }}
+                            {{ book_filter.form.id|addclass:"form-control" }}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-3">
+                            {{ book_filter.form.user.label_tag }}
+                            {{ book_filter.form.user|addclass:"form-control" }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-4 col-md-2">
+                            {{ book_filter.form.status.label_tag }}
+                            {{ book_filter.form.status|addclass:"form-control" }}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-8">
+                            {{ book_filter.form.event.label_tag }}
+                            {{ book_filter.form.event|addclass:"form-control" }}
+                            </div>
+                            <div class="form-group col-sm-4 col-md-2">
+                            {{ book_filter.form.event__level.label_tag }}
+                            {{ book_filter.form.event__level|addclass:"form-control" }}
+                            </div>
+                            <div class="form-group col-sm-2 col-md-2">
+                            {{ book_filter.form.start_date.label_tag }}
+                            {{ book_filter.form.start_date|addclass:"form-control datepicker" }}
+                            </div>
+                            <div class="form-group col-sm-2 col-md-2">
+                            {{ book_filter.form.end_date.label_tag }}
+                            {{ book_filter.form.end_date|addclass:"form-control datepicker" }}
+                            </div>
+                            <div class="form-group col-sm-8 col-md-6">
+                            {{ book_filter.form.times.label_tag }}
+                            {{ book_filter.form.times }}
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Search
+                        </button>
+                    </form>
+                </div>
             </div>
-            <div class="form-group col-sm-4 col-md-3">
-            {{ book_filter.form.user.label_tag }}
-            {% render_field book_filter.form.user class="form-control" %}
+            <div class="tab-pane fade" id="create" role="tabpanel" aria-labelledby="create-tab">
+                <div class="card-body">
+                    <form action="{% url 'booking_list' %}" method="POST">{% csrf_token %}
+                        <div class="row">
+                            {{ form.non_field_errors }}
+                            <div class="form-group col-sm-8 col-md-6">
+                                {{ form.user.errors }}
+                                {{ form.user.label_tag }}
+                                {{ form.user}}
+                              <span class="helptext">{{ form.user.help_text }}</span>
+                            </div>
+                            <div class="form-group col-sm-8 col-md-6">
+                                {{ form.event.errors }}
+                                {{ form.event.label_tag }}
+                                {{ form.event }}
+                              <span class="helptext">{{ form.event.help_text }}</span>
+                            </div>
+                            <div class="form-group col-sm-8 col-md-6">
+                                {{ form.times.errors }}
+                                {{ form.times.label_tag }}
+                                {{ form.times|addclass:"form-control"  }}
+                              <span class="helptext">{{ form.times.help_text }}</span>
+                            </div>
+                            <div class="form-group col-sm-8 col-md-6">
+                                {{ form.price.errors }}
+                                {{ form.price.label_tag }}
+                                {{ form.price|addclass:"form-control"  }}
+                              <span class="helptext">{{ form.times.help_text }}</span>
+                            </div>
+                        </div>
+                    <button type="submit" name="newbooking" class="btn btn-info">
+                    <i class="fas fa-plus"></i> Create New
+                    </button>
+                    </form>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="form-group col-sm-4 col-md-2">
-            {{ book_filter.form.status.label_tag }}
-            {% render_field book_filter.form.status class="form-control" %}
-            </div>
-            <div class="form-group col-sm-4 col-md-8">
-            {{ book_filter.form.event.label_tag }}
-            {% render_field book_filter.form.event class="form-control" %}
-            </div>
-            <div class="form-group col-sm-4 col-md-2">
-            {{ book_filter.form.event__level.label_tag }}
-            {% render_field book_filter.form.event__level class="form-control" %}
-            </div>
-            <div class="form-group col-sm-2 col-md-2">
-            {{ book_filter.form.start_date.label_tag }}
-            {% render_field book_filter.form.start_date class="datepicker form-control" %}
-            </div>
-            <div class="form-group col-sm-2 col-md-2">
-            {{ book_filter.form.end_date.label_tag }}
-            {% render_field book_filter.form.end_date class="datepicker form-control" %}
-            </div>
-            <div class="form-group col-sm-8 col-md-6">
-            {{ book_filter.form.times.label_tag }}
-                <ul style=" list-style-type: none; max-height: 120px; overflow-y: auto;" >
-                    {% for choice in book_filter.form.times %}
-                    <li>
-                        <label class="checkbox-inline">
-                            {{ choice.tag }} {{ choice.choice_label }}
-                        </label>
-                    </li>
-                {% endfor %}
-                </ul>
-            </div>
-        </div>
-        <button type="submit" class="btn btn-primary">
-        <i class="fas fa-search"></i> Search
-        </button>
     </div>
-</form>
 
 <hr>
 
@@ -86,7 +129,7 @@
                 <td><a href="{% url 'booking_update' obj.pk %}?{% pass_get_filter %}">{{obj.pk}}</a></td>
                 <td>{{obj.booked_at|date:'d.m'}}</td>
                 <td>{% if event.category == 'CY' %}<a href="{% url 'class' obj.event.slug %}">{{obj.event.title}}</a>{% else %}<a href="{% url 'event' obj.event.slug %}">{{obj.event.title}}</a>{% endif %}</td>
-                <td>{% for obj in obj.times.all %} {% if obj.regular_day %}{{obj.regular_day}}: {{obj.class_starttime|date:'G:i'}}{% else %}{{obj.name}}: {{obj.class_starttime|date:'G:i'}}{% endif %}, {% endfor %}</td>
+                <td>{% for obj in obj.times.all %}{% if obj.regular_day %}{{obj.get_regular_day_display}}: {{obj.class_starttime|date:'G:i'}}{% else %}{{obj.name}}: {{obj.class_starttime|date:'G:i'}}{% endif %}{% endfor %}</td>
                 <td>{{obj.price.name}}</td>
                 <td>{% if obj.status == "PE" %}<span style="color: red;">{{obj.get_status_display}}</span>{% elif obj.status == "PA" %}<span style="color: green;">{{obj.get_status_display}}</span>{% else %}<span style="color: orange;">{{obj.get_status_display}}</span>{% endif %}</td>
                 <td><a href="{% url 'contact_list' %}?user={{obj.user.id}}">{{obj.user.get_full_name}}</a></td>

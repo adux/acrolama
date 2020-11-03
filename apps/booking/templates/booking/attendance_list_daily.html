@@ -3,24 +3,24 @@
 {% load widget_tweaks %}
 {% load booking_tags %}
 {% block content %}
-<form method="get">
     <div class="card card-body bg-light">
         <h4>Filter</h4>
-        <div class="row">
-            <div class="form-group col-sm-4 col-md-6">
-            {{ attendance_filter.form.book__event.label_tag }}
-            {% render_field attendance_filter.form.book__event class="form-control" %}
+        <form method="get">
+            <div class="row">
+                <div class="form-group col-sm-4 col-md-6">
+                {{ attendance_filter.form.book__event.label_tag }}
+                {% render_field attendance_filter.form.book__event class="form-control" %}
+                </div>
+                <div class="form-group col-sm-2 col-md-2">
+                {{ attendance_filter.form.attendance_date.label_tag }}
+                {% render_field attendance_filter.form.attendance_date class="datepicker form-control" %}
+                </div>
             </div>
-            <div class="form-group col-sm-2 col-md-2">
-            {{ attendance_filter.form.attendance_date.label_tag }}
-            {% render_field attendance_filter.form.attendance_date class="datepicker form-control" %}
-            </div>
-        </div>
-        <button type="submit" name="filter" class="btn btn-primary">
-        <i class="fas fa-search"></i> Search
-        </button>
+            <button type="submit" name="filter" class="btn btn-primary">
+            <i class="fas fa-search"></i> Search
+            </button>
+        </form>
     </div>
-</form>
 <form action="{% url 'teacher_attendance' %}" method="POST">{% csrf_token %}
     <div class="table-responsive">
     <table class="table table-hover table-borderless">
@@ -52,11 +52,11 @@
             {% endfor%}
         </tbody>
     </table>
-    </div>
         <button type="submit" name="update" class="btn btn-warning">
-        <i class="fas fa-edit"></i> Check
+        <i class="fas fa-save"></i> Check
         </button>
         <a class="btn btn-info" href={% url "teacher_booking_create" %}?book__event={{request.GET.book__event}}&attendance_date={{request.GET.attendance_date}}><i class="fas fa-plus"></i> Add Book</a>
         <a class="btn btn-info" href={% url "invitation" %}?book__event={{request.GET.book__event}}&attendance_date={{request.GET.attendance_date}}><i class="fas fa-plus"></i> Invite User</a>
+    </div>
 </form>
 {% endblock %}

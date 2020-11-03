@@ -56,11 +56,24 @@ class BookDuoUpdateForm(forms.ModelForm):
 
 
 class BookCreateForm(forms.ModelForm):
+
     class Meta:
         model = Book
         fields = ["user", "event", "times", "price"]
         widgets = {
-            "times": M2MSelect,
+            "times": M2MSelect(),
+            "event": BootstrapedSelect2(url="event-autocomplete"),
+            "user": BootstrapedSelect2(url="user-autocomplete",),
+        }
+
+
+class TeacherBookCreateForm(forms.ModelForm):
+
+    class Meta:
+        model = Book
+        fields = ["user", "event", "times", "price"]
+        widgets = {
+            "times": M2MSelect(),
             "event": BootstrapedSelect2(url="event-autocomplete"),
             "user": BootstrapedSelect2(url="user-autocomplete",),
         }
