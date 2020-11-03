@@ -193,10 +193,8 @@ def eventlistview(request):
         request.GET,
         queryset=(
             Event.objects.all()
-            .select_related("project", "policy", "level", "discipline")
-            .prefetch_related(
-                "time_locations", "irregularities", "price_options", "images", "videos", "teachers", "team"
-            )
+            # .select_related("project", "policy", "level", "discipline")
+            .select_related("project", "level",)
             .order_by("-event_startdate")
         ),
     )
@@ -245,7 +243,7 @@ class EventUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
             self.request.GET,
             queryset=(
                 Event.objects.all()
-                .select_related("level")
+                .select_related("project", "level")
             )
         )
 
