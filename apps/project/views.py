@@ -264,14 +264,6 @@ class EventUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
         return context
 
-    # def form_valid(self, form):
-    #     instance = form.save(commit=False)
-
-    #     # Get the book before save
-    #     # book = get_book(instance.id)
-
-    #     return super().form_valid(form)
-
     def get_success_url(self, **kwargs):
         url = build_url(
             "event_list",

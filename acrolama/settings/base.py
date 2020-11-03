@@ -113,7 +113,7 @@ TINYMCE_DEFAULT_CONFIG = {
     'powerpaste_allow_local_images': "true",
     'plugins': [
         'fullscreen autolink help image imagetools ',
-        'link noneditable preview',
+        'link noneditable preview lists',
         'searchreplace'
     ],
     'toolbar':
@@ -122,6 +122,7 @@ TINYMCE_DEFAULT_CONFIG = {
     'contextmenu': "false",
     'menubar': "false",
     'language': "de",
+    'lists_indent_on_tab': "false"
 }
 
 
