@@ -6,7 +6,6 @@ dj-database-url==0.5.0
 
 -- Utils --
 sentry-sdk==0.18.0
-django-cachalot==2.3.2
 django-redis==4.12.1
 
 -- Mail --

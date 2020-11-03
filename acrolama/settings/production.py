@@ -80,7 +80,6 @@ CACHES = {
         },
     }
 }
-INSTALLED_APPS += ["cachalot"]
 
 
 # HTTPS
