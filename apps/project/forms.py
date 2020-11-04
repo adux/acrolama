@@ -43,34 +43,34 @@ class EventUpdateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(EventUpdateForm, self).__init__(*args, **kwargs)
-        self.fields['project'].queryset = cache.get_or_set(
-            'cache_project', Project.objects.all(), 120
-        )
         self.fields['time_locations'].queryset = cache.get_or_set(
             'cache_time_locations', TimeLocation.objects.all(), 120
         )
-        self.fields['irregularities'].queryset = cache.get_or_set(
-            'cache_irregularities', Irregularity.objects.all(), 120
-        )
-        self.fields['price_options'].queryset = cache.get_or_set(
-            'cache_price_options', PriceOption.objects.all(), 120
-        )
-        self.fields['policy'].queryset = cache.get_or_set(
-            'cache_policy', Policy.objects.all(), 120
-        )
-        self.fields['discipline'].queryset = cache.get_or_set(
-            'cache_discipline', Discipline.objects.all(), 120
-        )
-        self.fields['teachers'].queryset = cache.get_or_set(
-            'cache_user', User.objects.all(), 120
-        )
-        self.fields['team'].queryset = cache.get('cache_user')
-        self.fields['images'].queryset = cache.get_or_set(
-            'cache_images', Image.objects.all(), 120
-        )
-        self.fields['videos'].queryset = cache.get_or_set(
-            'cache_videos', Video.objects.all(), 120
-        )
+        # self.fields['project'].queryset = cache.get_or_set(
+        #     'cache_project', Project.objects.all(), 120
+        # )
+        # self.fields['irregularities'].queryset = cache.get_or_set(
+        #     'cache_irregularities', Irregularity.objects.all(), 120
+        # )
+        # self.fields['price_options'].queryset = cache.get_or_set(
+        #     'cache_price_options', PriceOption.objects.all(), 120
+        # )
+        # self.fields['policy'].queryset = cache.get_or_set(
+        #     'cache_policy', Policy.objects.all(), 120
+        # )
+        # self.fields['discipline'].queryset = cache.get_or_set(
+        #     'cache_discipline', Discipline.objects.all(), 120
+        # )
+        # self.fields['teachers'].queryset = cache.get_or_set(
+        #     'cache_user', User.objects.all(), 120
+        # )
+        # self.fields['team'].queryset = cache.get('cache_user')
+        # self.fields['images'].queryset = cache.get_or_set(
+        #     'cache_images', Image.objects.all(), 120
+        # )
+        # self.fields['videos'].queryset = cache.get_or_set(
+        #     'cache_videos', Video.objects.all(), 120
+        # )
 
 
 class EventMinimalCreateForm(forms.ModelForm):
