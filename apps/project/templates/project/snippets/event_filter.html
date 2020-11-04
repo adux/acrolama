@@ -129,8 +129,8 @@
                 <td><input type="checkbox" name="check" value="{{obj.id}}"></td>
                 <td><a href="{% url "event_update" obj.pk %}?{% pass_get_filter %}">{{obj.title}}</a></td>
                 <td><a href="{% url "event_update" obj.pk %}?{% pass_get_filter %}">{{obj.pk}}</a></td>
-                <td>{{obj.project}} - {% comment %}{% for obj in obj.project.manager.all %}{{obj.first_name}}{% endfor %}{% endcomment %}</td>
-                <td>{{obj.event_startdate|date:'d M. y.'}}</td>
+                <td>{{obj.project}}</td>
+                <td>{{obj.event_startdate|date:'y. M. d'}}</td>
                 <td>{{obj.cycle|default_if_none:"--"}}</td>
                 <td>{{obj.level.get_name_display}}</td>
                 <td>{% if obj.published == False %}<i class="fas fa-times" style="color: red;"></i>{% else %}<i class="fas fa-check" style="color: green;"></i>{% endif %}</td>
