@@ -28,7 +28,7 @@ class EventUpdateForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = '__all__'
-        exclude = ["slug", ]
+        exclude = ["slug", "team", ]
         widgets = {
             "price_options": BootstrapedSelect2Multiple(url="po-autocomplete",),
             "time_locations": BootstrapedSelect2Multiple(url="tl-autocomplete",),
