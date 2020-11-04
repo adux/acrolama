@@ -68,7 +68,7 @@ class EventUpdateForm(forms.ModelForm):
         self.fields['images'].queryset = cache.get_or_set(
             'cache_images', Image.objects.all(), 120
         )
-        self.fields['Video'].queryset = cache.get_or_set(
+        self.fields['videos'].queryset = cache.get_or_set(
             'cache_videos', Video.objects.all(), 120
         )
 
