@@ -95,7 +95,7 @@ urlpatterns = [
     path("herd/booking/<int:pk>/update/", BookUpdateView.as_view(), name="booking_update"),
     # Event
     path("herd/event/", eventlistview, name="event_list"),
-    path("herd/event/<int:pk>/update/", EventUpdateView, name="event_update"),
+    path("herd/event/<int:pk>/update/", EventUpdateView.as_view(), name="event_update"),
     # Quotation
     path("herd/quotation/", quotationlistview, name="quotation_list"),
     path("herd/quotation/<int:pk>/update/", QuotationUpdateView.as_view(), name="quotation_update"),

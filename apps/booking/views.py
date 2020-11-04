@@ -9,6 +9,7 @@ from invitations.utils import get_invitation_model
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.cache import cache
 from django.db.models import Q  # Queries with OR
 from django.http import HttpResponseRedirect
 from django.utils.translation import gettext as _
@@ -157,7 +158,8 @@ class TimeLocationAutocomplete(autocomplete.Select2QuerySetView):
         if not herd_check(self.request.user):
             return TimeLocation.objects.none()
 
-        qs = TimeLocation.objects.all().order_by("name", "location").select_related("location")
+        # qs = TimeLocation.objects.all().order_by("name", "location").select_related("location")
+        qs = cache.get_or_set('cache_time_locations', TimeLocation.objects.all(), 120)
 
         if self.q:
             qs = qs.filter(
@@ -192,7 +194,8 @@ class PriceOptionAutocomplete(autocomplete.Select2QuerySetView):
         if not staff_check(self.request.user):
             return PriceOption.objects.none()
 
-        qs = PriceOption.objects.all().order_by("name")
+        # qs = PriceOption.objects.all().order_by("name")
+        qs = cache.get_or_set('cache_price_options', PriceOption.objects.all(), 120)
 
         if self.q:
             qs = qs.filter(Q(name__icontains=self.q) | Q(price_chf__icontains=self.q) | Q(name__icontains=self.q))

@@ -52,9 +52,9 @@ class EventUpdateForm(forms.ModelForm):
         # self.fields['irregularities'].queryset = cache.get_or_set(
         #     'cache_irregularities', Irregularity.objects.all(), 120
         # )
-        # self.fields['price_options'].queryset = cache.get_or_set(
-        #     'cache_price_options', PriceOption.objects.all(), 120
-        # )
+        self.fields['price_options'].queryset = cache.get_or_set(
+            'cache_price_options', PriceOption.objects.all(), 120
+        )
         # self.fields['policy'].queryset = cache.get_or_set(
         #     'cache_policy', Policy.objects.all(), 120
         # )
