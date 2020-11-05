@@ -32,8 +32,6 @@ class EventUpdateForm(forms.ModelForm):
         fields = '__all__'
         exclude = ["slug", "team", ]
         widgets = {
-            # "irregularities": BootstrapedSelect2Multiple(url="irregularities-autocomplete",),
-            # "teachers": BootstrapedSelect2Multiple(url="teachers-autocomplete",),
             "description": TinyMCE(attrs={'cols': 40, 'rows': 20}),
             "prerequisites": TinyMCE(attrs={'cols': 40, 'rows': 20}),
             "highlights": TinyMCE(attrs={'cols': 80, 'rows': 10}),

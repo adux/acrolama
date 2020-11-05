@@ -281,22 +281,47 @@ def eventlistview(request):
 def EventUpdateView(request, pk):
     template = "project/event_update.html"
 
-    obj = get_object_or_404(Event, id=pk)
-    form = EventUpdateForm(
-        request.POST or None,
-        instance=obj,
-        initial={
-            'price_options': [p.id for p in obj.price_options.all()],
-            'time_locations': [p.id for p in obj.time_locations.all()],
-            'teachers': [p.id for p in obj.teachers.all()],
-            'irregularities': [p.id for p in obj.irregularities.all()],
-            'images': [p.id for p in obj.images.all()],
-        }
-    )
+    obj = cache.get_or_set('cache_event_'+str(pk), get_object_or_404(Event, id=pk), 120)
 
     if request.method == "POST":
+        form = EventUpdateForm(
+            request.POST,
+            instance=obj,
+        )
         if form.is_valid():
             form.save()
+    else:
+        form = EventUpdateForm(
+            None,
+            initial={
+                # m2m
+                'time_locations': [p.id for p in obj.time_locations.all()],
+                'irregularities': [p.id for p in obj.irregularities.all()],
+                'price_options': [p.id for p in obj.price_options.all()],
+                'teachers': [p.id for p in obj.teachers.all()],
+                'images': [p.id for p in obj.images.all()],
+                'videos': [p.id for p in obj.videos.all()],
+                # fk
+                'project': obj.project.id,
+                'policy': obj.policy.id,
+                'level': obj.level.id,
+                'discipline': obj.discipline.id,
+                # fields
+                'category': obj.category,
+                'cycle': obj.cycle,
+                'title': obj.title,
+                'event_startdate': obj.event_startdate,
+                'event_enddate': obj.event_enddate,
+                'description': obj.description,
+                'max_participants': obj.max_participants,
+                'prerequisites': obj.prerequisites,
+                'highlights': obj.highlights,
+                'included': obj.included,
+                'food': obj.food,
+                'published': obj.published,
+                'registration': obj.registration,
+            }
+        )
 
     context = {
         "filter": request.GET,
