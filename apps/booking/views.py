@@ -125,7 +125,7 @@ class TeachersAutocomplete(autocomplete.Select2QuerySetView):
         if not herd_check(self.request.user):
             return User.objects.none()
 
-        qs = User.objects.all().order_by("last_name").filter(is_teacher=True)
+        qs = cache.get_or_set('cache_teachers_all', User.objects.all().order_by("last_name").filter(is_teacher=True), 120)
 
         if self.q:
             qs = qs.filter(
@@ -177,7 +177,7 @@ class IrregularityAutocomplete(autocomplete.Select2QuerySetView):
         if not herd_check(self.request.user):
             return Irregularity.objects.none()
 
-        qs = Irregularity.objects.all().order_by("-id").prefetch_related("time_location")
+        qs = cache.get_or_set('cache_irregularities_all', Irregularity.objects.all().order_by("-id"), 120)
 
         if self.q:
             qs = qs.filter(
@@ -195,7 +195,7 @@ class PriceOptionAutocomplete(autocomplete.Select2QuerySetView):
             return PriceOption.objects.none()
 
         # qs = PriceOption.objects.all().order_by("name")
-        qs = cache.get_or_set('cache_price_options', PriceOption.objects.all(), 120)
+        qs = cache.get_or_set('cache_price_options_all', PriceOption.objects.all(), 120)
 
         if self.q:
             qs = qs.filter(Q(name__icontains=self.q) | Q(price_chf__icontains=self.q) | Q(name__icontains=self.q))

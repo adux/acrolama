@@ -1,3 +1,4 @@
+from dal import autocomplete
 from tinymce.widgets import TinyMCE
 
 from django import forms
@@ -25,15 +26,31 @@ class EventUpdateForm(forms.ModelForm):
     """
     TODO: Add clean to check conditions like right cycle number,
     """
+    price_options = forms.MultipleChoiceField(
+        choices=[(p.id, p.name) for p in cache.get_or_set('cache_price_options_all', PriceOption.objects.all(), 120)],
+        widget=autocomplete.Select2Multiple(url="po-autocomplete",
+                                            attrs={'data-theme': 'bootstrap4', 'data-width': 'style'}))
+    time_locations = forms.MultipleChoiceField(
+        choices=[(p.id, p.name) for p in cache.get_or_set('cache_time_locations_all', TimeLocation.objects.all(), 120)],
+        widget=autocomplete.Select2Multiple(url="tl-autocomplete",
+                                            attrs={'data-theme': 'bootstrap4', 'data-width': 'style'}))
+
+    irregularities = forms.MultipleChoiceField(
+        choices=[(p.id, p.description) for p in cache.get_or_set('cache_irregularities_all', Irregularity.objects.all().order_by("-id"), 120)],
+        widget=autocomplete.Select2Multiple(url="irregularities-autocomplete",
+                                            attrs={'data-theme': 'bootstrap4', 'data-width': 'style'}))
+    teachers = forms.MultipleChoiceField(
+        choices=[(p.id, p.get_full_name) for p in cache.get_or_set('cache_teachers_all', User.objects.filter(is_teacher=True), 120)],
+        widget=autocomplete.Select2Multiple(url="irregularities-autocomplete",
+                                            attrs={'data-theme': 'bootstrap4', 'data-width': 'style'}))
+
     class Meta:
         model = Event
         fields = '__all__'
         exclude = ["slug", "team", ]
         widgets = {
-            "price_options": BootstrapedSelect2Multiple(url="po-autocomplete",),
-            "time_locations": BootstrapedSelect2Multiple(url="tl-autocomplete",),
-            "irregularities": BootstrapedSelect2Multiple(url="irregularities-autocomplete",),
-            "teachers": BootstrapedSelect2Multiple(url="teachers-autocomplete",),
+            # "irregularities": BootstrapedSelect2Multiple(url="irregularities-autocomplete",),
+            # "teachers": BootstrapedSelect2Multiple(url="teachers-autocomplete",),
             "description": TinyMCE(attrs={'cols': 40, 'rows': 20}),
             "prerequisites": TinyMCE(attrs={'cols': 40, 'rows': 20}),
             "highlights": TinyMCE(attrs={'cols': 80, 'rows': 10}),
@@ -43,9 +60,9 @@ class EventUpdateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(EventUpdateForm, self).__init__(*args, **kwargs)
-        self.fields['time_locations'].queryset = cache.get_or_set(
-            'cache_time_locations', TimeLocation.objects.all(), 120
-        )
+        # self.fields['time_locations'].queryset = cache.get_or_set(
+        #     'cache_time_locations', TimeLocation.objects.all(), 120
+        # )
         # self.fields['project'].queryset = cache.get_or_set(
         #     'cache_project', Project.objects.all(), 120
         # )

@@ -281,8 +281,17 @@ def eventlistview(request):
 def EventUpdateView(request, pk):
     template = "project/event_update.html"
 
-    obj = cache.get_or_set('cache_event_' + str(pk), get_object_or_404(Event, id=pk), 120)
-    form = EventUpdateForm(request.POST or None, instance=obj)
+    obj = get_object_or_404(Event, id=pk)
+    form = EventUpdateForm(
+        request.POST or None,
+        instance=obj,
+        initial={
+            'price_options': [p.id for p in obj.price_options.all()],
+            'time_locations': [p.id for p in obj.time_locations.all()],
+            'teachers': [p.id for p in obj.teachers.all()],
+            'irregularities': [p.id for p in obj.irregularities.all()],
+        }
+    )
 
     if request.method == "POST":
         if form.is_valid():
