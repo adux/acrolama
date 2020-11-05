@@ -290,6 +290,7 @@ def EventUpdateView(request, pk):
             'time_locations': [p.id for p in obj.time_locations.all()],
             'teachers': [p.id for p in obj.teachers.all()],
             'irregularities': [p.id for p in obj.irregularities.all()],
+            'images': [p.id for p in obj.images.all()],
         }
     )
 
