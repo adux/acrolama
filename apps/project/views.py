@@ -195,8 +195,10 @@ def eventlistview(request):
         queryset=(
             Event.objects.all()
             # .select_related("project", "policy", "level", "discipline")
-            .select_related("project", "level",)
-            .order_by("-event_startdate")
+            .select_related(
+                "project",
+                "level",
+            ).order_by("-event_startdate")
         ),
     )
 
@@ -281,7 +283,42 @@ def eventlistview(request):
 def EventUpdateView(request, pk):
     template = "project/event_update.html"
 
-    obj = cache.get_or_set('cache_event_'+str(pk), get_object_or_404(Event, id=pk), 120)
+    obj = cache.get_or_set("cache_event_" + str(pk), get_object_or_404(Event, id=pk), 120)
+
+    def cache_m2m(fields=[], obj=None):
+        cached_m2m = {}
+        for f in fields:
+            cached_obj = cache.get_or_set(
+                "cached_" + f + "_event" + str(obj.id), [p.id for p in getattr(obj, str(f)).all()], 120
+            )
+            cached_m2m.update({str(f): cached_obj})
+        return cached_m2m
+
+    initial = cache_m2m(["time_locations", "price_options", "teachers", "irregularities", "images", "videos"], obj)
+
+    initial.update(
+        {
+            # fk
+            "project": obj.project.id,
+            "policy": obj.policy.id,
+            "level": obj.level.id,
+            "discipline": obj.discipline.id,
+            # fields
+            "category": obj.category,
+            "cycle": obj.cycle,
+            "title": obj.title,
+            "event_startdate": obj.event_startdate,
+            "event_enddate": obj.event_enddate,
+            "description": obj.description,
+            "max_participants": obj.max_participants,
+            "prerequisites": obj.prerequisites,
+            "highlights": obj.highlights,
+            "included": obj.included,
+            "food": obj.food,
+            "published": obj.published,
+            "registration": obj.registration,
+        }
+    )
 
     if request.method == "POST":
         form = EventUpdateForm(
@@ -291,37 +328,7 @@ def EventUpdateView(request, pk):
         if form.is_valid():
             form.save()
     else:
-        form = EventUpdateForm(
-            None,
-            initial={
-                # m2m
-                'time_locations': [p.id for p in obj.time_locations.all()],
-                'irregularities': [p.id for p in obj.irregularities.all()],
-                'price_options': [p.id for p in obj.price_options.all()],
-                'teachers': [p.id for p in obj.teachers.all()],
-                'images': [p.id for p in obj.images.all()],
-                'videos': [p.id for p in obj.videos.all()],
-                # fk
-                'project': obj.project.id,
-                'policy': obj.policy.id,
-                'level': obj.level.id,
-                'discipline': obj.discipline.id,
-                # fields
-                'category': obj.category,
-                'cycle': obj.cycle,
-                'title': obj.title,
-                'event_startdate': obj.event_startdate,
-                'event_enddate': obj.event_enddate,
-                'description': obj.description,
-                'max_participants': obj.max_participants,
-                'prerequisites': obj.prerequisites,
-                'highlights': obj.highlights,
-                'included': obj.included,
-                'food': obj.food,
-                'published': obj.published,
-                'registration': obj.registration,
-            }
-        )
+        form = EventUpdateForm(initial=initial)
 
     context = {
         "filter": request.GET,
