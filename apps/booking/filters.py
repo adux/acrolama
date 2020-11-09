@@ -6,7 +6,7 @@ from dal import autocomplete
 from django.db.models import Q
 
 # Widgets
-from booking.widgets import M2MSelect, BootstrapedSelect2, BootstrapedSelect2Multiple
+from booking.widgets import M2MSelect, BootstrapedSelect2, BootstrapedSelect2Multiple, BootstrapedModelSelect2Multiple
 
 # Models
 from booking.models import Book, Attendance, Quotation
@@ -91,7 +91,7 @@ class BookFilter(django_filters.FilterSet):
         queryset=Event.objects.all(), widget=BootstrapedSelect2(url="event-autocomplete",)
     )
     times = django_filters.ModelMultipleChoiceFilter(
-        queryset=TimeOption.objects.all(), widget=BootstrapedSelect2Multiple(url="to-autocomplete",)
+        queryset=TimeOption.objects.all(), widget=BootstrapedModelSelect2Multiple(url="to-autocomplete",)
     )
     start_date = django_filters.DateFilter(
         field_name="booked_at",

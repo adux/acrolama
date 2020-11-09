@@ -2,13 +2,13 @@
 
 Welcome to {{ site_name }}!!
 
-Someone (You we hope) registered {{ user_display }} as an e-mail address to connect their account our happy surveillance center.
+Someone -You we hope- registered {{ user_display }} as an e-mail address to our happy surveillance center.
 
-To confirm this is correct and it was indeed you, please go to: {{ activate_url }}
+To confirm please go to: {{ activate_url }}
 
 {% endblocktrans %}{% endautoescape %}
-{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}See you soon - or well, each other - we're always watching...
+{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}See you soon!
 {{ site_domain }}
 
-PS: Just keeding ;-) we have a no drama policy at {{site_name}} <3
+PS: Just kidding the surveillance thing, no drama policy at {{site_name}} <3
 {% endblocktrans %}

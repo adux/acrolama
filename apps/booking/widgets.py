@@ -1,4 +1,4 @@
-from dal.autocomplete import ModelSelect2, ModelSelect2Multiple
+from dal.autocomplete import ModelSelect2, ModelSelect2Multiple, Select2Multiple
 from django import forms
 from django.utils.datastructures import MultiValueDict
 
@@ -46,7 +46,16 @@ class BootstrapedSelect2(ModelSelect2):
         return attrs
 
 
-class BootstrapedSelect2Multiple(ModelSelect2Multiple):
+class BootstrapedModelSelect2Multiple(ModelSelect2Multiple):
+    def build_attrs(self, *args, **kwargs):
+        """Set Bootraped default"""
+        attrs = super(BootstrapedModelSelect2Multiple, self).build_attrs(*args, **kwargs)
+        attrs['data-theme'] = 'bootstrap4'
+        attrs['data-width'] = 'style'
+        return attrs
+
+
+class BootstrapedSelect2Multiple(Select2Multiple):
     def build_attrs(self, *args, **kwargs):
         """Set Bootraped default"""
         attrs = super(BootstrapedSelect2Multiple, self).build_attrs(*args, **kwargs)

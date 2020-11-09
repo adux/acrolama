@@ -40,6 +40,8 @@ from booking.views import (
     TeachersAutocomplete,
     PriceOptionAutocomplete,
     TimeOptionAutocomplete,
+    ImagesAutocomplete,
+    VideosAutocomplete,
 )
 
 from accounting.views import (
@@ -113,6 +115,8 @@ urlpatterns = [
     re_path(r"^tl-autocomplete/$", TimeLocationAutocomplete.as_view(), name="tl-autocomplete"),
     re_path(r"^po-autocomplete/$", PriceOptionAutocomplete.as_view(), name="po-autocomplete"),
     re_path(r"^irregularities-autocomplete/$", IrregularityAutocomplete.as_view(), name="irregularities-autocomplete"),
+    re_path(r"^images-autocomplete/$", ImagesAutocomplete.as_view(), name="images-autocomplete"),
+    re_path(r"^videos-autocomplete/$", VideosAutocomplete.as_view(), name="videos-autocomplete"),
 ]
 
 if settings.DEBUG:

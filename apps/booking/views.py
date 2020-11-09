@@ -20,7 +20,7 @@ from django.views.generic import TemplateView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 # Models
-# from audiovisual.models import Image, Video
+from audiovisual.models import Image, Video
 from users.models import User
 from booking.models import Book, Attendance, Quotation
 from project.models import (
@@ -199,6 +199,36 @@ class PriceOptionAutocomplete(autocomplete.Select2QuerySetView):
 
         if self.q:
             qs = qs.filter(Q(name__icontains=self.q) | Q(price_chf__icontains=self.q) | Q(name__icontains=self.q))
+
+        return qs
+
+
+class ImagesAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        if not staff_check(self.request.user):
+            return Image.objects.none()
+
+        # qs = PriceOption.objects.all().order_by("name")
+        qs = cache.get_or_set('cache_image_all', Image.objects.all(), 120)
+
+        if self.q:
+            qs = qs.filter(Q(name__icontains=self.q))
+
+        return qs
+
+
+class VideosAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        if not staff_check(self.request.user):
+            return Video.objects.none()
+
+        # qs = PriceOption.objects.all().order_by("name")
+        qs = cache.get_or_set('cache_video_all', Video.objects.all(), 120)
+
+        if self.q:
+            qs = qs.filter(Q(name__icontains=self.q))
 
         return qs
 
@@ -540,7 +570,7 @@ def contactlistview(request):
     )
 
     # Pagination
-    paginator = Paginator(booking_filter.qs, 24)  # Show 24 contacts per page.
+    paginator = Paginator(booking_filter.qs, 30)  # Show 24 contacts per page.
     page = request.GET.get("page")
 
     try:

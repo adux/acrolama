@@ -321,14 +321,13 @@ def EventUpdateView(request, pk):
     )
 
     if request.method == "POST":
-        form = EventUpdateForm(
-            request.POST,
-            instance=obj,
-        )
+        form = EventUpdateForm(request.POST, instance=obj,)
+
         if form.is_valid():
             form.save()
+
     else:
-        form = EventUpdateForm(initial=initial)
+        form = EventUpdateForm(initial=initial, instance=obj)
 
     context = {
         "filter": request.GET,
