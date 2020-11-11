@@ -2,10 +2,9 @@ from collections import defaultdict
 
 from django.http import HttpResponseRedirect
 from django.views import View
-from django.views.generic import DetailView, FormView, UpdateView
+from django.views.generic import DetailView, FormView
 from django.views.generic.detail import SingleObjectMixin
 
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required, user_passes_test
 
 from django.contrib import messages
@@ -17,13 +16,8 @@ from django.core.cache import cache
 # Utils
 from booking.utils import (
     email_sender,
-    build_url,
     staff_check,
 )
-
-# from booking.services import (
-#     inform_book,
-# )
 
 # Models
 from project.models import Event, TimeOption, PriceOption, Irregularity, TimeLocation
@@ -234,53 +228,9 @@ def eventlistview(request):
     return render(request, template, context)
 
 
-# class EventUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
-#     model = Event
-#     template_name = "project/event_update.html"
-#     form_class = EventUpdateForm
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-
-#         event_filter = EventFilter(
-#             self.request.GET,
-#             queryset=(
-#                 Event.objects.all()
-#                 .select_related("project", "level")
-#             )
-#         )
-
-#         # Paginator
-#         paginator = Paginator(event_filter.qs, 24)  # Show 24 contacts per page.
-#         page = self.request.GET.get("page")
-#         try:
-#             response = paginator.page(page)
-#         except PageNotAnInteger:
-#             response = paginator.page(1)
-#         except EmptyPage:
-#             response = paginator.page(paginator.num_pages)
-
-#         # Context
-#         context["page_obj"] = response
-#         context["filter"] = self.request.GET
-#         context["event_filter"] = event_filter
-
-#         return context
-
-#     def get_success_url(self, **kwargs):
-#         url = build_url(
-#             "event_list",
-#             get=self.request.GET.items(),
-#         )
-#         return url
-
-#     def test_func(self):
-#         return staff_check(self.request.user)
-
-
 @login_required
 @user_passes_test(staff_check)
-def EventUpdateView(request, pk):
+def eventupdateview(request, pk):
     template = "project/event_update.html"
 
     obj = cache.get_or_set("cache_event_" + str(pk), get_object_or_404(Event, id=pk), 120)
@@ -321,10 +271,10 @@ def EventUpdateView(request, pk):
     )
 
     if request.method == "POST":
-        form = EventUpdateForm(request.POST, instance=obj,)
-
+        form = EventUpdateForm(request.POST, initial=initial, instance=obj)
         if form.is_valid():
             form.save()
+            return redirect('event_list')
 
     else:
         form = EventUpdateForm(initial=initial, instance=obj)
