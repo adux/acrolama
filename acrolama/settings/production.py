@@ -1,6 +1,7 @@
 import dj_database_url
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.redis import RedisIntegration
 
 from urllib.parse import urlparse
 
@@ -35,7 +36,12 @@ COLLECTFAST_STRATEGY = "collectfast.strategies.boto3.Boto3Strategy"
 
 # Sentry SDK
 # ------------------------------------------------------------------------------
-sentry_sdk.init(dsn="https://449183d07de2455ba0ecf384ca29a77f@sentry.io/1310482", integrations=[DjangoIntegration()])
+sentry_sdk.init(
+    dsn="https://449183d07de2455ba0ecf384ca29a77f@sentry.io/1310482",
+    integrations=[
+        DjangoIntegration(),
+        RedisIntegration(),
+    ])
 
 # Anymail (Mailgun)
 # ------------------------------------------------------------------------------

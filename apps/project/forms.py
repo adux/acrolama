@@ -1,3 +1,5 @@
+import logging
+
 from django.db import models
 
 from tinymce.widgets import TinyMCE
@@ -72,6 +74,7 @@ class EventUpdateForm(forms.Form):
                 m2m_fields.remove(m2m_field)
         # Filter the List and get them by attname that later will be in data[name]
         changed_m2m_fields = [field for field in m2m_fields if field.attname in self.changed_data]
+        logging.error(changed_m2m_fields)
 
         if changed_m2m_fields:
             for m2m_field in changed_m2m_fields:
@@ -85,6 +88,7 @@ class EventUpdateForm(forms.Form):
                     selected_obj = [
                         obj for obj in m2m_field.related_model.objects.filter(id__in=data[m2m_field.attname])
                     ]
+                    logging.error(selected_obj)
                 # set the selected objects
                 getattr(obj, m2m_field.attname).set(selected_obj)
 
