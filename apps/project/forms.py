@@ -73,7 +73,7 @@ class EventUpdateForm(forms.Form):
         # Filter the List and get them by attname that later will be in data[name]
         changed_m2m_fields = [field for field in m2m_fields if field.attname in self.changed_data]
 
-        if not changed_m2m_fields:
+        if changed_m2m_fields:
             for m2m_field in changed_m2m_fields:
                 model_name = m2m_field.related_model.__name__.lower()
                 # check if model still in query
@@ -85,13 +85,12 @@ class EventUpdateForm(forms.Form):
                     selected_obj = [
                         obj for obj in m2m_field.related_model.objects.filter(id__in=data[m2m_field.attname])
                     ]
-                print(selected_obj)
                 # set the selected objects
                 getattr(obj, m2m_field.attname).set(selected_obj)
 
                 # Delete cache of model
                 model_name = m2m_field.related_model.__name__.lower()
-                cache.delete("cache_" + model_name + "_all", m2m_field.related_model.objects.all(), 120)
+                cache.delete("cache_" + model_name + "_all")
 
     def __init__(self, *args, **kwargs):
         self.instance = kwargs.pop("instance", None)
