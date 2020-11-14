@@ -84,9 +84,6 @@ class EventUpdateForm(forms.Form):
                 # If there is a cached version filter in python and dont hit db
                 if cached_query is not None:
                     selected_obj = [obj for obj in cached_query if str(obj.id) in data[m2m_field.attname]]
-                    logging.error(data[m2m_field.attname])
-                    logging.error(cached_query)
-                    logging.error(selected_obj)
                 else:
                     selected_obj = [
                         obj for obj in m2m_field.related_model.objects.filter(id__in=data[m2m_field.attname])
@@ -94,9 +91,8 @@ class EventUpdateForm(forms.Form):
                 # set the selected objects
                 getattr(obj, m2m_field.attname).set(selected_obj)
 
-                # Delete cache of model
-                model_name = m2m_field.related_model.__name__.lower()
-                cache.delete("cache_" + model_name + "_all")
+                # Remove the initial
+                cache.delete("cached_" + m2m_field.attname + "_event" + str(obj.id))
 
     def __init__(self, *args, **kwargs):
         self.instance = kwargs.pop("instance", None)
