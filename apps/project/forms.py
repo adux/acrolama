@@ -83,7 +83,7 @@ class EventUpdateForm(forms.Form):
 
                 # If there is a cached version filter in python and dont hit db
                 if cached_query is not None:
-                    selected_obj = [obj for obj in cached_query if obj.id in data[m2m_field.attname]]
+                    selected_obj = [obj for obj in cached_query if str(obj.id) in data[m2m_field.attname]]
                     logging.error(data[m2m_field.attname])
                     logging.error(cached_query)
                     logging.error(selected_obj)
