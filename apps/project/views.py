@@ -274,7 +274,7 @@ def eventupdateview(request, pk):
         if form.is_valid():
             form.save()
             # Delete the cached Event
-            obj = cache.delete("cache_event_" + str(pk))
+            cache.delete("cache_event_" + str(pk))
             return redirect("event_list")
 
     else:
