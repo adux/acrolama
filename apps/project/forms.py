@@ -71,7 +71,7 @@ class EventUpdateForm(forms.Form):
             if m2m_field.attname in excludes:
                 m2m_fields.remove(m2m_field)
         # Filter the List and get them by attname that later will be in data[name]
-        changed_m2m_fields = [i for i in m2m_fields if i in self.changed_data]
+        changed_m2m_fields = [field for field in m2m_fields if field.attname in self.changed_data]
 
         for m2m_field in changed_m2m_fields:
             model_name = m2m_field.related_model.__name__.lower()
