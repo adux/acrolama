@@ -233,6 +233,7 @@ def eventlistview(request):
 def eventupdateview(request, pk):
     template = "project/event_update.html"
 
+    # Cache to re-enter fast and do the 20 + queries
     obj = cache.get_or_set("cache_event_" + str(pk), get_object_or_404(Event, id=pk), 120)
 
     def cache_m2m(fields=[], obj=None):
@@ -248,14 +249,12 @@ def eventupdateview(request, pk):
 
     initial.update(
         {
-            # fk
-            "project": obj.project.id,
-            "policy": obj.policy.id,
-            "level": obj.level.id,
-            "discipline": obj.discipline.id,
-            # fields
+            "project_id": str(obj.project.id),
+            "policy_id": str(obj.policy.id),
+            "level_id": str(obj.level.id),
+            "discipline_id": str(obj.discipline.id),
             "category": obj.category,
-            "cycle": obj.cycle,
+            "cycle": str(obj.cycle),
             "title": obj.title,
             "event_startdate": obj.event_startdate,
             "event_enddate": obj.event_enddate,
@@ -274,7 +273,9 @@ def eventupdateview(request, pk):
         form = EventUpdateForm(request.POST, initial=initial, instance=obj)
         if form.is_valid():
             form.save()
-            return redirect('event_list')
+            # Delete the cached Event
+            obj = cache.delete("cache_event_" + str(pk))
+            return redirect("event_list")
 
     else:
         form = EventUpdateForm(initial=initial, instance=obj)
@@ -282,6 +283,7 @@ def eventupdateview(request, pk):
     context = {
         "filter": request.GET,
         "form": form,
+        "object": obj,
     }
 
     return render(request, template, context)

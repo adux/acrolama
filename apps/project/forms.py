@@ -47,57 +47,43 @@ class EventUpdateForm(forms.Form):
             m2m_choices[field.attname] = choices
         return m2m_choices
 
-    def add_id_to_fk_fields(self, choices, data):
-        for field in choices:
-            model_name = field.related_model.__name__.lower()
-            if model_name in data:
-                data[model_name + '_id'] = data.pop(model_name)
-        return data
-
     def save(self):
         """
         TODO: solve atomicity and race conditions, atomicity is priority
 
+        m2m_fields_name = list(map(lambda x: x.attname, m2m_fields))
         Could use comprehension too [item.upper() for item in mylis]
-        instead of the list(map(lambda ...
-        TODO: How to do this without doing a new list.
         """
-        # Save Fk and None relational Fields
         data = self.cleaned_data
-        data = self.add_id_to_fk_fields(self.get_fk_fields(), data)
-        self.instance.__dict__.update(data)
-        self.instance.save()
+        obj = self.instance
+
+        # Save FK
+        obj.__dict__.update(data)
+        obj.save()
 
         # Save M2M
         # Get all the M2M fields from the Model
         m2m_fields = self.get_m2m_fields()
 
-        # Excludes from the Form that are part of the Model need to be removed
+        # Remove Model Fields that are explicilty not included in Form
         excludes = ['team']
         for m2m_field in m2m_fields:
             if m2m_field.attname in excludes:
                 m2m_fields.remove(m2m_field)
         # Filter the List and get them by attname that later will be in data[name]
-        m2m_fields_name = list(map(lambda x: x.attname, m2m_fields))
+        changed_m2m_fields = [i for i in m2m_fields if i in self.changed_data]
 
-        # Processing the M2M is expensive so check first if the have changed at all
-        has_changed = False
-        for m2m_field in m2m_fields_name:
-            if data[m2m_field] != self.initial[m2m_field]:
-                has_changed = True
-
-        # TODO: Process only the changed fields
-        if has_changed:
-            for m2m_field in m2m_fields:
-                model_name = m2m_field.related_model.__name__.lower()
-                cached_query = cache.get("cache_" + model_name + "_all")
-                # If there is a cached version filter in python and dont hit db
-                if cached_query is not None:
-                    selected_obj = [obj for obj in cached_query if obj.id in data[m2m_field.attname]]
-                else:
-                    selected_obj = m2m_field.related_model.objects.filter(id__in=data[m2m_field.attname])
-
-                getattr(self.instance, m2m_field.attname).set(selected_obj)
+        for m2m_field in changed_m2m_fields:
+            model_name = m2m_field.related_model.__name__.lower()
+            # check if model still in query
+            cached_query = cache.get("cache_" + model_name + "_all")
+            # If there is a cached version filter in python and dont hit db
+            if cached_query is not None:
+                selected_obj = [obj for obj in cached_query if obj.id in data[m2m_field.attname]]
+            else:
+                selected_obj = [obj for obj in m2m_field.related_model.objects.filter(id__in=data[m2m_field.attname])]
+            # set the selected objects
+            getattr(obj, m2m_field.attname).set(selected_obj)
 
     def __init__(self, *args, **kwargs):
         self.instance = kwargs.pop("instance", None)
@@ -133,10 +119,10 @@ class EventUpdateForm(forms.Form):
             widget=BootstrapedSelect2Multiple(url="videos-autocomplete"),
             required=False,
         )
-        self.fields["project"] = forms.ChoiceField(choices=fk_choices["project_id"])
-        self.fields["policy"] = forms.ChoiceField(choices=fk_choices["policy_id"])
-        self.fields["level"] = forms.ChoiceField(choices=fk_choices["level_id"])
-        self.fields["discipline"] = forms.ChoiceField(choices=fk_choices["discipline_id"])
+        self.fields["project_id"] = forms.ChoiceField(choices=fk_choices["project_id"], label="Project")
+        self.fields["policy_id"] = forms.ChoiceField(choices=fk_choices["policy_id"], label="Policy")
+        self.fields["level_id"] = forms.ChoiceField(choices=fk_choices["level_id"], label="Level")
+        self.fields["discipline_id"] = forms.ChoiceField(choices=fk_choices["discipline_id"], label="Discipline")
         self.fields["category"] = forms.ChoiceField(choices=EVENTCATEGORY)
         self.fields["cycle"] = forms.ChoiceField(choices=CYCLE)
         self.fields["title"] = forms.CharField(max_length=100)
