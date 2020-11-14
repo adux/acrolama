@@ -85,6 +85,7 @@ class EventUpdateForm(forms.Form):
                     selected_obj = [
                         obj for obj in m2m_field.related_model.objects.filter(id__in=data[m2m_field.attname])
                     ]
+                print(selected_obj)
                 # set the selected objects
                 getattr(obj, m2m_field.attname).set(selected_obj)
 
