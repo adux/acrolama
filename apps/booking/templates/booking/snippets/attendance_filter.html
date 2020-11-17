@@ -1,28 +1,32 @@
 {% load widget_tweaks %}{% load booking_tags %}
-<form method="get">
     <div class="card card-body bg-light">
         <h4>Filter</h4>
-        <div class="row">
-            <div class="form-group col-sm-4 col-md-4">
-            {{ attendance_filter.form.book__user.label_tag }}
-            {% render_field attendance_filter.form.book__user class="form-control" %}
+        <form method="GET">
+            <div class="row">
+                <div class="form-group col-sm-4 col-md-2">
+                {{ attendance_filter.form.id.label_tag }}
+                {% render_field attendance_filter.form.id class="form-control" %}
+                </div>
+                <div class="form-group col-sm-4 col-md-3">
+                {{ attendance_filter.form.book__user.label_tag }}
+                {% render_field attendance_filter.form.book__user class="form-control" %}
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-sm-4 col-md-8">
-            {{ attendance_filter.form.book__event.label_tag }}
-            {% render_field attendance_filter.form.book__event class="form-control" %}
+            <div class="row">
+                <div class="form-group col-sm-4 col-md-8">
+                {{ attendance_filter.form.book__event.label_tag }}
+                {% render_field attendance_filter.form.book__event class="form-control" %}
+                </div>
+                <div class="form-group col-sm-4 col-md-2">
+                {{ attendance_filter.form.attendance_date.label_tag }}
+                {% render_field attendance_filter.form.attendance_date class="datepicker form-control" %}
+                </div>
             </div>
-            <div class="form-group col-sm-4 col-md-2">
-            {{ attendance_filter.form.attendance_date.label_tag }}
-            {% render_field attendance_filter.form.attendance_date class="datepicker form-control" %}
-            </div>
-        </div>
-        <button type="submit" class="btn btn-primary">
-        <i class="fas fa-search"></i> Search
-        </button>
+            <button type="submit" class="btn btn-primary">
+            <i class="fas fa-search"></i> Search
+            </button>
+        </form>
     </div>
-</form
 <hr>
 <table class="table table-hover table-borderless">
     <thead>
@@ -30,19 +34,18 @@
         <th>Name</th>
         <th>Event</th>
         <th>Time Option</th>
-        <th>Attendance</th>
-        <th>Edit</th>
+        <th>Price Option</th>
+        <th>Attd.</th>
     </thead>
     <tbody>
         {% for obj in page_obj %}
         <tr>
-            <td>{{obj.pk}}</td>
+            <td><a href="{% url 'attendance_update' obj.pk %}?{% pass_get_filter %}">{{obj.pk}}</a></td>
             <td>{{obj.book.user.get_full_name}}</td>
             <td>{{obj.book.event.title}}</td>
-            {# TODO: Getting times for view should be done somewhere else #}
-            <td>{% for obj in obj.book.times.all %}{{obj.name}}, {% endfor %}</td>
-            <td>{{obj.count_attendance}}</td>
-            <td><a href="{% url 'attendance_update' obj.pk %}?{% pass_get_filter %}"></i></a>
+            <td>{% for obj in obj.book.times.all %}{{obj.name}}{% endfor %}</td>
+            <td>{{obj.book.price.name}}</td>
+            <td>{{obj.count_attendance}}/{{obj.count_dates}}</td>
         </tr>
         {% endfor%}
     </tbody>

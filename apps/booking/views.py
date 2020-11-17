@@ -427,7 +427,7 @@ def attendancelistview(request):
     )
 
     # Pagination
-    paginator = Paginator(attendance_filter.qs, 20)  # Show 25 contacts per page.
+    paginator = Paginator(attendance_filter.qs, 24)  # Show 25 contacts per page.
     page = request.GET.get("page")
     try:
         response = paginator.page(page)
@@ -498,8 +498,10 @@ def attendance_daily_view(request):
         user=request.user,
     )
 
+    date_today = datetime.datetime.now().date()
+
     if not request.GET.get("attendance_date"):
-        initial_date = str(datetime.datetime.now().date())
+        initial_date = str(date_today)
     else:
         initial_date = request.GET.get("attendance_date")
 
@@ -507,7 +509,7 @@ def attendance_daily_view(request):
         "attendance_filter": attendance_filter,
         "attendance_list": attendance_filter.qs,
         "filtered_date": datetime.date.fromisoformat(initial_date),
-        "date_today": datetime.datetime.now().date(),
+        "date_today": date_today,
     }
     return render(request, template, context)
 

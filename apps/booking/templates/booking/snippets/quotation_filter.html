@@ -1,30 +1,32 @@
 {% load widget_tweaks %}{% load booking_tags %}
-<form method="get">
     <div class="card card-body bg-light">
         <h4>Filter</h4>
-        <div class="row">
-            <div class="form-group col-sm-4 col-md-4">
-            {{ quotation_filter.form.teachers.label_tag }}
-            {% render_field quotation_filter.form.teachers class="form-control" %}
+        <form method="GET">
+            <div class="row">
+                <div class="form-group col-sm-4 col-md-2">
+                {{ quotation_filter.form.id.label_tag }}
+                {% render_field quotation_filter.form.id class="form-control" %}
+                </div>
+                <div class="form-group col-sm-4 col-md-4">
+                {{ quotation_filter.form.teachers.label_tag }}
+                {% render_field quotation_filter.form.teachers class="form-control" %}
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-sm-4 col-md-8">
-            {{ quotation_filter.form.event.label_tag }}
-            {% render_field quotation_filter.form.event class="form-control" %}
+            <div class="row">
+                <div class="form-group col-sm-4 col-md-6">
+                {{ quotation_filter.form.event.label_tag }}
+                {% render_field quotation_filter.form.event class="form-control" %}
+                </div>
+                <div class="form-group col-sm-4 col-md-6">
+                {{ quotation_filter.form.time_location.label_tag }}
+                {% render_field quotation_filter.form.time_location class="form-control" %}
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-sm-4 col-md-8">
-            {{ quotation_filter.form.time_location.label_tag }}
-            {% render_field quotation_filter.form.time_location class="form-control" %}
-            </div>
-        </div>
-        <button type="submit" class="btn btn-primary">
-        <i class="fas fa-search"></i> Search
-        </button>
+            <button type="submit" class="btn btn-primary">
+            <i class="fas fa-search"></i> Search
+            </button>
+        </form>
     </div>
-</form>
 <hr>
 <table class="table table-hover table-borderless">
     <thead>

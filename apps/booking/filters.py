@@ -15,9 +15,15 @@ from users.models import User
 
 
 class AttendanceFilter(django_filters.FilterSet):
-    book__user = django_filters.CharFilter(method="filter_by_all_name_fields")
+    book__user = django_filters.ModelChoiceFilter(
+        queryset=User.objects.all(),
+        widget=BootstrapedSelect2(url="user-autocomplete"),
+        label="User"
+    )
     book__event = django_filters.ModelChoiceFilter(
-        queryset=Event.objects.all(), widget=BootstrapedSelect2(url="event-autocomplete",)
+        queryset=Event.objects.all(),
+        widget=BootstrapedSelect2(url="event-autocomplete"),
+        label="Event"
     )
     attendance_date = django_filters.DateFilter(
         field_name="attendance_date",
@@ -26,23 +32,14 @@ class AttendanceFilter(django_filters.FilterSet):
 
     class Meta:
         model = Attendance
-        fields = {}
+        fields = {'id'}
 
     def filter_by_date_contains(self, queryset, name, value):
         return queryset.filter(Q(attendance_date__icontains=value))
 
-    def filter_by_all_name_fields(self, queryset, name, value):
-        return queryset.filter(
-            Q(book__user__first_name__icontains=value)
-            | Q(book__user__last_name__icontains=value)
-            | Q(book__user__first_name__icontains=value)
-            | Q(book__user__email__icontains=value)
-            | Q(book__event__title__icontains=value)
-        )
-
 
 class AttendanceDailyFilter(django_filters.FilterSet):
-    # Gets the Event the User is teacher on.
+    # Gets the Event the User is te acher on.
     book__event = django_filters.ChoiceFilter(
         label="Your Events", field_name="book__event", widget=autocomplete.ListSelect2(
             url="event-teacher-autocomplete",
@@ -120,18 +117,21 @@ class BookFilter(django_filters.FilterSet):
 
 class QuotationFilter(django_filters.FilterSet):
     event = django_filters.ModelChoiceFilter(
-        queryset=Event.objects.all(), widget=BootstrapedSelect2(url="event-autocomplete",)
+        queryset=Event.objects.all(),
+        widget=BootstrapedSelect2(url="event-autocomplete")
     )
     teachers = django_filters.ModelMultipleChoiceFilter(
-        queryset=User.objects.filter(is_teacher=True), widget=M2MSelect()
+        queryset=User.objects.filter(is_teacher=True),
+        widget=BootstrapedModelSelect2Multiple(url="teachers-autocomplete")
     )
     time_location = django_filters.ModelChoiceFilter(
-        queryset=TimeLocation.objects.all(), required=True, widget=BootstrapedSelect2(url="tl-autocomplete",)
+        queryset=TimeLocation.objects.all(),
+        widget=BootstrapedSelect2(url="tl-autocomplete",)
     )
 
     class Meta:
         model = Quotation
-        fields = {"event", "time_location", "teachers"}
+        fields = {"id", "event", "time_location"}
 
 
 class QuotationBookFilter(django_filters.FilterSet):

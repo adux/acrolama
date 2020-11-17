@@ -197,7 +197,7 @@ class PriceOption(models.Model):
     # Options
     duo = models.BooleanField(default=False)
     single_date = models.BooleanField(default=False)
-    cycles = models.IntegerField(verbose_name="Numbero of Cycles", default=0)
+    cycles = models.IntegerField(verbose_name="Number of Cycles", default=0)
 
     # Info
     name = models.CharField(max_length=30)

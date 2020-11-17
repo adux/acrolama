@@ -12,6 +12,7 @@ from home.views import (
     EventListView,
 )
 
+from audiovisual.views import ImageCreateView
 from project.views import (
     EventDetail,
     eventlistview,
@@ -19,9 +20,6 @@ from project.views import (
 )
 
 from booking.views import (
-    EventAutocomplete,
-    EventTeacherAutocomplete,
-    UserAutocomplete,
     attendance_daily_view,
     attendancelistview,
     AttendanceUpdateView,
@@ -42,6 +40,9 @@ from booking.views import (
     TimeOptionAutocomplete,
     ImagesAutocomplete,
     VideosAutocomplete,
+    EventAutocomplete,
+    EventTeacherAutocomplete,
+    UserAutocomplete,
 )
 
 from accounting.views import (
@@ -102,6 +103,8 @@ urlpatterns = [
     path("herd/quotation/create/", quotationcreateview, name="quotation_create"),
     # Contact
     path("herd/contact/", contactlistview, name="contact_list"),
+    # Audiovisul
+    path("herd/image/create/", ImageCreateView.as_view(), name="image_create"),
     # Teachers
     path("herd/teacher/attendance/", attendance_daily_view, name="teacher_attendance"),
     path("herd/teacher/booking/create/", BookCreateView.as_view(), name="teacher_booking_create"),

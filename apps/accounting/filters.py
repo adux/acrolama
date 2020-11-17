@@ -5,11 +5,15 @@ import django_filters
 from booking.widgets import BootstrapedSelect2
 
 from accounting.models import Invoice, BALANCE
+from users.models import User
 from project.models import Event
 
 
 class AccountFilter(django_filters.FilterSet):
-    book__user = django_filters.CharFilter(method="filter_by_all_name_fields", label="User (by Name or Email)")
+    book__user = django_filters.ModelChoiceFilter(
+        queryset=User.objects.all(),
+        widget=BootstrapedSelect2(url="user-autocomplete")
+    )
     book__event = django_filters.ModelChoiceFilter(
         queryset=Event.objects.all(), widget=BootstrapedSelect2(url="event-autocomplete",)
     )
@@ -25,13 +29,3 @@ class AccountFilter(django_filters.FilterSet):
 
     def filter_by_date_smaller_than(self, queryset, name, value):
         return queryset.filter(Q(pay_till__lte=value))
-
-    def filter_by_all_name_fields(self, queryset, name, value):
-        return queryset.filter(
-            Q(book__user__first_name__icontains=value)
-            | Q(book__user__last_name__icontains=value)
-            | Q(book__user__first_name__icontains=value)
-            | Q(book__user__email__icontains=value)
-            | Q(partner__email__icontains=value)
-            | Q(partner__name__icontains=value)
-        )

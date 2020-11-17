@@ -84,6 +84,13 @@ class Attendance(models.Model):
                 count += 1
         return count
 
+    def count_dates(self):
+        count = 0
+        for position, date in enumerate(self.attendance_date):
+            if date:
+                count += 1
+        return count
+
 
 class Quotation(models.Model):
     event = models.ForeignKey("project.Event", on_delete=models.PROTECT)
