@@ -23,6 +23,7 @@ videos/
 acrolama/settings/local.py
 templates/local/
 news/
+ads/
 
 # Sass Ignore
 .sass-cache/
