@@ -83,7 +83,9 @@ class AttendanceDailyFilter(django_filters.FilterSet):
 
 
 class BookFilter(django_filters.FilterSet):
-    user = django_filters.CharFilter(method="filter_by_all_name_fields")
+    user = django_filters.ModelChoiceFilter(
+        queryset=User.objects.all(), widget=BootstrapedSelect2(url=("user-autocomplete"))
+    )
     event = django_filters.ModelChoiceFilter(
         queryset=Event.objects.all(), widget=BootstrapedSelect2(url="event-autocomplete",)
     )
