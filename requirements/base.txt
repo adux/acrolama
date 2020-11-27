@@ -1,33 +1,34 @@
 -- Base --
-pytz==2020.1
+pytz==2020.4
 webencodings==0.5.1
-bleach==3.2.0
-Pillow==7.1.2
+bleach==3.2.1
+Pillow==8.0.1
 pycparser==2.18
 cryptography==3.2.1
-asn1crypto==1.2.0
+asn1crypto==1.4.0
 chardet==3.0.4
 Unidecode==1.0.22
 six==1.12.0
-requests==2.23.0
+requests==2.25.0
 defusedxml==0.6.0
 python3-openid==3.1.0
 urllib3==1.25.10
+importlib-metadata==2.1.0
 
 -- Django --
-django==2.2.16
+django==2.2.17
 django-crispy-forms==1.9.1
 django-autocomplete-light==3.8.1
 django-allauth==0.41.0
 django-invitations==1.9.3
 oauthlib==3.0.1
-sqlparse==0.3.0
+sqlparse==0.3.1
 psycopg2==2.8.4
 
 -- Utils --
 django-annoying==0.10.6
 django-widget-tweaks==1.4.8
-django-tinycontent
+django-tinycontent==0.8.0
 django-tinymce==3.1.0
 django-autoslug
 django-filter==2.4.0

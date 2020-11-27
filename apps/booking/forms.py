@@ -18,7 +18,12 @@ from booking.models import (
 import accounting.services
 
 # Widgets
-from booking.widgets import DynamicArrayWidget, M2MSelect, BootstrapedSelect2
+from booking.widgets import (
+    DynamicArrayWidget,
+    M2MSelect,
+    BootstrapedSelect2,
+    BootstrapedSelect2Multiple,
+)
 
 
 class AttendanceUpdateForm(forms.ModelForm):
@@ -36,7 +41,10 @@ class BookUpdateForm(forms.ModelForm):
     class Meta:
         model = Book
         fields = ["user", "event", "status", "times", "comment", "note"]
-        widgets = {"times": M2MSelect(attrs={})}
+        widgets = {
+            "times": M2MSelect(),
+            "event": BootstrapedSelect2(url="event-autocomplete"),
+        }
 
     def clean(self):
         cleaned_data = super(BookUpdateForm, self).clean()
@@ -97,12 +105,14 @@ class QuotationCreateForm(forms.ModelForm):
             "admin_profit",
             "partner_profit",
         )
+        widgets = {
+            "teachers": BootstrapedSelect2Multiple(url="teachers-autocomplete"),
+            "event": BootstrapedSelect2(url="event-autocomplete"),
+            "time_location": BootstrapedSelect2(url="tl-autocomplete"),
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Filled
-        self.fields["teachers"].queryset = User.objects.filter(is_teacher=True)
-
         # NOT required
         self.fields["direct_costs"].required = False
 

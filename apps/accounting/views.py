@@ -28,7 +28,9 @@ from accounting.services import get_invoice
 def accountinglistview(request):
     template = "accounting/accounting_list.html"
     accounting_filter = AccountFilter(
-        request.GET, queryset=(Invoice.objects.filter(balance="CR").select_related("book").order_by("-id")),
+        request.GET, queryset=(
+            Invoice.objects.filter(balance="CR").select_related("book__user", "book__event").order_by("-id")
+        )
     )
 
     # Pagination
@@ -59,7 +61,11 @@ class InvoiceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        accounting_filter = AccountFilter(self.request.GET, queryset=(Invoice.objects.all().select_related("book")),)
+        accounting_filter = AccountFilter(
+            self.request.GET, queryset=(
+                Invoice.objects.all().select_related("book__user", "book__event")
+            )
+        )
 
         context["account_filter"] = accounting_filter
         paginator = Paginator(accounting_filter.qs, 24)  # Show 25 contacts per page.

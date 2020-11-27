@@ -653,7 +653,7 @@ class QuotationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
             event=self.object.event.id,
             event__time_locations=self.object.time_location.id,
             times__in=time_options_id_list,
-        ).select_related("user", "price", "attendance")
+        ).select_related("event__level", "user", "price", "attendance")
         return filtered_list
 
     def get_context_data(self, **kwargs):
