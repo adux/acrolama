@@ -18,13 +18,27 @@ def get_book(book):
 
     # if its a id get the book
     if book_pk:
-        try:
-            book = Book.objects.get(pk=book_pk)
-        except Book.DoesNotExist:
-            # TODO: Raise Error to log or to Sentry somehow ?
-            print("Booking doesn't exist")
+        return Book.objects.get(pk=book_pk)
 
-    return book
+
+def book_is_paid(book):
+    """
+    To check if a book is paid we need to differenciate how its price_option works
+    For Cycles for example one would need to go to its first booking to see the related invoice there
+    """
+    book = get_book(book)
+
+    if book.invoice:
+        if book.invoice.status == "PY":
+            return True
+        else:
+            return False
+    else:
+        if check_abocounter(book.id):
+            new_book_id = get_first_book_abocounter(book.id)
+            book_is_paid(new_book_id)
+        else:
+            return False
 
 
 def get_event(event):
@@ -36,13 +50,7 @@ def get_event(event):
 
     # if its a id get the book
     if event_pk:
-        try:
-            event = Event.objects.get(pk=event_pk)
-        except Event.DoesNotExist:
-            # TODO: Raise Error to log or to Sentry somehow ?
-            print("Event doesn't exist")
-
-    return event
+        return Event.objects.get(pk=event_pk)
 
 
 def get_timelocation(tl):
@@ -54,13 +62,7 @@ def get_timelocation(tl):
 
     # if its a id get the book
     if tl_pk:
-        try:
-            tl = TimeLocation.objects.get(pk=tl_pk)
-        except TimeLocation.DoesNotExist:
-            # TODO: Raise Error to log or to Sentry somehow ?
-            print("Time Location doesn't exist")
-
-    return tl
+        return TimeLocation.objects.get(pk=tl_pk)
 
 
 def get_location_from_timeoption(timeoptions, event):
@@ -80,13 +82,12 @@ def get_location_from_timeoption(timeoptions, event):
                 return False
 
 
-def switch_check_attendance(id, position):
+def attendance_toggle_check(id, position):
     attendance = Attendance.objects.get(pk=id)
     attendance.attendance_check[position] = not attendance.attendance_check[position]
     attendance.save()
 
 
-# TODO: Into model
 def update_book_status(book, status):
     book = get_book(book)
     if status in ("PA", "Participant"):
@@ -163,7 +164,6 @@ def create_abocounter_from_book(book):
     AboCounter.objects.create(data={'first_book': str(book.id), 'last_book': str(book.id), 'count': book.price.cycles})
 
 
-# TODO: Into model
 def update_lastbook_abocounter(bookid, newbookid):
     obj = AboCounter.objects.get(data__last_book=str(bookid))
     obj.data['last_book'] = str(newbookid)
@@ -222,6 +222,7 @@ def inform_book(request, instance, book):
 
         # Check if it has doesn't have a counter
         if not check_abocounter(book.id):
+
             # Create the Counter for Abos
             create_abocounter_from_book(book)
             reduce_abocounter(book.id)
@@ -236,7 +237,7 @@ def inform_book(request, instance, book):
             else:
                 messages.add_message(request, messages.SUCCESS, _("Invoice Created"))
 
-            # Create the attendance list
+            # Create the Attendance
             try:
                 create_attendance_from_book(instance)
             except Exception as e:
@@ -254,6 +255,7 @@ def inform_book(request, instance, book):
                     messages.add_message(request, messages.ERROR, _("Error Email: " + str(e)))
                 else:
                     messages.add_message(request, messages.SUCCESS, _("Informed email sent."))
+                    # If email send correctly register
                     instance.informed_at = datetime.datetime.now()
             else:
                 messages.add_message(request, messages.INFO, _("Email sent: " + str(book.informed_at)))
@@ -285,7 +287,7 @@ def inform_book(request, instance, book):
             else:
                 messages.add_message(request, messages.SUCCESS, _("Attendance created"))
 
-            # If the Invoice of the First Book is payed then set as Participant
+            # If the Invoice of the First Book is paid then set as Participant
 
             first_book_id = get_first_book_abocounter(book.id)
             invoice_first_book = Invoice.objects.get(book=first_book_id)
@@ -293,7 +295,7 @@ def inform_book(request, instance, book):
                 update_book_status(book.id, "PA")
             else:
                 messages.add_message(
-                    request, messages.WARNING, _("First Booking not payed")
+                    request, messages.WARNING, _("First Booking not paid.")
                 )
 
 

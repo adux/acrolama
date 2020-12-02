@@ -67,10 +67,11 @@ from booking.services import (
     get_timelocation,
     inform_book,
     update_lastbook_abocounter,
-    switch_check_attendance,
+    attendance_toggle_check
 )
 
 
+# TODO: Move all autocomplete to herdi or home
 class EventAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         # Don't forget to filter out results depending on the visitor !
@@ -240,7 +241,10 @@ def bookinglistview(request):
     booking_filter = BookFilter(
         request.GET,
         queryset=(
-            Book.objects.all().select_related("event", "user", "price").prefetch_related("times").order_by("-booked_at")
+            Book.objects.all()
+            .select_related("event", "user", "price")
+            .prefetch_related("times")
+            .order_by("-booked_at")
         ),
     )
 
@@ -461,7 +465,7 @@ def attendance_daily_view(request):
                     attendance_id = values_split[0]
                     check_pos = values_split[1]
                     # Make the actual Switch
-                    switch_check_attendance(attendance_id, int(check_pos))
+                    attendance_toggle_check(attendance_id, int(check_pos))
                     # Send a message
                     messages.add_message(
                         request,

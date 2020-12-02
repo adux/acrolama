@@ -52,6 +52,7 @@ def make_regularday_dates_list(startdate, enddate, regularday):
     return dateList
 
 
+# TODO: Move to herdi or home
 def email_sender(instance, flag):
     """
     Signals could give Error cause you can call them from wherever.

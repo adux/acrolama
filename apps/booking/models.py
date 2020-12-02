@@ -57,8 +57,9 @@ class BookDateInfo(models.Model):
 class Attendance(models.Model):
     """
     Contains the dates a Person should participate depending on the booking they did
-    TODO: This could be done with JSON.
-    Not to much to use those, nor see the practical advantage now.
+
+    NOTE: This could be done with JSON. But to make us of date operations its better to have an Array that can
+    store them in date format. If done with JSON we would have to transform and parse the date constantly.
     """
     book = models.OneToOneField("booking.Book", on_delete=models.PROTECT)
     attendance_date = ArrayField(models.DateField())
@@ -135,11 +136,13 @@ class Quotation(models.Model):
 
 class AboCounter(models.Model):
     """
+    TODO: We need to re think this since now space aint a problem anymore we might
+    want to keep a register of all the bookings associated to a AboCounter
     Json should have the form
     data={
+        'count': 0,
         'first_book': '123', #number of the first booking
         'last_book': '123',
-        'count': 0,
     }
     """
     data = JSONField()

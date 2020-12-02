@@ -1,5 +1,11 @@
+import datetime
 import accounting.utils
+
 from django.db import models
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext as _
+
+from django.contrib.postgres.fields import ArrayField
 from django.db.models.signals import pre_save
 
 
@@ -8,9 +14,15 @@ INVOICESTATUS = [
     ("PY", "Paid"),
     ("CA", "Canceled"),
     ("ST", "Storno"),
+    ("FR", "First Reminder"),
+    ("SR", "Second Reminder"),
+    ("TR", "Third Reminder"),
 ]
 
-BALANCE = [("DB", "DEBIT"), ("CR", "CREDIT")]
+BALANCE = [
+    ("DB", "DEBIT"),
+    ("CR", "CREDIT")
+]
 
 METHODE = [
     ("BT", "Bank"),
@@ -24,6 +36,9 @@ METHODE = [
 
 
 class Partner(models.Model):
+    """
+    TODO: Create a partener for every teacher on signal
+    """
     name = models.CharField(max_length=50)
     address = models.ForeignKey("address.Address", null=True, blank=True, on_delete=models.CASCADE)
     phone = models.CharField(max_length=50, null=True, blank=True)
@@ -48,6 +63,7 @@ class Invoice(models.Model):
     paid = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
     pay_till = models.DateField(auto_now_add=False, auto_now=False, null=True, blank=True)
     pay_date = models.DateField(auto_now_add=False, auto_now=False, null=True, blank=True)
+    reminder_dates = ArrayField(models.DateField(), size=3, null=True, blank=True)
     methode = models.CharField(max_length=15, choices=METHODE, default="UN", null=True, blank=True)
     notes = models.TextField(max_length=500, null=True, blank=True)
 
@@ -56,6 +72,26 @@ class Invoice(models.Model):
             return "%s - %s" % (self.id, self.book)
         else:
             return "%s - %s" % (self.id, self.partner)
+
+    def clean(self, *args, **kwargs):
+        if self.status == "PY":
+            if not self.methode or (self.methode == "UN"):
+                raise ValidationError(_("Can't save. Paid invoices need a payment methode."))
+            if not self.paid:
+                self.paid = 0
+            if not self.pay_date:
+                self.pay_date = datetime.datetime.now().date()
+
+        if (self.status in ("FR", "SR", "TR")) and (self.pay_date):
+            raise ValidationError(_("Can't save. Status indequate invoice seems paid."))
+
+        if self.reminder_dates and len(self.reminder_dates) > 1:
+            if self.reminder_dates[-2] + datetime.timedelta(2) > self.reminder_dates[-1]:
+                raise ValidationError(_("Can't save. Reminders need to be send 2 days apart min."))
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super(Invoice, self).save(*args, **kwargs)
 
 
 def invoice_pre_save_referenz(sender, instance, *args, **kwargs):

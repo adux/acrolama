@@ -14,8 +14,7 @@ from booking.models import (
 )
 
 # Services
-
-import accounting.services
+from booking.services import book_is_paid
 
 # Widgets
 from booking.widgets import (
@@ -27,6 +26,7 @@ from booking.widgets import (
 
 
 class AttendanceUpdateForm(forms.ModelForm):
+
     class Meta:
         model = Attendance
         fields = ["attendance_date", "attendance_check"]
@@ -51,13 +51,14 @@ class BookUpdateForm(forms.ModelForm):
         new_status = cleaned_data.get('status')
 
         if (self.instance.status in ("IN", "PE", "WL", "CA", "SW")) and (new_status == "PA"):
-            # If invoice is not payed raise Error
-            if not accounting.services.check_is_book_payed(self.instance.id):
-                raise forms.ValidationError("Error: Cannot update to Participant. Invoice not payed.")
+            if not book_is_paid(self.instance.id):
+                raise forms.ValidationError("Error: Cannot update to Participant. Invoice not paid.")
+
         return cleaned_data
 
 
 class BookDuoUpdateForm(forms.ModelForm):
+
     class Meta:
         model = BookDuoInfo
         fields = ["first_name", "last_name", "phone", "email"]
@@ -88,6 +89,7 @@ class TeacherBookCreateForm(forms.ModelForm):
 
 
 class QuotationCreateForm(forms.ModelForm):
+    # TODO: On Model changes this line gives and error ... why?
     direct_costs = forms.MultipleChoiceField(
         choices=[("%s %s" % (o.id, o.to_pay), o.__str__) for o in Invoice.objects.filter(balance="DB")]
     )
@@ -121,6 +123,7 @@ class QuotationCreateForm(forms.ModelForm):
 
 
 class QuotationLockForm(forms.ModelForm):
+
     class Meta:
         model = Quotation
         fields = (
@@ -154,6 +157,7 @@ class QuotationLockForm(forms.ModelForm):
 
 
 class BookForm(forms.ModelForm):
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["times"].label_from_instance = lambda obj: "%s %s" % (
@@ -178,6 +182,7 @@ class BookForm(forms.ModelForm):
 
 
 class BookDuoInfoForm(forms.ModelForm):
+
     class Meta:
         model = BookDuoInfo
         fields = ["first_name", "last_name", "phone", "email"]
@@ -206,6 +211,7 @@ class BookDuoInfoForm(forms.ModelForm):
 
 
 class BookDateInfoForm(forms.ModelForm):
+
     class Meta:
         model = BookDateInfo
         exclude = ["book"]

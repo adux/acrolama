@@ -7,6 +7,9 @@
         <h4>Invoice N°{{object.pk}} {% if object.book %}of <a href="{% url 'booking_update' object.book.id %}?{% pass_get_filter %}">Booking N°{{object.book.id}}</a>{% endif %} - {% if object.book %}{{object.book.user.get_full_name}}{% else %}{{object.partner.name}}{% endif %} - Pay till: {{object.pay_till|date:'d M.'}} CHF {{object.to_pay}}.-</h4>
         <div class="row">
             <div class="col">
+                {% if object.reminder_dates %}
+                <div class="d-inline text-dark">Informed: {% for d in object.reminder_dates %}{{ d|date:'d M.' }} {% endfor %}</div>
+                {% endif %}
                 <div class="d-inline text-dark"><a id="addnote" class="text-primary" >Show notes.</a></div>
                 <div id="note" >
                 {% render_field form.notes class="form-control" rows="2" %}
