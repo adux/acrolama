@@ -74,16 +74,21 @@ class Invoice(models.Model):
             return "%s - %s" % (self.id, self.partner)
 
     def clean(self, *args, **kwargs):
-        if self.status == "PY":
+        """
+        Some crusal cleaning of the database to keep it consistent and clean with rather expected behaviours
+        """
+
+        if (self.paid and not self.pay_date) or (self.pay_date and not self.paid):
+            raise ValidationError(_("Can't save. Paid invoices need a date and payment of min. 0."))
+
+        if self.status in ("PY", "ST"):
             if not self.methode or (self.methode == "UN"):
                 raise ValidationError(_("Can't save. Paid invoices need a payment methode."))
-            if not self.paid:
-                self.paid = 0
-            if not self.pay_date:
-                self.pay_date = datetime.datetime.now().date()
+            if not self.paid or not self.pay_date:
+                raise ValidationError(_("Can't save. Paid invoices need a date and payment of min. 0."))
 
-        if (self.status in ("FR", "SR", "TR")) and (self.pay_date):
-            raise ValidationError(_("Can't save. Status indequate invoice seems paid."))
+        if (self.status in ("PE", "CA", "FR", "SR", "TR")) and (self.pay_date):
+            raise ValidationError(_("Can't save. Is it paid? Valid status: Paid, Storno."))
 
         if self.reminder_dates and len(self.reminder_dates) > 1:
             if self.reminder_dates[-2] + datetime.timedelta(2) > self.reminder_dates[-1]:
