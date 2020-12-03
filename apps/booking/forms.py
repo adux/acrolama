@@ -90,9 +90,9 @@ class TeacherBookCreateForm(forms.ModelForm):
 
 class QuotationCreateForm(forms.ModelForm):
     # TODO: On Model changes this line gives and error ... why?
-    direct_costs = forms.MultipleChoiceField(
-        choices=[("%s %s" % (o.id, o.to_pay), o.__str__) for o in Invoice.objects.filter(balance="DB")]
-    )
+    # direct_costs = forms.MultipleChoiceField(
+    #     choices=[("%s %s" % (o.id, o.to_pay), o.__str__) for o in Invoice.objects.filter(balance="DB")]
+    # )
 
     class Meta:
         model = Quotation
