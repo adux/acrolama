@@ -74,11 +74,8 @@ class Invoice(models.Model):
             return "%s - %s" % (self.id, self.partner)
 
     def clean(self, *args, **kwargs):
-        """
-        Some crusal cleaning of the database to keep it consistent and clean with rather expected behaviours
-        """
 
-        if (self.paid and not self.pay_date) or (self.pay_date and not self.paid):
+        if ((self.paid >= 0) and not self.pay_date) or (self.pay_date and not (self.paid >= 0)):
             raise ValidationError(_("Can't save. Paid invoices need a date and payment of min. 0."))
 
         if self.status in ("PY", "ST"):

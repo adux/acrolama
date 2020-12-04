@@ -1,14 +1,14 @@
 
-Hey {{user.first_name}}
+Hey {{ user.first_name }}
 
-We are thrilled you're joining our {{ event.category }}.
-We still have an outstanding balance. We little lamas would really appreciate
-it if you could pay the missing amount within the next few days.
+We are thrilled you're joining our {{ event.get_category_display }}.
+We still have an outstanding balance. We little lamas would really appreciate it if
+you could pay the missing amount within the next few days.
 
-Event: {{event.title}} Details:{% if event.category == 'CY' %}https://www.acrolama.com/classes/{{event.slug}}/{% else %}https://www.acrolama.com/events/{{event.slug}}/{% endif %}
-Date: {{ event.event_startdate|date:'d M.' }}{% if event.event_startdate != event.event_enddate %}- {{ event.event_enddate|date:'d M. y' }}{% endif %}
-Invoice N°{{ invoice.id }}</p>
+Event: {{ event.title }} Details:{% if event.category == 'CY' %}https://www.acrolama.com/classes/{{event.slug}}/{% else %}https://www.acrolama.com/events/{{event.slug}}/{% endif %}
+Invoice N°{{ invoice.id }}
 Price: CHF {{ invoice.to_pay }}.-
+Booked: {{ invoice.book.price.name }}{% if invoice.book.bookdateinfo %} - Date: {{ invoice.book.bookdateinfo.single_date|date: "d M. Y" }}{% endif %}
 *If you already paid, please send us a confirmation so we can match the payment.*
 
 Bank Transfer:

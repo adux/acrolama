@@ -30,9 +30,9 @@
                     <p>We are thrilled you're joining our {{ event.get_category_display }}.</p>
                     <p>We still have an outstanding balance. We little lamas would really appreciate it if you could pay the missing amount within the next few days.</p>
                     <p>Event: {{event.title}} {% if event.category == 'CY' %}<a href="https://www.acrolama.com/classes/{{event.slug}}/" target="_blank" rel="noopener">Class details</a>{% else %}<a href="https://www.acrolama.com/events/{{event.slug}}/" target="_blank" rel="noopener">{{ event.get_category_display }} details</a>{% endif %}</p>
-                    <p>Date: {{ event.event_startdate|date:'d M.' }}{% if event.event_startdate != event.event_enddate %}- {{ event.event_enddate|date:'d M. y' }}{% endif %}</p>
                     <p>Invoice N°{{ invoice.id }}</p>
                     <p>Price: CHF {{ invoice.to_pay }}.-</p>
+                    <p>Booked: {{ invoice.book.price.name }}{% if invoice.book.bookdateinfo %} - Date: {{ invoice.book.bookdateinfo.single_date|date: "d M. Y" }}{% endif %}
                     <h4>If you already paid, please send us a confirmation so we can match the payment.</h4>
 
                     <p>Bank Transfer:</p>
