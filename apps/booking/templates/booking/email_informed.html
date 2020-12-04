@@ -48,10 +48,14 @@
                               <td style="padding: 25px 0 0 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;">
                                 <h4>Booking details: </h4>
                                 {% if event.category == 'CY' %}
-                                <p><b>Regular{% if times %}{% with count=times.count %} day{{ count|pluralize }}</b>:{% endwith %}{% for d in times.all %}<br/>· {{d}}{% endfor %}{% endif %}</p>
+                                    {% if not book.bookdateinfo %}{% with count=times.count %}
+                                        <p><b>Regular day{{ count|pluralize }}</b>:{% endwith %}{% for d in times.all %}<br/>· {{ d }}{% endfor %}
+                                    {% else %}
+                                        <p><b>Drop-In: {{ book.bookdateinfo.single_date|date "d M. Y" }}
+                                    {% endif %}
                                 {% endif %}
                                 {% if location %}
-                                <p>Address: {{location.name}} - {{location.address}}. {{location.description}}</p>
+                                    <p>Address: {{location.name}} - {{location.address}}. {{location.description}}</p>
                                 {% endif %}
                                 <p><b>Price</b>:<br/> {{ price }}</p>
                                 <p><b>Reference number</b>: {{ referenznum }}</p>
@@ -75,13 +79,13 @@
                             <tr>
                               <td style="padding: 25px 0 0 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;">
                                 <h4>Payment details: </h4>
-                                <p><b>Pay till</b>: {{pay_till}} </p>
+                                <p><b>Pay till</b>: {{ pay_till }} </p>
                                 <p><b>Bank Transfer</b>:<br/>
                                   Acrolama KLG<br/>
                                   Tramstrasse 65, 8050 Zürich<br/>
                                   IBAN: CH29 0022 5225 1202 6601 B<br/>
                                   BIC: UBSWCHZH80A<br/><br/><br/>
-                                  <b>Use reference number</b>: {{referenznum}}
+                                  <b>Use reference number</b>: {{ referenznum }}
                                 </p>
                                 <p>Find out more about our abos <a href="https://acrolama.com/info/prices/" target="_blank">www.acrolama/info/prices/</a></p>
                               </td>

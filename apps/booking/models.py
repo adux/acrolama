@@ -37,7 +37,7 @@ class Book(models.Model):
         return ",\n".join([p.name for p in self.times.all()])
 
     def __str__(self):
-        return "%s: %s - %s %s" % (self.pk, self.event, self.user.first_name, self.user.last_name,)
+        return "%s: %s - %s" % (self.pk, self.event.title, self.user.get_full_name)
 
 
 class BookDuoInfo(models.Model):

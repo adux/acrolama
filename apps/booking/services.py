@@ -1,12 +1,18 @@
 import datetime
+from django.conf import settings
 from django.contrib import messages
 from django.utils.translation import gettext as _
 
+# Email
+from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives
+from django.core.exceptions import ObjectDoesNotExist
+
 from booking.models import Book, Attendance, AboCounter, BOOKINGSTATUS, Quotation
-from project.models import Event, TimeLocation
+from project.models import Event, TimeLocation, Irregularity
 from accounting.models import Invoice
 
-import booking.utils
+from booking.utils import get_weekday_dates_for_period
 
 
 def get_book(book):
@@ -138,7 +144,7 @@ def create_attendance_from_book(book):
             else:
                 # If it's a Cycle get all the dates from start to end and add
                 num = to.regular_day
-                li = booking.utils.make_regularday_dates_list(start, end, int(num))
+                li = get_weekday_dates_for_period(start, end, int(num))
                 obj.attendance_date.extend(li)
                 for time in li:
                     obj.attendance_check.append("False")
@@ -206,7 +212,7 @@ def inform_book(request, instance, book):
         # Send the Informed Email
         if book.informed_at is None:
             try:
-                booking.utils.email_sender(instance, "Informed")
+                book_send_informed(instance)
             except Exception as e:
                 messages.add_message(request, messages.ERROR, _("Error Email: " + str(e)))
             else:
@@ -250,7 +256,7 @@ def inform_book(request, instance, book):
             # Send New Book Email
             if book.informed_at is None:
                 try:
-                    booking.utils.email_sender(instance, "Informed")
+                    book_send_informed(instance)
                 except Exception as e:
                     messages.add_message(request, messages.ERROR, _("Error Email: " + str(e)))
                 else:
@@ -268,7 +274,7 @@ def inform_book(request, instance, book):
             # Send a Reminder
             if book.informed_at is None:
                 try:
-                    booking.utils.email_sender(instance, "Reminder")
+                    book_send_reminder(instance)
                 except Exception as e:
                     messages.add_message(request, messages.ERROR, _("Error Email: " + str(e)))
                 else:
@@ -384,3 +390,91 @@ def create_quotation(form, count):
     obj.direct_costs.add(*dc)
 
     obj.save()
+
+
+def book_send_registered(book):
+    sender = "notmonkeys@acrolama.com"
+    bcc = ["acrolama@acrolama.com"]
+    subject = "Acrolama - Booking received - " + str(book.event.title)
+    to = [book.user.email]
+
+    p = {
+        "event": book.event,
+        "user": book.user,
+    }
+
+    msg_plain = render_to_string(settings.BASE_DIR + "/apps/booking/templates/booking/email_registration.txt", p,)
+    msg_html = render_to_string(settings.BASE_DIR + "/apps/booking/templates/booking/email_registration.html", p,)
+
+    msg = EmailMultiAlternatives(subject, msg_plain, sender, to, bcc)
+    msg.attach_alternative(msg_html, "text/html")
+    msg.send()
+
+
+def book_send_informed(book):
+    """
+    Signals could give Error cause you can call them from wherever.
+    Save slows down.
+    https://stackoverflow.com/questions/2809547/creating-email-templates-with-django
+    Theres another Method with Multi wich helps for headers if needed
+    """
+    sender = "notmonkeys@acrolama.com"
+    bcc = ["acrolama@acrolama.com"]
+    subject = "Acrolama - Confirmation - " + str(book.event.title)
+    to = [book.user.email]
+
+    irregularities = Irregularity.objects.filter(event__slug=book.event.slug)
+
+    times = book.times.all()
+    location = get_location_from_timeoption(times, book.event)
+
+    p = {
+        "book": book,
+        "event": book.event,
+        "user": book.user,
+        "price": book.price,
+        "referenznum": book.invoice.referral_code,
+        "pay_till": book.invoice.pay_till,
+        "times": times,
+        "location": location,
+        "irregularities": irregularities,
+    }
+
+    msg_plain = render_to_string(settings.BASE_DIR + "/apps/booking/templates/booking/email_informed.txt", p,)
+    msg_html = render_to_string(settings.BASE_DIR + "/apps/booking/templates/booking/email_informed.html", p,)
+
+    msg = EmailMultiAlternatives(subject, msg_plain, sender, to, bcc)
+    msg.attach_alternative(msg_html, "text/html")
+    msg.send()
+
+
+def book_send_reminder(book):
+    sender = "notmonkeys@acrolama.com"
+    bcc = ["acrolama@acrolama.com"]
+    subject = "Acrolama - Reminder - " + str(book.event.title)
+    to = [book.user.email]
+
+    irregularities = Irregularity.objects.filter(event__slug=book.event.slug)
+    times = book.times.all()
+    location = get_location_from_timeoption(times, book.event)
+
+    try:
+        abocount = get_count_abocounter_of_book(book.id)
+    except ObjectDoesNotExist:
+        abocount = False
+
+    p = {
+        "event": book.event,
+        "user": book.user,
+        "times": times,
+        "location": location,
+        "abocount": abocount,
+        "irregularities": irregularities,
+    }
+
+    msg_plain = render_to_string(settings.BASE_DIR + "/apps/booking/templates/booking/email_reminder.txt", p,)
+    msg_html = render_to_string(settings.BASE_DIR + "/apps/booking/templates/booking/email_reminder.html", p,)
+
+    msg = EmailMultiAlternatives(subject, msg_plain, sender, to, bcc)
+    msg.attach_alternative(msg_html, "text/html")
+    msg.send()

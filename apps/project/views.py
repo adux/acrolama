@@ -13,11 +13,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.cache import cache
 
-# Utils
-from booking.utils import (
-    email_sender,
-    staff_check,
-)
+# Utis
+from booking.services import book_send_registered
+from booking.utils import staff_check
 
 # Models
 from project.models import Event, TimeOption, PriceOption, Irregularity, TimeLocation
@@ -156,7 +154,7 @@ class EventInterest(SingleObjectMixin, FormView):
         form.save_m2m()
 
         # save all m2m of instance
-        email_sender(instance, "Registered")
+        book_send_registered(instance)
         return super().form_valid(form)
 
     def get_success_url(self):
