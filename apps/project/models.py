@@ -208,7 +208,7 @@ class PriceOption(models.Model):
     published = models.BooleanField(default=False)
 
     def __str__(self):
-        if self.price_euro:
+        if self.price_euro and self.price_chf:
             return "%s, EUR: %s - CHF: %s" % (
                 self.name,
                 self.price_euro,
@@ -216,6 +216,12 @@ class PriceOption(models.Model):
             )
         else:
             return "%s, CHF: %s" % (self.name, self.price_chf)
+
+    def get_price(self):
+        if self.price_euro:
+            return "CHF {}.- || EUR: {}.-".format(self.price_chf, self.price_euroA)
+        else:
+            return "CHF {}.-".format(self.price_chf)
 
     def clean(self):
         if self.duo and self.single_date:

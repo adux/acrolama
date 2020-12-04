@@ -6,17 +6,17 @@ We are happy to inform you that the herd of lamas confirmed your booking for:
 
 Please let us know if there are any changes regarding your participation.
 
-Booking details:
-{% if event.category == 'CY' %}Regular{% if times %}{% with count=times.count %} day{{ count|pluralize }}:{% endwith %}{% for d in times.all %} · {{d}}{% endfor %}{% endif %}{% endif %}
-{% if location %}Address: {{location.name}} - {{location.address}}. {{location.description}}{% endif %}
-Price: {{price}}
-Reference number: {{referenznum}}
-{% if irregularities %}{% with count=irregularities.count %}Please note the event has the following exception{{ count|pluralize }}:{% endwith %}{% for obj in irregularities %} ·{{obj.description}}{% endfor %}\n\r{% endif %}
-Is there are a day you can not come to class?
-Find a answear to this in our FAQ https://acrolama.ch/faq/
+Booking details:{% if event.category == 'CY' %}{% if not book.bookdateinfo %}{% with count=times.count %}
+Regular day{{ count|pluralize }}:{% endwith %}{% for d in times.all %}· {{ d }} {% endfor %}
+{% else %}Drop-In: {{ book.bookdateinfo.single_date|date "d M. Y" }}{% endif %}{% endif %}
+{% if location %}Address: {{ location.name }} - {{ location.address }}. {{ location.description }}{% endif %}
+Price: {{ price }}
+Reference number: {{ referenznum }}
+{% if irregularities %}{% with count=irregularities.count %}
+Please note the following exception{{ count|pluralize }}:{% endwith %}{% for obj in irregularities %} ·{{ obj.description }} {% endfor %}{% endif %}
 
 Payment details:
-Pay till : {{pay_till}}
+Pay till : {{ pay_till }}
 Bank Transfer:
 Acrolama KLG
 Tramstrasse 65, 8050 Zürich
