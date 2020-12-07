@@ -44,7 +44,10 @@
                             <tr>
                               <td style="padding: 25px 0 0 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;">
                                 <h4>Booking details: </h4>
-                                <p>{{ price.name }} - {{ event.title }} {{ event.event_startdate|date:"d M." }}{% if event.event_startdate != event.event_enddate %} - {{ event.event_enddate|date:"d M. y" }} {% endif %}{% if event.category == "CY" %}<a href="https://www.acrolama.com/classes/{{event.slug}}/" target="_blank" rel="noopener">Class details</a>{% else %}<a href="https://www.acrolama.com/events/{{event.slug}}/" target="_blank" rel="noopener">Event details</a>{% endif %}</p>
+                                <p>{{ price.name }}<br/>
+                                {{ event.title }}<br/>
+                                {{ event.event_startdate|date:"d M." }}{% if event.event_startdate != event.event_enddate %} - {{ event.event_enddate|date:"d M. y" }}{% endif %}<br/>
+                                {% if event.category == "CY" %}<a href="https://www.acrolama.com/classes/{{event.slug}}/" target="_blank" rel="noopener">{{ event.get_category_display }} details</a>{% else %}<a href="https://www.acrolama.com/events/{{event.slug}}/" target="_blank" rel="noopener">{{ event.get_category_display }} details</a>{% endif %}</p>
                                 {% if event.category == "CY" %}
                                     {% if not book.bookdateinfo %}{% with count=times.count %}
                                     <p><b>Regular day{{ count|pluralize }}</b>:{% endwith %}{% for d in times.all %}<br/>· {{ d }}{% endfor %}</p>
