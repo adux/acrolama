@@ -75,13 +75,13 @@ class Invoice(models.Model):
 
     def clean(self, *args, **kwargs):
 
-        if ((self.paid >= 0) and not self.pay_date) or (self.pay_date and not (self.paid >= 0)):
-            raise ValidationError(_("Can't save. Paid invoices need a date and payment of min. 0."))
+        if (self.paid is not None and self.pay_date is None) or (self.pay_date is not None and self.paid is None):
+            raise ValidationError(_("Can't save. Paid invoices need a date and payment"))
 
         if self.status in ("PY", "ST"):
             if not self.methode or (self.methode == "UN"):
                 raise ValidationError(_("Can't save. Paid invoices need a payment methode."))
-            if not self.paid or not self.pay_date:
+            if self.paid is None or self.pay_date is None:
                 raise ValidationError(_("Can't save. Paid invoices need a date and payment of min. 0."))
 
         if (self.status in ("PE", "CA", "FR", "SR", "TR")) and (self.pay_date):

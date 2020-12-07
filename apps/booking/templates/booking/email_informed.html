@@ -44,21 +44,22 @@
                             <tr>
                               <td style="padding: 25px 0 0 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;">
                                 <h4>Booking details: </h4>
-                                <p>{{ price.name }} - {{event.title}} {{event.event_startdate|date:'d M.'}}{% if event.event_startdate != event.event_enddate %} - {{ event.event_enddate|date:'d M. y'}}{% endif %} {% if event.category == 'CY' %}<a href="https://www.acrolama.com/classes/{{event.slug}}/" target="_blank" rel="noopener">Class details</a>{% else %}<a href="https://www.acrolama.com/events/{{event.slug}}/" target="_blank" rel="noopener">Event details</a>{% endif %}</p>
-                                {% if event.category == 'CY' %}
+                                <p>{{ price.name }} - {{ event.title }} {{ event.event_startdate|date:"d M." }}{% if event.event_startdate != event.event_enddate %} - {{ event.event_enddate|date:"d M. y" }} {% endif %}{% if event.category == "CY" %}<a href="https://www.acrolama.com/classes/{{event.slug}}/" target="_blank" rel="noopener">Class details</a>{% else %}<a href="https://www.acrolama.com/events/{{event.slug}}/" target="_blank" rel="noopener">Event details</a>{% endif %}</p>
+                                {% if event.category == "CY" %}
                                     {% if not book.bookdateinfo %}{% with count=times.count %}
                                     <p><b>Regular day{{ count|pluralize }}</b>:{% endwith %}{% for d in times.all %}<br/>· {{ d }}{% endfor %}</p>
                                     {% else %}
-                                    <p><b>Drop-In</b>: {{ book.bookdateinfo.single_date|date "d M. Y" }}</p>
+                                    <p><b>Drop-In</b>: {{ book.bookdateinfo.single_date|date:"d M. Y" }}</p>
                                     {% endif %}
                                 {% endif %}
                                 {% if location %}
-                                    <p>Address: {{location.name}} - {{location.address}}. {{location.description}}</p>
+                                    <p>Address: {{ location.name }} - {{ location.address }}. {{ location.description }}</p>
                                 {% endif %}
                                 {% if event.project.public_chat_link %}
                                 <p><a href="{{ event.project.public_chat_link|safe }}">Event Group</a></p>
+                                {% endif %}
                                 {% if irregularities %}{% with count=irregularities.count %}
-                                <p><b>Please note the following exception{{ count|pluralize }}</b>:{% endwith %}{% for obj in irregularities %}<br/> ·{{obj.description}}{% endfor %}</p>
+                                <p><b>Please note the following exception{{ count|pluralize }}</b>:{% endwith %}{% for obj in irregularities %}<br/> ·{{ obj.description }}{% endfor %}</p>
                                 {% endif %}
                               </td>
                             </tr>

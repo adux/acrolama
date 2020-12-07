@@ -1,33 +1,31 @@
 Hola {{user.first_name}}
 {% load tinycontent_tags %}
-We are happy to inform you that the herd of lamas confirmed your booking for:
-{{event.title}} {{event.event_startdate|date:'d M.'}}{% if event.event_startdate != event.event_enddate %}- {{ event.event_enddate|date:'d M. y'}}{% endif %}
-{% if event.category == 'CY' %}Class details: https://www.acrolama.com/classes/{{event.slug}}/{% else %} Event details: https://www.acrolama.com/events/{{event.slug}}/{% endif %}
-
+We are happy to inform you that the herd of lamas confirmed your booking for our {{ event.get_category_display }}.
 Please let us know if there are any changes regarding your participation.
 
-Booking details:{% if event.category == 'CY' %}{% if not book.bookdateinfo %}{% with count=times.count %}
-Regular day{{ count|pluralize }}:{% endwith %}{% for d in times.all %}· {{ d }} {% endfor %}
-{% else %}Drop-In: {{ book.bookdateinfo.single_date|date "d M. Y" }}{% endif %}{% endif %}
+
+Booking details:
+{{ price.name }} - {{ event.title }} {{ event.event_startdate|date:"d M." }}{% if event.event_startdate != event.event_enddate %} - {{ event.event_enddate|date:"d M. y" }} {% endif %}
+{% if event.category == "CY" %} Cycle details: https://www.acrolama.com/classes/{{event.slug}}/{% else %} {{ event.get_category_display }} details: https://www.acrolama.com/events/{{event.slug}}/{% endif %}
+
+{% if event.category == "CY" %}{% if not book.bookdateinfo %}{% with count=times.count %}*Regular day{{ count|pluralize }}*:{% endwith %}{% for d in times.all %}· {{ d }} {% endfor %}{% else %}*Drop-In*: {{ book.bookdateinfo.single_date|date:"d M. Y" }}{% endif %}{% endif %}
 {% if location %}Address: {{ location.name }} - {{ location.address }}. {{ location.description }}{% endif %}
-Price: {{ price }}
-Reference number: {{ referenznum }}
-{% if irregularities %}{% with count=irregularities.count %}
-Please note the following exception{{ count|pluralize }}:{% endwith %}{% for obj in irregularities %} ·{{ obj.description }} {% endfor %}{% endif %}
+{% if event.project.public_chat_link %}{{ event.get_display_category }} Whatsapp Group: {{ event.project.public_chat_link|safe }}{% endif %}
+{% if irregularities %}{% with count=irregularities.count %}*Please note the following exception{{ count|pluralize }}*:{% endwith %}{% for obj in irregularities %} · *{{ obj.description }}* {% endfor %}{% endif %}
+
 
 Payment details:
-Pay till : {{ pay_till }}
+Price: {{ price.get_price }}
+Pay till: {{ pay_till }}
+Reference number: {{ referenznum }}
+
 Bank Transfer:
 Acrolama KLG
 Tramstrasse 65, 8050 Zürich
 IBAN: CH29 0022 5225 1202 6601 B
 BIC: UBSWCHZH80A
-Use reference number: {{ referenznum }}
 
 Find our payment methods and abos at: https://acrolama.ch/info/prices/
-
-Last but not least, get the latest news in our Whatsapp Group:
-{% tinycontent_simple 'email_whatsapp' %}
 
 See you soon!
 Big hug
@@ -37,6 +35,10 @@ The Lamas ;)
 ---
 Möchtest du fliegen wie ein Lama? Wir haben verschiedene Acroyoga
 Events! Check out: www.acrolama.com
+
+Acrolama GENERAL Whatsapp Group: {% tinycontent_simple 'email_whatsapp' %}
+Instagram: https://instagram.com/acrolama
+Facebook: https://facebook.com/acrolama
 
 Acrolmaa KLG
 Tramstrasse 65, Oerlikon, ZH 8050

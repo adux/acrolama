@@ -59,16 +59,15 @@ from booking.utils import (
 
 # Services
 from booking.services import (
+    book_create_next,
+    book_inform,
+    book_get,
     check_abocounter,
-    create_next_book,
     create_quotation,
-    get_book,
-    get_event,
-    get_timelocation,
-    inform_book,
     update_lastbook_abocounter,
     attendance_toggle_check
 )
+from project.services import event_get, timelocation_get
 
 
 # TODO: Move all autocomplete to herdi or home
@@ -284,12 +283,12 @@ def bookinglistview(request):
 
         if "create" in request.POST:
             for pk in checked_list:
-                book = get_book(pk)
+                book = book_get(pk)
 
                 # Create the next book
                 if book.status == "PA":
                     try:
-                        new_book = create_next_book(book, "PE")
+                        new_book = book_create_next(book, "PE")
 
                         # Check if it has a counter and update last_book
                         if book.price.cycles > 1:
@@ -371,11 +370,11 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         instance = form.save(commit=False)
 
         # Get the book before save
-        book = get_book(instance.id)
+        book = book_get(instance.id)
 
         if "update" in self.request.POST:
             if (book.status in ("PE", "WL")) and (instance.status == "IN"):
-                inform_book(self.request, instance, book)
+                book_inform(self.request, instance, book)
 
         return super().form_valid(form)
 
@@ -737,9 +736,9 @@ def quotationcreateview(request):
                 event_id = str(request.GET.get("event"))
                 filter_time_location_id = str(request.GET.get("event__time_locations"))
 
-                event = get_event(event_id)
+                event = event_get(event_id)
                 event_time_locations = event.time_locations.all()
-                filter_time_location = get_timelocation(filter_time_location_id)
+                filter_time_location = timelocation_get(filter_time_location_id)
 
                 # If the filtered TL is in the TLS of the Event
                 if filter_time_location in event_time_locations:

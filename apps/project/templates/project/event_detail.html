@@ -1,6 +1,6 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load widget_tweaks %}{% load static compress %}{% load tinycontent_tags %}
-{% block head_title %}{{block.super}}{{ object.get_discipline_display }}{{ object.level }}{{ object.get_category_display }}: {{object.title}}{% endblock%}
+{% block head_title %}{{block.super}}{{ object.get_discipline_display }}{{ object.level }}{{ object.get_category_display }}: {{ object.title }}{% endblock%}
 {% block css %}
         {% compress css file event %}
             <link rel="stylesheet" type="text/css" href="{% static "booking/bootstrap-datepicker3.standalone.min.css" %}?v=18" media="screen" />
@@ -22,11 +22,11 @@
                         maxViewMode: 0,
                         todayBtn: "linked",
                         clearBtn: true,
-                        orientation: "bottom auto",
+                        orientation: "top auto",
                         autoclose: true,
                         todayHighlight: true,
-                        startDate: "{{object.event_startdate|date:'Y-m-d'}}",
-                        endDate: "{{object.event_enddate|date:'Y-m-d'}}",
+                        startDate: "{{ object.event_startdate|date:'Y-m-d' }}",
+                        endDate: "{{ object.event_enddate|date:'Y-m-d' }}",
                     });
                 }
             </script>

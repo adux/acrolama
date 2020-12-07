@@ -8,6 +8,7 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.core.exceptions import ObjectDoesNotExist
 
+
 from booking.models import Book, Attendance, AboCounter, BOOKINGSTATUS, Quotation
 from project.models import Event, TimeLocation, Irregularity
 from accounting.models import Invoice
@@ -15,7 +16,7 @@ from accounting.models import Invoice
 from booking.utils import get_weekday_dates_for_period
 
 
-def get_book(book):
+def book_get(book):
     # If its str or int treat it as id
     if isinstance(book, (str, int)):
         book_pk = int(book)
@@ -32,7 +33,7 @@ def book_is_paid(book):
     To check if a book is paid we need to differenciate how its price_option works
     For Cycles for example one would need to go to its first booking to see the related invoice there
     """
-    book = get_book(book)
+    book = book_get(book)
 
     if book.invoice:
         if book.invoice.status == "PY":
@@ -47,45 +48,20 @@ def book_is_paid(book):
             return False
 
 
-def get_event(event):
-    # If its str or int treat it as id
-    if isinstance(event, (str, int)):
-        event_pk = int(event)
+def book_get_location(book):
+    """
+    Bridge function to get locations of book. A necesary evil since the book has a
+    time but no location.
+    """
+    # Preventing  bookings with multiple times, shouldn't happen. But times is still a M2M
+    if book.times.count() > 1:
+        raise Exception(_("Booking with multiple Time Options can't match Location"))
     else:
-        return event
-
-    # if its a id get the book
-    if event_pk:
-        return Event.objects.get(pk=event_pk)
-
-
-def get_timelocation(tl):
-    # If its str or int treat it as id
-    if isinstance(tl, (str, int)):
-        tl_pk = int(tl)
-    else:
-        return tl
-
-    # if its a id get the book
-    if tl_pk:
-        return TimeLocation.objects.get(pk=tl_pk)
-
-
-def get_location_from_timeoption(timeoptions, event):
-    if timeoptions.count() > 1:
-        return False
-    else:
-        event = get_event(event)
-        timelocations_qs = event.time_locations.all()
-        filteredTimeLocation_qs = timelocations_qs.filter(time_options__in=timeoptions)
+        filteredTimeLocation_qs = book.event.time_locations.filter(time_options__in=book.times.all())
         if filteredTimeLocation_qs.count() > 1:
-            return False
+            raise Exception(_("Multiple Locations found, only one was expected for selected Time Option."))
         else:
-            location = filteredTimeLocation_qs.last().location
-            if location is not None:
-                return location
-            else:
-                return False
+            return filteredTimeLocation_qs.last().location
 
 
 def attendance_toggle_check(id, position):
@@ -95,7 +71,7 @@ def attendance_toggle_check(id, position):
 
 
 def update_book_status(book, status):
-    book = get_book(book)
+    book = book_get(book)
     if status in ("PA", "Participant"):
         book.status = "PA"
         book.save()
@@ -104,9 +80,8 @@ def update_book_status(book, status):
         book.save()
 
 
-def create_invoice_from_book(book):
-    book = get_book(book)
-
+def book_create_invoice(book):
+    book = book_get(book)
     obj = Invoice()
     obj.balance = "CR"  # Credit
     obj.book = book
@@ -118,12 +93,12 @@ def create_invoice_from_book(book):
     obj.save()
 
 
-def create_attendance_from_book(book):
+def book_create_attendance(book):
     """
     Creates an Attendance to a particular booking
     """
     # Get a book
-    book = get_book(book)
+    book = book_get(book)
 
     # Create Attendance
     obj = Attendance()
@@ -185,13 +160,13 @@ def get_first_book_abocounter(bookid):
     return counter.data['first_book']
 
 
-def inform_book(request, instance, book):
+def book_inform(request, instance, book):
 
     # If the Price Option is an Single Cycle Abo
     if book.price.cycles < 2:
         # Create the Invoice
         try:
-            create_invoice_from_book(instance)
+            book_create_invoice(instance)
         except Exception as e:
             messages.add_message(
                 request, messages.WARNING, _("Error creating Invoice: " + str(e)),
@@ -201,7 +176,7 @@ def inform_book(request, instance, book):
 
         # Create the attendance list
         try:
-            create_attendance_from_book(instance)
+            book_create_attendance(instance)
         except Exception as e:
             messages.add_message(
                 request, messages.WARNING, _("Error creating Attendance: " + str(e)),
@@ -235,7 +210,7 @@ def inform_book(request, instance, book):
 
             # Create the Invoice
             try:
-                create_invoice_from_book(instance)
+                book_create_invoice(instance)
             except Exception as e:
                 messages.add_message(
                     request, messages.WARNING, _("Error creating Invoice: " + str(e)),
@@ -245,7 +220,7 @@ def inform_book(request, instance, book):
 
             # Create the Attendance
             try:
-                create_attendance_from_book(instance)
+                book_create_attendance(instance)
             except Exception as e:
                 messages.add_message(
                     request, messages.WARNING, _("Error creating Attendance: " + str(e)),
@@ -285,7 +260,7 @@ def inform_book(request, instance, book):
 
             # Create the attendance list
             try:
-                create_attendance_from_book(instance)
+                book_create_attendance(instance)
             except Exception as e:
                 messages.add_message(
                     request, messages.WARNING, _("Error creating Attendance: " + str(e)),
@@ -305,7 +280,7 @@ def inform_book(request, instance, book):
                 )
 
 
-def create_next_book(book, status):
+def book_create_next(book, status):
     """
     Gets and Workshop Booking and creates the next based on cycle
     """
@@ -425,8 +400,7 @@ def book_send_informed(book):
 
     irregularities = Irregularity.objects.filter(event__slug=book.event.slug)
 
-    times = book.times.all()
-    location = get_location_from_timeoption(times, book.event)
+    location = book_get_location(book)
 
     p = {
         "book": book,
@@ -435,7 +409,7 @@ def book_send_informed(book):
         "price": book.price,
         "referenznum": book.invoice.referral_code,
         "pay_till": book.invoice.pay_till,
-        "times": times,
+        "times": book.times.all(),
         "location": location,
         "irregularities": irregularities,
     }
@@ -455,8 +429,7 @@ def book_send_reminder(book):
     to = [book.user.email]
 
     irregularities = Irregularity.objects.filter(event__slug=book.event.slug)
-    times = book.times.all()
-    location = get_location_from_timeoption(times, book.event)
+    location = book_get_location(book)
 
     try:
         abocount = get_count_abocounter_of_book(book.id)
@@ -466,7 +439,7 @@ def book_send_reminder(book):
     p = {
         "event": book.event,
         "user": book.user,
-        "times": times,
+        "times": book.times.all(),
         "location": location,
         "abocount": abocount,
         "irregularities": irregularities,
