@@ -62,7 +62,7 @@
                                 <p><a href="{{ event.project.public_chat_link|safe }}">Event Group</a></p>
                                 {% endif %}
                                 {% if irregularities %}{% with count=irregularities.count %}
-                                <p><b>Please note the following exception{{ count|pluralize }}</b>:{% endwith %}{% for obj in irregularities %}<br/> ·{{ obj.description }}{% endfor %}</p>
+                                <p><b>Important exception{{ count|pluralize }}</b>:{% endwith %}{% for obj in irregularities %}<br/> ·{{ obj.description }}{% endfor %}</p>
                                 {% endif %}
                               </td>
                             </tr>
