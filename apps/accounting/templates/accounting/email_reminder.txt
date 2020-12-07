@@ -8,7 +8,7 @@ you could pay the missing amount within the next few days.
 Event: {{ event.title }} Details:{% if event.category == 'CY' %}https://www.acrolama.com/classes/{{event.slug}}/{% else %}https://www.acrolama.com/events/{{event.slug}}/{% endif %}
 Invoice N°{{ invoice.id }}
 Price: CHF {{ invoice.to_pay }}.-
-Booked: {{ invoice.book.price.name }}{% if invoice.book.bookdateinfo %} - Date: {{ invoice.book.bookdateinfo.single_date|date: "d M. Y" }}{% endif %}
+Booked: {{ invoice.book.price.name }}{% if invoice.book.bookdateinfo %} - Date: {{ invoice.book.bookdateinfo.single_date|date:"d M. Y" }}{% endif %}
 *If you already paid, please send us a confirmation so we can match the payment.*
 
 Bank Transfer:

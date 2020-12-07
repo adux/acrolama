@@ -32,7 +32,7 @@
                     <p>Event: {{event.title}} {% if event.category == 'CY' %}<a href="https://www.acrolama.com/classes/{{event.slug}}/" target="_blank" rel="noopener">Class details</a>{% else %}<a href="https://www.acrolama.com/events/{{event.slug}}/" target="_blank" rel="noopener">{{ event.get_category_display }} details</a>{% endif %}</p>
                     <p>Invoice N°{{ invoice.id }}</p>
                     <p>Price: CHF {{ invoice.to_pay }}.-</p>
-                    <p>Booked: {{ invoice.book.price.name }}{% if invoice.book.bookdateinfo %} - Date: {{ invoice.book.bookdateinfo.single_date|date: "d M. Y" }}{% endif %}
+                    <p>Booked: {{ invoice.book.price.name }}{% if invoice.book.bookdateinfo %} - Date: {{ invoice.book.bookdateinfo.single_date|date:"d M. Y" }}{% endif %}
                     <h4>If you already paid, please send us a confirmation so we can match the payment.</h4>
 
                     <p>Bank Transfer:</p>
