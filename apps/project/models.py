@@ -134,14 +134,29 @@ class TimeLocation(models.Model):
     time_options = models.ManyToManyField(TimeOption)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
 
-    def get_times(self):
-        return ",\n".join([p.name for p in self.time_options.all()])
-
     def __str__(self):
         if self.name is None:
             return str(self.location)
         else:
             return self.name
+
+    def get_times(self):
+        return ",\n".join([p.name for p in self.time_options.all()])
+
+    @cached_property
+    def capsule(self):
+        key = ["location", "regular_day", "open_starttime", "open_endtime", "class_starttime", "class_endtime"]
+        location = [self.location]
+        time_options = self.time_options.all()
+        for to in time_options:
+            location = location + [
+                to.get_regular_day_display(),
+                to.open_starttime,
+                to.open_endtime,
+                to.class_starttime,
+                to.class_endtime,
+                ]
+        return dict(zip(key, location))
 
 
 def timelocation_post_save(sender, instance, *args, **kwargs):
@@ -334,6 +349,23 @@ class Event(models.Model):
                 else:
                     return None
         return regular_days
+
+    def get_formated_timelocations(self):
+        formatedtimelocations = []
+        key = ["location", "regular_day", "open_starttime", "open_endtime", "class_starttime", "class_endtime"]
+        for obj in self.time_locations.all():
+            location = [obj.location]
+            time_options = obj.time_options.all()
+            for to in time_options:
+                timelocation = location + [
+                    to.get_regular_day_display(),
+                    to.open_starttime,
+                    to.open_endtime,
+                    to.class_starttime,
+                    to.class_endtime,
+                ]
+            formatedtimelocations.append(dict(zip(key, timelocation)))
+        return formatedtimelocations
 
     def __str__(self):
         return "(%s) %s %s - %s" % (

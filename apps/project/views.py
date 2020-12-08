@@ -52,23 +52,6 @@ class EventDisplay(DetailView):
                 conditional["formdate"].append(obj.id)
         return conditional
 
-    def get_fromatedtimelocations(self, timelocations):
-        formatedtimelocations = []
-        key = ["location", "regular_day", "open_starttime", "open_endtime", "class_starttime", "class_endtime"]
-        for obj in timelocations:
-            location = [obj.location]
-            time_options = obj.time_options.all()
-            for to in time_options:
-                timelocation = location + [
-                    to.get_regular_day_display(),
-                    to.open_starttime,
-                    to.open_endtime,
-                    to.class_starttime,
-                    to.class_endtime,
-                ]
-            formatedtimelocations.append(dict(zip(key, timelocation)))
-        return formatedtimelocations
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
@@ -81,7 +64,8 @@ class EventDisplay(DetailView):
 
         # Extra Formats
         conditional = self.get_formconditional(prices)
-        timelocations = self.get_fromatedtimelocations(timelocations)
+        timelocations = self.object.get_formated_timelocations()
+        print(timelocations)
 
         # Forms
         form = BookForm(prefix="booking")
