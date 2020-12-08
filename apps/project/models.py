@@ -131,7 +131,7 @@ class TimeLocation(models.Model):
     """
 
     name = models.CharField(max_length=120, null=True, blank=True)
-    time_options = models.ManyToManyField(TimeOption)
+    time_option = models.ForeignKey(TimeOption, on_delete=models.PROTECT, related_name="time_option")
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -159,41 +159,41 @@ class TimeLocation(models.Model):
         return dict(zip(key, location))
 
 
-def timelocation_post_save(sender, instance, *args, **kwargs):
-    """
-    Solution for recursion to tho the save.
-    """
-    if not instance:
-        return
+# def timelocation_post_save(sender, instance, *args, **kwargs):
+#     """
+#     Solution for recursion to tho the save.
+#     """
+#     if not instance:
+#         return
 
-    if hasattr(instance, "_dirty"):
-        return
+#     if hasattr(instance, "_dirty"):
+#         return
 
-    instance.name = " - ".join(str(p) for p in instance.time_options.all()) + " | %s" % (instance.location)
+#     instance.name = " - ".join(str(p) for p in instance.time_options.all()) + " | %s" % (instance.location)
 
-    try:
-        instance._dirty = True
-        instance.save()
-    finally:
-        del instance._dirty
-
-
-post_save.connect(timelocation_post_save, sender=TimeLocation)
+#     try:
+#         instance._dirty = True
+#         instance.save()
+#     finally:
+#         del instance._dirty
 
 
-def timelocation_m2m_change(sender, instance, *args, **kwargs):
-    """
-    Will call two times the post_save since its saving
-    """
-    if kwargs.get("action") in {"post_add", "post_remove"}:
-        print(kwargs.get("action"))
-        pk_set = kwargs.pop("pk_set", None)
-        b = [TimeOption.objects.get(pk=pk) for pk in pk_set]
-        instance.name = " - ".join(str(p) for p in b) + " | %s" % (instance.location)
-        instance.save()
+# post_save.connect(timelocation_post_save, sender=TimeLocation)
 
 
-m2m_changed.connect(timelocation_m2m_change, sender=TimeLocation.time_options.through)
+# def timelocation_m2m_change(sender, instance, *args, **kwargs):
+#     """
+#     Will call two times the post_save since its saving
+#     """
+#     if kwargs.get("action") in {"post_add", "post_remove"}:
+#         print(kwargs.get("action"))
+#         pk_set = kwargs.pop("pk_set", None)
+#         b = [TimeOption.objects.get(pk=pk) for pk in pk_set]
+#         instance.name = " - ".join(str(p) for p in b) + " | %s" % (instance.location)
+#         instance.save()
+
+
+# m2m_changed.connect(timelocation_m2m_change, sender=TimeLocation.time_options.through)
 
 
 class Irregularity(models.Model):
