@@ -164,7 +164,7 @@ class TimeLocationAutocomplete(autocomplete.Select2QuerySetView):
         if self.q:
             qs = qs.filter(
                 Q(location__name__icontains=self.q)
-                | Q(time_options__name__icontains=self.q)
+                | Q(time_option__name__icontains=self.q)
                 | Q(name__icontains=self.q)
             )
 
@@ -605,7 +605,7 @@ def quotationlistview(request):
         queryset=(
             Quotation.objects.all()
             .select_related("event", "time_location__location")
-            .prefetch_related("teachers", "direct_costs", "time_location__time_options")
+            .prefetch_related("teachers", "direct_costs", "time_location__time_option")
             .order_by("-id")
         ),
     )
@@ -633,7 +633,6 @@ class QuotationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     form_class = QuotationCreateForm
 
     def dispatch(self, request, *args, **kwargs):
-        # TODO: Not sure if this makes two queries
         self.object = self.get_object()
 
         if self.object.locked:
@@ -646,17 +645,25 @@ class QuotationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
         return super(QuotationUpdateView, self).dispatch(request, *args, **kwargs)
 
+    def get_object(self):
+        """
+        It doesn't matter how many times get_object is called per request
+        it should not do more than one request.
+        """
+        if not hasattr(self, '_object'):
+            self._object = super(QuotationUpdateView, self).get_object()
+        return self._object
+
     def get_quotation_bookings(self):
         """
-        Gets all the booings with same Event, Location and Time Option
+        Gets all the bookings with same Event, Location and Time Option
         """
         time_location_of_quotation = TimeLocation.objects.get(id=self.object.time_location.id)
-        time_options_id_list = [to.id for to in time_location_of_quotation.time_options.all()]
         filtered_list = Book.objects.filter(
             event=self.object.event.id,
             event__time_locations=self.object.time_location.id,
-            times__in=time_options_id_list,
-        ).select_related("event__level", "user", "price", "attendance")
+            times=time_location_of_quotation.time_option,
+        ).select_related("event__level", "user", "price", "attendance",)
         return filtered_list
 
     def get_context_data(self, **kwargs):
@@ -672,10 +679,6 @@ class QuotationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         # Revenue
         books_participants = self.get_quotation_bookings().filter(status="PA")
         summe = Decimal(0)
-
-        # TODO: Apply condition in DataBase and aggregate the sum there
-        #     direct_revenue = books_participants.aggregate(Sum("price__price_chf"))
-        #     direct_revenue = direct_revenue["price__price_chf__sum"]
 
         for book in books_participants:
             if book.price.cycles < 2:
@@ -724,7 +727,9 @@ def quotationcreateview(request):
     book_filter = QuotationBookFilter(
         request.GET,
         queryset=(
-            Book.objects.all().select_related("event__level", "user", "price").prefetch_related("invoice", "attendance")
+            Book.objects.all()
+            .select_related("event__level", "user", "price")
+            .prefetch_related("invoice", "attendance")
         ),
     )
 

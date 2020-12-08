@@ -57,7 +57,7 @@ def book_get_location(book):
     if book.times.count() > 1:
         raise Exception(_("Booking with multiple Time Options can't match Location"))
     else:
-        filteredTimeLocation_qs = book.event.time_locations.filter(time_options__in=book.times.all())
+        filteredTimeLocation_qs = book.event.time_locations.filter(time_option__in=book.times.all())
         if filteredTimeLocation_qs.count() > 1:
             raise Exception(_("Multiple Locations found, only one was expected for selected Time Option."))
         else:

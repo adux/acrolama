@@ -64,8 +64,7 @@ class EventDisplay(DetailView):
 
         # Extra Formats
         conditional = self.get_formconditional(prices)
-        timelocations = self.object.get_formated_timelocations()
-        print(timelocations)
+        timelocations = self.object.get_timelocations_capsule()
 
         # Forms
         form = BookForm(prefix="booking")

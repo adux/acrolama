@@ -52,9 +52,9 @@
                                             <ul>
                                                 <li>
                                                     <a href="{{ obj.get_absolute_url }}">
-                                                        {{ obj.event_startdate|date:"d M" }}
+                                                        {{ obj.event_startdate|date:"d M." }}
                                                         {% if obj.event_enddate != obj.event_startdate %}
-                                                        - {{ obj.event_enddate|date:"d M Y" }}
+                                                        - {{ obj.event_enddate|date:"d M. Y" }}
                                                         {% endif %}
                                                     </a>
                                                 </li>
@@ -104,30 +104,18 @@
                                 </div>
                                 <div class="cat-links">
                                     <ul>
-                                        <li>
-                                            <a href="{{ obj.get_absolute_url }}">
-                                                {{ obj.event_startdate|date:"d M" }}
-                                                {% if obj.event_enddate != obj.event_startdate %}
-                                                - {{ obj.event_enddate|date:"d M Y" }}
-                                                {% endif %}
+                                        <li><a href="{{ object.get_absolute_url }}">
+                                                {{ object.event_startdate|date:"d M." }} {% if object.event_enddate != object.event_startdate %}- {{ object.event_enddate|date:"d M. Y" }} {% endif %}
                                             </a>
                                         </li>
-                                    </ul>
-                                </div>
-                                <div class="cat-links">
-                                    <ul>
-                                        <li>
-                                            <a href="{{ obj.get_absolute_url }}">
-                                                {% for to in obj.time_locations.all %}
-                                                    {% for rd in to.time_options.all %}
-                                                        {% ifchanged %}
-                                                            {% if rd.regular_day != Null %}
-                                                            {{ rd.get_regular_day_display|default_if_none:"" }}'S {%if rd.regular_day.count == 1 %}·{% endif %}
-                                                            {% endif %}
-                                                        {% endifchanged%}
-                                                    {% endfor %}
-                                                {% endfor %}
-                                            </a>
+                                        <li><a href="{{ object.get_absolute_url }}">
+                                            {% for obj in object.time_locations.all %}
+                                            {% ifchanged %}
+                                            {% if obj.time_option.regular_day %}
+                                            {{ obj.time_option.get_regular_day_display}}'S 
+                                            {% endif %}
+                                            {% endifchanged%}
+                                            {% endfor %}
                                         </li>
                                     </ul>
                                 </div>

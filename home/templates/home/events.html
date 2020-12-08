@@ -17,14 +17,9 @@
                     {% for obj in event %}
                     <article class="blog-item-holder relative">
                         <div class ="num-inf">
-                            {% comment "TODO" %}
-                            <div class="num">
-                                <i class="{{ obj.category|get_icon }}"></i>
-                            </div>
-                            {% endcomment %}
                             <div class="infos">
                                 <div class="author vcard ">
-                                    <a href="{{ obj.get_absolute_url}}">
+                                    <a href="{{ obj.get_absolute_url}} ">
                                         {{ obj.level.get_name_display|upper }} {{ obj.get_category_display }} -
                                         {% for ad in obj.time_locations.all %}
                                             {% ifchanged %} {{ad.location.address.city }} {% endifchanged %}
@@ -34,10 +29,10 @@
                                 <div class="cat-links">
                                     <ul>
                                         <li>
-                                            <a href="{{ obj.get_absolute_url}}">
-                                                {{ obj.event_startdate|date:"d M"}}
+                                            <a href="{{ obj.get_absolute_url }}">
+                                                {{ obj.event_startdate|date:"d M."}}
                                                 {% if obj.event_enddate != obj.event_startdate %}
-                                                - {{ obj.event_enddate|date:"d M Y" }}
+                                                - {{ obj.event_enddate|date:"d M. Y" }}
                                                 {% endif %}
                                             </a>
                                         </li>
@@ -46,13 +41,13 @@
                             </div>
                         </div>
                         <h3 class="entry-title">
-                            <a href="{{obj.get_absolute_url}}">{{obj.title}}</a>
+                            <a href="{{ obj.get_absolute_url }}">{{ obj.title }}</a>
                         </h3>
                         <div class="clear"></div>
                     </article>
                     {% endfor %}
                     <div class="latest-post-bottom-text">
-                        <a href="{% url 'events' %}">EVENTS CALENDAR</a>
+                        <a href="{% url 'events' %}">ALL EVENTS</a>
                     </div>
                     <div class="clear"></div>
                 </div>

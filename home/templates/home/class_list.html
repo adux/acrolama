@@ -25,21 +25,26 @@
                                 <i class="{{ object.category|get_icon }}"></i>
                         </div>
                         <div class="infos">
-                                <div class="author vcard "><a href="/classes/{{object.slug}}/">
+                            <div class="author vcard "><a href="{{ object.get_absolute_url }}">
                                         {{ object.level.get_name_display }} {{ object.get_category_display }} -
                                         {% for ad in object.time_locations.all %}
                                         {% ifchanged %} {{ad.location.name }} {% endifchanged %}
                                     {% endfor %}</a></div>
                             <div class="cat-links">
                                 <ul>
-                                        <li><a href="/classes/{{object.slug}}/">
-                                                {{ object.event_startdate }} {% if object.event_enddate != object.event_startdate %}- {{ object.event_enddate }} {% endif %}
-                                                {% for obj in object.time_locations.all %}
-                                                {% for rd in obj.time_options.all %}
-                                                {% ifchanged %} | {{ rd.get_regular_day_display|default_if_none:"" }}{% endifchanged%}
-                                                {% endfor %}
-                                                {% endfor %}
-                                            </a></li>
+                                    <li><a href="{{ object.get_absolute_url }}">
+                                            {{ object.event_startdate|date:"M. d, Y" }} {% if object.event_enddate != object.event_startdate %}- {{ object.event_enddate|date:"M. d, Y" }} {% endif %}
+                                        </a>
+                                    </li>
+                                    <li><a href="{{ object.get_absolute_url }}">
+                                        {% for obj in object.time_locations.all %}
+                                            {% ifchanged %}
+                                                {% if obj.time_option.regular_day %}
+                                                    {{ obj.time_option.get_regular_day_display}}'S 
+                                                {% endif %}
+                                            {% endifchanged%}
+                                        {% endfor %}
+                                    </li>
                                 </ul>
                             </div>
                         </div>

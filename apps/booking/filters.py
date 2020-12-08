@@ -150,13 +150,15 @@ class QuotationBookFilter(django_filters.FilterSet):
 
     @property
     def qs(self):
+        """
+        Filters the Books of the Quotation to be only the ones matching the Selected TimeLocation
+        by looking into the TimeOptions match between both
+        """
         parent = super().qs
         # Get the TL id entered
         pk = self.data.get("event__time_locations", None)
         if pk:
             # If the id not None get the object
-            tl = TimeLocation.objects.get(id=pk)
-            # Get all the TO of the TL
-            to_ids = [to.id for to in tl.time_options.all()]
+            time_location = TimeLocation.objects.get(id=pk)
             # And filter bookings with only to of event
-            return parent.filter(times__in=to_ids)
+            return parent.filter(times=time_location.time_option)

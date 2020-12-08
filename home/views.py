@@ -49,7 +49,7 @@ class HomeFormView(CacheMixin, MultiFormsView):
         event_main = (
             Event.objects.all()
             .select_related("level", "discipline")
-            .prefetch_related("time_locations__time_options")
+            .prefetch_related("time_locations__time_option")
             .prefetch_related("time_locations__location")
         )
         event = (
@@ -80,10 +80,10 @@ class HomeFormView(CacheMixin, MultiFormsView):
         )
 
         d = defaultdict(list, {k: [] for k in ('Monday', 'Tuesday', 'Wednesday', 'Friday', 'Sunday')})
-        for class_ in current:
-            days = class_.get_regular_days_list
+        for cycle in current:
+            days = cycle.get_regular_days_list()
             for day in days:
-                d[day].append(class_)
+                d[day].append(cycle)
 
         context["current"] = dict(d)
 

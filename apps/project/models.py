@@ -125,14 +125,9 @@ class Location(models.Model):
 
 
 class TimeLocation(models.Model):
-    """
-    time_options as a many to many was not the best desition ever probably
-    it spears no practical time nor space
-    """
-
     name = models.CharField(max_length=120, null=True, blank=True)
-    time_option = models.ForeignKey(TimeOption, on_delete=models.PROTECT, related_name="time_option")
-    location = models.ForeignKey(Location, on_delete=models.CASCADE)
+    time_option = models.ForeignKey(TimeOption, on_delete=models.PROTECT, related_name="timelocation")
+    location = models.ForeignKey(Location, on_delete=models.PROTECT)
 
     def __str__(self):
         if self.name is None:
@@ -140,60 +135,38 @@ class TimeLocation(models.Model):
         else:
             return self.name
 
-    def get_times(self):
-        return ",\n".join([p.name for p in self.time_options.all()])
-
-    @cached_property
     def capsule(self):
-        key = ["location", "regular_day", "open_starttime", "open_endtime", "class_starttime", "class_endtime"]
-        location = [self.location]
-        time_options = self.time_options.all()
-        for to in time_options:
-            location = location + [
-                to.get_regular_day_display(),
-                to.open_starttime,
-                to.open_endtime,
-                to.class_starttime,
-                to.class_endtime,
-                ]
-        return dict(zip(key, location))
+        cap = {
+            "location": self.location,
+            "regular_day": self.time_option.get_regular_day_display(),
+            "open_starttime": self.time_option.open_starttime,
+            "open_endtime": self.time_option.open_endtime,
+            "class_starttime": self.time_option.class_starttime,
+            "class_endtime": self.time_option.class_endtime,
+        }
+        return cap
 
 
-# def timelocation_post_save(sender, instance, *args, **kwargs):
-#     """
-#     Solution for recursion to tho the save.
-#     """
-#     if not instance:
-#         return
+def timelocation_post_save(sender, instance, *args, **kwargs):
+    """
+    Solution for recursion to tho the save.
+    """
+    if not instance:
+        return
 
-#     if hasattr(instance, "_dirty"):
-#         return
+    if hasattr(instance, "_dirty"):
+        return
 
-#     instance.name = " - ".join(str(p) for p in instance.time_options.all()) + " | %s" % (instance.location)
+    instance.name = "{} | {}".format(instance.time_option, instance.location)
 
-#     try:
-#         instance._dirty = True
-#         instance.save()
-#     finally:
-#         del instance._dirty
-
-
-# post_save.connect(timelocation_post_save, sender=TimeLocation)
+    try:
+        instance._dirty = True
+        instance.save()
+    finally:
+        del instance._dirty
 
 
-# def timelocation_m2m_change(sender, instance, *args, **kwargs):
-#     """
-#     Will call two times the post_save since its saving
-#     """
-#     if kwargs.get("action") in {"post_add", "post_remove"}:
-#         print(kwargs.get("action"))
-#         pk_set = kwargs.pop("pk_set", None)
-#         b = [TimeOption.objects.get(pk=pk) for pk in pk_set]
-#         instance.name = " - ".join(str(p) for p in b) + " | %s" % (instance.location)
-#         instance.save()
-
-
-# m2m_changed.connect(timelocation_m2m_change, sender=TimeLocation.time_options.through)
+post_save.connect(timelocation_post_save, sender=TimeLocation)
 
 
 class Irregularity(models.Model):
@@ -335,37 +308,22 @@ class Event(models.Model):
         else:
             return reverse("event", args=[str(self.slug)])
 
-    @cached_property
     def get_regular_days_list(self):
-        regular_days = []
+        regular_days = set()
         tls = self.time_locations.all()
         for tl in tls:
-            tos = tl.time_options.all()
-            for to in tos:
-                if to.regular_day:
-                    regular_days.append(
-                        to.get_regular_day_display()
-                    ) if to.get_regular_day_display() not in regular_days else regular_days
-                else:
-                    return None
+            if tl.time_option.regular_day:
+                regular_days.add(tl.time_option.get_regular_day_display())
+            else:
+                return None
         return regular_days
 
-    def get_formated_timelocations(self):
-        formatedtimelocations = []
-        key = ["location", "regular_day", "open_starttime", "open_endtime", "class_starttime", "class_endtime"]
+    def get_timelocations_capsule(self):
+        cap = []
         for obj in self.time_locations.all():
-            location = [obj.location]
-            time_options = obj.time_options.all()
-            for to in time_options:
-                timelocation = location + [
-                    to.get_regular_day_display(),
-                    to.open_starttime,
-                    to.open_endtime,
-                    to.class_starttime,
-                    to.class_endtime,
-                ]
-            formatedtimelocations.append(dict(zip(key, timelocation)))
-        return formatedtimelocations
+            print(obj.capsule())
+            cap.append(obj.capsule())
+        return cap
 
     def __str__(self):
         return "(%s) %s %s - %s" % (

@@ -71,7 +71,7 @@ class TimeLocationAdmin(admin.ModelAdmin):
     list_display = [
         "name",
         "location",
-        "get_times",
+        "time_option",
     ]
     list_select_related = ["location"]
 
