@@ -7,6 +7,6 @@ from accounting.views import (
 
 urlpatterns = [
     # Accounting
-    path("invoices/", accountinglistview, name="accounting_list"),
-    path("invoice/<int:pk>/update/", InvoiceUpdateView.as_view(), name="accounting_update"),
+    path("", accountinglistview, name="accounting_list"),
+    path("<int:pk>/", InvoiceUpdateView.as_view(), name="accounting_update"),
 ]

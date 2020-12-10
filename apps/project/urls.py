@@ -7,6 +7,6 @@ from project.views import (
 
 urlpatterns = [
     # Event
-    path("events/", eventlistview, name="event_list"),
-    path("event/<int:pk>/update/", eventupdateview, name="event_update"),
+    path("", eventlistview, name="event_list"),
+    path("<int:pk>/", eventupdateview, name="event_update"),
 ]

@@ -1,6 +1,7 @@
 from django.urls import path, re_path, include
 
 from audiovisual.views import ImageCreateView
+from booking.views import attendance_daily_view, BookCreateView
 
 from herdi.views import (
     HerdView,
@@ -21,12 +22,14 @@ from herdi.views import (
 
 urlpatterns = [
     path("", HerdView.as_view(), name="herd"),
-    path("", include('project.urls')),
-    path("", include('accounting.urls')),
-    path("", include('booking.urls')),
+    path("book/", include('booking.urls')),
+    path("event/", include('project.urls')),
+    path("invoice/", include('accounting.urls')),
     path("contact/", contactlistview, name="contact_list"),
-    path("teacher/booking/invite/", invitationsendview, name="invitation"),
     path("image/create/", ImageCreateView.as_view(), name="image_create"),
+    path("teacher/booking/invite/", invitationsendview, name="invitation"),
+    path("teacher/attendance/", attendance_daily_view, name="teacher_attendance"),
+    path("teacher/booking/create/", BookCreateView.as_view(), name="teacher_booking_create"),
     # Autocompletes
     re_path(r"^event-autocomplete/$", EventAutocomplete.as_view(), name="event-autocomplete"),
     re_path(r"^event-teacher-autocomplete/$", EventTeacherAutocomplete.as_view(), name="event-teacher-autocomplete"),
