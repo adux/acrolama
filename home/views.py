@@ -1,7 +1,6 @@
 import datetime
 from collections import defaultdict
 
-# from django.http import HttpResponseRedirect
 from django.utils import timezone
 from django.utils.decorators import classonlymethod
 from django.shortcuts import render

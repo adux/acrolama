@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Avatar, Image, Video
+from audiovisual.models import Avatar, Image, Video
 
 
 class ImageAdmin(admin.ModelAdmin):
@@ -27,4 +27,3 @@ class AvatarAdmin(admin.ModelAdmin):
 admin.site.register(Avatar, AvatarAdmin)
 admin.site.register(Image, ImageAdmin)
 admin.site.register(Video)
-# Register your models here.

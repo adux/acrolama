@@ -17,7 +17,7 @@ from booking.models import (
 from booking.services import book_is_paid
 
 # Widgets
-from booking.widgets import (
+from herdi.widgets import (
     DynamicArrayWidget,
     M2MSelect,
     BootstrapedSelect2,
@@ -215,7 +215,3 @@ class BookDateInfoForm(forms.ModelForm):
     class Meta:
         model = BookDateInfo
         exclude = ["book"]
-
-
-class InvitationForm(forms.Form):
-    email = forms.EmailField()

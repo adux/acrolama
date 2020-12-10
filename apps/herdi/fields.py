@@ -1,11 +1,9 @@
 from django.contrib.postgres.fields import ArrayField as DjangoArrayField
 
-from booking.widgets import DynamicArrayWidget
+from herdi.widgets import DynamicArrayWidget
 from itertools import chain
 
 from django import forms
-from django.forms import MultipleChoiceField
-from django.forms.widgets import Select
 from django.contrib.postgres.utils import prefix_validation_error
 
 

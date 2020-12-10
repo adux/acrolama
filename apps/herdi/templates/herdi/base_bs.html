@@ -5,20 +5,20 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Fonts Awesome -->
-    <script defer src="{% static 'booking/all.min.js' %}"></script>
+    <script defer src="{% static 'herdi/all.min.js' %}"></script>
 
     <!-- Bootstrap 4.3.1 -->
-    <link rel="stylesheet" href="{% static 'booking/bootstrap.min.css' %}" type="text/css" media="screen" >
-    <link rel="stylesheet" href="{% static 'booking/bootstrap-datepicker3.standalone.min.css' %}" type="text/css" media="screen" >
+    <link rel="stylesheet" href="{% static 'herdi/bootstrap.min.css' %}" type="text/css" media="screen" >
+    <link rel="stylesheet" href="{% static 'herdi/bootstrap-datepicker3.standalone.min.css' %}" type="text/css" media="screen" >
     <!-- Project -->
-    <link rel="stylesheet" href="{% static 'booking/project.css' %}?ran=135018i" type="text/css" media="screen" >
+    <link rel="stylesheet" href="{% static 'herdi/project.css' %}?ran=135018i" type="text/css" media="screen" >
 
     <!-- Bootstrap 4.3.1 -->
-    <script src="{% static 'booking/jquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'herdi/jquery-3.4.1.min.js' %}"></script>
 
     <!-- Autocomplete -->
     {{ form.media }}{{ event_filter.form.media }}{{ book_filter.form.media }}{{ attendance_filter.form.media }}{{ quotation_filter.form.media }}{{ account_filter.form.media }}
-    <link rel="stylesheet" href="{% static 'booking/select2-bootstrap.css' %}" type="text/css" media="screen" >
+    <link rel="stylesheet" href="{% static 'herdi/select2-bootstrap.css' %}" type="text/css" media="screen" >
 
     </head>
 <body>
@@ -45,20 +45,19 @@
         {% endfor %}
     {% endif %}
     <div class="container">
-    {% include 'booking/snippets/navbar.html' %}
+    {% include 'herdi/snippets/navbar.html' %}
     {% block content %}
     {% endblock %}
     </div>
 
     <!-- https://underscorejs.org/ -->
     <script src="https://underscorejs.org/underscore-min.js"></script>
-    <!-- <script src="{% static 'home/js/accounting.js' %}"></script> -->
 
 
     <!-- Popper and Bootstrap -->
-    <script src="{% static 'booking/bootstrap.bundle.min.js' %}"></script>
-    <script src="{% static 'booking/bootstrap-datepicker.min.js' %}"></script>
-    <script src="{% static 'booking/project.js' %}"></script>
+    <script src="{% static 'herdi/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'herdi/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'herdi/project.js' %}"></script>
     <script>
         $('.datepicker').datepicker({
             format: "yyyy-mm-dd",

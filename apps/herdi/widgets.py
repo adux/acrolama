@@ -5,7 +5,7 @@ from django.utils.datastructures import MultiValueDict
 
 class DynamicArrayWidget(forms.TextInput):
 
-    template_name = "booking/dynamic_array.html"
+    template_name = "herdi/snippets/dynamic_array.html"
 
     def get_context(self, name, value, attrs):
         context_value = value or [""]

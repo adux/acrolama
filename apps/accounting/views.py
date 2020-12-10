@@ -1,30 +1,28 @@
+# Django Utils
 from django.contrib import messages
+from django.shortcuts import render
+
+# Paginator
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils.translation import gettext as _
-from django.shortcuts import render
 
+# Views
 from django.views.generic import UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
-from booking.utils import (
+# Utils
+from herdi.utils import (
     build_url,
     staff_check,
 )
 
-from accounting.services import (
-    invoice_get,
-    invoice_send_paid,
-    invoice_reminder,
-)
-
+from accounting.services import invoice_get, invoice_send_paid, invoice_reminder
 from booking.services import update_book_status
 
 from accounting.models import Invoice
 from accounting.filters import AccountFilter
 from accounting.forms import InvoiceUpdateForm
-
-# Create your views here.
 
 
 @login_required

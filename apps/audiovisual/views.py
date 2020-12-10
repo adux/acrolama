@@ -1,13 +1,11 @@
 from django.contrib import messages
-from django.shortcuts import render
 from django.utils.translation import gettext as _
 
 from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
-from booking.utils import (
+from herdi.utils import (
     build_url,
-    staff_check,
     herd_check,
 )
 

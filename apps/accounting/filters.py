@@ -2,7 +2,7 @@ from django.db.models import Q
 
 import django_filters
 
-from booking.widgets import BootstrapedSelect2
+from herdi.widgets import BootstrapedSelect2
 
 from accounting.models import Invoice, BALANCE
 from users.models import User

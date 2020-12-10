@@ -3,7 +3,7 @@ import django_filters
 from project.models import TimeLocation, Event
 
 # Widgets
-from booking.widgets import BootstrapedSelect2
+from herdi.widgets import BootstrapedSelect2
 
 
 class EventFilter(django_filters.FilterSet):

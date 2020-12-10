@@ -1,5 +1,3 @@
-import logging
-
 from django.db import models
 
 from tinymce.widgets import TinyMCE
@@ -14,7 +12,7 @@ from project.models import (
 )
 
 # Widgets
-from booking.widgets import BootstrapedModelSelect2Multiple, BootstrapedSelect2Multiple
+from herdi.widgets import BootstrapedModelSelect2Multiple, BootstrapedSelect2Multiple
 
 
 class EventUpdateForm(forms.Form):

@@ -10,7 +10,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 from booking.models import Book, Attendance, AboCounter, BOOKINGSTATUS, Quotation
-from project.models import Event, TimeLocation, Irregularity
+from project.models import Event, Irregularity
 from accounting.models import Invoice
 
 from booking.utils import get_weekday_dates_for_period

@@ -1,8 +1,6 @@
 from django import forms
 from django.contrib import admin
-from django.db import models
-from .models import Book, Attendance, Quotation
-from booking.fields import ArrayField
+from booking.models import Book, Attendance, Quotation
 
 
 class AttendanceForm(forms.ModelForm):
@@ -20,9 +18,6 @@ class AttendanceForm(forms.ModelForm):
 
 class AttendanceAdmin(admin.ModelAdmin):
     form = AttendanceForm
-    # formfield_overrides = {
-    #     ArrayField: {'widget': forms.TextInput},
-    # }
     list_display = [
         "id",
         "book",

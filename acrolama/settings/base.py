@@ -4,7 +4,9 @@ import sys
 from .allauth import *
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+BASE_DIR = os.path.dirname(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+)
 
 # Change of root of apps
 sys.path.insert(0, os.path.join(BASE_DIR, "apps"))
@@ -36,7 +38,9 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
-            "libraries": {"booking_tags": "apps.booking.templatetags.booking_tags", },
+            "libraries": {
+                "booking_tags": "apps.booking.templatetags.booking_tags",
+            },
         },
     },
 ]
@@ -55,19 +59,28 @@ DJANGO_APPS = [
 ]
 
 EXTERNAL_APPS = [
-    "django_filters",
-    "tinymce",
-    "crispy_forms",
-    "storages",
-    "widget_tweaks",
-    "tinycontent",
     "allauth",
     "allauth.socialaccount",
     "allauth.account",
+    "crispy_forms",
+    "django_filters",
     "invitations",
+    "tinycontent",
+    "tinymce",
+    "storages",
+    "widget_tweaks",
 ]
 
-LOCAL_APPS = ["home", "project", "address", "audiovisual", "accounting", "booking", "users"]
+LOCAL_APPS = [
+    "accounting",
+    "address",
+    "audiovisual",
+    "booking",
+    "home",
+    "herdi",
+    "project",
+    "users",
+]
 
 INSTALLED_APPS = DJANGO_APPS + EXTERNAL_APPS + LOCAL_APPS
 
@@ -79,13 +92,23 @@ GOOGLE_ANALYTICS_PROPERTY_ID = "UA-118797477-1"
 AUTH_USER_MODEL = "users.User"
 SITE_ID = 1  # required by allauth
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator", },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator", },
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator", },
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator", },
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+    },
 ]
 
-DATABASES = {"default": {"ENGINE": "django.db.backends.postgresql", "NAME": "acrolama"}}
+DATABASES = {
+    "default": {"ENGINE": "django.db.backends.postgresql", "NAME": "acrolama"}
+}
 
 # STATIC FILES AND COMPRESSION
 INSTALLED_APPS += ["compressor"]
@@ -104,25 +127,31 @@ MOB_SIZE = (os.environ.get("MOB_SIZE", default=(420, 420)),)
 TINYMCE_COMPRESSOR = False
 TINYMCE_INCLUDE_JQUERY = False
 TINYMCE_DEFAULT_CONFIG = {
-    'gecko_spellcheck': "true",
-    'browser_spellcheck': "true",
-    'height': "300",
-    'selector': "textarea",
-    'resize': "false",
-    'autosave_ask_before_unload': "false",
-    'powerpaste_allow_local_images': "true",
-    'plugins': [
-        'fullscreen autolink help image imagetools ',
-        'link noneditable preview lists',
-        'searchreplace'
+    "gecko_spellcheck": "true",
+    "browser_spellcheck": "true",
+    "height": "300",
+    "selector": "textarea",
+    "resize": "false",
+    "autosave_ask_before_unload": "false",
+    "powerpaste_allow_local_images": "true",
+    "plugins": [
+        "fullscreen autolink help image imagetools ",
+        "link noneditable preview lists",
+        "searchreplace",
     ],
-    'toolbar':
-        "insertfile undo redo | cut copy paste | formatselect bold italic | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist | link image | fullscreen preview searchreplace",
-    'toolbar_mode': "sliding",
-    'contextmenu': "false",
-    'menubar': "false",
-    'language': "de",
-    'lists_indent_on_tab': "false"
+    "toolbar": "insertfile undo redo \
+    | cut copy paste \
+    | formatselect bold italic \
+    | forecolor backcolor \
+    | alignleft aligncenter alignright alignjustify \
+    | bullist numlist \
+    | link image \
+    | fullscreen preview searchreplace",
+    "toolbar_mode": "sliding",
+    "contextmenu": "false",
+    "menubar": "false",
+    "language": "de",
+    "lists_indent_on_tab": "false",
 }
 
 

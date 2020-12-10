@@ -1,3 +1,4 @@
+from io import BytesIO
 from PIL import Image
 from django.db.models.fields.files import ImageFieldFile
 from django.core.files.uploadedfile import InMemoryUploadedFile

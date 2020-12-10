@@ -2,12 +2,9 @@
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 from django.db.models.signals import post_save
-
-# Original would be from postgres.field, booking.fields looks for other widgets
-# from django.contrib.postgres.fields import ArrayField
-from booking.fields import ArrayField
-
 from django.utils.translation import ugettext_lazy as _
+
+from herdi.fields import ArrayField
 
 
 BOOKINGSTATUS = [

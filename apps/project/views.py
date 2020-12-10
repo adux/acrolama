@@ -14,8 +14,10 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.cache import cache
 
 # Utis
+from herdi.utils import staff_check
+
+# Services
 from booking.services import book_send_registered
-from booking.utils import staff_check
 
 # Models
 from project.models import Event, TimeOption, PriceOption, Irregularity, TimeLocation

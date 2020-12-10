@@ -1,12 +1,12 @@
 import django_filters
 import datetime
 
-from dal import autocomplete
+from dal.autocomplete import ListSelect2
 
 from django.db.models import Q
 
 # Widgets
-from booking.widgets import M2MSelect, BootstrapedSelect2, BootstrapedSelect2Multiple, BootstrapedModelSelect2Multiple
+from herdi.widgets import BootstrapedSelect2, BootstrapedModelSelect2Multiple
 
 # Models
 from booking.models import Book, Attendance, Quotation
@@ -41,7 +41,7 @@ class AttendanceFilter(django_filters.FilterSet):
 class AttendanceDailyFilter(django_filters.FilterSet):
     # Gets the Event the User is te acher on.
     book__event = django_filters.ChoiceFilter(
-        label="Your Events", field_name="book__event", widget=autocomplete.ListSelect2(
+        label="Your Events", field_name="book__event", widget=ListSelect2(
             url="event-teacher-autocomplete",
             attrs={'data-theme': 'bootstrap4', 'data-width': 'style'}
         )
