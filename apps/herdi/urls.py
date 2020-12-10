@@ -22,7 +22,7 @@ from herdi.views import (
 
 urlpatterns = [
     path("", HerdView.as_view(), name="herd"),
-    path("book/", include('booking.urls')),
+    path("", include('booking.urls')),
     path("event/", include('project.urls')),
     path("invoice/", include('accounting.urls')),
     path("contact/", contactlistview, name="contact_list"),

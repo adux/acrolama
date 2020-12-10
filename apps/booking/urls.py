@@ -1,12 +1,10 @@
 from django.urls import path
 
 from booking.views import (
-    attendance_daily_view,
     attendancelistview,
     AttendanceUpdateView,
     bookinglistview,
     BookUpdateView,
-    BookCreateView,
     QuotationUpdateView,
     quotationlistview,
     quotationcreateview,
@@ -15,8 +13,8 @@ from booking.views import (
 
 urlpatterns = [
     # Booking
-    path("", bookinglistview, name="booking_list"),
-    path("<int:pk>/", BookUpdateView.as_view(), name="booking_update"),
+    path("book/", bookinglistview, name="booking_list"),
+    path("book/<int:pk>/", BookUpdateView.as_view(), name="booking_update"),
     # Attendance
     path("attendance/", attendancelistview, name="attendance_list"),
     path("attendance/<int:pk>/", AttendanceUpdateView.as_view(), name="attendance_update"),
