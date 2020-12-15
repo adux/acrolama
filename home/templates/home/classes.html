@@ -16,17 +16,16 @@
                 <div class="content-title-holder">
                     <p class="content-title">CYCLE</p>
                 </div>
-                <div class="one_half ">
-                    <h6>Cycles:</h6>
-                    <p><b>Each cycle has its own topic and consists of 4 weekly classes</b>.
-                        This format, balances progress and compromise, helping you get the most out of it.</p>
-                    <p><b>Drop ins are possible</b> and a good oportunity to test which level and teacher fits you best.</p>
+                <div class="one"
+                    <p>In order to balance progress and compromise our Classes are wrapped into Cycles. Each cycle has a topic to deepen into for 4 weeks. <b>Drop ins are possible</b> and a good oportunity to test which level and teacher fits you best.</p>
                 </div>
-                <div class="one_half last ">
+                <div class="one_half">
                     <h6>Level: </h6>
-                    <p>We want you to feel comfortable but with <b>the right amount of challenge.</b> Cycles are split in 4 levels you can always swap as long as you meet the prerequisites.</p>
+                    <p>We want you to feel comfortable but with the <b>right amount of challenge</b>. Cycles are split in 4 levels. You can always swap levels as long as you meet the prerequisites.</p>
+                </div>
+                <div class="one_half last">
                     <h6>Partner: </h6>
-                    <p>Only advanced classes require you to come with a partner. <b>We keep classes balanced on each roll.</b></p>
+                    <p>In General only advanced acrobatic classes require you to come with a partner. <b>We keep classes balanced on each roll</b> so you always have someone to train with.</p>
                 </div>
                 <div class="clear"></div>
             </div>
@@ -35,7 +34,7 @@
                     <!-- KEY -->
                     {% for key, objs in current.items %}
                         {% if objs %}
-                            <h4>{{ key }}</h4>
+                            <h3>{{ key }}</h3>
                                 {% for obj in objs %}
                             <article class="blog-item-holder relative">
                                 <div class ="num-inf">
@@ -82,7 +81,7 @@
         <div class="section-title-holder left green">
             <div class="section-num green">
                 <span>
-                    <i class="fas fa-flask"></i>
+                    <i class="fas fa-hourglass-half"></i>
                 </span>
             </div>
             <h2 class="entry-title">NEXT</h2>
@@ -104,17 +103,17 @@
                                 </div>
                                 <div class="cat-links">
                                     <ul>
-                                        <li><a href="{{ object.get_absolute_url }}">
-                                                {{ object.event_startdate|date:"d M." }} {% if object.event_enddate != object.event_startdate %}- {{ object.event_enddate|date:"d M. Y" }} {% endif %}
+                                        <li><a href="{{ obj.get_absolute_url }}">
+                                                {{ obj.event_startdate|date:"d M." }} {% if object.event_enddate != object.event_startdate %}- {{ object.event_enddate|date:"d M. Y" }} {% endif %}
                                             </a>
                                         </li>
-                                        <li><a href="{{ object.get_absolute_url }}">
-                                            {% for obj in object.time_locations.all %}
-                                            {% ifchanged %}
-                                            {% if obj.time_option.regular_day %}
-                                            {{ obj.time_option.get_regular_day_display}}'S 
-                                            {% endif %}
-                                            {% endifchanged%}
+                                        <li><a href="{{ obj.get_absolute_url }}">
+                                            {% for obj in obj.time_locations.all %}
+                                                {% ifchanged %}
+                                                    {% if obj.time_option.regular_day %}
+                                                        {{ obj.time_option.get_regular_day_display}}'S 
+                                                    {% endif %}
+                                                {% endifchanged%}
                                             {% endfor %}
                                         </li>
                                     </ul>

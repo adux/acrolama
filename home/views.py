@@ -3,9 +3,9 @@ from collections import defaultdict
 
 from django.utils import timezone
 from django.utils.decorators import classonlymethod
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, TemplateView
 from django.views.decorators import gzip
 
 from home.multiforms import MultiFormsView
@@ -22,7 +22,31 @@ from home.models import (
     NewsList,
 )
 
+from booking.models import Book
 from project.models import Event
+from users.models import User
+
+
+class ProfileView(TemplateView):
+    template_name = "home/profile.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        # TODO: Change this to something more significant like account sign up
+        if request.user.id is None:
+            return redirect("home")
+
+        return super(ProfileView, self).dispatch(request, *args, **kwargs)
+
+    # If logged in
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = User.objects.get(id=self.request.user.id)
+        context["user"] = user
+
+        books = Book.objects.filter(user=user)[:5]
+        context["books"] = books
+
+        return context
 
 
 class HomeFormView(CacheMixin, MultiFormsView):
