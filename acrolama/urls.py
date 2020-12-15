@@ -6,11 +6,12 @@ from django.contrib.sitemaps.views import sitemap
 from django.urls import path, include
 
 from home.views import (
-    HomeFormView,
-    faqview,
     ClassListView,
-    InfoDetailView,
     EventListView,
+    faqview,
+    HomeFormView,
+    InfoDetailView,
+    ProfileView,
 )
 
 from project.views import EventDetail
@@ -33,6 +34,7 @@ sitemaps = {
 urlpatterns = [
     # Home
     path("", HomeFormView.as_view(), name="home"),
+    path("h/", ProfileView.as_view(), name="profile"),
     path("accounts/", include("allauth.urls")),
     path("events/", EventListView.as_view(), name="events"),
     path("events/<slug:slug>/", EventDetail.as_view(), name="event"),

@@ -1,88 +1,52 @@
-{% extends 'base.html' %}
-{% block head_title %}UUUUUUSER{% endblock%}
+{% extends "base.html" %}{% load static compress%}
+{% block head_title %}Profile{% endblock%}
+{% block css %}
+        {% compress css file event %}
+            <link rel="stylesheet" type="text/css" href="{% static "home/css/profile.css" %}?v=18" media="screen" />
+            <link rel="stylesheet" type="text/css" href="{% static "home/css/event.css" %}?v=18" media="screen" />
+            <link rel="stylesheet" type="text/css" href="{% static "home/css/forms.css" %}?v=18" media="screen" />
+        {% endcompress %}
+{% endblock %}
 {% block content %}{% load widget_tweaks %}
 {% load static %}{% load tinycontent_tags %}
 {% include 'snippets/nav.html'%}
 <div class="single-portfolio">
-    <article id="portfolio-2" class=" section portfolio">
+    <article id="profile" class="section portfolio">
         <div class="center-relative content-1170">
             <div class="entry-content">
                 <div class="content-wrap relative">
-<!-- General Info Start -->
                     <div class="one top-50">
-                        <div><h2><b>{{ object.title }}</b>{% if object.discipline %} - {{ object.discipline.name }} {% endif %}{% if object.level %} {{ object.level }} {% endif %}{% if object.category %} {{ object.get_category_display }} {% endif %}</h2></div>
-                    </div>
-                    <div class="one_half">
-                        <div class="tab" style="width:324px;">
-                            <input id="tab-one" type="checkbox" name="tabs"/>
-                            <label for="tab-one"><b>Pricing options ≡</b></label>
-                            <div class="tab-content">
-                                <div class="table-wrapper text-left">
-                                    <table class="alt">
-                                        <tbody>
-                                            {% for po in priceoptions %}
-                                            <tr>
-                                                <td scope="row" data-label="Name"><b>{{ po.name }}</b></td>
-                                                <td data-label="Price">
-                                                    {% if po.price_chf %}CHF {{po.price_chf}} {% endif %}{% if por.price_euro %}EURO {{po.price.euro}}{% endif %}
-                                                </td>
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <a href="/info/prices/" target="_self" class="button" type="submit">
-                                    Details
-                                </a>
-                            </div>
-                        </div>
-                        <ul class="actions">
-                            {% if object.registration %}
-                                {% if user.is_authenticated %}
-                                <li><a class="button popup-trigger" style="width:252px;"><b>Book</b></a></li>
-                                {% else %}
-                                <li><a class="button" href="{% url "account_signup" %}"><b>Register</b></a></li>
-                                <li>Already have an account? <a href="{% url "account_login" %}">Sign in</a></li>
-                                {% endif %}
-                            {% endif %}
-                        </ul>
-                    </div>
-                    <div class="clear"></div>
-<!-- General Info End -->
-                    <div class="one">
-                        <h1>Description</h1>
-                        <p>{{object.description|safe}}</p>
-                    </div>
-                    <div class="one">
-                        {% if object.prerequisites %}
-                        <h1>Prerequisites</h1>
-                        <p>{{object.prerequisites|safe}}</p>
-                        {% endif%}
+                        <h4>{{ user.first_name }} {{user.last_name }}</h4>
+                        <h6>Profile</h6>
+                        <ul>
+                            <li>Email: {{ user.email }} <a href="{% url "account_email" %}">Edit</a></li>
+                            <li><a href="{% url "account_change_password" %}">Change Password</a></li>
+                            <li>Phone: {% if user.phone %} {{ user.phone }} <a href="">Edit</a>
+                                {% else %}<a href="">Add</a>{% endif %}</li>
+                            <li>Address: {% if user.address %} {{ user.address }} {% else %} <a href="{% url 'home' %}">Add</a>{% endif %}</li>
+                        <h6>Bookings</h6>
+                        <table class="alt">
+                          <thead>
+                            <tr>
+                              <th scope="col">Booked</th>
+                              <th scope="col">Status</th>
+                              <th scope="col">Attendance</th>
+                              <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                            <tbody>
+                                {% for book in books %}
+                              <tr>
+                                  <td data-label="Booked"><a href="{{ book.event.get_absolute_url }}">{{ book.event.title }}</a></td>
+                                  <td data-label="Status">{{ book.invoice.get_status_display }}</td>
+                                  <td data-label="Attendance">{{ book.attendance.count_attendance }}/{{ book.attendance.count_dates }}</td>
+                                  <td data-label="Actions"><a href="">Pay</a> | <a href="">Cancel</a></td>
+                              </tr>
+                              {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-            </div>
-        <div id="extra" class="section">
-            <div class="block content-1170 center-relative">
-                <div class="section-title-holder left">
-                    <div class="section-num">
-                        <span>
-                          <i class="fas fa-plus-circle"></i>
-                        </span>
-                    </div>
-                    <h2 class="entry-title">Infos</h2>
-                </div>
-                <div class="section-content-holder right">
-                     <!-- If video -->
-                    <div class="full-width ">
-                        {% for obj in event.videos.all %}
-                        <a class="video-popup-holder" href="{{ obj.link}}" data-rel="prettyPhoto[gallery-video1]">
-                            <img class="thumb" src="{{ obj.image.url }}" alt="{{ obj.description }}">
-                            <img class="popup-play" src="{% static "home/images/icon_video.svg" %}" alt="Play">
-                        </a>
-                        {% endfor %}
-                    </div>
-                </div>
-                <div class="clear"></div>
             </div>
         </div>
     </article>

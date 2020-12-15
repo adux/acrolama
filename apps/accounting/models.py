@@ -103,3 +103,16 @@ def invoice_pre_save_referenz(sender, instance, *args, **kwargs):
 
 
 pre_save.connect(invoice_pre_save_referenz, sender=Invoice)
+
+
+############
+"""
+Credit rules:
+1 Date pro Event
+12 hours before Event start time
+Falls automnatisch angemeldet Sie konnen sich vom ganzen cycle abmelden
+Nur falls bezahlt
+Credit wird immer beim nächsten booking gebraucht, auch wenn ein Drop-In
+Kann not me given back as money
+Drop-Ins need to be analyzed further
+"""
