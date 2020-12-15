@@ -36,7 +36,7 @@ def accountinglistview(request):
     )
 
     # Pagination
-    paginator = Paginator(accounting_filter.qs, 24)  # Show 24 contacts per page.
+    paginator = Paginator(accounting_filter.qs, 100)  # Show 24 contacts per page.
     page = request.GET.get("page")
     try:
         response = paginator.page(page)
