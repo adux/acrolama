@@ -1,4 +1,4 @@
-<!-- menu -->
+<!-- menu -->{% load cache %}{% cache 500 sidebar request.user.is_authenticated %}
 <div class="menu-wrapper center-relative">
   <nav id="header-main-menu">
     <div class="mob-menu">MENU <i style="font-size:27px;" class="fas fa-bars"></i></div>
@@ -18,4 +18,4 @@
       <li><a target="_blank" rel="noopener" style="font-size: 20px;" href="http://www.instagram.com/acrolama"><i class="fab fa-instagram"></i></a></li>
     </ul>
     </nav>
-</div>
+</div>{% endcache %}
