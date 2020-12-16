@@ -1,4 +1,4 @@
-<!-- menu -->{% load cache %}{% cache 500 sidebar request.user.is_authenticated %}
+<!-- menu -->{% load cache %}{% cache 500 nav request.user.id %}
 <div class="menu-wrapper center-relative">
   <nav id="header-main-menu">
     <div class="mob-menu">MENU <i style="font-size:27px;" class="fas fa-bars"></i></div>

@@ -1,7 +1,6 @@
-{% load static %}
-{% load icon_tags %}
+{% load static %}{% load icon_tags %}{% load cache %}
 <!-- News -->
-<div id="classes" class="section">
+<div id="classes" class="section">{% cache 500 classes %}
     <div class="block content-1170 center-relative">
         <div class="section-title-holder right pink">
             <div class="section-num pink">
@@ -75,8 +74,8 @@
         </div>
         <div class="clear"></div>
     </div>
-</div>
-<div id="classes" class="section">
+</div>{% endcache %}
+<div id="classes" class="section">{% cache 86400 next %}
     <div class="block content-1170 center-relative">
         <div class="section-title-holder left green">
             <div class="section-num green">
@@ -132,7 +131,7 @@
         </div>
         <div class="clear"></div>
     </div>
-    <!-- CAROUSEL -->
+    <!-- CAROUSEL -->{% cache 604800 testimonial %}
     <div class="block content-1170 center-relative">
         <div class="extra-half-content-left">
             <div class="news-slider">
@@ -151,6 +150,6 @@
             <a id="text1_next" class="carousel_text_next right" style="" href="#"></a>
         </div>
         <div class="clear"></div>
-    </div>
+    </div>{% endcache %}
     <div class="clear"></div>
 </div>

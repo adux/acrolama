@@ -1,5 +1,5 @@
 <!-- Footer -->
-{% load tinycontent_tags %}
+{% load tinycontent_tags %}{% load cache %}{% cache 604800 footer %}
 <footer id="footer" class="section">
   <section>
     <h2>General Informations</h2>
@@ -25,4 +25,4 @@
     </ul>
   </section>
   <p class="copyright">© 2020 All rights reserved.| Created by Adrian Garate | Pictures by <a href="http://mad-motions.tumblr.com/" target="_blank" rel="noopener">Matthias Bleich</a> | Template by <a href="https://colorlib.com" target="_blank" rel="noopener">Colorlib</a></p>
-</footer>
+</footer>{% endcache %}
