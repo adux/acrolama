@@ -9,7 +9,6 @@ from django.views.generic import DetailView, ListView, TemplateView
 from django.views.decorators import gzip
 
 from home.multiforms import MultiFormsView
-from home.cacheview import CacheMixin
 
 from home.models import (
     AboutTeam,
@@ -49,7 +48,7 @@ class ProfileView(TemplateView):
         return context
 
 
-class HomeFormView(CacheMixin, MultiFormsView):
+class HomeFormView(MultiFormsView):
     template_name = "home/home.html"
     gzip_page = True
     form_classes = {
@@ -110,7 +109,6 @@ class HomeFormView(CacheMixin, MultiFormsView):
 
         context["current"] = dict(d)
 
-        # context["intermediate"] = classes.filter(Q(level="2") | Q(level="3"))
         return context
 
     @classonlymethod
