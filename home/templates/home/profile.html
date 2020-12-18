@@ -5,6 +5,7 @@
             <link rel="stylesheet" type="text/css" href="{% static "home/css/profile.css" %}?v=18" media="screen" />
             <link rel="stylesheet" type="text/css" href="{% static "home/css/event.css" %}?v=18" media="screen" />
             <link rel="stylesheet" type="text/css" href="{% static "home/css/forms.css" %}?v=18" media="screen" />
+            <link rel="stylesheet" type="text/css" href="{% static "home/css/faq.css" %}?v=18" media="screen" />
         {% endcompress %}
 {% endblock %}
 {% block content %}{% load widget_tweaks %}
@@ -24,27 +25,67 @@
                             <li>Phone: {% if user.phone %} {{ user.phone }} <a href="">Edit</a>
                                 {% else %}<a href="">Add</a>{% endif %}</li>
                             <li>Address: {% if user.address %} {{ user.address }} {% else %} <a href="{% url 'home' %}">Add</a>{% endif %}</li>
-                        <h6>Bookings</h6>
-                        <table class="alt">
-                          <thead>
-                            <tr>
-                              <th scope="col">Booked</th>
-                              <th scope="col">Status</th>
-                              <th scope="col">Attendance</th>
-                              <th scope="col">Actions</th>
-                            </tr>
-                        </thead>
-                            <tbody>
-                                {% for book in books %}
-                              <tr>
-                                  <td data-label="Booked"><a href="{{ book.event.get_absolute_url }}">{{ book.event.title }}</a></td>
-                                  <td data-label="Status">{{ book.invoice.get_status_display }}</td>
-                                  <td data-label="Attendance">{{ book.attendance.count_attendance }}/{{ book.attendance.count_dates }}</td>
-                                  <td data-label="Actions"><a href="">Pay</a> | <a href="">Cancel</a></td>
-                              </tr>
-                              {% endfor %}
-                            </tbody>
-                        </table>
+                    </div>
+                    <div class="one top-20">
+                        <div class="accordion-header">My Registrations</div>
+                        <div class="accordion-content">
+                            <div class="accordion-entry">
+                                <input id="booking" type="checkbox" class="accordion">
+                                <div class="plus">+</div>
+                                <label for="booking" class="accordion-title">Bookings</label>
+                                <div class="accordion-entry-content">
+                                    <!-- Content -->
+                                    <table class="alt">
+                                      <thead>
+                                        <tr>
+                                          <th scope="col">Booked</th>
+                                          <th scope="col">Status</th>
+                                          <th scope="col">Attendance</th>
+                                          <th scope="col">Actions</th>
+                                        </tr>
+                                    </thead>
+                                        <tbody>
+                                            {% for book in books %}
+                                          <tr>
+                                              <td data-label="Booked"><a href="{{ book.event.get_absolute_url }}">{{ book.event.title }}</a></td>
+                                              <td data-label="Status">{{ book.invoice.get_status_display }}</td>
+                                              <td data-label="Attendance">{{ book.attendance.count_attendance }}/{{ book.attendance.count_dates }}</td>
+                                              <td data-label="Actions"><a href="">Pay</a> | <a href="">Cancel</a></td>
+                                          </tr>
+                                          {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="accordion-entry">
+                                <input id="accounting" type="checkbox" class="accordion">
+                                <div class="plus">+</div>
+                                <label for="accounting" class="accordion-title">Transactions/Credit</label>
+                                <div class="accordion-entry-content">
+                                    <!-- Content -->
+                                    <table class="alt">
+                                      <thead>
+                                        <tr>
+                                          <th scope="col">Booked</th>
+                                          <th scope="col">Status</th>
+                                          <th scope="col">Attendance</th>
+                                          <th scope="col">Actions</th>
+                                        </tr>
+                                    </thead>
+                                        <tbody>
+                                            {% for book in books %}
+                                          <tr>
+                                              <td data-label="Booked"><a href="{{ book.event.get_absolute_url }}">{{ book.event.title }}</a></td>
+                                              <td data-label="Status">{{ book.invoice.get_status_display }}</td>
+                                              <td data-label="Attendance">{{ book.attendance.count_attendance }}/{{ book.attendance.count_dates }}</td>
+                                              <td data-label="Actions"><a href="">Pay</a> | <a href="">Cancel</a></td>
+                                          </tr>
+                                          {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

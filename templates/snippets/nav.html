@@ -8,7 +8,6 @@
       <li><a href="{% url "home" %}#classes">Classes</a></li>
       <li><a href="{% url "home" %}#about">About US</a></li>
       {% if user.is_authenticated %}
-      <li><a href="{% url "home" %}"><i class="fas fa-user"></i> Account</a></li>
       <li><a href="{% url "account_logout" %}">Logout</a></li>
       {% else %}
       <li><a href="{% url "account_login" %}"><b>Sign in</b></a></li>
