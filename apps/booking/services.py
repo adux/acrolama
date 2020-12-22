@@ -48,13 +48,13 @@ def book_is_paid(book):
     For Cycles for example one would need to go to its first booking to see the related invoice there
     """
     book = book_get(book)
-
-    if book.invoice:
-        if book.invoice.status == "PY":
-            return True
-        else:
-            return False
-    else:
+    try:
+        if book.invoice:
+            if book.invoice.status == "PY":
+                return True
+            else:
+                return False
+    except Exception:
         if check_abocounter(book.id):
             new_book_id = get_first_book_abocounter(book.id)
             book_is_paid(new_book_id)
