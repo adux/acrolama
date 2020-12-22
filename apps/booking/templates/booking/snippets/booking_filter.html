@@ -127,7 +127,7 @@
             <tr>{% endif %}
                 <td><input type="checkbox" name="check" value="{{obj.id}}"></td>
                 <td><a href="{% url 'booking_update' obj.pk %}?{% pass_get_filter %}">{{obj.pk}}</a></td>
-                <td>{{obj.booked_at|date:'d.m'}}</td>
+                <td>{{obj.booked_at|date:"m.d"}}</td>
                 <td>{% if event.category == 'CY' %}<a href="{% url 'class' obj.event.slug %}">{{obj.event.title}}</a>{% else %}<a href="{% url 'event' obj.event.slug %}">{{obj.event.title}}</a>{% endif %}</td>
                 <td>{% for obj in obj.times.all %}{% if obj.regular_day %}{{obj.get_regular_day_display}}: {{obj.class_starttime|date:'G:i'}}{% else %}{{obj.name}}: {{obj.class_starttime|date:'G:i'}}{% endif %}{% endfor %}</td>
                 <td>{{obj.price.name}}</td>
