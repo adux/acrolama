@@ -16,6 +16,20 @@ from accounting.models import Invoice
 from booking.utils import get_weekday_dates_for_period
 
 
+def attendance_toggle_check(id, position):
+    attendance = Attendance.objects.get(pk=id)
+    attendance.attendance_check[position] = not attendance.attendance_check[position]
+    attendance.save()
+
+
+def attendance_list_creditoptions(id):
+    att = Attendance.objects.get(pk=id)
+    time_option = att.book.times.last()  # FIXME: Should be deprecated when Books times are FK
+    dts = [datetime.datetime.combine(d, time_option.class_starttime) for d in att.attendance_date]
+    dt_comp = datetime.datetime.now() + datetime.timedelta(hours=12)
+    return [dt.date() for dt in dts if dt > dt_comp]
+
+
 def book_get(book):
     # If its str or int treat it as id
     if isinstance(book, (str, int)):
@@ -64,13 +78,7 @@ def book_get_location(book):
             return filteredTimeLocation_qs.last().location
 
 
-def attendance_toggle_check(id, position):
-    attendance = Attendance.objects.get(pk=id)
-    attendance.attendance_check[position] = not attendance.attendance_check[position]
-    attendance.save()
-
-
-def update_book_status(book, status):
+def book_update_status(book, status):
     book = book_get(book)
     if status in ("PA", "Participant"):
         book.status = "PA"
@@ -273,7 +281,7 @@ def book_inform(request, instance, book):
             first_book_id = get_first_book_abocounter(book.id)
             invoice_first_book = Invoice.objects.get(book=first_book_id)
             if invoice_first_book.status == "PY":
-                update_book_status(book.id, "PA")
+                book_update_status(book.id, "PA")
             else:
                 messages.add_message(
                     request, messages.WARNING, _("First Booking not paid.")

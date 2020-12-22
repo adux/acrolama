@@ -16,9 +16,10 @@
         <div class="center-relative content-1170">
             <div class="entry-content">
                 <div class="content-wrap relative">
-                    <div class="one top-50">
+                    <div class="one">
                         <h4>{{ user.first_name }} {{user.last_name }}</h4>
                         <h6>Profile</h6>
+
                         <ul>
                             <li>Email: {{ user.email }} <a href="{% url "account_email" %}">Edit</a></li>
                             <li><a href="{% url "account_change_password" %}">Change Password</a></li>
@@ -60,7 +61,7 @@
                             <div class="accordion-entry">
                                 <input id="accounting" type="checkbox" class="accordion">
                                 <div class="plus">+</div>
-                                <label for="accounting" class="accordion-title">Transactions/Credit</label>
+                                <label for="accounting" class="accordion-title">Transactions / Credit</label>
                                 <div class="accordion-entry-content">
                                     <!-- Content -->
                                     <table class="alt">

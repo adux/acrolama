@@ -63,7 +63,7 @@ class Attendance(models.Model):
     attendance_check = ArrayField(models.BooleanField())
 
     def __str__(self):
-        return "%s - %s" % (self.book.event, self.book.user,)
+        return "%s - %s" % (self.book.event.title, self.book.user,)
 
     def get_check(self, date):
         for num, d in enumerate(self.attendance_date):

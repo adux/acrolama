@@ -18,7 +18,7 @@ from herdi.utils import (
 )
 
 from accounting.services import invoice_get, invoice_send_paid, invoice_reminder
-from booking.services import update_book_status
+from booking.services import book_update_status
 
 from accounting.models import Invoice
 from accounting.filters import AccountFilter
@@ -107,7 +107,7 @@ class InvoiceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
                     # Update related book status
                     try:
-                        update_book_status(instance.book.id, "PA")  # Update to Participant
+                        book_update_status(instance.book.id, "PA")  # Update to Participant
                     except Exception as e:
                         messages.add_message(
                             self.request, messages.WARNING, _(
@@ -134,7 +134,7 @@ class InvoiceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
                     # Check if no Attendance
                     if not invoice.book.attendance.count_attendance():
                         try:
-                            update_book_status(instance.book.id, "CA")
+                            book_update_status(instance.book.id, "CA")
                         except Exception as e:
                             messages.add_message(
                                 self.request, messages.WARNING, _(

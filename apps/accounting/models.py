@@ -19,6 +19,11 @@ INVOICESTATUS = [
     ("TR", "Third Reminder"),
 ]
 
+CREDITSTATUS = [
+    ("PE", "Pending"),
+    ("PY", "Paid"),
+]
+
 BALANCE = [
     ("DB", "DEBIT"),
     ("CR", "CREDIT")
@@ -105,14 +110,66 @@ def invoice_pre_save_referenz(sender, instance, *args, **kwargs):
 pre_save.connect(invoice_pre_save_referenz, sender=Invoice)
 
 
-############
+class Creditnote(models.Model):
+    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
+    to_credit = models.DecimalField(max_digits=12, decimal_places=2)
+    credit = models.DecimalField(max_digits=12, decimal_places=2)
+    credited_date = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True, null=True)
+    status = models.CharField(max_length=10, choices=CREDITSTATUS, default="PE")
+    created_on = models.DateTimeField(auto_now_add=True)
+
+
+class Creditnotedate(models.Model):
+    creditnote = models.ForeignKey(Creditnote, on_delete=models.CASCADE)
+    date = models.DateField(auto_now=False, auto_now_add=False, blank=False, null=False)
+
+
 """
-Credit rules:
-1 Date pro Event
-12 hours before Event start time
-Falls automnatisch angemeldet Sie konnen sich vom ganzen cycle abmelden
-Nur falls bezahlt
-Credit wird immer beim nächsten booking gebraucht, auch wenn ein Drop-In
-Kann not me given back as money
-Drop-Ins need to be analyzed further
+# Only for Cycles
+Before the beginning date of a cycle, due to limited spots and general organization of the class, we request\
+    that you cancel the whole cycle at least 72 hours before the beginning of the cycle. This gives us \
+    the opportunity to fill the free spot. You may cancel by email or online here. If you have to cancel your cycle\
+    and you have not paid the invoice then there is no refund and no obligation of either part. If you paid the invoice\
+    we offer you a credit to your account if you cancel before the 72 hours, but do not offer refunds.\
+    These credit will be automatically used in the next booking of any class or event.\
+    If you do not cancel the cycle prior to the 72 hours, class cancellation policies apply.
+
+During the period of a cycle, if the corresponding invoice is paid, you may cancel one class.\
+    Due to limited spots and general organization of the class, we request that you cancel at least 12 hours\
+    before a scheduled class. This gives us the opportunity to fill or adapt the class. You may cancel by email\
+    or online here. If you have to cancel your class, we offer you a credit to your account if you cancel\
+    before the 12 hours, but do not offer refunds. These credit will be automatically used in the next booking\
+    of any class or event. However, if you do not cancel prior to the 12 hours, you will lose the payment for the class.
+
+Credit Conditions:
+1 Date pro cycle
+
+In case of automatic booking canceling is posible till 12 before the next class
+You can only cancelled a class of a paid abo.
+
+Options Conditions
+if no event has been visited you can cancell all 48 hours before the Event start
+12 hours before next event start time you can cancell only 1 class
+
+The credit has to be used in the next booking
+Can not be cashed out
+
+Users do bookings
+Bookings have invoices
+All the invoices give a certain history
+
+
+signal when a attendance date is remove that
+1 cant removeorchange date indicated in a creditenotecycle
+
+0.- Action to cancel is shown if conditions are met.
+1.- Form shows available dates to "Cancel" (only one can be selected in a radio form)
+2.- Validate -> Check that conditions are still met.
+3.- Creates a Credit Note, maybe creates a creditnotedate
+4.- Open credit can be seen in profile
+
+
+4.- When creating invoice check for open credits
+
+
 """

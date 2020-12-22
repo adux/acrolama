@@ -63,7 +63,7 @@ class Project(models.Model):
     description = models.TextField(max_length=2000)
     manager = models.ManyToManyField("users.User")
     public_chat_link = models.CharField(max_length=120, null=True, blank=True)
-    creationdate = models.DateTimeField(auto_now_add=True)
+    created_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return "%s" % (self.name)
@@ -207,7 +207,7 @@ class PriceOption(models.Model):
 
     def get_price(self):
         if self.price_euro:
-            return "CHF {}.- || EUR: {}.-".format(self.price_chf, self.price_euroA)
+            return "CHF {}.- || EUR: {}.-".format(self.price_chf, self.price_euro)
         else:
             return "CHF {}.-".format(self.price_chf)
 
