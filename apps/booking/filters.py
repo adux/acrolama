@@ -133,7 +133,7 @@ class QuotationFilter(django_filters.FilterSet):
 
     class Meta:
         model = Quotation
-        fields = {"id", "event", "time_location"}
+        fields = {"id", "event", "time_location", "locked"}
 
 
 class QuotationBookFilter(django_filters.FilterSet):
