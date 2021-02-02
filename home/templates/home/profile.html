@@ -2,6 +2,7 @@
 {% block head_title %}Profile{% endblock%}
 {% block css %}
         {% compress css file event %}
+            <link rel="stylesheet" type="text/css" href="{% static "home/css/popform.css" %}?v=18" media="screen" />
             <link rel="stylesheet" type="text/css" href="{% static "home/css/profile.css" %}?v=18" media="screen" />
             <link rel="stylesheet" type="text/css" href="{% static "home/css/event.css" %}?v=18" media="screen" />
             <link rel="stylesheet" type="text/css" href="{% static "home/css/forms.css" %}?v=18" media="screen" />
@@ -79,7 +80,7 @@
                                               <td data-label="Booked"><a href="{{ book.event.get_absolute_url }}">{{ book.event.title }}</a></td>
                                               <td data-label="Status">{{ book.invoice.get_status_display }}</td>
                                               <td data-label="Attendance">{{ book.attendance.count_attendance }}/{{ book.attendance.count_dates }}</td>
-                                              <td data-label="Actions"><a href="">Pay</a> | <a href="">Cancel</a></td>
+                                              <td data-label="Actions"><a class="popup-trigger">Cancel Class</a></td>
                                           </tr>
                                           {% endfor %}
                                         </tbody>
@@ -92,6 +93,19 @@
             </div>
         </div>
     </article>
+</div>
+<!-- Sign in pop up -->
+<div class="popup" role="alert">
+    <div class="popup-container">
+        <a href="#0" class="popup-close img-replace">Close</a>
+        <div class ="center-text"><h2>Booking</h2></div>
+        <div class="popup-form text-left">
+          {% for form in forms %}
+            {{ form }}
+          {% endfor %}
+          <button type="submit" form="booking">Submit</button>
+        </div>
+    </div>
 </div>
 {% include 'footer.html' %}
 {% endblock %}

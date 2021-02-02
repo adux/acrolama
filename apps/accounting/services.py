@@ -25,7 +25,6 @@ def invoice_get(invoice):
 
 
 def invoice_reminder(instance, invoice):
-
     # Send the Informed Email and add the date
     if instance.status == "FR":
         if not invoice.reminder_dates:

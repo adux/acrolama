@@ -113,8 +113,8 @@ pre_save.connect(invoice_pre_save_referenz, sender=Invoice)
 class Creditnote(models.Model):
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
     to_credit = models.DecimalField(max_digits=12, decimal_places=2)
-    credit = models.DecimalField(max_digits=12, decimal_places=2)
-    credited_date = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True, null=True)
+    credited = models.DecimalField(max_digits=12, decimal_places=2)
+    credit_date = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True, null=True)
     status = models.CharField(max_length=10, choices=CREDITSTATUS, default="PE")
     created_on = models.DateTimeField(auto_now_add=True)
 

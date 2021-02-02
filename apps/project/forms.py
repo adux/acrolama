@@ -12,7 +12,10 @@ from project.models import (
 )
 
 # Widgets
-from herdi.widgets import BootstrapedModelSelect2Multiple, BootstrapedSelect2Multiple
+from herdi.widgets import (
+    BootstrapedModelSelect2Multiple,
+    BootstrapedSelect2Multiple,
+)
 
 
 class EventUpdateForm(forms.Form):
@@ -28,7 +31,11 @@ class EventUpdateForm(forms.Form):
         fk_choices = {}
         for field in self.get_fk_fields():
             model_name = field.related_model.__name__.lower()
-            cached_query = cache.get_or_set("cache_" + model_name + "_all", field.related_model.objects.all(), 120)
+            cached_query = cache.get_or_set(
+                "cache_" + model_name + "_all",
+                field.related_model.objects.all(),
+                120,
+            )
             choices = [(obj.id, obj.__str__()) for obj in cached_query]
             fk_choices[field.attname] = choices
         return fk_choices
@@ -42,7 +49,11 @@ class EventUpdateForm(forms.Form):
         m2m_choices = {}
         for field in self.get_m2m_fields():
             model_name = field.related_model.__name__.lower()
-            cached_query = cache.get_or_set("cache_" + model_name + "_all", field.related_model.objects.all(), 120)
+            cached_query = cache.get_or_set(
+                "cache_" + model_name + "_all",
+                field.related_model.objects.all(),
+                120,
+            )
             choices = [(obj.id, obj.__str__()) for obj in cached_query]
             m2m_choices[field.attname] = choices
         return m2m_choices
@@ -66,7 +77,7 @@ class EventUpdateForm(forms.Form):
         m2m_fields = self.get_m2m_fields()
 
         # Remove Model Fields that are explicilty not included in Form
-        excludes = ['team']
+        excludes = ["team"]
         for m2m_field in m2m_fields:
             if m2m_field.attname in excludes:
                 m2m_fields.remove(m2m_field)

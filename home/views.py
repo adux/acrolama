@@ -25,6 +25,8 @@ from booking.models import Book
 from project.models import Event
 from users.models import User
 
+from accounting.forms import CreditnotedateForm
+
 
 class ProfileView(TemplateView):
     template_name = "home/profile.html"
@@ -43,7 +45,17 @@ class ProfileView(TemplateView):
         context["user"] = user
 
         books = Book.objects.filter(user=user)[:5]
+        forms = []
+        for book in books:
+            if hasattr(book, 'attendance'):
+                form = CreditnotedateForm(book.attendance)
+                print(form.__dict__)
+
+            else:
+                forms.append(None)
+
         context["books"] = books
+        context["forms"] = forms
 
         return context
 

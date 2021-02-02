@@ -16,14 +16,14 @@ from accounting.models import Invoice
 from booking.utils import get_weekday_dates_for_period
 
 
-def attendance_toggle_check(id, position):
-    attendance = Attendance.objects.get(pk=id)
+def attendance_toggle_check(pk, position):
+    attendance = Attendance.objects.get(pk=pk)
     attendance.attendance_check[position] = not attendance.attendance_check[position]
     attendance.save()
 
 
-def attendance_list_creditoptions(id):
-    att = Attendance.objects.get(pk=id)
+def attendance_list_creditoptions(pk):
+    att = Attendance.objects.get(pk=pk)
     time_option = att.book.times.last()  # FIXME: Should be deprecated when Books times are FK
     dts = [datetime.datetime.combine(d, time_option.class_starttime) for d in att.attendance_date]
     dt_comp = datetime.datetime.now() + datetime.timedelta(hours=12)
@@ -167,7 +167,6 @@ def get_first_book_abocounter(bookid):
 
 
 def book_inform(request, instance, book):
-
     # If the Price Option is an Single Cycle Abo
     if book.price.cycles < 2:
         # Create the Invoice
@@ -275,11 +274,8 @@ def book_inform(request, instance, book):
                 messages.add_message(request, messages.SUCCESS, _("Attendance created"))
 
             # If the Invoice of the First Book is paid then set as Participant
-
-            first_book_id = get_first_book_abocounter(book.id)
-            invoice_first_book = Invoice.objects.get(book=first_book_id)
-            if invoice_first_book.status == "PY":
-                book_update_status(book.id, "PA")
+            if book_is_paid(book):
+                book_update_status(book, "PA")
             else:
                 messages.add_message(
                     request, messages.WARNING, _("First Booking not paid.")
@@ -339,7 +335,6 @@ def book_create_next(book, status):
 
 
 def create_quotation(form, count):
-
     obj = Quotation()  # gets new object
     obj.event = form.cleaned_data["event"]
     obj.time_location = form.cleaned_data["time_location"]
