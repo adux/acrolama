@@ -143,14 +143,14 @@
                     {% endfor %}
                     <div class="clear"></div>
 <!-- General Info End -->
-                    <div class="one">
+                    <div class="one liststyle">
                         <h1>Description</h1>
-                        <p>{{object.description|safe}}</p>
+                        <p>{{ object.description|safe }}</p>
                     </div>
-                    <div class="one">
+                    <div class="one liststyle">
                         {% if object.prerequisites %}
                         <h1>Prerequisites</h1>
-                        <p>{{object.prerequisites|safe}}</p>
+                        <p>{{ object.prerequisites|safe }}</p>
                         {% endif%}
                     </div>
                 </div>
@@ -214,7 +214,7 @@
             <div class="entry-content">
                 <div class="content-wrap relative">
         {% if object.highlights or object.included or object.food %}
-                    <div class="one">
+                    <div class="one liststyle">
                         {% if object.highlights %}
                         <h1 class="right">Highlights</h1>
                             <p>{{object.highlights|safe}}</p>
