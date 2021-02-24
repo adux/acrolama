@@ -103,7 +103,7 @@
                                 <div class="cat-links">
                                     <ul>
                                         <li><a href="{{ obj.get_absolute_url }}">
-                                                {{ obj.event_startdate|date:"d M." }} {% if object.event_enddate != object.event_startdate %}- {{ object.event_enddate|date:"d M. Y" }} {% endif %}
+                                                {{ obj.event_startdate|date:"d M." }} {% if obj.event_enddate != obj.event_startdate %}- {{ obj.event_enddate|date:"d M. Y" }} {% endif %}
                                             </a>
                                         </li>
                                         <li><a href="{{ obj.get_absolute_url }}">
