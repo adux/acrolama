@@ -80,26 +80,24 @@ class HomeFormView(MultiFormsView):
         context["news"] = NewsList.objects.all()
 
         # Events
+        # All the events that haven't finished.
         event_main = (
-            Event.objects.all()
+            Event.objects.filter(event_enddate__gte=timezone.now())
+            .exclude(published=False)
+            .order_by("event_startdate", "level", "title")
             .select_related("level", "discipline")
             .prefetch_related("time_locations__time_option")
             .prefetch_related("time_locations__location")
         )
-        event = (
-            event_main.filter(event_enddate__gte=timezone.now())
-            .order_by("event_startdate")
-            .exclude(published=False)
-            .exclude(category="CY")
+
+        context["event"] = (
+            event_main.exclude(category="CY")
             .distinct()[:6]
         )
-        context["event"] = event
 
         # Classes
         classes = (
             event_main.filter(category="CY")
-            .order_by("event_startdate", "level", "title")
-            .exclude(published=False)
             .distinct()
         )
 
@@ -110,9 +108,9 @@ class HomeFormView(MultiFormsView):
 
         current = classes.filter(
             event_startdate__lte=timezone.now(),
-            event_enddate__gte=timezone.now(),
         )
 
+        #  Note: Could do aux func/methode out of this.
         d = defaultdict(list, {k: [] for k in ('Monday', 'Tuesday', 'Wednesday', 'Friday', 'Sunday')})
         for cycle in current:
             days = cycle.get_regular_days_list()
