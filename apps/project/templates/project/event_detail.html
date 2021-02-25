@@ -217,15 +217,15 @@
                     <div class="one liststyle">
                         {% if object.highlights %}
                         <h1 class="right">Highlights</h1>
-                            <p>{{object.highlights|safe}}</p>
+                            <p>{{ object.highlights|safe }}</p>
                         {% endif%}
                         {% if object.included %}
                         <h1>Included</h1>
-                            <p>{{object.included|safe}}</p>
+                            <p>{{ object.included|safe }}</p>
                         {% endif %}
                         {% if object.food %}
                         <h1>Food</h1>
-                            <p>{{object.food|safe}}</p>
+                            <p>{{ object.food|safe }}</p>
                         {% endif %}
                     </div>
         {% endif %}
@@ -235,6 +235,66 @@
         </div>
         {% endif %}
     </article>
+</div>
+<!-- Sign in pop up -->
+<div class="popup" role="alert">
+    <div class="popup-container">
+        <a href="#0" class="popup-close img-replace">Close</a>
+        <div class ="center-text"><h2>Booking</h2></div>
+        <div class="popup-form text-left">
+            <form method="POST" id="booking"> {% csrf_token %}
+                <div>
+                    {{ form.times.label_tag }}
+                    {% render_field form.times %}
+                </div>
+                <div >
+                    {# TODO: make wider#}
+                    {{ form.price.label_tag }}
+                    {% render_field form.price %}
+                </div>
+                <div>
+                    {{ form.comment.label_tag }}
+                    {% render_field form.comment %}
+                </div>
+                <div>
+                    {% render_field form.accepted_policy %} I accept the <a href="{{ object.policy.get_absolute_url }}">Terms and Conditions</a><label for="booking-acccepted_policy"></label>
+                </div>
+                <div class="conditional" data-cond-option="booking-price" data-cond-value="{% for obj in conditional.formduo %}{{ obj }} {% endfor %}">
+                    <hr>
+                    <h4>Extra info for Duo Booking</h4>
+                    <div>
+                        {{ formduo.first_name.label_tag }}
+                        {% render_field formduo.first_name %}
+                    </div>
+                    <div>
+                        {{ formduo.last_name.label_tag }}
+                        {% render_field formduo.last_name %}
+                    </div>
+                    <div>
+                        {{ formduo.email.label_tag }}
+                        {% render_field formduo.email %}
+                    </div>
+                    <div>
+                        {{ formduo.phone.label_tag }}
+                        {% render_field formduo.phone %}
+                    </div>
+                </div>
+                <div class="conditional" data-cond-option="booking-price" data-cond-value="{% for obj in conditional.formdate %}{{ obj }} {% endfor %}">
+                    <hr>
+                    {{ formdate.single_date.label_tag }}
+                    <span style=".datepicker table tr td.disabled,
+                                .datepicker table tr td.disabled:hover {
+                                 background:0 0;
+                                 color:#7777774a;
+                                 cursor:default
+                                 }">
+                    {% render_field formdate.single_date class="datepicker" %}
+                    </span>
+                </div>
+            </form>
+                    <button type="submit" form="booking">Submit</button>
+        </div>
+    </div>
 </div>
 {% include 'footer.html' %}
 {% endblock %}
