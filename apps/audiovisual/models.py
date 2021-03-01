@@ -218,7 +218,7 @@ class Video(models.Model):
         imageTemproaryCrop = imageTemproary.crop((left, top, right, bottom))
 
         imageTemproaryCrop.save(
-            outputIoStream, format="JPEG", quality=60, subsampling=0, optimize=True,
+            outputIoStream, format="JPEG", quality=90, subsampling=0, optimize=True,
         )
         outputIoStream.seek(0)
         image = InMemoryUploadedFile(
