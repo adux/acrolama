@@ -41,7 +41,7 @@
                                         <div class="author vcard ">
                                             <a href="{{ obj.get_absolute_url }}">
                                                 {{ obj.discipline.name }} {{ obj.level.get_name_display|upper }}
-                                                {% for ad in obj.time_locations.all %}
+                                                {% for ad in obj.time_locations.all|dictsort:"location.address.city" %}
                                                     {% ifchanged %} - {{ad.location.address.city }} {% endifchanged %}
                                                 {% endfor %}
                                             </a>
@@ -95,8 +95,8 @@
                                 <div class="author vcard ">
                                     <a href="{{ obj.get_absolute_url }}">
                                         {{ obj.discipline.name }} {{ obj.level.get_name_display|upper }}
-                                        {% for ad in obj.time_locations.all %}
-                                            {% ifchanged %} - {{ad.location.address.city }} {% endifchanged %}
+                                        {% for ad in obj.time_locations.all|dictsort:"location.address.city" %}
+                                            {% ifchanged %} - {{ ad.location.address.city }} {% endifchanged %}
                                         {% endfor %}
                                     </a>
                                 </div>
@@ -107,7 +107,7 @@
                                             </a>
                                         </li>
                                         <li><a href="{{ obj.get_absolute_url }}">
-                                            {% for obj in obj.time_locations.all %}
+                                            {% for obj in obj.time_locations.all|dictsort:"time_option.regular_day" %}
                                                 {% ifchanged %}
                                                     {% if obj.time_option.regular_day %}
                                                         {{ obj.time_option.get_regular_day_display}}'S 
