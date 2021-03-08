@@ -63,7 +63,8 @@
                 <div class="content-wrapper relative">
                   <!-- General Info -->
                   <div class="one">
-                      <div><h2><b>{{ object.title }}</b>{% if object.discipline %} - {{ object.discipline.name }} {% endif %}{% if object.level %} {{ object.level }} {% endif %}{% if object.category %} {{ object.get_category_display }} {% endif %}</h2></div>
+                    <h6 class="kicker">{% if object.discipline %}{{ object.discipline.name }}{% endif %}{% if object.level %} {{ object.level }}{% endif %}{% if object.category %} {{ object.get_category_display }}{% endif %}</h6>
+                    <h2 class="headline">{{ object.title }}</h2>
                   </div>
                   <div class="one_half">
                       <ul>
@@ -144,12 +145,12 @@
                   <div class="clear"></div>
                   <!-- Description -->
                   <div class="one liststyle">
-                      <h2>Description</h2>
+                      <h3>Description</h3>
                       <p>{{ object.description|safe }}</p>
                   </div>
                   <div class="one liststyle">
                       {% if object.prerequisites %}
-                      <h2>Prerequisites</h2>
+                      <h3>Prerequisites</h3>
                       <p>{{ object.prerequisites|safe }}</p>
                       {% endif%}
                   </div>
@@ -216,15 +217,15 @@
         {% if object.highlights or object.included or object.food %}
                     <div class="one liststyle">
                         {% if object.highlights %}
-                        <h2 class="right">Highlights</h2>
+                        <h3 class="right">Highlights</h3>
                             <p>{{ object.highlights|safe }}</p>
                         {% endif%}
                         {% if object.included %}
-                        <h2>Included</h2>
+                        <h3>Included</h3>
                             <p>{{ object.included|safe }}</p>
                         {% endif %}
                         {% if object.food %}
-                        <h2>Food</h2>
+                        <h3>Food</h3>
                             <p>{{ object.food|safe }}</p>
                         {% endif %}
                     </div>
