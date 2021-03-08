@@ -32,7 +32,7 @@ sitemaps = {
 }
 
 urlpatterns = [
-    # Home
+    # Base_Home
     path("", HomeFormView.as_view(), name="home"),
     path("h/", ProfileView.as_view(), name="profile"),
     path("accounts/", include("allauth.urls")),
@@ -42,9 +42,10 @@ urlpatterns = [
     path("classes/<slug:slug>/", EventDetail.as_view(), name="class"),
     path("info/<slug:slug>/", InfoDetailView.as_view(), name="info"),
     path("faq/", faqview, name="faq"),
-    # Admin
+    # Base_Admin
     path(settings.ADMIN_URL, admin.site.urls),
     path("tinymce/", include("tinymce.urls")),
+    # Base_BootStrap
     path("invitations/", include("invitations.urls", namespace="invitations")),
     path("herd/", include("herdi.urls")),
     # Sitemaps

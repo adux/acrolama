@@ -14,8 +14,8 @@
             <div class="grid" id="portfolio-grid">
                 <div class="grid-sizer"></div>
                 {% for obj in portfolio %}
-                <div class="grid-item {% if obj.image.formImage == 'landscape' %} grid-item--width2{% endif %}">
-                    <a data-lightbox="portfolio" href="{{obj.image.image.url}}">
+                <div class="grid-item {% if obj.image.formImage == "landscape" %} grid-item--width2{% endif %}">
+                    <a data-lightbox="portfolio" href="{{ obj.image.image.url }}">
                         <picture>
                             <source media="max-width: 450px)" srcset="{{ obj.image.mob.url }}">
                             <img src="{{ obj.image.thumbnail.url }}" alt="{{ obj.image.description }}">

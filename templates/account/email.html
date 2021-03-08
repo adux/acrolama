@@ -1,12 +1,11 @@
 {% extends "account/base.html" %}{% load i18n %}
 {% block head_title %}{% trans "Account" %}{% endblock %}
 {% block content %}
-{% include "snippets/nav.html" %}
 <div class="account">
     <article id="account" class="section account">
         <div class="center-relative content-1170">
             <div class="entry-content">
-                <div class="content-wrap relative">
+                <div class="content-wrapper relative">
                     <div class="one text-left">
                         <h1>{% trans "E-mail Addresses" %}</h1>
                     {% if user.emailaddress_set.all %}
@@ -57,7 +56,6 @@
                         </form>
 
                     {% endblock %}
-
 
                     {% block extra_body %}
                     <script type="text/javascript">

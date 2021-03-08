@@ -1,7 +1,9 @@
-<!-- menu -->{% load cache %}{% cache 500 nav request.user.id %}
+<!-- Menu -->{% load cache %}{% cache 500 nav request.user.id %}
 <div class="menu-wrapper center-relative">
   <nav id="header-main-menu">
-    <div class="mob-menu">MENU <i style="font-size:27px;" class="fas fa-bars"></i></div>
+    <div class="mob-menu">
+      MENU <i style="font-size:27px;" class="fas fa-bars"></i>
+    </div>
     <ul class="main-menu sm sm-clean">
       <li><a href="{% url "home" %}">Home</a></li>
       <li><a href="{% url "home" %}#events">Events</a></li>
@@ -16,5 +18,5 @@
       <li><a target="_blank" rel="noopener" style="font-size: 20px;" href="http://www.facebook.com/acrolama"><i class="fab fa-facebook"></i></a></li>
       <li><a target="_blank" rel="noopener" style="font-size: 20px;" href="http://www.instagram.com/acrolama"><i class="fab fa-instagram"></i></a></li>
     </ul>
-    </nav>
+  </nav>
 </div>{% endcache %}

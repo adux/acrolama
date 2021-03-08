@@ -9,9 +9,7 @@
             <link rel="stylesheet" type="text/css" href="{% static "home/css/faq.css" %}?v=18" media="screen" />
         {% endcompress %}
 {% endblock %}
-{% block content %}{% load widget_tweaks %}
-{% load static %}{% load tinycontent_tags %}
-{% include 'snippets/nav.html'%}
+{% block content %}{% load widget_tweaks %}{% load static %}{% load tinycontent_tags %}
 <div class="single-portfolio">
     <article id="profile" class="section portfolio">
         <div class="center-relative content-1170">
@@ -20,13 +18,13 @@
                     <div class="one">
                         <h4>{{ user.first_name }} {{user.last_name }}</h4>
                         <h6>Profile</h6>
-
                         <ul>
                             <li>Email: {{ user.email }} <a href="{% url "account_email" %}">Edit</a></li>
                             <li><a href="{% url "account_change_password" %}">Change Password</a></li>
                             <li>Phone: {% if user.phone %} {{ user.phone }} <a href="">Edit</a>
                                 {% else %}<a href="">Add</a>{% endif %}</li>
                             <li>Address: {% if user.address %} {{ user.address }} {% else %} <a href="{% url 'home' %}">Add</a>{% endif %}</li>
+                        </ul>
                     </div>
                     <div class="one top-20">
                         <div class="accordion-header">My Registrations</div>
@@ -107,5 +105,4 @@
         </div>
     </div>
 </div>
-{% include 'footer.html' %}
 {% endblock %}

@@ -2,12 +2,11 @@
 {% load i18n %}
 {% block head_title %}{% trans "Signup" %}{% endblock %}
 {% block content %}
-{% include 'snippets/nav.html' %}
 <div class="account">
     <article id="account" class="section account">
         <div class="center-relative content-1170">
             <div class="entry-content">
-                <div class="content-wrap relative">
+                <div class="content-wrapper relative">
                     <div class="one text-left">
                     <h1>{% trans "Sign Up" %}</h1>
                     <p>{% blocktrans %}Already have an account?<a href="{{ login_url }}"> Sign in</a>.{% endblocktrans %}</p>
@@ -24,5 +23,4 @@
         </div>
     </article>
 </div>
-{% include 'footer.html' %}
 {% endblock %}

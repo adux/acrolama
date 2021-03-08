@@ -40,119 +40,119 @@
             <meta property="fb:app_id" content="2581322572097954" />
 {% endblock meta_og %}
 {% block content %}
-{% include 'snippets/nav.html'%}
 <div class="single-portfolio">
     <article id="portfolio-2" class="section portfolio">
         <div class="center-relative content-1170">
             <div class="entry-content">
-                <div class="content-wrap relative">
-                    <!-- Image Start -->
-                    <div class="relative">
-                        <div class="header-slider">
-                            {% for obj in object.images.all %}
-                            <div>
-                                <picture>
-                                    <source media="(max-width: 450px)" data-srcset="{{ obj.mob.url }}">
-                                    <source media="(max-width: 800px)" data-srcset="{{ obj.thumbnail.url }}">
-                                    <source media="(min-width: 800px)" data-srcset="{{ obj.image.url }}">
-                                    <img class="lazyload" data-src="{{ obj.image.url }}" alt="{{ obj.image.description }}">
-                                </picture>
-                            </div>
-                            {%endfor%}
+                <!-- Image Start -->
+                <div class="relative">
+                    <div class="header-slider">
+                        {% for obj in object.images.all %}
+                        <div>
+                            <picture>
+                                <source media="(max-width: 450px)" data-srcset="{{ obj.mob.url }}">
+                                <source media="(max-width: 800px)" data-srcset="{{ obj.thumbnail.url }}">
+                                <source media="(min-width: 800px)" data-srcset="{{ obj.image.url }}">
+                                <img class="lazyload" data-src="{{ obj.image.url }}" alt="{{ obj.image.description }}">
+                            </picture>
                         </div>
+                        {%endfor%}
                     </div>
-                    <div class="clear"></div>
-                    <!-- General Info Start -->
-                    <div class="one top-50">
-                        <div><h2><b>{{ object.title }}</b>{% if object.discipline %} - {{ object.discipline.name }} {% endif %}{% if object.level %} {{ object.level }} {% endif %}{% if object.category %} {{ object.get_category_display }} {% endif %}</h2></div>
-                    </div>
-                    <div class="one_half">
-                        <ul>
-                            <li>
-                                <strong>Date</strong>: {{ object.event_startdate }}{% if object.event_startdate != object.event_enddate %} - {{ object.event_enddate }}{% endif %}
-                            </li>
-                    {% if exceptions %}
-                            <li>
-                                <strong>Exceptions:</u></strong>
-                            </li>
-                            {% for obj in exceptions %}
-                                <li>
-                                    · {{obj.description}}
-                                </li>
-                            {% endfor %}
-                    {% endif %}
-                            <li>
-                                <strong>Max. Participants</strong> : {{ object.max_participants }}
-                            </li>
-                        </ul>
-                        <div class="tab" style="width:340px;">
-                            <input id="tab-one" type="checkbox" name="tabs"/>
-                            <label for="tab-one"><b>Pricing options ≡</b></label>
-                            <div class="tab-content">
-                                <div class="table-wrapper text-left">
-                                    <table class="alt">
-                                        <tbody>
-                                            {% for po in priceoptions %}
-                                            <tr>
-                                                <td scope="row" data-label="Name"><b>{{ po.name }}</b></td>
-                                                <td data-label="Price">
-                                                    {% if po.price_chf %}CHF {{po.price_chf|floatformat:"0"}} {% endif %}{% if por.price_euro %}EURO {{po.price.euro|floatformat:"0"}}{% endif %}
-                                                </td>
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <a href="/info/prices/" target="_self" class="button" type="submit">
-                                    Details
-                                </a>
-                            </div>
-                        </div>
-                        <ul class="actions">
-                            {% if object.registration %}
-                                {% if user.is_authenticated %}
-                                <li><a class="button popup-trigger" style="width:252px;"><b>Book</b></a></li>
-                                {% else %}
-                                <li><a class="button" href="{% url "account_signup" %}"><b>Register</b></a></li>
-                                <li>Already have an account? <a href="{% url "account_login" %}">Sign in</a></li>
-                                {% endif %}
-                            {% endif %}
-                        </ul>
-                    </div>
-                    {%for option in timelocations%}
-                    <div class="one_half last">
-                        <ul>
-                        {%if option.regular_day %}
-                            <li>
-                                <h5>{{ option.regular_day }} Class</h5>
-                            </li>
-                        {% endif %}
-                        <li>
-                            <strong>Address</strong> : {{option.location }} || {{option.location.address }}
-                        </li>
-                        <li>
-                            <strong>Door Open</strong>: {{ option.open_starttime }}  - {{ option.open_endtime }}
-                        </li>
-                        {% if option.class_starttime %}
-                            <li>
-                                <strong>Class</strong>: {{ option.class_starttime }} - {{ option.class_endtime }}
-                            </li>
-                        {% endif %}
-                        </ul>
-                    </div>
-                    {% endfor %}
-                    <div class="clear"></div>
-<!-- General Info End -->
-                    <div class="one liststyle">
-                        <h1>Description</h1>
-                        <p>{{ object.description|safe }}</p>
-                    </div>
-                    <div class="one liststyle">
-                        {% if object.prerequisites %}
-                        <h1>Prerequisites</h1>
-                        <p>{{ object.prerequisites|safe }}</p>
-                        {% endif%}
-                    </div>
+                </div>
+                <div class="clear"></div>
+                <div class="content-wrapper relative">
+                  <!-- General Info -->
+                  <div class="one">
+                      <div><h2><b>{{ object.title }}</b>{% if object.discipline %} - {{ object.discipline.name }} {% endif %}{% if object.level %} {{ object.level }} {% endif %}{% if object.category %} {{ object.get_category_display }} {% endif %}</h2></div>
+                  </div>
+                  <div class="one_half">
+                      <ul>
+                          <li>
+                              <strong>Date</strong>: {{ object.event_startdate }}{% if object.event_startdate != object.event_enddate %} - {{ object.event_enddate }}{% endif %}
+                          </li>
+                          {% if exceptions %}
+                          <li>
+                              <strong>Exceptions:</u></strong>
+                          </li>
+                          {% for obj in exceptions %}
+                              <li>
+                                  · {{obj.description}}
+                              </li>
+                          {% endfor %}
+                          {% endif %}
+                          <li>
+                              <strong>Max. Participants</strong> : {{ object.max_participants }}
+                          </li>
+                      </ul>
+                      <div class="tab">
+                          <input id="tab-one" type="checkbox" name="tabs"/>
+                          <label for="tab-one"><b>Pricing options ≡</b></label>
+                          <div class="tab-content">
+                              <div class="table-wrapper text-left">
+                                  <table class="alt">
+                                      <tbody>
+                                          {% for po in priceoptions %}
+                                          <tr>
+                                              <td scope="row" data-label="Name"><b>{{ po.name }}</b></td>
+                                              <td data-label="Price">
+                                                  {% if po.price_chf %}CHF {{po.price_chf|floatformat:"0"}} {% endif %}{% if por.price_euro %}EURO {{po.price.euro|floatformat:"0"}}{% endif %}
+                                              </td>
+                                          </tr>
+                                          {% endfor %}
+                                      </tbody>
+                                  </table>
+                              </div>
+                              <a href="/info/prices/" target="_self" class="button" type="submit">
+                                  Details
+                              </a>
+                          </div>
+                      </div>
+                      <ul class="actions">
+                          {% if object.registration %}
+                              {% if user.is_authenticated %}
+                              <li><a class="button popup-trigger" style="width:252px;"><b>Book</b></a></li>
+                              {% else %}
+                              <li><a class="button" href="{% url "account_signup" %}"><b>Register</b></a></li>
+                              <li>Already have an account? <a href="{% url "account_login" %}">Sign in</a></li>
+                              {% endif %}
+                          {% endif %}
+                      </ul>
+                  </div>
+                  <!-- Time & Location  -->
+                  {%for option in timelocations%}
+                  <div class="one_half last">
+                      <ul>
+                      {%if option.regular_day %}
+                          <li>
+                              <h5>{{ option.regular_day }} Class</h5>
+                          </li>
+                      {% endif %}
+                      <li>
+                          <strong>Address</strong> : {{option.location }} || {{option.location.address }}
+                      </li>
+                      <li>
+                          <strong>Door Open</strong>: {{ option.open_starttime }}  - {{ option.open_endtime }}
+                      </li>
+                      {% if option.class_starttime %}
+                          <li>
+                              <strong>Class</strong>: {{ option.class_starttime }} - {{ option.class_endtime }}
+                          </li>
+                      {% endif %}
+                      </ul>
+                  </div>
+                  {% endfor %}
+                  <div class="clear"></div>
+                  <!-- Description -->
+                  <div class="one liststyle">
+                      <h2>Description</h2>
+                      <p>{{ object.description|safe }}</p>
+                  </div>
+                  <div class="one liststyle">
+                      {% if object.prerequisites %}
+                      <h2>Prerequisites</h2>
+                      <p>{{ object.prerequisites|safe }}</p>
+                      {% endif%}
+                  </div>
                 </div>
             </div>
         <div id="extra" class="section">
@@ -212,19 +212,19 @@
         {% if object.highlights or object.included or object.food %}
         <div class="center-relative content-1170">
             <div class="entry-content">
-                <div class="content-wrap relative">
+                <div class="content-wrapper relative">
         {% if object.highlights or object.included or object.food %}
                     <div class="one liststyle">
                         {% if object.highlights %}
-                        <h1 class="right">Highlights</h1>
+                        <h2 class="right">Highlights</h2>
                             <p>{{ object.highlights|safe }}</p>
                         {% endif%}
                         {% if object.included %}
-                        <h1>Included</h1>
+                        <h2>Included</h2>
                             <p>{{ object.included|safe }}</p>
                         {% endif %}
                         {% if object.food %}
-                        <h1>Food</h1>
+                        <h2>Food</h2>
                             <p>{{ object.food|safe }}</p>
                         {% endif %}
                     </div>
@@ -292,9 +292,8 @@
                     </span>
                 </div>
             </form>
-                    <button type="submit" form="booking">Submit</button>
+            <button type="submit" form="booking">Submit</button>
         </div>
     </div>
 </div>
-{% include 'footer.html' %}
 {% endblock %}

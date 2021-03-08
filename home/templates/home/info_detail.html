@@ -6,7 +6,6 @@
         {% endcompress %}
 {% endblock %}
 {% block content %}
-{% include 'snippets/nav.html' %}
 <div id="infos" class="infos">
     <article class="section infos" >
         <div class="center-relative content-1170">
@@ -31,8 +30,8 @@
                     </div>
                     <div class="clear"></div>
                     <div class="one text-left">
-                            <h2>{{object.title}}</h2>
-                                {{object.content|safe}}
+                            <h2>{{ object.title }}</h2>
+                                {{ object.content|safe }}
                             <br/><br/>
                             <a class="button" onclick="goBack()">Go Back</a>
                             <script>
@@ -46,5 +45,4 @@
         </div>
     </article>
 </div>
-{% include 'footer.html' %}
 {% endblock %}

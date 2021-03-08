@@ -1,12 +1,12 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static compress %}
 {% block css %}
         {% compress css file faq %}
             <link rel="stylesheet" type="text/css" href="{% static "home/css/faq.css" %}?v=18" media="screen" />
         {% endcompress %}
 {% endblock %}
-{% block head_title %}{{block.super}}FAQ{% endblock%}
-{% block content %}{% include 'snippets/nav.html' %}
+{% block head_title %}{{ block.super }}FAQ{% endblock%}
+{% block content %}
 <!-- Service -->
 <div id="faq" class="section faq">
     <div class="block content-1170 center-relative">
@@ -80,5 +80,4 @@
 
         <div class='clear'></div>
     </div>
-{% include 'footer.html' %}
 {% endblock %}</div>
