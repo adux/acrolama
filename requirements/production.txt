@@ -5,11 +5,11 @@ gunicorn==20.0.4
 dj-database-url==0.5.0
 
 -- Utils --
-sentry-sdk==0.19.4
+sentry-sdk==0.20.3
 django-redis==4.12.1
 
 -- Mail --
 django-anymail==6.1.0
 
 -- Stats --
-newrelic==5.22.1.152
+newrelic==5.24.0.153
