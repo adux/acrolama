@@ -32,21 +32,19 @@
             </script>
 {% endblock %}
 {% block meta_og %}
-{% cache 43200 meta_og %}
             <meta property="og:url" content="{{request.build_absolute_uri}}" />
             <meta property="og:type" content="website" />
             <meta property="og:title" content="{{object.title}}" />
             <meta property="og:description" content="{{object.description|striptags|truncatechars:197}}" />
             <meta property="og:image" content="{{object.images.first.thumbnail.url}}" />
             <meta property="fb:app_id" content="2581322572097954" />
-{% endcache %}
 {% endblock meta_og %}
 {% block content %}
 <div class="single-portfolio">
     <article id="portfolio-2" class="section portfolio">
         <div class="center-relative content-1170">
             <div class="entry-content">
-                <!-- Image Start -->{% cache 360 event_img_slider %}
+                <!-- Image Start -->
                 <div class="relative">
                     <div class="header-slider">
                         {% for obj in object.images.all %}
@@ -60,7 +58,7 @@
                         </div>
                         {%endfor%}
                     </div>
-                </div>{% endcache %}
+                </div>
                 <div class="clear"></div>
                 <div class="content-wrapper relative">
                   <!-- General Info -->
