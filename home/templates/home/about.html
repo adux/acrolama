@@ -1,5 +1,5 @@
-{% load static %}{% load tinycontent_tags %}
-<!-- About -->
+{% load static %}{% load tinycontent_tags %}{% load cache %}
+<!-- About -->{% cache 43200 home_about %}
 <div id="about" class="section">
     <div class="block content-1170 center-relative">
         <div class="section-title-holder left green">
@@ -77,4 +77,4 @@
         </div>
         <div class="clear"></div>
     </div>
-</div>
+</div>{% endcache %}

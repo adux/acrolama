@@ -9,9 +9,34 @@ from django.contrib.postgres.fields import ArrayField
 from django.db.models.signals import pre_save
 
 
+"""
+Since we're basically using Invoice as Transaction we could use it a sort of
+Creditnote
+
+Example:
+Balance -> DEBIT
+Booking -> FK_XX
+Partner -> NULL
+referral_code -> Security Hash ?
+status ->
+    ("PE", "Pending") -> For Open not fully paid Credits
+    ("PY", "Paid") -> for fully paid Credits
+    ("CA", "Canceled") -> for over due unused credit
+    ("ST", "Storno") -> doesn't applly
+    ("FR", "First Reminder") -> Reminder of credit to be used
+    ("SR", "Second Reminder") -> Reminder of credit can be used and canceled
+    ("TR", "Third Reminder") -> Last reminder of Credit being canceled
+to_pay -> total amount to be paid back by Acrolama
+paid -> amount that has been paid till date
+pay_till -> due of credit
+pay_date -> dates of transactions
+methode -> internal, credit or similar
+notes -> some notes to the transaction
+"""
+
 INVOICESTATUS = [
     ("PE", "Pending"),
-    ("PY", "Paid"),
+    ("PY", "Paid"),  # TODO: Change to PI
     ("CA", "Canceled"),
     ("ST", "Storno"),
     ("FR", "First Reminder"),
@@ -42,7 +67,8 @@ METHODE = [
 
 class Partner(models.Model):
     """
-    TODO: Create a partener for every teacher on signal
+    TODO: Create a Partner for every User with Teacher tag on signal for
+    linking it with the quotations
     """
     name = models.CharField(max_length=50)
     address = models.ForeignKey("address.Address", null=True, blank=True, on_delete=models.CASCADE)
@@ -111,6 +137,11 @@ pre_save.connect(invoice_pre_save_referenz, sender=Invoice)
 
 
 class Creditnote(models.Model):
+    """
+    @param
+        invoice FK to invoice
+        to_credit amount that has been credited from the price of booking
+    """
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
     to_credit = models.DecimalField(max_digits=12, decimal_places=2)
     credited = models.DecimalField(max_digits=12, decimal_places=2)
@@ -167,7 +198,6 @@ signal when a attendance date is remove that
 2.- Validate -> Check that conditions are still met.
 3.- Creates a Credit Note, maybe creates a creditnotedate
 4.- Open credit can be seen in profile
-
 
 4.- When creating invoice check for open credits
 
