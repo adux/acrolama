@@ -1,3 +1,5 @@
+import datetime
+
 from dal import autocomplete
 from django.db.models import Q  # Queries with OR
 from django.core.cache import cache
@@ -103,6 +105,10 @@ def contactlistview(request):
 
 
 class EventAutocomplete(autocomplete.Select2QuerySetView):
+    """
+    Get all the Events from the past year ordered by startdate and level
+    """
+
     def get_queryset(self):
         # Don't forget to filter out results depending on the visitor !
         if not herd_check(self.request.user):
@@ -110,6 +116,7 @@ class EventAutocomplete(autocomplete.Select2QuerySetView):
 
         qs = (
             Event.objects.all()
+            .filter(event_enddate__gte=datetime.datetime.now() - datetime.timedelta(days=356))
             .order_by("-event_startdate", "level")
             .select_related("project", "level")
         )
