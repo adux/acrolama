@@ -1,4 +1,4 @@
-{% load static %}
+{% load static %}{% load cache %}{% cache 43200 home_portfolio %}
 <!-- Portfolio -->
 <div id="portfolio" class="section">
     <div class="block content-1170 center-relative">
@@ -38,4 +38,4 @@
         <div class="clear"></div>
     </div>
     <div class="clear"></div>
-</div>
+</div>{% endcache %}
