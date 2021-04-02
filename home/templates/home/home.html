@@ -1,7 +1,6 @@
 {% extends "base.html" %}
-{% load tinycontent_tags %}
 {% block head_title %}
-{{block.super}}Acro and Acroyoga Team - Classes, Workshop and Festivals
+{{ block.super }}Acro and Acroyoga Team - Classes, Workshop and Festivals
 {% endblock%}
 {% block meta_description %}
   <meta name="description" content="Swiss Acro & Acroyoga team that offers weekly classes, organize Workshops and Training Camps internationally. Hosts of the Winter & Urban Acro Festival Zürich."/>
@@ -15,9 +14,9 @@
   <meta property="fb:app_id" content="2581322572097954" />
 {% endblock meta_og %}
 {% block content %}
-{% include "home/start.html" %}
-{% include "home/events.html" %}
-{% include "home/classes.html" %}
-{% include "home/portfolio.html" %}
-{% include "home/about.html" %}
+  {% include "home/start.html" %}
+  {% include "home/events.html" %}
+  {% include "home/classes.html" %}
+  {% include "home/portfolio.html" %}
+  {% include "home/about.html" %}
 {% endblock%}

@@ -62,7 +62,7 @@ class ProfileView(TemplateView):
 
 class HomeFormView(MultiFormsView):
     template_name = "home/home.html"
-    gzip_page = True
+    gzip_page = False
     form_classes = {
         # "news": NewsForm,
     }
@@ -72,12 +72,12 @@ class HomeFormView(MultiFormsView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["about_content"] = AboutTeam.objects.all()
+        context["about_content"] = AboutTeam.objects.all().select_related("team__avatar")
         context["about_image"] = AboutImage.objects.all().select_related("image")
         context["about_date"] = AboutDate.objects.all()
         context["testimonial"] = Testimonial.objects.all()
         context["portfolio"] = Portfolio.objects.all()[0:8].select_related("image")
-        context["news"] = NewsList.objects.all()
+        context["news"] = NewsList.objects.all().select_related("event__level", "event__discipline")
 
         # Events
         # All the events that haven't finished.
@@ -87,7 +87,7 @@ class HomeFormView(MultiFormsView):
             .order_by("event_startdate", "level", "title")
             .select_related("level", "discipline")
             .prefetch_related("time_locations__time_option")
-            .prefetch_related("time_locations__location")
+            .prefetch_related("time_locations__location__address")
         )
 
         context["event"] = (

@@ -1,16 +1,16 @@
-{% load static %}{% load cache %}
-<!-- Home --><div id="home" class="section intro-page">{% cache 43200 home_start_img %}
+{% load static %}
+<!-- Home --><div id="home" class="section intro-page">
     <div class="block content-1170 center-relative center-text">
         <picture>
             <!--[if IE 9]><video style="display: none"><![endif]-->
             <source data-scrset="{% static "home/images/acrolama_logo.png" %}">
             <source data-scrset="{% static "home/images/acrolama_logo.webp" %}">
             <!--[if IE 9]></video><![endif]-->
-            <img class="top-logo lazyload" data-src="{% static "home/images/acrolama_logo.svg" %}" alt="Acrolama logo disigned by Guillia Martinelli" width="350" height="350"/>
+            <img class="top-logo lazyload" data-src="{% static "home/images/acrolama_logo.svg" %}" alt="Acrolama logo disigned by Guillia Martinelli"/>
         </picture>
         <h1 class="big-title"><span>Be the monkey you want to be...<br>but we are lamas.</span></h1>
         <p class="title-desc">Flying lamas.</p>
-    </div>{% endcache %}{% cache 300 home_start_news %}
+    </div>
     <div class="extra-content-top">
         <div class="news-slider">
             {% for obj in news %}
@@ -33,6 +33,6 @@
             {% endfor %}
         </div>
         <div class="clear"></div>
-    </div><!-- extra content -->{% endcache %}
+    </div><!-- extra content -->
 </div>
 
