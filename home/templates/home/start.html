@@ -1,8 +1,9 @@
 {% load static %}
-<!-- Home --><div id="home" class="section intro-page">
+<!-- Home -->
+<div id="home" class="section intro-page">
     <div class="block content-1170 center-relative center-text">
         <img
-            class="top-logo lazyload"
+            class="top-logo"
             srcset="{% static "home/images/acrolama_logo.webp" %} 350w"
             sizes="(max-width: 600px) 350px,
                   350px"
@@ -13,33 +14,27 @@
         <p class="title-desc">Flying lamas.</p>
     </div>
     <div class="extra-content-top">
-        <div class="news-slider">
-            {% for obj in news %}
-            <div class="placeholder-item">
-                <a href="{{ obj.event.get_absolute_url }}">
-                    <!--<picture>-->
-                    <!--    <!-1-[if IE 9]><video style="display: none"><![endif]-1->-->
-                    <!--    <source media="(max-width: 450px)" data-srcset="{{ obj.mob.url }}" />-->
-                    <!--    <source media="(max-width: 800px" data-srcset="{{ obj.thumbnail.url }}" />-->
-                    <!--    <!-1-[if IE 9]></video><![endif]-1->-->
-                    <!--    <img data-expand="auto" class="lazyload" data-src="{{ obj.image.url }}" alt="{{ obj.event.discipline }} {{ obj.event.title }}" >-->
-                    <!--</picture>-->
-                    <img
-                        src="{{ obj.image.url }}"
-                        srcset="{{ obj.thumbnail.url }} 150w,
-                        {{ obj.image.url }} 300w"
-                        sizes="(max-width: 600px) 150px,
-                               300px"
-                        alt="{{ obj.event.discipline }} {{ obj.event.title }}"
-                        />
-                    <span style="font-size: 1.5em; background: #f3d216;">
-                        {% if obj.event.discipline %} {{ obj.event.discipline.name }} {% endif %}
-                        {% if obj.event.level %} {{ obj.event.level }} {% endif %}
-                        {% if obj.event.category %} {{ obj.event.get_category_display }} {% endif %}
-                    </span>
-                </a>
-            </div>
-            {% endfor %}
+        <div class="placeholder-item">
+          <div class="news-slider slick-slider">
+              {% for obj in news %}
+              <div class="slick-slider">
+                  <a href="{{ obj.event.get_absolute_url }}">
+                      <img
+                          src="{{ obj.image.url }}"
+                          srcset="{{ obj.thumbnail.url }} 150w,
+                          {{ obj.image.url }} 300w"
+                          sizes="(max-width: 600px) 150px,
+                                 300px"
+                          alt="{{ obj.event.discipline }} {{ obj.event.title }}"/>
+                      <span style="font-size: 1.5em; background: #f3d216;">
+                          {% if obj.event.discipline %} {{ obj.event.discipline.name }} {% endif %}
+                          {% if obj.event.level %} {{ obj.event.level }} {% endif %}
+                          {% if obj.event.category %} {{ obj.event.get_category_display }} {% endif %}
+                      </span>
+                  </a>
+              </div>
+              {% endfor %}
+          </div>
         </div>
         <div class="clear"></div>
     </div><!-- extra content -->
