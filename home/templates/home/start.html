@@ -1,18 +1,11 @@
 {% load static %}
 <!-- Home --><div id="home" class="section intro-page">
     <div class="block content-1170 center-relative center-text">
-        <!--<picture>-->
-        <!--    <!-1-[if IE 9]><video style="display: none"><![endif]-1->-->
-        <!--    <source data-scrset="{% static "home/images/acrolama_logo.png" %}">-->
-        <!--    <source data-scrset="{% static "home/images/acrolama_logo.webp" %}">-->
-        <!--    <!-1-[if IE 9]></video><![endif]-1->-->
-        <!--    <img class="top-logo lazyload" data-src="{% static "home/images/acrolama_logo.svg" %}" alt="Acrolama logo disigned by Guillia Martinelli"/>-->
-        <!--</picture>-->
         <img
             class="top-logo lazyload"
             srcset="{% static "home/images/acrolama_logo.webp" %} 350w"
             sizes="(max-width: 600px) 350px,
-                800px"
+                  350px"
             src="{% static "home/images/acrolama_logo.png" %}"
             alt="Acrolama logo disigned by Guillia Martinelli">
 
@@ -24,13 +17,21 @@
             {% for obj in news %}
             <div class="placeholder-item">
                 <a href="{{ obj.event.get_absolute_url }}">
-                    <picture>
-                        <!--[if IE 9]><video style="display: none"><![endif]-->
-                        <source media="(max-width: 450px)" data-srcset="{{ obj.mob.url }}" />
-                        <source media="(max-width: 800px" data-srcset="{{ obj.thumbnail.url }}" />
-                        <!--[if IE 9]></video><![endif]-->
-                        <img data-expand="auto" class="lazyload" data-src="{{ obj.image.url }}" alt="{{ obj.event.discipline }} {{ obj.event.title }}" >
-                    </picture>
+                    <!--<picture>-->
+                    <!--    <!-1-[if IE 9]><video style="display: none"><![endif]-1->-->
+                    <!--    <source media="(max-width: 450px)" data-srcset="{{ obj.mob.url }}" />-->
+                    <!--    <source media="(max-width: 800px" data-srcset="{{ obj.thumbnail.url }}" />-->
+                    <!--    <!-1-[if IE 9]></video><![endif]-1->-->
+                    <!--    <img data-expand="auto" class="lazyload" data-src="{{ obj.image.url }}" alt="{{ obj.event.discipline }} {{ obj.event.title }}" >-->
+                    <!--</picture>-->
+                    <img
+                        src="{{ obj.image.url }}"
+                        srcset="{{ obj.thumbnail.url }} 150w,
+                        {{ obj.image.url }} 300w"
+                        sizes="(max-width: 600px) 150px,
+                               300px"
+                        alt="{{ obj.event.discipline }} {{ obj.event.title }}"
+                        />
                     <span style="font-size: 1.5em; background: #f3d216;">
                         {% if obj.event.discipline %} {{ obj.event.discipline.name }} {% endif %}
                         {% if obj.event.level %} {{ obj.event.level }} {% endif %}
