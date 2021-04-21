@@ -10,14 +10,6 @@ from django.db.models.signals import pre_save
 
 
 """
-Since we're basically using Invoice as Transaction we could use it a sort of
-Creditnote
-
-Example:
-Balance -> DEBIT
-Booking -> FK_XX
-Partner -> NULL
-referral_code -> Security Hash ?
 status ->
     ("PE", "Pending") -> For Open not fully paid Credits
     ("PY", "Paid") -> for fully paid Credits
@@ -85,6 +77,24 @@ class Partner(models.Model):
 
 
 class Invoice(models.Model):
+    """
+    Dividend + Expenses + Assets = Liabilites + Owner Equity + Revenue
+    |---------------------------|  |---------------------------------|
+    Debits: Increase when debited  Credits: Increse when Credited
+    and Decrease when credited     and Decresease when Debited
+
+    Balance -> Credit or Debits Acording to squeme
+    Book -> If an Book order is Asociated
+    Partner -> For invoices not asociated with a book
+    referral_code -> Security Code according to def invoice_pre_save_referenz()
+    status -> needs to be balanced by the state_controller
+    to_pay -> liability
+    paid -> sum of payments
+    pay_till -> due date
+    pay_date -> date of last pay
+    reminder_dates -> reminder dates Array
+    methode -> Payment methode to track
+    """
     balance = models.CharField(max_length=11, choices=BALANCE)
     book = models.OneToOneField("booking.Book", null=True, blank=True, on_delete=models.CASCADE)
     partner = models.ForeignKey("accounting.Partner", on_delete=models.CASCADE, null=True, blank=True)

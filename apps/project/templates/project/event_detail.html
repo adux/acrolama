@@ -96,7 +96,7 @@
                                           <tr>
                                               <td scope="row" data-label="Name"><b>{{ po.name }}</b></td>
                                               <td data-label="Price">
-                                                  {% if po.price_chf %}CHF {{po.price_chf|floatformat:"0"}} {% endif %}{% if por.price_euro %}EURO {{po.price.euro|floatformat:"0"}}{% endif %}
+                                                  {% if po.price_chf %}CHF {{po.price_chf|floatformat:"0"}} {% endif %}{% if po.price_euro %}EURO {{po.price.euro|floatformat:"0"}}{% endif %}
                                               </td>
                                           </tr>
                                           {% endfor %}
