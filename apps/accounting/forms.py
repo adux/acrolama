@@ -28,9 +28,15 @@ class InvoiceUpdateForm(forms.ModelForm):
 
 class CreditnotedateForm(forms.Form):
     def __init__(self, *args, **kwargs):
-        self.attendance = kwargs.pop("attendance", None)
+        self.book = args[1]
         super(CreditnotedateForm, self).__init__(*args, **kwargs)
+        raw_choices = attendance_list_creditoptions(self.book.attendance.id)
+        choices = []
+
+        for i, v in enumerate(raw_choices):
+            option = (f'{self.book.id}_{i}', v)
+            choices.append(option)
+
         self.fields["radio"] = forms.ChoiceField(
-            choices=attendance_list_creditoptions(self.attendance.id),
-            widget=forms.RadioSelect(),
+            choices=choices,
         )

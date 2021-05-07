@@ -44,17 +44,27 @@ class ProfileView(TemplateView):
         user = User.objects.get(id=self.request.user.id)
         context["user"] = user
 
-        books = Book.objects.filter(user=user)[:5]
-        forms = []
-        for book in books:
-            if hasattr(book, 'attendance'):
-                form = CreditnotedateForm(book.attendance)
-                print(form.__dict__)
+        # Have bookins
+        if not Book.objects.filter(user=user).exists():
+            print("doens't have books")
+            return context
 
+        books = Book.objects.filter(user=user)[:5]
+        context["books"] = books
+
+        ongoing_event = [b for b in books if b.event.event_enddate > datetime.datetime.now().date()]
+        ongoing_pos = [k for k, b in enumerate(books) if b.event.event_enddate > datetime.datetime.now().date()]
+        context["ongoing"] = ongoing_event
+        context["pos"] = ongoing_pos
+
+        forms = []
+        for book in ongoing_event:
+            if hasattr(book, 'attendance'):
+                form = CreditnotedateForm(self.request.POST, book)
+                forms.append(form)
             else:
                 forms.append(None)
 
-        context["books"] = books
         context["forms"] = forms
 
         return context

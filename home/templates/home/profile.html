@@ -1,4 +1,4 @@
-{% extends "base.html" %}{% load static compress%}
+{% extends "base.html" %}{% load static compress booking_tags%}
 {% block head_title %}Profile{% endblock%}
 {% block css %}
         {% compress css file event %}
@@ -14,7 +14,7 @@
     <article id="profile" class="section portfolio">
         <div class="center-relative content-1170">
             <div class="entry-content">
-                <div class="content-wrap relative">
+                <div class="content-wrapper relative">
                     <div class="one">
                         <h4>{{ user.first_name }} {{user.last_name }}</h4>
                         <h6>Profile</h6>
@@ -78,7 +78,7 @@
                                               <td data-label="Booked"><a href="{{ book.event.get_absolute_url }}">{{ book.event.title }}</a></td>
                                               <td data-label="Status">{{ book.invoice.get_status_display }}</td>
                                               <td data-label="Attendance">{{ book.attendance.count_attendance }}/{{ book.attendance.count_dates }}</td>
-                                              <td data-label="Actions"><a class="popup-trigger">Cancel Class</a></td>
+                                              <td data-label="Actions">{% if forloop.counter0 in pos %}<a class="popup-trigger-{{ forloop.counter0 }}">Credit Class</a>{% else %} - {% endif %}</td>
                                           </tr>
                                           {% endfor %}
                                         </tbody>
@@ -92,17 +92,27 @@
         </div>
     </article>
 </div>
+{% for form in forms %}
 <!-- Sign in pop up -->
-<div class="popup" role="alert">
+<div class="popup popup-{{ pos|index:forloop.counter0 }}" role="alert">
     <div class="popup-container">
         <a href="#0" class="popup-close img-replace">Close</a>
-        <div class ="center-text"><h2>Booking</h2></div>
+        <div class ="center-text"><h2>Credit Form</h2></div>
         <div class="popup-form text-left">
-          {% for form in forms %}
-            {{ form }}
-          {% endfor %}
+            {{ form.as_p }}
           <button type="submit" form="booking">Submit</button>
         </div>
     </div>
 </div>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    jQuery(document).ready(function($){
+      $('.popup-trigger-{{ pos|index:forloop.counter0 }}').on('click', function(event){
+        event.preventDefault();
+        $('.popup-{{ pos|index:forloop.counter0 }}').addClass('is-visible');
+        });
+      });
+    });
+</script>
+{% endfor %}
 {% endblock %}

@@ -24,10 +24,15 @@ def attendance_toggle_check(pk, position):
 
 def attendance_list_creditoptions(pk):
     att = Attendance.objects.get(pk=pk)
-    time_option = att.book.times.last()  # FIXME: Should be deprecated when Books times are FK
-    dts = [datetime.datetime.combine(d, time_option.class_starttime) for d in att.attendance_date]
-    dt_comp = datetime.datetime.now() + datetime.timedelta(hours=12)
-    return [dt.date() for dt in dts if dt > dt_comp]
+
+    time_option = att.book.times.last()  # Should be only one. FIXME: To be Deprecated
+
+    class_datetimes = [datetime.datetime.combine(d, time_option.class_starttime) for d in att.attendance_date]
+    min_datetime_to_credit = datetime.datetime.now() + datetime.timedelta(hours=12)
+    print(class_datetimes)
+    print(min_datetime_to_credit)
+
+    return [class_datetime.strftime("%m/%d/%Y") for class_datetime in class_datetimes if class_datetime < min_datetime_to_credit]
 
 
 def book_get(book):

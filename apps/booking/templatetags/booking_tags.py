@@ -33,3 +33,8 @@ def addclass(value, arg):
     if value == "":
         return
     return value.as_widget(attrs={'class': arg})
+
+
+@register.filter
+def index(indexable, i):
+    return indexable[i]

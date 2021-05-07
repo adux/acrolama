@@ -161,12 +161,16 @@ class Creditnote(models.Model):
 
 
 class Creditnotedate(models.Model):
+    """
+    Track of Canceled dates ?
+    """
     creditnote = models.ForeignKey(Creditnote, on_delete=models.CASCADE)
     date = models.DateField(auto_now=False, auto_now_add=False, blank=False, null=False)
 
 
 """
 # Only for Cycles
+
 Before the beginning date of a cycle, due to limited spots and general organization of the class, we request\
     that you cancel the whole cycle at least 72 hours before the beginning of the cycle. This gives us \
     the opportunity to fill the free spot. You may cancel by email or online here. If you have to cancel your cycle\
@@ -175,7 +179,7 @@ Before the beginning date of a cycle, due to limited spots and general organizat
     These credit will be automatically used in the next booking of any class or event.\
     If you do not cancel the cycle prior to the 72 hours, class cancellation policies apply.
 
-During the period of a cycle, if the corresponding invoice is paid, you may cancel one class.\
+During the period of your cycle, if the corresponding invoice is paid, you may cancel up to one class.\
     Due to limited spots and general organization of the class, we request that you cancel at least 12 hours\
     before a scheduled class. This gives us the opportunity to fill or adapt the class. You may cancel by email\
     or online here. If you have to cancel your class, we offer you a credit to your account if you cancel\
@@ -183,33 +187,27 @@ During the period of a cycle, if the corresponding invoice is paid, you may canc
     of any class or event. However, if you do not cancel prior to the 12 hours, you will lose the payment for the class.
 
 Credit Conditions:
-1 Date pro cycle
 
-In case of automatic booking canceling is posible till 12 before the next class
-You can only cancelled a class of a paid abo.
+For all:
+· You can only credit fully or partially a paid abo.
+· Cancel the whole events is only posible till 72hrs before the first class.
+· Cancel 1 class is only possible till 12hrs before the class.
+· 1 date each 4 dates in the attendance, so doble cycles would have 2 classes.
+· the credit must be used in the next booking
+· will never be cashed out
 
-Options Conditions
-if no event has been visited you can cancell all 48 hours before the Event start
-12 hours before next event start time you can cancell only 1 class
+0.- Check if abo is paid. Conditional offer credit or cancel.
+1.- If first attd. > 72 hrs can be fully credited.
+1.1.- Validate -> Check that conditions are still met.
+1.2.- Creditnote.
+2.- If first attd. < 72 hrs show avilable dates to credit. Only one can be selected in a radio form.
+2.1.- Validate -> Check that conditions are still met.
+2.2- Creditnote + Creditdate
 
-The credit has to be used in the next booking
-Can not be cashed out
-
-Users do bookings
-Bookings have invoices
-All the invoices give a certain history
-
-
-signal when a attendance date is remove that
-1 cant removeorchange date indicated in a creditenotecycle
-
-0.- Action to cancel is shown if conditions are met.
-1.- Form shows available dates to "Cancel" (only one can be selected in a radio form)
-2.- Validate -> Check that conditions are still met.
-3.- Creates a Credit Note, maybe creates a creditnotedate
-4.- Open credit can be seen in profile
-
+3.- Open credit can be seen in profile
 4.- When creating invoice check for open credits
 
+5.- If CR < PO Invoice price = PO - Credit
+6.- If CR > PO - 
 
 """
