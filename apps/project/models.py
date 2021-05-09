@@ -197,17 +197,17 @@ class PriceOption(models.Model):
 
     def __str__(self):
         if self.price_euro and self.price_chf:
-            return "%s, EUR: %s - CHF: %s" % (
+            return "%s - € %s - CHF %s" % (
                 self.name,
                 self.price_euro,
                 self.price_chf,
             )
         else:
-            return "%s, CHF: %s" % (self.name, self.price_chf)
+            return "%s - CHF %s" % (self.name, self.price_chf)
 
     def get_price(self):
         if self.price_euro:
-            return "CHF {}.- || EUR: {}.-".format(self.price_chf, self.price_euro)
+            return "€ {}.-".format(self.price_euro)
         else:
             return "CHF {}.-".format(self.price_chf)
 
@@ -220,6 +220,11 @@ class PriceOption(models.Model):
         if self.single_date and self.cycles > 0:
             raise ValidationError(
                 _("Can't usr 'Single date' with Cycle Abos"),
+                code="invalid",
+            )
+        if self.price_euro and not self.price_chf:
+            raise ValidationError(
+                _("For price in Euro, there needs to be a intern CHF price."),
                 code="invalid",
             )
 
