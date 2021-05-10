@@ -103,7 +103,7 @@
                 </tr>
                 <tr>
                   <td style="padding: 5px 0 5px 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;">
-                    <p>{{ book.comment_response }}</p>
+                    <p>{{ book.comment_response|safe }}</p>
                     <p>
                         See you soon!<br/>
                         Big hug<br/>{% if event.category == "CA" %}
