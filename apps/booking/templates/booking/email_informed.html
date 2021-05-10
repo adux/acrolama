@@ -82,15 +82,17 @@
                               <td style="padding: 25px 0 0 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;">
                                 <h4>Payment details: </h4>
                                 <p>Price: {{ price.get_price }}<br/>
-                                Pay till: {{ pay_till }}<br/>
+                                Pay till: {{ pay_till|date:"d M. Y" }}<br/>
                                 Reference number: {{ referenznum }}</p>
                                 <p><b>Bank Transfer</b>:<br/>
                                   Acrolama KLG<br/>
-                                  Tramstrasse 65, 8050 Zürich<br/>
-                                  IBAN:<br/>CH29 0022 5225 1202 6601 B<br/>
+                                  Tramstrasse 65, 8050 Zürich<br/>{% if price.price_euro %}
+                                  IBAN:<br>CH94 0022 5225 1202 6660 M<br/>{% else %}
+                                  IBAN:<br/>CH29 0022 5225 1202 6601 B<br/>{% endif %}
                                   BIC: UBSWCHZH80A<br/><br/><br/>
                                 </p>
-                                <p>Find out more about our abos <a href="https://acrolama.com/info/prices/" target="_blank">www.acrolama/info/prices/</a></p>
+                              {% if event.category == "CY" %}<p>Find out more about our abos <a href="https://acrolama.com/info/prices/" target="_blank">www.acrolama/info/prices/</a></p>{% else %}
+                              <p>Other Camps and Festivals <a href="https://acrofestivals.ch/" target="_blank">www.acrofestivals.ch</a></p>{% endid %}
                               </td>
                             </tr>
                           </table>
@@ -104,9 +106,10 @@
 
                     <p>
                         See you soon!<br/>
-                        Big hug<br/>
-                        Adrian + Danica<br/>
-                        The Lamas ;)
+                        Big hug<br/>{% if event.category == "CA" %}
+                        Organization Team<br/>{% else %}
+                        Adrin + Danica<br/>{% endif %}
+                        The Lamas
                     </p>
                   </td>
                 </tr>
@@ -119,7 +122,7 @@
                 <tr>
                   <td style="color: #000; font-family: Arial, sans-serif; font-size: 14px;" width="75%">
                     ---
-                    <p>Möchtest du fliegen wie ein Lama? Wir haben verschiedene Acroyoga Events!<br/> <a href="https://www.acrolama.com" target="_blank">wwww.acrolama.com</a></p>
+                    <p>Want to fly like a Lama? Check our Events and Classes!<br/> <a href="https://www.acrolama.com" target="_blank">wwww.acrolama.com</a></p>
                     <table border="0" cellpadding="0" cellspacing="0" width="100%">
                         <tr>
                           <td align="left" width="100%">
@@ -145,7 +148,7 @@
                               </tr>
                             </table>
                             <p>&reg; Acrolama KLG, Tramstrasse 65, Oerlikon, CH 8050<br/></p>
-                            <a href="www.acrolama.com/unsuscribe" style="color: #ffffff;"><font color="#000">Unsubscribe</font></a> to this notifications.
+                            <a href="www.acrolama.com/h/unsubcribe" style="color: #ffffff;"><font color="#000">Unsubscribe</font></a> to this notifications.
                             <p>For questions check <a href="https://acrolama.com/faq/" target="_blank" rel="noopener">FAQ</a></p>
                           </td>
                         </tr>

@@ -197,7 +197,7 @@ class PriceOption(models.Model):
 
     def __str__(self):
         if self.price_euro and self.price_chf:
-            return "%s - € %s - CHF %s" % (
+            return "{} - EUR{:.0f} - CHF{:.0f}".format(
                 self.name,
                 self.price_euro,
                 self.price_chf,
@@ -207,9 +207,9 @@ class PriceOption(models.Model):
 
     def get_price(self):
         if self.price_euro:
-            return "€ {}.-".format(self.price_euro)
+            return "EUR {:.0f}.-".format(self.price_euro)
         else:
-            return "CHF {}.-".format(self.price_chf)
+            return "CHF {:.0f}.-".format(self.price_chf)
 
     def clean(self):
         if self.duo and self.single_date:
