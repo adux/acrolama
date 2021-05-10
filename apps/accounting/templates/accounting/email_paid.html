@@ -27,7 +27,7 @@
                 <tr>
                   <td style="padding: 20px 0 30px 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;">
                     <p>Hola {{user.first_name}}</p>
-                    <p>A robolama that checks payments just <b>confirmed your payment</b> for:
+                    <p>A robolama checked and <b>confirmed your payment</b> for:
                         {{event.title}}  {{event.event_startdate|date:'d M.'}}{% if event.event_startdate != event.event_enddate %}- {{ event.event_enddate|date:'d M. y'}}{% endif %} {% if event.category == 'CY' %}<a href="https://www.acrolama.com/classes/{{event.slug}}/" target="_blank" rel="noopener">Class details</a>{% else %}<a href="https://www.acrolama.com/events/{{event.slug}}/" target="_blank" rel="noopener">Event details</a>{% endif %}</p>
                     <h4>Write us if there are changes in your participation.</h4>
                     {% if event.category == 'CY' %}<p><b>Regular{% if times %}{% with count=times.count %} day{{ count|pluralize }}</b>:{% endwith %}{% for d in times.all %}<br/>· {{d}}{% endfor %}{% endif %}</p>{% endif %}
@@ -40,7 +40,7 @@
                         See you soon!<br/>
                         Big hug<br/>
                         Adrian + Danica<br/>
-                        The Lamas ;-)
+                        The Lamas
                     </p>
                     <p style="color: #808080; font-size: 12px;">
                         PS: For Videos and Latest Infos:</br>

@@ -21,19 +21,26 @@ Reference number: {{ referenznum }}
 
 Bank Transfer:
 Acrolama KLG
-Tramstrasse 65, 8050 Zürich
+{% if price.price_euro %}
+IBAN:<br>CH94 0022 5225 1202 6660 M<br/>{% else %}
+IBAN:<br/>CH29 0022 5225 1202 6601 B<br/>{% endif %}
+ramstrasse 65, 8050 Zürich
 IBAN: CH29 0022 5225 1202 6601 B
 BIC: UBSWCHZH80A
 
-Find our payment methods and abos at: https://acrolama.ch/info/prices/
+
+{{ book.comment_response|safe }}
+
+
+{% if event.category == "CY" %}Find out more about our abos: https://acrolama.com/info/prices/{% else %}Other Camps and Festivals: www.acrofestivals.ch{% endif %}
 
 See you soon!
 Big hug
-Adrian & Danica
-The Lamas ;)
+{% if event.category == "CA" %}Organization Team{% else %}Adrin + Danica{% endif %}
+The Lamas
 
 ---
-Möchtest du fliegen wie ein Lama? Wir haben verschiedene Acroyoga
+Want to fly like a Lama? Check our Events and Classes!
 Events! Check out: www.acrolama.com
 
 Acrolama GENERAL Whatsapp Group: {% tinycontent_simple 'email_whatsapp' %}
