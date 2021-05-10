@@ -40,7 +40,7 @@ class BookUpdateForm(forms.ModelForm):
 
     class Meta:
         model = Book
-        fields = ["user", "event", "status", "times", "comment", "note"]
+        fields = ["user", "event", "status", "times", "comment", "comment_response", "note"]
         widgets = {
             "times": M2MSelect(),
             "event": BootstrapedSelect2(url="event-autocomplete"),

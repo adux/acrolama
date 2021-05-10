@@ -23,7 +23,7 @@ class Book(models.Model):
     price = models.ForeignKey("project.PriceOption", on_delete=models.PROTECT)
     times = models.ManyToManyField("project.TimeOption")
     comment = models.TextField(max_length=350, null=True, blank=True)
-    comment_rosponse = models.TextField(max_length=350, null=True, blank=True)
+    comment_response = models.TextField(max_length=350, null=True, blank=True)
     accepted_policy = models.BooleanField(default=False)
     status = models.CharField(max_length=15, choices=BOOKINGSTATUS, default="PE", null=True, blank=True,)
     note = models.TextField(max_length=1000, null=True, blank=True)

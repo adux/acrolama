@@ -50,6 +50,18 @@
             </div>
         </div>
         {% endif %}
+        <div class="d-inline text-dark"><a id="addresponse" class="text-primary" >Add response.</a></div>
+        <div id="response" >
+        {% render_field form.comment_response class="form-control" rows="4" %}
+        </div>
+        <script>
+        $("#response").hide();
+        $(document).ready(function(){
+            $("#addresponse").click(function(){
+                $("#response").show();
+            });
+          });
+        </script>
         {% if object.bookduoinfo %}
         <hr>
         <h4>Additional Info</h4>
