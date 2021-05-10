@@ -32,7 +32,7 @@ BIC: UBSWCHZH80A
 {{ book.comment_response|safe }}
 
 
-{% if event.category == "CY" %}Find out more about our abos: https://acrolama.com/info/prices/{% else %}Other Camps and Festivals: www.acrofestivals.ch{% endif %}
+{% if event.category == "CY" %}Find out more about our abos: https://acrolama.com/info/prices/{% else %}Other Camps and Festivals: www.acrofestival.ch{% endif %}
 
 See you soon!
 Big hug
