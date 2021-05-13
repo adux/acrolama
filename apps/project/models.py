@@ -323,11 +323,18 @@ class Event(models.Model):
                 return None
         return regular_days
 
-    def get_timelocations_capsule(self):
+    def get_timelocations_capsule(self, time_locations=None):
         cap = []
+        if time_locations is not None:
+            for obj in time_locations:
+                print(obj.capsule())
+                cap.append(obj.capsule())
+            return cap
+
         for obj in self.time_locations.all():
             print(obj.capsule())
             cap.append(obj.capsule())
+
         return cap
 
     def __str__(self):

@@ -20,8 +20,7 @@ from herdi.utils import staff_check
 from booking.services import book_send_registered
 
 # Models
-from project.models import Event, TimeOption, PriceOption, Irregularity, TimeLocation
-from users.models import User
+from project.models import Event, TimeOption
 
 # Forms
 from project.forms import EventUpdateForm, EventMinimalCreateForm
@@ -58,15 +57,21 @@ class EventDisplay(DetailView):
         context = super().get_context_data(**kwargs)
 
         # Queries
-        exceptions = Irregularity.objects.filter(event__slug=self.object.slug)
-        teachers = User.objects.filter(eventteacher__slug=self.object.slug)
-        prices = PriceOption.objects.filter(event__slug=self.object.slug)
-        timelocations = TimeLocation.objects.filter(event__slug=self.object.slug)
+        # exceptions = Irregularity.objects.filter(event__slug=self.object.slug)
+        # teachers = User.objects.filter(eventteacher__slug=self.object.slug)
+        # prices = PriceOption.objects.filter(event__slug=self.object.slug)
+        # timelocations = TimeLocation.objects.filter(event__slug=self.object.slug)
+        # timeoptions = TimeOption.objects.filter(timelocation__event__slug=self.object.slug)
+
+        exceptions = self.object.irregularities.all()
+        teachers = self.object.teachers.all().select_related('avatar')
+        prices = self.object.price_options.all()
+        time_locations = self.object.time_locations.all().select_related('time_option', 'location__address')
         timeoptions = TimeOption.objects.filter(timelocation__event__slug=self.object.slug)
 
         # Extra Formats
         conditional = self.get_formconditional(prices)
-        timelocations = self.object.get_timelocations_capsule()
+        time_locations = self.object.get_timelocations_capsule(time_locations=time_locations)
 
         # Forms
         form = BookForm(prefix="booking")
@@ -83,7 +88,8 @@ class EventDisplay(DetailView):
         context["formdate"] = formdate
         context["conditional"] = conditional
         context["priceoptions"] = prices
-        context["timelocations"] = timelocations
+        context["timelocations"] = time_locations
+
         return context
 
 
@@ -140,6 +146,7 @@ class EventInterest(SingleObjectMixin, FormView):
 
         # save all m2m of instance
         book_send_registered(instance)
+
         return super().form_valid(form)
 
     def get_success_url(self):
