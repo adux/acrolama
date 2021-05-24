@@ -155,6 +155,7 @@
                 <th>Time</th>
                 <th>Price</th>
                 <th>Status</th>
+                <th></th>
                 <th>User</th>
             </tr>
         </thead>
@@ -165,11 +166,43 @@
                 <td><input type="checkbox" name="check" value="{{obj.id}}"></td>
                 <td><a href="{% url 'booking_update' obj.pk %}?{% pass_get_filter %}">{{obj.pk}}</a></td>
                 <td>{{obj.booked_at|date:"m.d"}}</td>
-                <td>{% if event.category == 'CY' %}<a href="{% url 'class' obj.event.slug %}">{{obj.event.title}}</a>{% else %}<a href="{% url 'event' obj.event.slug %}">{{obj.event.title}}</a>{% endif %}</td>
-                <td>{% for obj in obj.times.all %}{% if obj.regular_day %}{{obj.get_regular_day_display}}: {{obj.class_starttime|date:'G:i'}}{% else %}{{obj.name}}: {{obj.class_starttime|date:'G:i'}}{% endif %}{% endfor %}</td>
-                <td>{{obj.price.name}}</td>
-                <td>{% if obj.status == "PE" %}<span style="color: red;">{{obj.get_status_display}}</span>{% elif obj.status == "PA" %}<span style="color: green;">{{obj.get_status_display}}</span>{% else %}<span style="color: orange;">{{obj.get_status_display}}</span>{% endif %}</td>
-                <td><a href="{% url 'contact_list' %}?user={{obj.user.id}}">{{obj.user.get_full_name}}</a></td>
+                <td>
+                  {% if event.category == 'CY' %}
+                  <a href="{% url 'class' obj.event.slug %}">{{obj.event.title|truncatechars_middle:15}}</a>
+                  {% else %}
+                  <a href="{% url 'event' obj.event.slug %}">{{obj.event.title|truncatechars_middle:15}}</a>
+                  {% endif %}
+                </td>
+                <td>
+                  {% for obj in obj.times.all %}
+                    {% if obj.regular_day %}
+                    {{obj.get_regular_day_display|truncatechars:8}} {{obj.class_starttime|date:'G:i'}}
+                    {% else %}
+                    {{obj.name|truncatechars:8}} {{obj.class_starttime|date:'G:i'}}
+                    {% endif %}
+                  {% endfor %}
+                </td>
+                <td>{{obj.price.name|truncatechars_middle:15}}</td>
+                <td>
+                    {% if obj.status == "PE" %}
+                    <span style="color: red;">{{obj.get_status_display}}</span>
+                    {% elif obj.status == "PA" %}
+                    <span style="color: green;">{{obj.get_status_display}}</span>
+                    {% else %}
+                    <span style="color: orange;">{{obj.get_status_display}}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if obj.flags.comment and not obj.flags.response%}
+                    <i style="color: red" class="far fa-envelope"></i>
+                    {% elif obj.flags.comment and obj.flags.response %}
+                    <i style="color: green" class="far fa-envelope"></i>
+                    {% endif %}
+                    {% if not obj.flags.user %}
+                    <i class="fas fa-user-alt-slash"></i>
+                    {% endif %}
+                </td>
+                <td><a href="{% url 'contact_list' %}?user={{obj.get_user_pk}}">{{obj.get_user_name}}</a></td>
             </tr>
             {% endfor%}
         </tbody>

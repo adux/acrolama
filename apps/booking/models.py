@@ -43,6 +43,14 @@ class Book(models.Model):
 
         raise AttributeError("No user information in booking")
 
+    def flags(self):
+        flags = {
+            "user": (lambda x: True if x.user is not None else False)(self),
+            "comment": (lambda x: True if (x.comment is not None) and (x.comment != '') else False)(self),
+            "response": (lambda x: True if (x.comment_response is not None) and (x.comment != '') else False)(self)
+        }
+        return flags
+
     def get_user_email(self):
         return self.get_user().email
 

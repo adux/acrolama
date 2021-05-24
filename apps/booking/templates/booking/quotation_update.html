@@ -40,7 +40,7 @@
                 <tbody>
                     {% for obj in filtered_list %}
                     <tr>
-                        <td>{{obj.user.get_full_name}}, {{obj.user.id}}</td>
+                        <td>{{obj.get_user_name}}, {{obj.get_user_pk}}</td>
                         <td>{{obj.price.name}}, {{obj.price.price_chf}}</td>
                         <td>{{obj.get_status_display}}</td>
                         <td>{{obj.invoice.get_status_display}}</td>
