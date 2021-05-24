@@ -44,9 +44,17 @@
                 <input type="hidden" name="filtered_date" value="{{filtered_date|date:"Y-m-d"}}">
                 <td><input type="checkbox" name="check" value="{{obj.id}} {% get_attendance_num obj 'get_num' filtered_date %}"></td>
                 <td>{{obj.book.id}}</td>
-                <td>{{obj.book.event.title}}</td>
+                <td>{{obj.book.event.title|truncatechars_middle:20}}</td>
                 <td>{{obj.book.price.name}}</td>
-                <td>{{obj.book.invoice.get_status_display}}</td>
+                <td>
+                    {% if obj.book.invoice.status == "FR" or obj.book.invoice.status == "SR" %}
+                    <span style="color: red;">{{obj.book.invoice.get_status_display}}</span>
+                    {% elif obj.book.invoice.status == "PY" %}
+                    <span style="color: green;">{{obj.book.invoice.get_status_display}}</span>
+                    {% else %}
+                    <span style="color: orange;">{{obj.book.invoice.get_status_display}}</span>
+                    {% endif %}
+                </td>
                 <input type="hidden" name="filtered_event" value="{{obj.book.event.id}}">
             </tr>
             {% endfor%}
