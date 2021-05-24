@@ -107,6 +107,8 @@ def book_create_invoice(book):
 def book_create_attendance(book):
     """
     Creates an Attendance to a particular booking
+    TODO: Check if attandance is more then the cycles of price option and then
+    reduce te amount to the last
     """
     # Get a book
     book = book_get(book)

@@ -31,6 +31,7 @@ from booking.filters import (
 from booking.forms import (
     BookUpdateForm,
     BookCreateForm,
+    BookUserInfoUpdateForm,
     AttendanceUpdateForm,
     QuotationCreateForm,
     QuotationLockForm,
@@ -66,7 +67,8 @@ def bookinglistview(request):
         ),
     )
 
-    form = BookCreateForm()
+    book_form = BookCreateForm(prefix="booking")
+    bookextrauser_form = BookUserInfoUpdateForm(prefix="extrauserinfo")
 
     # Pagination
     paginator = Paginator(booking_filter.qs, 24)  # Show 24 contacts per page.
@@ -79,24 +81,29 @@ def bookinglistview(request):
     except EmptyPage:
         response = paginator.page(paginator.num_pages)
 
-    # Context
-
-    context = {
-        "book_filter": booking_filter,
-        "filter": request.GET,
-        "bookingcreate_form": form,
-        "page_obj": response,
-    }
-
     # Logic
-
     if request.method == "POST":
         if "newbooking" in request.POST:
-            form = BookCreateForm(request.POST or None)
-            if form.is_valid():
-                form.save()
+            book = Book()
+            book_form = BookCreateForm(request.POST or None, prefix="booking", instance=book)
+            if book_form.is_valid():
+                book_form.save()
+
+            if request.POST.get('booking-user'):
+                bookuserinfo = book.bookuserinfo
+                bookextrauser_form = BookUserInfoUpdateForm(
+                    request.POST or None,
+                    prefix="extrauserinfo",
+                    instance=bookuserinfo
+                )
+                if bookextrauser_form.is_valid():
+                    bookextrauser_form.save()
+                else:
+                    book.delete()
+                    book.bookuserinfo.delete()
 
         checked_list = request.POST.getlist("check")
+
         if checked_list is None:
             return
 
@@ -143,6 +150,16 @@ def bookinglistview(request):
                         messages.WARNING,
                         _("Book N°: " + str(book.id) + " is not 'Participant'"),
                     )
+
+    # Context
+
+    context = {
+        "book_filter": booking_filter,
+        "filter": request.GET,
+        "bookcreate_form": book_form,
+        "bookusercreate_form": bookextrauser_form,
+        "page_obj": response,
+    }
 
     return render(request, template, context)
 

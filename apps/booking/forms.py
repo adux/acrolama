@@ -7,6 +7,7 @@ from accounting.models import Invoice
 from users.models import User
 from booking.models import (
     Book,
+    BookUserInfo,
     BookDuoInfo,
     BookDateInfo,
     Attendance,
@@ -53,6 +54,22 @@ class BookUpdateForm(forms.ModelForm):
         if (self.instance.status in ("IN", "PE", "WL", "CA", "SW")) and (new_status == "PA"):
             if not book_is_paid(self.instance.id):
                 raise forms.ValidationError("Error: Cannot update to Participant. Invoice not paid.")
+
+        return cleaned_data
+
+
+class BookUserInfoUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = BookUserInfo
+        fields = ["first_name", "last_name", "phone", "email"]
+
+    def clean(self):
+        cleaned_data = super(BookUserInfoUpdateForm, self).clean()
+
+        for key, item in cleaned_data.items():
+            if not item:
+                raise forms.ValidationError("Error: {} can not be empty.".format(key))
 
         return cleaned_data
 

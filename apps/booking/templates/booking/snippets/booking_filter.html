@@ -60,30 +60,67 @@
                 <div class="card-body">
                     <form action="{% url 'booking_list' %}" method="POST">{% csrf_token %}
                         <div class="row">
-                            {{ bookingcreate_form.non_field_errors }}
+                            {{ bookcreate_form.non_field_errors }}
                             <div class="form-group col-sm-8 col-md-6">
-                                {{ bookingcreate_form.user.errors }}
-                                {{ bookingcreate_form.user.label_tag }}
-                                {{ bookingcreate_form.user}}
-                              <span class="helptext">{{ bookingcreate_form.user.help_text }}</span>
+                                {{ bookcreate_form.user.errors }}
+                                {{ bookcreate_form.user.label_tag }}
+                                {{ bookcreate_form.user}}
+                              <span class="helptext">{{ bookcreate_form.user.help_text }}</span>
                             </div>
                             <div class="form-group col-sm-8 col-md-6">
-                                {{ bookingcreate_form.event.errors }}
-                                {{ bookingcreate_form.event.label_tag }}
-                                {{ bookingcreate_form.event }}
-                              <span class="helptext">{{ bookingcreate_form.event.help_text }}</span>
+                                {{ bookcreate_form.event.errors }}
+                                {{ bookcreate_form.event.label_tag }}
+                                {{ bookcreate_form.event }}
+                              <span class="helptext">{{ bookcreate_form.event.help_text }}</span>
                             </div>
                             <div class="form-group col-sm-8 col-md-6">
-                                {{ bookingcreate_form.times.errors }}
-                                {{ bookingcreate_form.times.label_tag }}
-                                {{ bookingcreate_form.times|addclass:"form-control"  }}
-                              <span class="helptext">{{ bookingcreate_form.times.help_text }}</span>
+                                {{ bookcreate_form.times.errors }}
+                                {{ bookcreate_form.times.label_tag }}
+                                {{ bookcreate_form.times|addclass:"form-control"  }}
+                              <span class="helptext">{{ bookcreate_form.times.help_text }}</span>
                             </div>
                             <div class="form-group col-sm-8 col-md-6">
-                                {{ bookingcreate_form.price.errors }}
-                                {{ bookingcreate_form.price.label_tag }}
-                                {{ bookingcreate_form.price|addclass:"form-control"  }}
-                              <span class="helptext">{{ bookingcreate_form.times.help_text }}</span>
+                                {{ bookcreate_form.price.errors }}
+                                {{ bookcreate_form.price.label_tag }}
+                                {{ bookcreate_form.price|addclass:"form-control"  }}
+                              <span class="helptext">{{ bookcreate_form.price.help_text }}</span>
+                            </div>
+                        </div>
+                            <div class="row">
+                              <div class="col"><hr></div>
+                              <div class="col-auto">Extern User Info</div>
+                              <div class="col"><hr></div>
+                            </div>
+
+                        <div class="row">
+                            {% if bookusercreate_form.non_field_errors %}
+                            <div class="form-group col-sm-12 col-md-12">
+                              {{ bookusercreate_form.non_field_errors }}
+                            </div>
+                            {% endif %}
+                            <div class="form-group col-sm-8 col-md-6">
+                                {{ bookusercreate_form.first_name.errors }}
+                                {{ bookusercreate_form.first_name.label_tag }}
+                                {{ bookusercreate_form.first_name|addclass:"form-control"  }}
+                              <span class="helptext">{{ bookusercreate_form.first_name.help_text }}</span>
+                            </div>
+                            <div class="form-group col-sm-8 col-md-6">
+                                {{ bookusercreate_form.last_name.errors }}
+                                {{ bookusercreate_form.last_name.label_tag }}
+                                {{ bookusercreate_form.last_name|addclass:"form-control"  }}
+                              <span class="helptext">{{ bookusercreate_form.last_name.help_text }}</span>
+                            </div>
+                            <div class="form-group col-sm-8 col-md-6">
+                                {{ bookusercreate_form.email.errors }}
+                                {{ bookusercreate_form.email.label_tag }}
+                                {{ bookusercreate_form.email|addclass:"form-control"  }}
+                              <span class="helptext">{{ bookusercreate_form.first_name.help_text }}</span>
+                            </div>
+                            <div class="form-group col-sm-8 col-md-6">
+                                {{ bookusercreate_form.phone.errors }}
+                                {{ bookusercreate_form.phone.label_tag }}
+                                {{ bookusercreate_form.phone|addclass:"form-control"  }}
+                              <span class="helptext">{{ bookusercreate_form.phone.help_text }}</span>
                             </div>
                         </div>
                     <button type="submit" name="newbooking" class="btn btn-info">

@@ -19,7 +19,7 @@ BOOKINGSTATUS = [
 
 class Book(models.Model):
     event = models.ForeignKey("project.Event", on_delete=models.PROTECT)
-    user = models.ForeignKey("users.User", on_delete=models.PROTECT)
+    user = models.ForeignKey("users.User", blank=True, null=True, on_delete=models.PROTECT)
     price = models.ForeignKey("project.PriceOption", on_delete=models.PROTECT)
     times = models.ManyToManyField("project.TimeOption")
     comment = models.TextField(max_length=350, null=True, blank=True)
@@ -34,8 +34,39 @@ class Book(models.Model):
     def get_times(self):
         return ",\n".join([p.name for p in self.times.all()])
 
+    def get_user(self):
+        if self.user:
+            return self.user
+
+        if hasattr(self, 'getuserinfo'):
+            return self.getuserinfo
+
+        raise AttributeError("No user information in booking")
+
     def __str__(self):
         return "%s: %s - %s" % (self.pk, self.event.title, self.user.get_full_name())
+
+
+class BookUserInfo(models.Model):
+    book = models.OneToOneField("booking.Book", on_delete=models.CASCADE)
+    user = models.ForeignKey("users.User", blank=True, null=True, on_delete=models.PROTECT)
+    first_name = models.CharField(_("first name"), max_length=30, blank=True, null=True)
+    last_name = models.CharField(_("last name"), max_length=30, blank=True, null=True)
+    phone = models.CharField(max_length=50, blank=True, null=True)
+    email = models.EmailField(_("email address"), blank=True, null=True)
+
+
+# TODO: If booking gets updated to an User remove the UserInfo associated
+def create_userinfo(sender, instance, created, *args, **kwargs):
+    """
+    Make sure that if there is no user in the booking we have an associated
+    userinfo to be filled in
+    """
+    if created and (instance.user is None):
+        BookUserInfo.objects.create(book=instance)
+
+
+post_save.connect(create_userinfo, sender=Book)
 
 
 class BookDuoInfo(models.Model):
