@@ -63,7 +63,7 @@
         {% for obj in page_obj %}
         <tr>
             <td><a href="{% url 'accounting_update' obj.pk %}?{% pass_get_filter %}">{{ obj.pk }}</a></td>
-            <td>{% if obj.partner %}{{ obj.partner.name}}{% else %}{{obj.book.user.get_full_name}}{% endif %}</td>
+            <td>{% if obj.partner %}{{ obj.partner.name}}{% else %}{{obj.book.get_user_name}}{% endif %}</td>
             <td>{% if obj.book %}{{obj.book.event.title|truncatechars:25}}{% else %}-{% endif %}</td>
             <td>{% now "Ymd" as today %}
               {% if obj.pay_till|date:"Ymd" < today %}

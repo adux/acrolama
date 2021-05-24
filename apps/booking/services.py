@@ -297,7 +297,7 @@ def book_create_next(book, status):
     obj.pk = None
     obj.id = None
     # Event resolved below
-    obj.user = book.user
+    obj.user = book.get_user()
     obj.price = book.price
     # Times resolved below
     obj.note = "\nAutomatic created booking, please report if error."
@@ -379,11 +379,11 @@ def book_send_registered(book):
     sender = "notmonkeys@acrolama.com"
     bcc = ["acrolama@acrolama.com"]
     subject = "Acrolama - Booking received - " + str(book.event.title)
-    to = [book.user.email]
+    to = [book.get_user_email()]
 
     p = {
         "event": book.event,
-        "user": book.user,
+        "user": book.get_user(),
     }
 
     msg_plain = render_to_string(settings.BASE_DIR + "/apps/booking/templates/booking/email_registration.txt", p,)
@@ -404,7 +404,7 @@ def book_send_informed(book):
     sender = "notmonkeys@acrolama.com"
     bcc = ["acrolama@acrolama.com"]
     subject = "Acrolama - Confirmation - " + str(book.event.title)
-    to = [book.user.email]
+    to = [book.get_user_email()]
 
     irregularities = Irregularity.objects.filter(event__slug=book.event.slug)
 
@@ -413,7 +413,7 @@ def book_send_informed(book):
     p = {
         "book": book,
         "event": book.event,
-        "user": book.user,
+        "user": book.get_user(),
         "price": book.price,
         "referenznum": book.invoice.referral_code,
         "pay_till": book.invoice.pay_till,
@@ -434,7 +434,7 @@ def book_send_reminder(book):
     sender = "notmonkeys@acrolama.com"
     bcc = ["acrolama@acrolama.com"]
     subject = "Acrolama - Reminder - " + str(book.event.title)
-    to = [book.user.email]
+    to = [book.get_user_email()]
 
     irregularities = Irregularity.objects.filter(event__slug=book.event.slug)
     location = book_get_location(book)
@@ -446,7 +446,7 @@ def book_send_reminder(book):
 
     p = {
         "event": book.event,
-        "user": book.user,
+        "user": book.get_user(),
         "times": book.times.all(),
         "location": location,
         "abocount": abocount,

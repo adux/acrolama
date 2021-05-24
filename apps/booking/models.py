@@ -38,13 +38,26 @@ class Book(models.Model):
         if self.user:
             return self.user
 
-        if hasattr(self, 'getuserinfo'):
-            return self.getuserinfo
+        if hasattr(self, 'bookuserinfo'):
+            return self.bookuserinfo
 
         raise AttributeError("No user information in booking")
 
+    def get_user_email(self):
+        return self.get_user().email
+
+    def get_user_phone(self):
+        return self.get_user().phone
+
+    def get_user_name(self):
+        user = self.get_user()
+        return "{} {}".format(user.first_name, user.last_name)
+
+    def get_user_pk(self):
+        return self.get_user().pk
+
     def __str__(self):
-        return "%s: %s - %s" % (self.pk, self.event.title, self.user.get_full_name())
+        return "%s: %s - %s" % (self.pk, self.event.title, self.get_user_name())
 
 
 class BookUserInfo(models.Model):
@@ -95,7 +108,7 @@ class Attendance(models.Model):
     attendance_check = ArrayField(models.BooleanField())
 
     def __str__(self):
-        return "%s - %s" % (self.book.event.title, self.book.user,)
+        return "%s - %s" % (self.book.event.title, self.book.get_user_name(),)
 
     def get_check(self, date):
         for num, d in enumerate(self.attendance_date):

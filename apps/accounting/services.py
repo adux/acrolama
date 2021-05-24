@@ -52,11 +52,11 @@ def invoice_send_reminder(invoice):
     sender = "notmonkeys@acrolama.com"
     bcc = ["acrolama@acrolama.com"]
     subject = "Acrolama - Payment Reminder - " + str(invoice.book.event.title)
-    to = [invoice.book.user.email]
+    to = [invoice.book.get_user_email()]
 
     context = {
         "invoice": invoice,
-        "user": invoice.book.user,
+        "user": invoice.book.get_user(),
         "event": invoice.book.event,
     }
 
@@ -78,11 +78,11 @@ def invoice_send_paid(invoice):
     sender = "notmonkeys@acrolama.com"
     bcc = ["acrolama@acrolama.com"]
     subject = "Acrolama - Payment Confirmation -  " + str(invoice.book.event.title)
-    to = [invoice.book.user.email]
+    to = [invoice.book.get_user_email()]
 
     context = {
         "event": invoice.book.event,
-        "user": invoice.book.user,
+        "user": invoice.book.get_user(),
         "price": invoice.book.price,
         "times": invoice.book.times.all,
     }

@@ -139,7 +139,7 @@ class Invoice(models.Model):
 
 def invoice_pre_save_referenz(sender, instance, *args, **kwargs):
     if not instance.pk:
-        referenzstr = '{}00{}'.format(instance.book.user.pk, instance.book.pk)
+        referenzstr = '{}00{}'.format(instance.book.get_user_pk(), instance.book.pk)
         instance.referral_code = accounting.utils.finalize_referenz(referenzstr)
 
 

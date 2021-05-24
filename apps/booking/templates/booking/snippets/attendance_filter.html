@@ -41,7 +41,7 @@
         {% for obj in page_obj %}
         <tr>
             <td><a href="{% url 'attendance_update' obj.pk %}?{% pass_get_filter %}">{{obj.pk}}</a></td>
-            <td>{{obj.book.user.get_full_name}}</td>
+            <td>{{obj.book.get_user_name}}</td>
             <td>{{obj.book.event.title}}</td>
             <td>{% for obj in obj.book.times.all %}{{obj.name}}{% endfor %}</td>
             <td>{{obj.book.price.name}}</td>
