@@ -26,6 +26,27 @@ from herdi.widgets import (
 )
 
 
+def clean_booking(clean_data):
+    event = clean_data.get('event')
+    price = clean_data.get('price')
+    times = clean_data.get('times')
+
+    if len(times) > 1:
+        raise forms.ValidationError("Error: Select only one time. Deprecated")
+
+    event_to = [tl.time_option for tl in event.time_locations.all()]
+
+    if times.first() not in event_to:
+        raise forms.ValidationError("Error: Selected Time Option not in Event. Options are: {}".format(event_to))
+
+    event_po = [po for po in event.price_options.all()]
+
+    if price not in event_po:
+        raise forms.ValidationError("Error: Selected Price not in Event. Options are: {}".format(event_po))
+
+    return clean_data
+
+
 class AttendanceUpdateForm(forms.ModelForm):
 
     class Meta:
@@ -91,6 +112,11 @@ class BookCreateForm(forms.ModelForm):
             "event": BootstrapedSelect2(url="event-autocomplete"),
             "user": BootstrapedSelect2(url="user-autocomplete",),
         }
+
+    def clean(self):
+        cleaned_data = super(BookCreateForm, self).clean()
+        cleaned_data = clean_booking(cleaned_data)
+        return cleaned_data
 
 
 class TeacherBookCreateForm(forms.ModelForm):

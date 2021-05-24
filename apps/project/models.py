@@ -327,12 +327,10 @@ class Event(models.Model):
         cap = []
         if time_locations is not None:
             for obj in time_locations:
-                print(obj.capsule())
                 cap.append(obj.capsule())
             return cap
 
         for obj in self.time_locations.all():
-            print(obj.capsule())
             cap.append(obj.capsule())
 
         return cap
