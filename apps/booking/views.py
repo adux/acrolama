@@ -262,6 +262,7 @@ def attendancelistview(request):
             Attendance.objects.all()
             .select_related("book", "book__event", "book__user", "book__price")
             .prefetch_related("book__times")
+            .order_by("-book__booked_at")
         ),
     )
 
