@@ -89,7 +89,7 @@ def bookinglistview(request):
             if book_form.is_valid():
                 book_form.save()
 
-            if request.POST.get('booking-user'):
+            if not request.POST.get('booking-user'):
                 bookuserinfo = book.bookuserinfo
                 bookextrauser_form = BookUserInfoUpdateForm(
                     request.POST or None,
@@ -397,8 +397,6 @@ class AttendanceUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
 
     def test_func(self):
         return staff_check(self.request.user)
-
-
 
 
 @login_required

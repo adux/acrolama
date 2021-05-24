@@ -26,10 +26,10 @@ from herdi.widgets import (
 )
 
 
-def clean_booking(clean_data):
-    event = clean_data.get('event')
-    price = clean_data.get('price')
-    times = clean_data.get('times')
+def clean_booking(cleaned_data):
+    event = cleaned_data.get('event')
+    price = cleaned_data.get('price')
+    times = cleaned_data.get('times')
 
     if len(times) > 1:
         raise forms.ValidationError("Error: Select only one time. Deprecated")
@@ -44,7 +44,7 @@ def clean_booking(clean_data):
     if price not in event_po:
         raise forms.ValidationError("Error: Selected Price not in Event. Options are: {}".format(event_po))
 
-    return clean_data
+    return cleaned_data
 
 
 class AttendanceUpdateForm(forms.ModelForm):
