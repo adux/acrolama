@@ -6,7 +6,6 @@ from django.utils.translation import ugettext_lazy as _
 
 from herdi.fields import ArrayField
 
-
 BOOKINGSTATUS = [
     ("PE", "Pending"),
     ("WL", "Waiting List"),

@@ -35,16 +35,35 @@
         <th>Event</th>
         <th>Time Option</th>
         <th>Price Option</th>
+        <th>Book Status</th>
         <th>Attd.</th>
     </thead>
     <tbody>
-        {% for obj in page_obj %}
-        <tr>
+        {% for obj in page_obj %}{% if obj.book.status == "CA" %}
+        <tr style="text-decoration: line-through;">{% else %}
+        <tr>{% endif %}
             <td><a href="{% url 'attendance_update' obj.pk %}?{% pass_get_filter %}">{{obj.pk}}</a></td>
             <td>{{obj.book.get_user_name}}</td>
-            <td>{{obj.book.event.title}}</td>
-            <td>{% for obj in obj.book.times.all %}{{obj.name}}{% endfor %}</td>
+            <td>{{obj.book.event.title|truncatechars_middle:15}}</td>
+            <td>
+              {% for obj in obj.book.times.all %}
+                {% if obj.regular_day %}
+                  {{obj.get_regular_day_display|truncatechars:8}} {{obj.class_starttime|date:'G:i'}}
+                {% else %}
+                    {{obj.name|truncatechars:8}} {{obj.class_starttime|date:'G:i'}}
+                {% endif %}
+              {% endfor %}
+            </td>
             <td>{{obj.book.price.name}}</td>
+            <td>
+                {% if obj.book.status == "PE" %}
+                <span style="color: red;">{{obj.book.get_status_display}}</span>
+                {% elif obj.book.status == "PA" %}
+                <span style="color: green;">{{obj.book.get_status_display}}</span>
+                {% else %}
+                <span style="color: orange;">{{obj.book.get_status_display}}</span>
+                {% endif %}
+            </td>
             <td>{{obj.count_attendance}}/{{obj.count_dates}}</td>
         </tr>
         {% endfor%}
