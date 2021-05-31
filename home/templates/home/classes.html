@@ -33,7 +33,7 @@
                     <!-- KEY -->
                     {% for key, objs in current.items %}
                         {% if objs %}
-                            <h3>{{ key }}</h3>
+                            <h3>· {{ key }}</h3>
                                 {% for obj in objs %}
                             <article class="blog-item-holder relative">
                                 <a href="{{ obj.get_absolute_url }}"><span class="link-spanner"></span></a>
