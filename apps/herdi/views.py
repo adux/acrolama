@@ -1,5 +1,7 @@
 import datetime
 
+from allauth.account.models import EmailAddress
+
 from dal import autocomplete
 from django.db.models import Q  # Queries with OR
 from django.core.cache import cache
@@ -83,7 +85,7 @@ def contactlistview(request):
     )
 
     # Pagination
-    paginator = Paginator(booking_filter.qs, 30)  # Show 24 contacts per page.
+    paginator = Paginator(booking_filter.qs, 34)  # Show 24 contacts per page.
     page = request.GET.get("page")
 
     try:
@@ -160,7 +162,8 @@ class UserAutocomplete(autocomplete.Select2QuerySetView):
         if not herd_check(self.request.user):
             return User.objects.none()
 
-        qs = User.objects.all().order_by("last_name")
+        none_verified = EmailAddress.objects.filter(verified=False).values_list('user_id', flat=True)
+        qs = User.objects.exclude(pk__in=none_verified).order_by("last_name")
 
         if self.q:
             qs = qs.filter(
@@ -258,7 +261,6 @@ class PriceOptionAutocomplete(autocomplete.Select2QuerySetView):
         if not staff_check(self.request.user):
             return PriceOption.objects.none()
 
-        # qs = PriceOption.objects.all().order_by("name")
         qs = cache.get_or_set(
             "cache_price_options_all", PriceOption.objects.all(), 120
         )

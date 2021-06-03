@@ -60,8 +60,9 @@
         <th>Methode</th>
     </thead>
     <tbody>
-        {% for obj in page_obj %}
-        <tr>
+        {% for obj in page_obj %}{% if obj.status == "CA" %}
+        <tr style="text-decoration: line-through;">{% else %}
+        <tr>{% endif %}
             <td><a href="{% url 'accounting_update' obj.pk %}?{% pass_get_filter %}">{{ obj.pk }}</a></td>
             <td>{% if obj.partner %}{{ obj.partner.name}}{% else %}{{obj.book.get_user_name}}{% endif %}</td>
             <td>{% if obj.book %}{{obj.book.event.title|truncatechars:25}}{% else %}-{% endif %}</td>

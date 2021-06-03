@@ -4,7 +4,16 @@
 {% block content %}
 <form id="update" method="POST">{% csrf_token %}
     <div class="card card-body bg-light">
-        <h4>{{object.price.name}} N°{{object.pk}} by {{object.get_user_name}} - {{object.booked_at|date:'M. dS'}} {% if object.invoice %}, with <a href="{% url 'accounting_update' object.invoice.pk %}?{% pass_get_filter %}">Invoice N°{{object.invoice.pk}}</a>{% else %}No Invoice{% endif %}{% if object.attendance %} and <a href="{% url 'attendance_update' object.attendance.pk %}?{% pass_get_filter %}">Attendance N°{{object.attendance.pk}}</a> {% endif %}</h4>
+      <h6 class="text-right">{{object.booked_at|date:'l, jS  \o\f F Y'}}</h6>
+          <p><h2>Book N°{{object.pk}}
+            {% if object.invoice %}
+            <small>Invoice N°<a href="{% url 'accounting_update' object.invoice.pk %}?{% pass_get_filter %}">{{object.invoice.pk}}</a></small>
+            {% endif %}
+            {% if object.attendance %}
+            <small>Attendance N°<a href="{% url 'attendance_update' object.attendance.pk %}?{% pass_get_filter %}">{{object.attendance.pk}}</a></small>
+            {% endif %}</h2>
+            <h5>by <a href="{% url 'contact_list' %}?magic={{object.get_user_pk}}">{{object.get_user_name}}</a></h5>
+          </p>
         <div class="row">
             <div class="col">
                 {% if object.informed_at %}
@@ -24,6 +33,7 @@
                 </script>
             </div>
         </div>
+        <hr>
         <div class="row">
             <div class="form-group col-sm-4 col-md-3">
               {{ form.user.label_tag }}

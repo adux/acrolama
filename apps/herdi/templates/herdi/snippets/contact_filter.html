@@ -4,8 +4,8 @@
         <form method="GET">
             <div class="row">
                 <div class="form-group col-sm-4 col-md-2">
-                {{ book_filter.form.id.label_tag }}
-                {% render_field book_filter.form.id class="form-control" %}
+                {{ book_filter.form.magic.label_tag }}
+                {% render_field book_filter.form.magic class="form-control" %}
                 </div>
                 <div class="form-group col-sm-4 col-md-4">
                 {{ book_filter.form.user.label_tag }}
@@ -48,17 +48,24 @@
         <th>Name</th>
         <th>Email</th>
         <th>Phone</th>
-        <th>Status</th>
     </thead>
     <tbody>
         {% for obj in page_obj %}
+        {% if obj.user %}
         <tr>
             <td>{{obj.user.pk}}</td>
             <td>{{obj.user.get_full_name}}</td>
             <td>{{obj.user.email}}</td>
             <td>{{obj.user.phone}}</td>
-            <td>{{obj.get_status_display}}</td>
         </tr>
+        {% else %}
+        <tr>
+            <td>{{obj.bookuserinfo.pk}}</td>
+            <td>{{obj.bookuserinfo.first_name}}{{obj.bookuserinfo.last_name}}</td>
+            <td>{{obj.bookuserinfo.email}}</td>
+            <td>{{obj.bookuserinfo.phone}}</td>
+        </tr>
+        {% endif %}
         {% endfor%}
     </tbody>
 </table>

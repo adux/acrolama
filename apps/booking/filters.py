@@ -83,8 +83,10 @@ class AttendanceDailyFilter(django_filters.FilterSet):
 
 
 class BookFilter(django_filters.FilterSet):
+    magic = django_filters.CharFilter(label='Magic Box', method='filter_by_all_name_fields')
+
     user = django_filters.ModelChoiceFilter(
-        queryset=User.objects.all(), widget=BootstrapedSelect2(url=("user-autocomplete"))
+        label='Registered User', queryset=User.objects.all(), widget=BootstrapedSelect2(url=("user-autocomplete"))
     )
     event = django_filters.ModelChoiceFilter(
         queryset=Event.objects.all(), widget=BootstrapedSelect2(url="event-autocomplete",)
@@ -106,7 +108,7 @@ class BookFilter(django_filters.FilterSet):
 
     class Meta:
         model = Book
-        fields = {"id", "status", "times", "event__level"}
+        fields = {"status", "times", "event__level"}
 
     def filter_by_all_name_fields(self, queryset, name, value):
         return queryset.filter(
@@ -114,6 +116,10 @@ class BookFilter(django_filters.FilterSet):
             | Q(user__last_name__icontains=value)
             | Q(user__email__icontains=value)
             | Q(user__id__icontains=value)
+            | Q(bookuserinfo__first_name__icontains=value)
+            | Q(bookuserinfo__last_name__icontains=value)
+            | Q(bookuserinfo__email__icontains=value)
+            | Q(bookuserinfo__id__icontains=value)
         )
 
 
