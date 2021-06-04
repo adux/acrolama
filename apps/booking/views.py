@@ -86,21 +86,24 @@ def bookinglistview(request):
         if "newbooking" in request.POST:
             book = Book()
             book_form = BookCreateForm(request.POST or None, prefix="booking", instance=book)
+
             if book_form.is_valid():
                 book_form.save()
 
-            if not request.POST.get('booking-user'):
-                bookuserinfo = book.bookuserinfo
-                bookextrauser_form = BookUserInfoUpdateForm(
-                    request.POST or None,
-                    prefix="extrauserinfo",
-                    instance=bookuserinfo
-                )
-                if bookextrauser_form.is_valid():
-                    bookextrauser_form.save()
-                else:
-                    book.delete()
-                    book.bookuserinfo.delete()
+                if not request.POST.get('booking-user'):
+                    bookuserinfo = book.bookuserinfo
+
+                    bookextrauser_form = BookUserInfoUpdateForm(
+                        request.POST or None,
+                        prefix="extrauserinfo",
+                        instance=bookuserinfo
+                    )
+
+                    if bookextrauser_form.is_valid():
+                        bookextrauser_form.save()
+                    else:
+                        book.delete()
+                        book.bookuserinfo.delete()
 
         checked_list = request.POST.getlist("check")
 
