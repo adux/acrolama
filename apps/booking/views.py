@@ -147,6 +147,20 @@ def bookinglistview(request):
                     instance_duo = bookduo_form.save(commit=False)
                     instance_duo.book = book
                     instance_duo.save()
+                else:
+                    book.delete()
+                    book.bookuserinfo.delete()
+                    context = {
+                        "book_filter": booking_filter,
+                        "filter": request.GET,
+                        "bookcreate_form": book_form,
+                        "bookusercreate_form": bookextrauser_form,
+                        "bookduocreate_form": bookduo_form,
+                        "bookdatecreate_form": bookdate_form,
+                        "page_obj": response,
+                    }
+
+                    return render(request, template, context)
 
             if price_option.single_date:
                 bookdate_form = BookDateInfoForm(request.POST or None, prefix="extradateinfo")
@@ -154,6 +168,18 @@ def bookinglistview(request):
                     instance_date = bookdate_form.save(commit=False)
                     instance_date.book = book
                     instance_date.save()
+                else:
+                    book.delete()
+                    book.bookuserinfo.delete()
+                    context = {
+                        "book_filter": booking_filter,
+                        "filter": request.GET,
+                        "bookcreate_form": book_form,
+                        "bookusercreate_form": bookextrauser_form,
+                        "bookduocreate_form": bookduo_form,
+                        "bookdatecreate_form": bookdate_form,
+                        "page_obj": response,
+                    }
 
         checked_list = request.POST.getlist("check")
 
