@@ -24,7 +24,7 @@ from project.models import Event, TimeOption
 
 # Forms
 from project.forms import EventUpdateForm, EventMinimalCreateForm
-from booking.forms import BookForm, BookDuoInfoForm, BookDateInfoForm
+from booking.forms import PublicBookForm, BookDuoInfoForm, BookDateInfoForm
 
 # Filters
 from project.filters import EventFilter
@@ -74,7 +74,7 @@ class EventDisplay(DetailView):
         time_locations = self.object.get_timelocations_capsule(time_locations=time_locations)
 
         # Forms
-        form = BookForm(prefix="booking")
+        form = PublicBookForm(prefix="booking")
         form.fields["price"].queryset = prices
         form.fields["times"].queryset = timeoptions
         formduo = BookDuoInfoForm(prefix="duo")
@@ -99,12 +99,12 @@ class EventInterest(SingleObjectMixin, FormView):
     """
 
     template_name = "project/event_detail.html"
-    form_class = BookForm
+    form_class = PublicBookForm
     prefix = "booking"
     model = Event
 
     def post(self, request, *args, **kwargs):
-        form = BookForm(self.request.POST, prefix="booking")
+        form = PublicBookForm(self.request.POST, prefix="booking")
         if form.is_valid():
             return self.form_valid(form)
         else:

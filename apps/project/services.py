@@ -1,4 +1,4 @@
-from project.models import TimeLocation, Event
+from project.models import TimeLocation, Event, PriceOption
 
 
 def timelocation_get(tl):
@@ -24,3 +24,15 @@ def event_get(event):
     # if its a id get the book
     if event_pk:
         return Event.objects.get(pk=event_pk)
+
+
+def priceoption_get(po):
+    # If its str or int treat it as id
+    if isinstance(po, (str, int)):
+        event_pk = int(po)
+    else:
+        return po
+
+    # if its a id get the book
+    if event_pk:
+        return PriceOption.objects.get(pk=po)

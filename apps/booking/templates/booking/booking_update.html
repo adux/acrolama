@@ -47,6 +47,10 @@
               {% render_field form.status class="form-control" %}
             </div>
             <div class="form-group col-sm-4 col-md-5">
+            {{ form.price.label_tag }}
+            {% render_field form.price class="form-control" %}
+            </div>
+            <div class="form-group col-sm-4 col-md-5">
             {{ form.times.label_tag }}
             {% render_field form.times class="form-control" %}
             </div>
@@ -73,19 +77,23 @@
         </script>
         {% if object.bookduoinfo %}
         <hr>
-        <h4>Additional Info</h4>
         <div class="row">
-            <div class="d-inline p-2 text-dark">First name: {{object.bookduoinfo.first_name}}</div>
-            <div class="d-inline p-2 text-dark">Last name: {{object.bookduoinfo.last_name}}</div>
-            <div class="d-inline p-2 text-dark">Email: {{object.bookduoinfo.email}}</div>
-            <div class="d-inline p-2 text-dark">Phone: {{object.bookduoinfo.phone}}</div>
+            <div class="form-group col-sm-12 col-md-12">
+              <h4>Additional Info</h4>
+              <div class="d-inline text-dark">First name: {{object.bookduoinfo.first_name}}</div>
+              <div class="d-inline text-dark">Last name: {{object.bookduoinfo.last_name}}</div>
+              <div class="d-inline text-dark">Email: {{object.bookduoinfo.email}}</div>
+              <div class="d-inline text-dark">Phone: {{object.bookduoinfo.phone}}</div>
+            </div>
         </div>
         {% endif %}
         {% if object.bookdateinfo %}
         <hr>
-        <h4>Additional Info</h4>
         <div class="row">
-            <div class="d-inline p-2 text-dark">Single date: {{object.bookdateinfo.single_date}}</div>
+            <div class="form-group col-sm-12 col-md-12">
+            <h4>Additional Info</h4>
+              <div class="d-inline text-dark">Single date: {{object.bookdateinfo.single_date}}</div>
+            </div>
         </div>
         {% endif %}
         <hr>

@@ -31,7 +31,9 @@ from booking.filters import (
 from booking.forms import (
     BookUpdateForm,
     BookCreateForm,
-    BookUserInfoUpdateForm,
+    BookDuoInfoForm,
+    BookDateInfoForm,
+    BookUserInfoForm,
     AttendanceUpdateForm,
     QuotationCreateForm,
     QuotationLockForm,
@@ -50,7 +52,7 @@ from booking.services import (
     update_lastbook_abocounter,
     attendance_toggle_check
 )
-from project.services import event_get, timelocation_get
+from project.services import event_get, timelocation_get, priceoption_get
 
 
 @login_required
@@ -68,7 +70,9 @@ def bookinglistview(request):
     )
 
     book_form = BookCreateForm(prefix="booking")
-    bookextrauser_form = BookUserInfoUpdateForm(prefix="extrauserinfo")
+    bookextrauser_form = BookUserInfoForm(prefix="extrauserinfo")
+    bookduo_form = BookDuoInfoForm(prefix="extrduoinfo")
+    bookdate_form = BookDateInfoForm(prefix="extradateinfo")
 
     # Pagination
     paginator = Paginator(booking_filter.qs, 24)  # Show 24 contacts per page.
@@ -87,23 +91,69 @@ def bookinglistview(request):
             book = Book()
             book_form = BookCreateForm(request.POST or None, prefix="booking", instance=book)
 
-            if book_form.is_valid():
-                book_form.save()
+            if not book_form.is_valid():
+                context = {
+                    "book_filter": booking_filter,
+                    "filter": request.GET,
+                    "bookcreate_form": book_form,
+                    "bookusercreate_form": bookextrauser_form,
+                    "bookduocreate_form": bookduo_form,
+                    "bookdatecreate_form": bookdate_form,
+                    "page_obj": response,
+                }
 
-                if not request.POST.get('booking-user'):
-                    bookuserinfo = book.bookuserinfo
+                return render(request, template, context)
 
-                    bookextrauser_form = BookUserInfoUpdateForm(
-                        request.POST or None,
-                        prefix="extrauserinfo",
-                        instance=bookuserinfo
-                    )
+            book_form.save()  # this create a bookuserinfo
 
-                    if bookextrauser_form.is_valid():
-                        bookextrauser_form.save()
-                    else:
-                        book.delete()
-                        book.bookuserinfo.delete()
+            if not request.POST.get('booking-user'):
+                """
+                This method works since we initiate at the model level
+                and instance of the bookuserinfo for it to basically not get lost
+                none the less. We don't do the same for duo or date ...
+                Maybe we should ?
+                """
+                # TODO: Check the method commented up there
+                bookuserinfo = book.bookuserinfo
+
+                bookextrauser_form = BookUserInfoForm(
+                    request.POST or None,
+                    prefix="extrauserinfo",
+                    instance=bookuserinfo
+                )
+
+                if bookextrauser_form.is_valid():
+                    bookextrauser_form.save()
+                else:
+                    book.delete()
+                    book.bookuserinfo.delete()
+                    context = {
+                        "book_filter": booking_filter,
+                        "filter": request.GET,
+                        "bookcreate_form": book_form,
+                        "bookusercreate_form": bookextrauser_form,
+                        "bookduocreate_form": bookduo_form,
+                        "bookdatecreate_form": bookdate_form,
+                        "page_obj": response,
+                    }
+
+                    return render(request, template, context)
+
+            price_option = priceoption_get(request.POST.get('booking-price'))
+
+            if price_option.duo:
+                bookduo_form = BookDuoInfoForm(request.POST or None, prefix="extraduoinfo")
+                if bookduo_form.is_valid():
+                    instance_duo = bookduo_form.save(commit=False)
+                    instance_duo.book = book
+                    instance_duo.save()
+
+            if price_option.single_date:
+                bookdate_form = BookDateInfoForm(request.POST or None, prefix="extradateinfo")
+                if bookdate_form.is_valid():
+                    instance_date = bookdate_form.save(commit=False)
+                    instance_date.book = book
+                    instance_date.save()
 
         checked_list = request.POST.getlist("check")
 
@@ -161,6 +211,8 @@ def bookinglistview(request):
         "filter": request.GET,
         "bookcreate_form": book_form,
         "bookusercreate_form": bookextrauser_form,
+        "bookduocreate_form": bookduo_form,
+        "bookdatecreate_form": bookdate_form,
         "page_obj": response,
     }
 

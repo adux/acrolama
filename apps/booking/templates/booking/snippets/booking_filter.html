@@ -86,12 +86,11 @@
                               <span class="helptext">{{ bookcreate_form.price.help_text }}</span>
                             </div>
                         </div>
-                            <div class="row">
-                              <div class="col"><hr></div>
-                              <div class="col-auto">Extern User Info</div>
-                              <div class="col"><hr></div>
-                            </div>
-
+                        <div class="row">
+                          <div class="col"><hr></div>
+                          <div class="col-auto">Extern User Info</div>
+                          <div class="col"><hr></div>
+                        </div>
                         <div class="row">
                             {% if bookusercreate_form.non_field_errors %}
                             <div class="form-group col-sm-12 col-md-12">
@@ -121,6 +120,60 @@
                                 {{ bookusercreate_form.phone.label_tag }}
                                 {{ bookusercreate_form.phone|addclass:"form-control"  }}
                               <span class="helptext">{{ bookusercreate_form.phone.help_text }}</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col"><hr></div>
+                            <div class="col-auto">Duo User Info</div>
+                            <div class="col"><hr></div>
+                        </div>
+                        <div class="row">
+                            {% if bookduocreate_form.non_field_errors %}
+                            <div class="form-group col-sm-12 col-md-12">
+                              {{ bookduocreate_form.non_field_errors }}
+                            </div>
+                            {% endif %}
+                            <div class="form-group col-sm-8 col-md-6">
+                                {{ bookduocreate_form.first_name.errors }}
+                                {{ bookduocreate_form.first_name.label_tag }}
+                                {{ bookduocreate_form.first_name|addclass:"form-control"  }}
+                              <span class="helptext">{{ bookduocreate_form.first_name.help_text }}</span>
+                            </div>
+                            <div class="form-group col-sm-8 col-md-6">
+                                {{ bookduocreate_form.last_name.errors }}
+                                {{ bookduocreate_form.last_name.label_tag }}
+                                {{ bookduocreate_form.last_name|addclass:"form-control"  }}
+                              <span class="helptext">{{ bookduocreate_form.last_name.help_text }}</span>
+                            </div>
+                            <div class="form-group col-sm-8 col-md-6">
+                                {{ bookduocreate_form.email.errors }}
+                                {{ bookduocreate_form.email.label_tag }}
+                                {{ bookduocreate_form.email|addclass:"form-control"  }}
+                              <span class="helptext">{{ bookduocreate_form.first_name.help_text }}</span>
+                            </div>
+                            <div class="form-group col-sm-8 col-md-6">
+                                {{ bookduocreate_form.phone.errors }}
+                                {{ bookduocreate_form.phone.label_tag }}
+                                {{ bookduocreate_form.phone|addclass:"form-control"  }}
+                              <span class="helptext">{{ bookduocreate_form.phone.help_text }}</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col"><hr></div>
+                            <div class="col-auto">Date Info</div>
+                            <div class="col"><hr></div>
+                        </div>
+                        <div class="row">
+                            {% if bookdatecreate_form.non_field_errors %}
+                            <div class="form-group col-sm-12 col-md-12">
+                              {{ bookdatecreate_form.non_field_errors }}
+                            </div>
+                            {% endif %}
+                            <div class="form-group col-sm-8 col-md-6">
+                                {{ bookdatecreate_form.single_date.errors }}
+                                {{ bookdatecreate_form.single_date.label_tag }}
+                                {{ bookdatecreate_form.single_date|addclass:"form-control datepicker"  }}
+                              <span class="helptext">{{ bookdatecreate_form.single_date.help_text }}</span>
                             </div>
                         </div>
                     <button type="submit" name="newbooking" class="btn btn-info">
