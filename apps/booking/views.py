@@ -61,7 +61,7 @@ def bookinglistview(request):
         request.GET,
         queryset=(
             Book.objects.all()
-            .select_related("event", "user", "price")
+            .select_related("event", "user", "price", "bookuserinfo")
             .prefetch_related("times")
             .order_by("-booked_at")
         ),
@@ -176,7 +176,7 @@ class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
             self.request.GET,
             queryset=(
                 Book.objects.all()
-                .select_related("event", "user", "price")
+                .select_related("event", "user", "price", "bookuserinfo")
                 .prefetch_related("times")
                 .order_by("-booked_at")
             ),

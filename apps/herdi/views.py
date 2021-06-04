@@ -80,7 +80,9 @@ def contactlistview(request):
     booking_filter = BookFilter(
         request.GET,
         queryset=(
-            Book.objects.all().select_related("event", "user", "price").prefetch_related("times").order_by("-booked_at")
+            Book.objects.all().select_related("event", "user", "price", "bookuserinfo")
+            .prefetch_related("times")
+            .order_by("-booked_at")
         ),
     )
 
@@ -207,7 +209,8 @@ class TimeOptionAutocomplete(autocomplete.Select2QuerySetView):
 
         if self.q:
             qs = qs.filter(
-                Q(name__icontains=self.q) | Q(regular_day__icontains=self.q)
+                Q(name__icontains=self.q)
+                | Q(regular_day__icontains=self.q)
             )
 
         return qs

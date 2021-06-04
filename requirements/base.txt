@@ -16,7 +16,7 @@ urllib3==1.25.10
 importlib-metadata==2.1.0
 
 -- Django --
-django==2.2.19
+django==2.2.24
 django-crispy-forms==1.9.1
 django-autocomplete-light==3.8.1
 django-allauth==0.41.0

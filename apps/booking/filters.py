@@ -115,11 +115,11 @@ class BookFilter(django_filters.FilterSet):
             Q(user__first_name__icontains=value)
             | Q(user__last_name__icontains=value)
             | Q(user__email__icontains=value)
-            | Q(user__id__icontains=value)
+            | Q(user__id__exact=value)
             | Q(bookuserinfo__first_name__icontains=value)
             | Q(bookuserinfo__last_name__icontains=value)
             | Q(bookuserinfo__email__icontains=value)
-            | Q(bookuserinfo__id__icontains=value)
+            | Q(bookuserinfo__id__exact=value)
         )
 
 

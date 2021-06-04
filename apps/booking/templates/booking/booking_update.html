@@ -4,7 +4,6 @@
 {% block content %}
 <form id="update" method="POST">{% csrf_token %}
     <div class="card card-body bg-light">
-      <h6 class="text-right">{{object.booked_at|date:'l, jS  \o\f F Y'}}</h6>
           <p><h2>Book N°{{object.pk}}
             {% if object.invoice %}
             <small>Invoice N°<a href="{% url 'accounting_update' object.invoice.pk %}?{% pass_get_filter %}">{{object.invoice.pk}}</a></small>
@@ -12,7 +11,7 @@
             {% if object.attendance %}
             <small>Attendance N°<a href="{% url 'attendance_update' object.attendance.pk %}?{% pass_get_filter %}">{{object.attendance.pk}}</a></small>
             {% endif %}</h2>
-            <h5>by <a href="{% url 'contact_list' %}?magic={{object.get_user_pk}}">{{object.get_user_name}}</a></h5>
+            <h5>by <a href="{% url 'contact_list' %}?magic={{object.get_user_pk}}">{{object.get_user_name}}</a>, {{object.booked_at|date:'l, jS  \o\f F Y \a\t H:m'}}</h5>
           </p>
         <div class="row">
             <div class="col">

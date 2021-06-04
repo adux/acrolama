@@ -108,9 +108,10 @@ class BookCreateForm(forms.ModelForm):
         model = Book
         fields = ["user", "event", "times", "price"]
         widgets = {
-            "times": BootstrapedSelect2(url="to-autocomplete"),
+            "times": BootstrapedSelect2Multiple(url="to-autocomplete"),
             "event": BootstrapedSelect2(url="event-autocomplete"),
             "user": BootstrapedSelect2(url="user-autocomplete"),
+            "price": BootstrapedSelect2(url="po-autocomplete")
         }
 
     def clean(self):
