@@ -71,6 +71,8 @@ def validate_update(book):
     if db_book.comment_response != book.comment_response:
         return False
 
+    return True
+
 
 class AttendanceUpdateForm(forms.ModelForm):
 
@@ -142,11 +144,13 @@ class BookUpdateForm(forms.ModelForm):
         new_status = cleaned_data.get('status')
 
         if self.instance.informed_at:
-            if not validate_update(self.instance):
+            validate = validate_update(self.instance)
+            if not validate:
                 raise forms.ValidationError("Error: Can not update field. Book is informed.")
 
         if (self.instance.status in ("IN", "PE", "WL", "CA", "SW")) and (new_status == "PA"):
-            if not book_is_paid(self.instance.id):
+            paid = book_is_paid(self.instance.id)
+            if not paid:
                 raise forms.ValidationError("Error: Can not update to Participant. Invoice not paid.")
 
         return cleaned_data

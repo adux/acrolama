@@ -50,7 +50,7 @@ from booking.services import (
     check_abocounter,
     create_quotation,
     update_lastbook_abocounter,
-    attendance_toggle_check
+    attendance_toggle_check,
 )
 from project.services import event_get, timelocation_get, priceoption_get
 
@@ -106,7 +106,7 @@ def bookinglistview(request):
 
             book_form.save()  # this create a bookuserinfo
 
-            if not request.POST.get('booking-user'):
+            if not request.POST.get("booking-user"):
                 """
                 This method works since we initiate at the model level
                 and instance of the bookuserinfo for it to basically not get lost
@@ -117,9 +117,7 @@ def bookinglistview(request):
                 bookuserinfo = book.bookuserinfo
 
                 bookextrauser_form = BookUserInfoForm(
-                    request.POST or None,
-                    prefix="extrauserinfo",
-                    instance=bookuserinfo
+                    request.POST or None, prefix="extrauserinfo", instance=bookuserinfo
                 )
 
                 if bookextrauser_form.is_valid():
@@ -139,7 +137,7 @@ def bookinglistview(request):
 
                     return render(request, template, context)
 
-            price_option = priceoption_get(request.POST.get('booking-price'))
+            price_option = priceoption_get(request.POST.get("booking-price"))
 
             if price_option.duo:
                 bookduo_form = BookDuoInfoForm(request.POST or None, prefix="extraduoinfo")
@@ -246,7 +244,9 @@ def bookinglistview(request):
 
 
 class BookUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
-    model = Book
+    queryset = Book.objects.select_related(
+        "event", "price", "user", "bookdateinfo", "bookuserinfo", "bookdateinfo"
+    ).prefetch_related("times", "invoice", "attendance")
     template_name = "booking/booking_update.html"
     form_class = BookUpdateForm
 
@@ -535,7 +535,7 @@ class QuotationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         It doesn't matter how many times get_object is called per request
         it should not do more than one request.
         """
-        if not hasattr(self, '_object'):
+        if not hasattr(self, "_object"):
             self._object = super(QuotationUpdateView, self).get_object()
         return self._object
 
@@ -548,7 +548,12 @@ class QuotationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
             event=self.object.event.id,
             event__time_locations=self.object.time_location.id,
             times=time_location_of_quotation.time_option,
-        ).select_related("event__level", "user", "price", "attendance",)
+        ).select_related(
+            "event__level",
+            "user",
+            "price",
+            "attendance",
+        )
         return filtered_list
 
     def get_context_data(self, **kwargs):
@@ -612,9 +617,7 @@ def quotationcreateview(request):
     book_filter = QuotationBookFilter(
         request.GET,
         queryset=(
-            Book.objects.all()
-            .select_related("event__level", "user", "price")
-            .prefetch_related("invoice", "attendance")
+            Book.objects.all().select_related("event__level", "user", "price").prefetch_related("invoice", "attendance")
         ),
     )
 

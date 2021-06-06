@@ -32,7 +32,11 @@ def attendance_list_creditoptions(pk):
     print(class_datetimes)
     print(min_datetime_to_credit)
 
-    return [class_datetime.strftime("%m/%d/%Y") for class_datetime in class_datetimes if class_datetime < min_datetime_to_credit]
+    return [
+        class_datetime.strftime("%m/%d/%Y")
+        for class_datetime in class_datetimes
+        if class_datetime < min_datetime_to_credit
+    ]
 
 
 def book_get(book):
@@ -44,7 +48,9 @@ def book_get(book):
 
     # if its a id get the book
     if book_pk:
-        return Book.objects.get(pk=book_pk)
+        return Book.objects.select_related("event", "price", "user", "bookuserinfo", "bookduoinfo", "bookdateinfo").get(
+            pk=book_pk
+        )
 
 
 def book_is_paid(book):
@@ -53,7 +59,7 @@ def book_is_paid(book):
     For Cycles for example one would need to go to its first booking to see the related invoice there
     """
     book = book_get(book)
-    if hasattr(book, 'invoice'):
+    if hasattr(book, "invoice"):
         if book.invoice.status == "PY":
             return True
         else:
@@ -96,7 +102,7 @@ def book_create_invoice(book):
     obj = Invoice()
     obj.balance = "CR"  # Credit
     obj.book = book
-    obj.status = "PE"   # Pending
+    obj.status = "PE"  # Pending
     obj.to_pay = int(book.price.price_chf)
     # Default 10 days to pay
     obj.pay_till = datetime.datetime.now().date() + datetime.timedelta(days=book.price.days_till_pay)
@@ -150,27 +156,33 @@ def check_abocounter(bookid):
 
 def reduce_abocounter(bookid):
     obj = AboCounter.objects.get(data__last_book=str(bookid))
-    obj.data['count'] -= 1
+    obj.data["count"] -= 1
     obj.save()
 
 
 def create_abocounter_from_book(book):
-    AboCounter.objects.create(data={'first_book': str(book.id), 'last_book': str(book.id), 'count': book.price.cycles})
+    AboCounter.objects.create(
+        data={
+            "first_book": str(book.id),
+            "last_book": str(book.id),
+            "count": book.price.cycles,
+        }
+    )
 
 
 def update_lastbook_abocounter(bookid, newbookid):
     obj = AboCounter.objects.get(data__last_book=str(bookid))
-    obj.data['last_book'] = str(newbookid)
+    obj.data["last_book"] = str(newbookid)
     obj.save()
 
 
 def get_count_abocounter_of_book(bookid):
-    return AboCounter.objects.get(data__last_book=str(bookid)).data['count']
+    return AboCounter.objects.get(data__last_book=str(bookid)).data["count"]
 
 
 def get_first_book_abocounter(bookid):
     counter = AboCounter.objects.get(data__last_book=str(bookid))
-    return counter.data['first_book']
+    return counter.data["first_book"]
 
 
 def book_inform(request, instance, book):
@@ -181,7 +193,9 @@ def book_inform(request, instance, book):
             book_create_invoice(instance)
         except Exception as e:
             messages.add_message(
-                request, messages.WARNING, _("Error creating Invoice: " + str(e)),
+                request,
+                messages.WARNING,
+                _("Error creating Invoice: " + str(e)),
             )
         else:
             messages.add_message(request, messages.SUCCESS, _("Invoice Created"))
@@ -191,7 +205,9 @@ def book_inform(request, instance, book):
             book_create_attendance(instance)
         except Exception as e:
             messages.add_message(
-                request, messages.WARNING, _("Error creating Attendance: " + str(e)),
+                request,
+                messages.WARNING,
+                _("Error creating Attendance: " + str(e)),
             )
         else:
             messages.add_message(request, messages.SUCCESS, _("Attendance created"))
@@ -225,7 +241,9 @@ def book_inform(request, instance, book):
                 book_create_invoice(instance)
             except Exception as e:
                 messages.add_message(
-                    request, messages.WARNING, _("Error creating Invoice: " + str(e)),
+                    request,
+                    messages.WARNING,
+                    _("Error creating Invoice: " + str(e)),
                 )
             else:
                 messages.add_message(request, messages.SUCCESS, _("Invoice Created"))
@@ -235,7 +253,9 @@ def book_inform(request, instance, book):
                 book_create_attendance(instance)
             except Exception as e:
                 messages.add_message(
-                    request, messages.WARNING, _("Error creating Attendance: " + str(e)),
+                    request,
+                    messages.WARNING,
+                    _("Error creating Attendance: " + str(e)),
                 )
             else:
                 messages.add_message(request, messages.SUCCESS, _("Attendance created"))
@@ -275,7 +295,9 @@ def book_inform(request, instance, book):
                 book_create_attendance(instance)
             except Exception as e:
                 messages.add_message(
-                    request, messages.WARNING, _("Error creating Attendance: " + str(e)),
+                    request,
+                    messages.WARNING,
+                    _("Error creating Attendance: " + str(e)),
                 )
             else:
                 messages.add_message(request, messages.SUCCESS, _("Attendance created"))
@@ -284,9 +306,7 @@ def book_inform(request, instance, book):
             if book_is_paid(book):
                 book_update_status(book, "PA")
             else:
-                messages.add_message(
-                    request, messages.WARNING, _("First Booking not paid.")
-                )
+                messages.add_message(request, messages.WARNING, _("First Booking not paid."))
 
 
 def book_create_next(book, status):
@@ -386,8 +406,14 @@ def book_send_registered(book):
         "user": book.get_user(),
     }
 
-    msg_plain = render_to_string(settings.BASE_DIR + "/apps/booking/templates/booking/email_registration.txt", p,)
-    msg_html = render_to_string(settings.BASE_DIR + "/apps/booking/templates/booking/email_registration.html", p,)
+    msg_plain = render_to_string(
+        settings.BASE_DIR + "/apps/booking/templates/booking/email_registration.txt",
+        p,
+    )
+    msg_html = render_to_string(
+        settings.BASE_DIR + "/apps/booking/templates/booking/email_registration.html",
+        p,
+    )
 
     msg = EmailMultiAlternatives(subject, msg_plain, sender, to, bcc)
     msg.attach_alternative(msg_html, "text/html")
@@ -422,8 +448,14 @@ def book_send_informed(book):
         "irregularities": irregularities,
     }
 
-    msg_plain = render_to_string(settings.BASE_DIR + "/apps/booking/templates/booking/email_informed.txt", p,)
-    msg_html = render_to_string(settings.BASE_DIR + "/apps/booking/templates/booking/email_informed.html", p,)
+    msg_plain = render_to_string(
+        settings.BASE_DIR + "/apps/booking/templates/booking/email_informed.txt",
+        p,
+    )
+    msg_html = render_to_string(
+        settings.BASE_DIR + "/apps/booking/templates/booking/email_informed.html",
+        p,
+    )
 
     msg = EmailMultiAlternatives(subject, msg_plain, sender, to, bcc)
     msg.attach_alternative(msg_html, "text/html")
@@ -453,8 +485,14 @@ def book_send_reminder(book):
         "irregularities": irregularities,
     }
 
-    msg_plain = render_to_string(settings.BASE_DIR + "/apps/booking/templates/booking/email_reminder.txt", p,)
-    msg_html = render_to_string(settings.BASE_DIR + "/apps/booking/templates/booking/email_reminder.html", p,)
+    msg_plain = render_to_string(
+        settings.BASE_DIR + "/apps/booking/templates/booking/email_reminder.txt",
+        p,
+    )
+    msg_html = render_to_string(
+        settings.BASE_DIR + "/apps/booking/templates/booking/email_reminder.html",
+        p,
+    )
 
     msg = EmailMultiAlternatives(subject, msg_plain, sender, to, bcc)
     msg.attach_alternative(msg_html, "text/html")

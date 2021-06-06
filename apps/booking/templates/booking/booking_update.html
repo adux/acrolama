@@ -65,15 +65,15 @@
         {% endif %}
         <div class="d-inline text-dark"><a id="addresponse" class="text-primary" >Add response.</a></div>
         <div id="response" >
-        {% render_field form.comment_response class="form-control" rows="4" %}
+          {% render_field form.comment_response class="form-control" rows="4" %}
         </div>
         <script>
-        $("#response").hide();
-        $(document).ready(function(){
-            $("#addresponse").click(function(){
-                $("#response").show();
-            });
-          });
+            $("#response").hide();
+            $(document).ready(function(){
+                $("#addresponse").click(function(){
+                    $("#response").show();
+                });
+              });
         </script>
         {% if object.bookduoinfo %}
         <hr>
@@ -105,4 +105,5 @@
 </form>
 <hr>
 {% include "booking/snippets/booking_filter.html" %}
+{% include "herdi/snippets/paginator.html" %}
 {% endblock %}
