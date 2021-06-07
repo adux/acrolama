@@ -225,8 +225,8 @@ def eventupdateview(request, pk):
     template = "project/event_update.html"
     cache_name = f"cache_event_{pk}"
 
-    event = cache.get(cache_name)
-    if not event:
+    cached_query = cache.get(cache_name)
+    if not cached_query:
         cached_query = event_get(pk)
         cache.set(cache_name, cached_query, 60 * 2)
 
