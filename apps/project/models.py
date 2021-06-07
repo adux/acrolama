@@ -294,9 +294,6 @@ class Event(models.Model):
     registration = models.BooleanField(default=True)
     slug = models.SlugField(unique=True, null=True, blank=True)
 
-    # class Meta:
-    #     ordering = [""]
-
     @cached_property
     def fulltitle(self):
         if self.category == "CY" and self.cycle:

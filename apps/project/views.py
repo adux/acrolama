@@ -8,7 +8,7 @@ from django.views.generic.detail import SingleObjectMixin
 from django.contrib.auth.decorators import login_required, user_passes_test
 
 from django.contrib import messages
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.cache import cache
@@ -18,6 +18,7 @@ from herdi.utils import staff_check
 
 # Services
 from booking.services import book_send_registered
+from project.services import event_get
 
 # Models
 from project.models import Event, TimeOption
@@ -222,58 +223,74 @@ def eventlistview(request):
 @user_passes_test(staff_check)
 def eventupdateview(request, pk):
     template = "project/event_update.html"
+    cache_name = f"cache_event_{pk}"
 
-    # Cache to re-enter fast and do the 20 + queries
-    obj = cache.get_or_set("cache_event_" + str(pk), get_object_or_404(Event, id=pk), 120)
+    event = cache.get(cache_name)
+    if not event:
+        cached_query = event_get(pk)
+        cache.set(cache_name, cached_query, 60 * 2)
 
-    def cache_m2m(fields=[], obj=None):
+    event = cached_query
+
+    def cache_event_m2m(fields=[], obj=None):
         cached_m2m = {}
-        for f in fields:
-            cached_obj = cache.get_or_set(
-                "cached_" + f + "_event" + str(obj.id), [p.id for p in getattr(obj, str(f)).all()], 120
-            )
-            cached_m2m.update({str(f): cached_obj})
+        for field in fields:
+            cache_name = f"cached_{field}_event_{obj.id}"
+
+            cached_list = cache.get(cache_name)
+            if not cached_list:
+                cached_list = [p.id for p in getattr(obj, field).all()]
+                cache.set(cache_name, cached_list, 60 * 2)
+
+            # cached_obj = cache.get_or_set(
+            #     f"cached_{field}_event_{obj.id}",
+            #     [p.id for p in getattr(obj, str(field)).all()],
+            #     120)
+
+            cached_m2m.update({str(field): cached_list})
+
         return cached_m2m
 
-    initial = cache_m2m(["time_locations", "price_options", "teachers", "irregularities", "images", "videos"], obj)
+    initial = cache_event_m2m(
+        ["time_locations", "price_options", "teachers", "irregularities", "images", "videos"],
+        event
+    )
 
     initial.update(
         {
-            "project_id": str(obj.project.id),
-            "policy_id": str(obj.policy.id),
-            "level_id": str(obj.level.id),
-            "discipline_id": str(obj.discipline.id),
-            "category": obj.category,
-            "cycle": str(obj.cycle),
-            "title": obj.title,
-            "event_startdate": obj.event_startdate,
-            "event_enddate": obj.event_enddate,
-            "description": obj.description,
-            "max_participants": obj.max_participants,
-            "prerequisites": obj.prerequisites,
-            "highlights": obj.highlights,
-            "included": obj.included,
-            "food": obj.food,
-            "published": obj.published,
-            "registration": obj.registration,
+            "project_id": event.project.id,
+            "policy_id": event.policy.id,
+            "level_id": event.level.id,
+            "discipline_id": event.discipline.id,
+            "category": event.category,
+            "cycle": event.cycle,
+            "title": event.title,
+            "event_startdate": event.event_startdate,
+            "event_enddate": event.event_enddate,
+            "description": event.description,
+            "max_participants": event.max_participants,
+            "prerequisites": event.prerequisites,
+            "highlights": event.highlights,
+            "included": event.included,
+            "food": event.food,
+            "published": event.published,
+            "registration": event.registration,
         }
     )
 
     if request.method == "POST":
-        form = EventUpdateForm(request.POST, initial=initial, instance=obj)
+        form = EventUpdateForm(request.POST, initial=initial, instance=event)
         if form.is_valid():
             form.save()
-            # Delete the cached Event
-            cache.delete("cache_event_" + str(pk))
+            cache.delete(f"cache_event_{pk}")
             return redirect("event_list")
-
     else:
-        form = EventUpdateForm(initial=initial, instance=obj)
+        form = EventUpdateForm(instance=event, initial=initial)
 
     context = {
         "filter": request.GET,
         "form": form,
-        "object": obj,
+        "object": event,
     }
 
     return render(request, template, context)

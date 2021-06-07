@@ -19,43 +19,61 @@ from herdi.widgets import (
 
 
 class EventUpdateForm(forms.Form):
-    """
-    TODO: make of fk_choices and m2m_choices 1 method for all.
-    NOTE: the attname for the fk_model ends in _id wich needs to be considered
-    """
 
     def get_fk_fields(self):
         return [f for f in self.instance._meta.fields if type(f) == models.fields.related.ForeignKey]
-
-    def get_fk_choices(self):
-        fk_choices = {}
-        for field in self.get_fk_fields():
-            model_name = field.related_model.__name__.lower()
-            cached_query = cache.get_or_set(
-                "cache_" + model_name + "_all",
-                field.related_model.objects.all(),
-                120,
-            )
-            choices = [(obj.id, obj.__str__()) for obj in cached_query]
-            fk_choices[field.attname] = choices
-        return fk_choices
 
     def get_m2m_fields(self):
         return [
             field for field in self.instance._meta.get_fields() if type(field) == models.fields.related.ManyToManyField
         ]
 
+    def get_fk_choices(self):
+        fk_choices = {}
+        fk_fields = self.get_fk_fields()
+
+        for field in fk_fields:
+            model_name = field.related_model.__name__.lower()
+            cache_name = f"cache_{model_name}_all"
+
+            cached_query = cache.get(cache_name)
+            if not cached_query:
+                cached_query = field.related_model.objects.all(),
+                cache.set(cache_name, cached_query, 60 * 2)
+
+            # cached_query = cache.get_or_set(
+            #     "cache_" + model_name + "_all",
+            #     field.related_model.objects.all(),
+            #     120,
+            # )
+
+            choices = [(obj.id, obj.__str__()) for obj in cached_query[0]]
+            fk_choices[field.attname] = choices
+
+        return fk_choices
+
     def get_m2m_choices(self):
         m2m_choices = {}
-        for field in self.get_m2m_fields():
+        m2m_fields = self.get_m2m_fields()
+
+        for field in m2m_fields:
             model_name = field.related_model.__name__.lower()
-            cached_query = cache.get_or_set(
-                "cache_" + model_name + "_all",
-                field.related_model.objects.all(),
-                120,
-            )
-            choices = [(obj.id, obj.__str__()) for obj in cached_query]
+            cache_name = f"cache_{model_name}_all"
+
+            cached_query = cache.get(cache_name)
+            if not cached_query:
+                cached_query = field.related_model.objects.all(),
+                cache.set(cache_name, cached_query, 60 * 2)
+
+            # cached_query = cache.get_or_set(
+            #     "cache_" + model_name + "_all",
+            #     field.related_model.objects.all(),
+            #     120,
+            # )
+
+            choices = [(obj.id, obj.__str__()) for obj in cached_query[0]]
             m2m_choices[field.attname] = choices
+
         return m2m_choices
 
     def save(self):
@@ -81,14 +99,16 @@ class EventUpdateForm(forms.Form):
         for m2m_field in m2m_fields:
             if m2m_field.attname in excludes:
                 m2m_fields.remove(m2m_field)
+
         # Filter the List and get them by attname that later will be in data[name]
         changed_m2m_fields = [field for field in m2m_fields if field.attname in self.changed_data]
 
         if changed_m2m_fields:
             for m2m_field in changed_m2m_fields:
+
                 # Check if model still in query
                 model_name = m2m_field.related_model.__name__.lower()
-                cached_query = cache.get("cache_" + model_name + "_all")
+                cached_query = cache.get(f"cache_{model_name}_all")
 
                 # If there is a cached version filter in python and dont hit db
                 if cached_query is not None:
@@ -101,7 +121,7 @@ class EventUpdateForm(forms.Form):
                 getattr(obj, m2m_field.attname).set(selected_obj)
 
                 # Remove the initial
-                cache.delete("cached_" + m2m_field.attname + "_event" + str(obj.id))
+                cache.delete(f"cached_{m2m_field.attname}_event_{obj.id}")
 
     def __init__(self, *args, **kwargs):
         self.instance = kwargs.pop("instance", None)
