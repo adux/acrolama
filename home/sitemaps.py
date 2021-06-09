@@ -29,7 +29,7 @@ class EventViewSite(Sitemap):
     changefreq = "weekly"
 
     def items(self):
-        return Event.objects.all()
+        return Event.objects.filter(published=True)
 
 
 class MainViewSitemap(Sitemap):

@@ -10,6 +10,7 @@ from django.core.exceptions import ValidationError
 
 from home.utils import unique_slug_generator
 from home.services import create_info_from_policy
+from project.managers import EventRelatedManager
 
 # Reference Data
 
@@ -293,6 +294,9 @@ class Event(models.Model):
     published = models.BooleanField(default=False)
     registration = models.BooleanField(default=True)
     slug = models.SlugField(unique=True, null=True, blank=True)
+
+    objects = models.Manager()
+    get_related = EventRelatedManager()
 
     @cached_property
     def fulltitle(self):

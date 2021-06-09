@@ -61,8 +61,9 @@ class EventUpdateForm(forms.Form):
             cache_name = f"cache_{model_name}_all"
 
             cached_query = cache.get(cache_name)
+
             if not cached_query:
-                cached_query = field.related_model.objects.all(),
+                cached_query = field.related_model.objects.all()
                 cache.set(cache_name, cached_query, 60 * 2)
 
             # cached_query = cache.get_or_set(
@@ -71,7 +72,7 @@ class EventUpdateForm(forms.Form):
             #     120,
             # )
 
-            choices = [(obj.id, obj.__str__()) for obj in cached_query[0]]
+            choices = [(obj.id, obj.__str__()) for obj in cached_query]
             m2m_choices[field.attname] = choices
 
         return m2m_choices

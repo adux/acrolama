@@ -179,11 +179,11 @@ def eventlistview(request):
         request.GET,
         queryset=(
             Event.objects.all()
-            # .select_related("project", "policy", "level", "discipline")
             .select_related(
                 "project",
                 "level",
-            ).order_by("-event_startdate")
+            )
+            .order_by("-event_startdate")
         ),
     )
 
@@ -235,9 +235,9 @@ def eventupdateview(request, pk):
     def cache_event_m2m(fields=[], obj=None):
         cached_m2m = {}
         for field in fields:
-            cache_name = f"cached_{field}_event_{obj.id}"
-
+            cache_name = f"cached_{field}_event_{pk}"
             cached_list = cache.get(cache_name)
+
             if not cached_list:
                 cached_list = [p.id for p in getattr(obj, field).all()]
                 cache.set(cache_name, cached_list, 60 * 2)

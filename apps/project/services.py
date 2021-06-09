@@ -23,20 +23,7 @@ def event_get(event):
 
     # if its a id get the book
     if event_pk:
-        query = Event.objects.select_related(
-            'project',
-            'policy',
-            'discipline',
-            'level').prefetch_related(
-                'time_locations',
-                'irregularities',
-                'price_options',
-                'images',
-                'videos',
-                'teachers',
-                'team'
-            ).get(pk=event_pk)
-        return query
+        return Event.get_related.get(pk=event_pk)
 
 
 def priceoption_get(po):
