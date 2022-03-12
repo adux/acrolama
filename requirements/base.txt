@@ -2,7 +2,7 @@
 pytz==2020.4
 webencodings==0.5.1
 bleach==3.3.0
-pillow==8.1.2
+pillow==9.0.1
 pycparser==2.18
 cryptography==3.4.6
 asn1crypto==1.4.0
